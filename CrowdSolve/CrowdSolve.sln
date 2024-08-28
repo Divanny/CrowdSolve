@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrowdSolve.Server", "CrowdSolve.Server\CrowdSolve.Server.csproj", "{D3A4DBF5-3A98-4DCF-8398-AE241B5EBF0B}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "CrowdSolve.Client", "crowdsolve.client\CrowdSolve.Client.esproj", "{7DC015AC-EF54-4404-8054-46A15565C4A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3A4DBF5-3A98-4DCF-8398-AE241B5EBF0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3A4DBF5-3A98-4DCF-8398-AE241B5EBF0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3A4DBF5-3A98-4DCF-8398-AE241B5EBF0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3A4DBF5-3A98-4DCF-8398-AE241B5EBF0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DC015AC-EF54-4404-8054-46A15565C4A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DC015AC-EF54-4404-8054-46A15565C4A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DC015AC-EF54-4404-8054-46A15565C4A0}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7DC015AC-EF54-4404-8054-46A15565C4A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DC015AC-EF54-4404-8054-46A15565C4A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DC015AC-EF54-4404-8054-46A15565C4A0}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AC5B1B40-3A8B-47A9-9C75-BD68C0B2B7D6}
+	EndGlobalSection
+EndGlobal

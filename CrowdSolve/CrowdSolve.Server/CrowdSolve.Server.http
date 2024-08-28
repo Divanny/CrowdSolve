@@ -1,0 +1,6 @@
+@CrowdSolve.Server_HostAddress = http://localhost:5266
+
+GET {{CrowdSolve.Server_HostAddress}}/api/Account/
+Accept: application/json
+
+###
