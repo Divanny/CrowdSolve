@@ -1,15 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace CrowdSolve.Server.Infraestructure
 {
     /// <summary>
-    /// Clase que se encarga de realizar el registro de visitas y errores en la aplicación.
+    /// Clase que se encarga de realizar el registro de las actividades y errores en la aplicación.
     /// </summary>
     public class Logger
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private int OnlineUserID;
-        //private readonly db_CrowdSolveContext _db_CrowdSolveContext;
+        private readonly CrowdSolveContext _CrowdSolveContext;
 
         /// <summary>
         /// Constructor de la clase Logger.
@@ -21,23 +23,32 @@ namespace CrowdSolve.Server.Infraestructure
         {
             var connectionString = configuration.GetConnectionString("CrowdSolve");
 
-            //var contextOptions = new DbContextOptionsBuilder<db_CrowdSolveContext>()
-            //                        .UseSqlServer(connectionString)
-            //                        .Options;
+            var contextOptions = new DbContextOptionsBuilder<CrowdSolveContext>()
+                                    .UseSqlServer(connectionString)
+                                    .Options;
 
             _httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
             OnlineUserID = userAccessor.idUsuario;
-            //_db_CrowdSolveContext = new db_CrowdSolveContext(contextOptions);
+            _CrowdSolveContext = new CrowdSolveContext(contextOptions);
         }
 
         /// <summary>
-        /// Registra una solicitud HTTP en el registro de visitas.
+        /// Registra una solicitud HTTP en alguna actividad.
         /// </summary>
         /// <param name="data">Datos de la solicitud HTTP.</param>
         public void LogHttpRequest(object data)
         {
-            string DataJSON = data == null ? String.Empty : JsonConvert.SerializeObject(data);
-            throw new NotImplementedException();
+            LogActividades log = new()
+            {
+                URL = _httpContextAccessor.HttpContext.Request.Path,
+                idUsuario = OnlineUserID,
+                Metodo = _httpContextAccessor.HttpContext.Request.Method,
+                Fecha = DateTime.Now,
+                Data = data == null ? String.Empty : JsonConvert.SerializeObject(data)
+            };
+
+            _CrowdSolveContext.Set<LogActividades>().Add(log);
+            _CrowdSolveContext.SaveChanges();
         }
 
         /// <summary>
@@ -46,16 +57,27 @@ namespace CrowdSolve.Server.Infraestructure
         /// <param name="ex">Excepción que se produjo.</param>
         public void LogError(Exception ex)
         {
-            throw new NotImplementedException();
+            LogErrores log = new()
+            {
+                idUsuario = OnlineUserID,
+                Fecha = DateTime.Now,
+                Mensaje = ex.Message,
+                StackTrace = ex.StackTrace,
+                Fuente = ex.Source
+            };
+
+            _CrowdSolveContext.Set<LogErrores>().Add(log);
+            _CrowdSolveContext.SaveChanges();
         }
 
         /// <summary>
-        /// Registra una solicitud HTTP en el registro de visitas.
+        /// Registra una solicitud HTTP en alguna actividad.
         /// </summary>
         /// <param name="log">Registro de actividad.</param>
-        public void LogHttpRequest(/* LogActividad log */)
+        public void LogHttpRequest(LogActividades log)
         {
-            throw new NotImplementedException();
+            _CrowdSolveContext.Set<LogActividades>().Add(log);
+            _CrowdSolveContext.SaveChanges();
         }
     }
 }
