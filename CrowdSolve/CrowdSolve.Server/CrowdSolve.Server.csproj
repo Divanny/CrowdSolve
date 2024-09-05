@@ -7,6 +7,7 @@
     <SpaRoot>..\Crowdsolve.Client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+    <UserSecretsId>4f84a896-4f8f-4115-9f1d-47c8f0eba62e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,6 +40,10 @@
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="efpt.config.json.user" />
   </ItemGroup>
 
 </Project>

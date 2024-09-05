@@ -1,0 +1,90 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "CrowdSolveContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Entities\/CrowdSolve",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "CrowdSolve.Server",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[CredencialesAutenticacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EstatusUsuarios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Identificaciones]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LogActividades]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LogErrores]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MetodosAutenticacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Participantes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Perfiles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PerfilesVistas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TiposIdentificacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Usuarios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vistas]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}
