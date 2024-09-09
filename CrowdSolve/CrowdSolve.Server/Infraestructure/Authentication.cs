@@ -67,14 +67,14 @@ namespace CrowdSolve.Server.Infraestructure
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                new Claim("Id", Guid.NewGuid().ToString()),
-                new Claim("idUsuario", idUsuario.ToString()),
-                new Claim(ClaimTypes.Role, idPerfil.ToString() ?? ""),
-                new Claim(JwtRegisteredClaimNames.Sub, UserName),
-                new Claim(JwtRegisteredClaimNames.Email, UserName),
-                new Claim(JwtRegisteredClaimNames.Jti,
-                Guid.NewGuid().ToString())
-            }),
+                    new Claim("Id", Guid.NewGuid().ToString()),
+                    new Claim("idUsuario", idUsuario.ToString()),
+                    new Claim(ClaimTypes.Role, idPerfil.ToString() ?? ""),
+                    new Claim(JwtRegisteredClaimNames.Sub, UserName),
+                    new Claim(JwtRegisteredClaimNames.Email, UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti,
+                    Guid.NewGuid().ToString())
+                }),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 Issuer = issuer,
                 Audience = audience,
