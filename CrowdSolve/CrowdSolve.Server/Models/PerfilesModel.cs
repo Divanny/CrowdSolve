@@ -18,5 +18,6 @@ namespace CrowdSolve.Server.Models
         [Unicode(false)]
         public string? Descripcion { get; set; }
         public IEnumerable<Vistas>? Vistas { get; set; }
+        public IEnumerable<Usuarios>? Usuarios { get; set; }
     }
 }

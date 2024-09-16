@@ -1,4 +1,6 @@
-﻿using CrowdSolve.Server.Models;
+﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,16 +15,17 @@ namespace CrowdSolve.Server.Infraestructure
     {
         private readonly IConfiguration _configuration;
         private readonly Dictionary<string, string> _testUsers;
-        //private readonly db_CrowdSolveContext _dbCrowdSolveContext;
+        private readonly CrowdSolveContext _CrowdSolveContext;
+        private readonly IPasswordHasher _passwordHasher;
 
         /// <summary>
         /// Constructor de la clase Authentication.
         /// </summary>
-        /// <param name="db_CrowdSolveContext">Contexto de la base de datos de CrowdSolve.</param>
+        /// <param name="CrowdSolveContext">Contexto de la base de datos de CrowdSolve.</param>
         /// <param name="configuration">Configuración de la aplicación.</param>
-        public Authentication(/*db_RegistroVisitasContext db_CrowdSolveContext,*/ IConfiguration configuration)
+        public Authentication(CrowdSolveContext CrowdSolveContext, IConfiguration configuration, IPasswordHasher passwordHasher)
         {
-            //_dbCrowdSolveContext = db_CrowdSolveContext;
+            _CrowdSolveContext = CrowdSolveContext;
             _configuration = configuration;
             _testUsers = new Dictionary<string, string>
             {
@@ -30,6 +33,7 @@ namespace CrowdSolve.Server.Infraestructure
                 { "participante", "Pruebas2024" },
                 { "empresa", "Pruebas2024" }
             };
+            _passwordHasher = passwordHasher;
         }
 
         /// <summary>
@@ -39,6 +43,11 @@ namespace CrowdSolve.Server.Infraestructure
         /// <returns>Resultado de la operación de inicio de sesión.</returns>
         public OperationResult LogIn(Credentials credentials)
         {
+            OperationResult logInResult;
+            if (credentials == null) return new OperationResult(false, "Credenciales no proporcionadas", false);
+            if (string.IsNullOrEmpty(credentials.Username)) return new OperationResult(false, "Nombre de usuario no proporcionado", false);
+            if (string.IsNullOrEmpty(credentials.Password)) return new OperationResult(false, "Contraseña no proporcionada", false);
+
             if (IsDevelopmentEnvironment())
             {
                 if (_testUsers.ContainsKey(credentials.Username) && _testUsers[credentials.Username] == credentials.Password)
@@ -47,7 +56,32 @@ namespace CrowdSolve.Server.Infraestructure
                 }
             }
 
-            throw new NotImplementedException();
+            UsuariosRepo ur = new UsuariosRepo(_CrowdSolveContext);
+            PerfilesRepo perfiles = new PerfilesRepo(_CrowdSolveContext);
+
+            var usuario = ur.GetFirst(u => u.NombreUsuario.ToLower() == credentials.Username.ToLower());
+
+            if (usuario == null)
+            {
+                return new OperationResult(false, "Usuario o contraseña incorrectos");
+            }
+
+            if (!_passwordHasher.Check(usuario.ContraseñaHashed ?? "", credentials.Password))
+            {
+                return new OperationResult(false, "Usuario o contraseña incorrectos");
+            }
+
+            List<Vistas> vistas = perfiles.GetPermisos(Convert.ToInt32(usuario.idPerfil)).ToList();
+
+            string token = TokenGenerator(credentials.Username, usuario.idUsuario, usuario.idPerfil);
+
+            var data = new
+            {
+                usuario = usuario,
+                vistas = vistas
+            };
+
+            return new OperationResult(true, "Éxito al iniciar sesión", data, token);
         }
 
         /// <summary>

@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace CrowdSolve.Server.Entities.CrowdSolve;
 
-public partial class Perfiles
+public partial class Categorias
 {
-    public int idPerfil { get; set; }
+    public int idCategoria { get; set; }
 
     public string Nombre { get; set; }
 
     public string Descripcion { get; set; }
 
-    public bool PorDefecto { get; set; }
+    public string ClaseIcono { get; set; }
 }

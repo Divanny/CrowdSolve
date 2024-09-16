@@ -15,11 +15,43 @@
    "T4TemplatePath": null,
    "Tables": [
       {
+         "Name": "[dbo].[Categorias]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ClasesProceso]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ComentariosProceso]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[CredencialesAutenticacion]",
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Desafios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DesafiosCategoria]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Empresas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EstatusProceso]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[EstatusUsuarios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[HistorialCambioEstatus]",
          "ObjectType": 0
       },
       {
@@ -39,6 +71,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Notificaciones]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Participantes]",
          "ObjectType": 0
       },
@@ -51,6 +87,26 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ProcesoEvaluacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Procesos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Soluciones]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Soportes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TiposEvaluacion]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[TiposIdentificacion]",
          "ObjectType": 0
       },
@@ -60,6 +116,10 @@
       },
       {
          "Name": "[dbo].[Vistas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VotosUsuarios]",
          "ObjectType": 0
       }
    ],
