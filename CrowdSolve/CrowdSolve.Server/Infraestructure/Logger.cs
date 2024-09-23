@@ -10,7 +10,7 @@ namespace CrowdSolve.Server.Infraestructure
     public class Logger
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private int OnlineUserID;
+        private readonly int OnlineUserID;
         private readonly CrowdSolveContext _CrowdSolveContext;
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace CrowdSolve.Server.Infraestructure
         public Logger(IServiceProvider serviceProvider, IUserAccessor userAccessor, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("CrowdSolve");
-
+          
             var contextOptions = new DbContextOptionsBuilder<CrowdSolveContext>()
                                     .UseSqlServer(connectionString)
                                     .Options;

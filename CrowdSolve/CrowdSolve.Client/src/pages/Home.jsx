@@ -2,7 +2,7 @@ import Navbar from "@/components/layout/Navbar";
 
 function Home() {
     return (
-        <div>
+        <div className="">
             <Navbar />
         </div>
     );
