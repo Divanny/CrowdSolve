@@ -47,6 +47,16 @@ namespace CrowdSolve.Server.Controllers
         {
             try
             {
+                if (credentials == null)
+                {
+                    return new OperationResult(false, "No se proporcionaron credenciales.");
+                }
+
+                if (string.IsNullOrEmpty(credentials.Username) || string.IsNullOrEmpty(credentials.Email) || string.IsNullOrEmpty(credentials.Password))
+                {
+                    return new OperationResult(false, "Los datos ingresados no son válidos");
+                }
+
                 OperationResult result = _authentication.SignUp(credentials);
                 _logger.LogHttpRequest(result.Data);
                 return result;

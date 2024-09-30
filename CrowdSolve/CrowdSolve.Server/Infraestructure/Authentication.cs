@@ -20,6 +20,7 @@ namespace CrowdSolve.Server.Infraestructure
         private readonly IPasswordHasher _passwordHasher;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
+        private readonly IdentificacionesRepo _identificacionesRepo;
 
         /// <summary>
         /// Constructor de la clase Authentication.
@@ -39,6 +40,7 @@ namespace CrowdSolve.Server.Infraestructure
             _passwordHasher = passwordHasher;
             _usuariosRepo = new UsuariosRepo(CrowdSolveContext);
             _perfilesRepo = new PerfilesRepo(CrowdSolveContext);
+            _identificacionesRepo = new IdentificacionesRepo(CrowdSolveContext);
         }
 
         /// <summary>
@@ -93,60 +95,79 @@ namespace CrowdSolve.Server.Infraestructure
         /// <returns></returns>
         public OperationResult SignUp(Credentials credentials)
         {
-            // Validaciones de Credenciales
-            if (credentials == null) return new OperationResult(false, "Credenciales no proporcionadas", false);
-            if (string.IsNullOrEmpty(credentials.Username)) return new OperationResult(false, "Nombre de usuario no proporcionado", false);
-            if (string.IsNullOrEmpty(credentials.Password)) return new OperationResult(false, "Contraseña no proporcionada", false);
-
-            if (_usuariosRepo.Any(x => x.NombreUsuario == credentials.Username))
+            using (var transaction = _CrowdSolveContext.Database.BeginTransaction())
             {
-                return new OperationResult(false, "Este usuario ya existe");
+                try
+                {
+                    // Validaciones de Credenciales
+                    if (credentials == null) return new OperationResult(false, "Credenciales no proporcionadas", false);
+                    if (string.IsNullOrEmpty(credentials.Username)) return new OperationResult(false, "Nombre de usuario no proporcionado", false);
+                    if (string.IsNullOrEmpty(credentials.Email)) return new OperationResult(false, "Correo electrónico no proporcionado", false);
+                    if (string.IsNullOrEmpty(credentials.Password)) return new OperationResult(false, "Contraseña no proporcionada", false);
+
+                    if (_usuariosRepo.Any(x => x.NombreUsuario == credentials.Username))
+                    {
+                        return new OperationResult(false, "Este usuario ya existe");
+                    }
+
+                    // Validaciones de Contraseña
+                    if (credentials.Password.Length < 8)
+                    {
+                        return new OperationResult(false, "La contraseña debe tener al menos 8 caracteres");
+                    }
+
+                    if (!credentials.Password.Any(char.IsUpper))
+                    {
+                        return new OperationResult(false, "La contraseña debe tener al menos una letra mayúscula");
+                    }
+
+                    if (!credentials.Password.Any(char.IsLower))
+                    {
+                        return new OperationResult(false, "La contraseña debe tener al menos una letra minúscula");
+                    }
+
+                    if (!credentials.Password.Any(char.IsDigit))
+                    {
+                        return new OperationResult(false, "La contraseña debe tener al menos un número");
+                    }
+
+                    // Registro de Usuario
+                    var idPerfilPorDefecto = _perfilesRepo.GetPerfilDefault();
+
+                    var usuario = _usuariosRepo.Add(new UsuariosModel()
+                    {
+                        idPerfil = idPerfilPorDefecto,
+                        NombreUsuario = credentials.Username,
+                        FechaRegistro = DateTime.Now,
+                        ContraseñaHashed = _passwordHasher.Hash(credentials.Password),
+                        idEstatusUsuario = (int)EstatusUsuariosEnum.Incompleto
+                    });
+
+                    var identificacion = _identificacionesRepo.Add(new IdentificacionesModel()
+                    {
+                        idUsuario = usuario.idUsuario,
+                        idTipoIdentificacion = (int)TiposIdentificacionEnum.Correo,
+                        Valor = credentials.Email
+                    });
+
+                    List<Vistas> vistas = _perfilesRepo.GetPermisos(Convert.ToInt32(usuario.idPerfil)).ToList();
+
+                    string token = TokenGenerator(credentials.Username, usuario.idUsuario, usuario.idPerfil);
+
+                    var data = new
+                    {
+                        usuario = usuario,
+                        vistas = vistas
+                    };
+
+                    return new OperationResult(true, "Usuario registrado con éxito", data, token);
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return new OperationResult(false, ex.Message);
+                }
             }
-
-            // Validaciones de Contraseña
-            if (credentials.Password.Length < 8)
-            {
-                return new OperationResult(false, "La contraseña debe tener al menos 8 caracteres");
-            }
-
-            if (!credentials.Password.Any(char.IsUpper))
-            {
-                return new OperationResult(false, "La contraseña debe tener al menos una letra mayúscula");
-            }
-
-            if (!credentials.Password.Any(char.IsLower))
-            {
-                return new OperationResult(false, "La contraseña debe tener al menos una letra minúscula");
-            }
-
-            if (!credentials.Password.Any(char.IsDigit))
-            {
-                return new OperationResult(false, "La contraseña debe tener al menos un número");
-            }
-
-            // Registro de Usuario
-            var idPerfilPorDefecto = _perfilesRepo.GetPerfilDefault();
-
-            var usuario = _usuariosRepo.Add(new UsuariosModel()
-            {
-                idPerfil = idPerfilPorDefecto,
-                NombreUsuario = credentials.Username,
-                FechaRegistro = DateTime.Now,
-                ContraseñaHashed = _passwordHasher.Hash(credentials.Password),
-                idEstatusUsuario = (int)EstatusUsuariosEnum.Activo
-            });
-
-            List<Vistas> vistas = _perfilesRepo.GetPermisos(Convert.ToInt32(usuario.idPerfil)).ToList();
-
-            string token = TokenGenerator(credentials.Username, usuario.idUsuario, usuario.idPerfil);
-
-            var data = new
-            {
-                usuario = usuario,
-                vistas = vistas
-            };
-
-            return new OperationResult(true, "Usuario registrado con éxito", data, token);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +40,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             NombreEstatusUsuario = e.Nombre,
                             FechaRegistro = u.FechaRegistro,
                             InformacionParticipante = pa,
-                            InformacionEmpresa = em
+                            InformacionEmpresa = em,
+                            Identificaciones = DB.Set<Identificaciones>().Where(i => i.idUsuario == u.idUsuario).ToList()
                         });
             }
         )
@@ -63,24 +65,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
             return null;
         }
-
-        public override void Edit(UsuariosModel model)
-        {
-            using (var trx = dbContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    base.Edit(model);
-                    trx.Commit();
-                }
-                catch (Exception E)
-                {
-                    trx.Rollback();
-                    throw;
-                }
-            }
-        }
-
         public override Usuarios Add(UsuariosModel model)
         {
             using (var trx = dbContext.Database.BeginTransaction())
@@ -97,6 +81,83 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                     throw;
                 }
             }
+        }
+
+        public override void Edit(UsuariosModel model)
+        {
+            using (var trx = dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var usuario = this.Get(model.idUsuario);
+
+                    if (usuario == null) throw new Exception("El usuario no se ha encontrado");
+
+                    usuario.idPerfil = model.idPerfil;
+                    usuario.idEstatusUsuario = model.idEstatusUsuario;
+
+                    if (model.idPerfil == (int)PerfilesEnum.Participante && model.InformacionParticipante != null)
+                    {
+                        dbContext.Set<Participantes>().Update(model.InformacionParticipante);
+                    }
+                    else if (model.idPerfil == (int)PerfilesEnum.Empresa && model.InformacionEmpresa != null)
+                    {
+                        dbContext.Set<Empresas>().Update(model.InformacionEmpresa);
+                    }
+
+                    SaveChanges();
+                    base.Edit(usuario);
+
+                    trx.Commit();
+                }
+                catch (Exception E)
+                {
+                    trx.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public void CompletarInformacion(UsuariosModel model)
+        {
+            using (var trx = dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var usuario = this.Get(x => x.idUsuario == model.idUsuario).FirstOrDefault();
+
+                    if (usuario == null) throw new Exception("El usuario no se ha encontrado");
+
+                    if (model.idPerfil == (int)PerfilesEnum.Participante)
+                    {
+                        usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
+
+                        model.InformacionParticipante.idUsuario = model.idUsuario;
+
+                        dbContext.Set<Participantes>().Add(model.InformacionParticipante);
+                    }
+
+                    if (usuario.idPerfil == (int)PerfilesEnum.Empresa)
+                    {
+                        usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Pendiente_de_validar;
+
+                        model.InformacionEmpresa.idUsuario = model.idUsuario;
+
+                        dbContext.Set<Empresas>().Add(model.InformacionEmpresa);
+                    }
+
+                    SaveChanges();
+                    base.Edit(usuario);
+
+                    trx.Commit();
+                }
+                catch (Exception E)
+                {
+                    trx.Rollback();
+                    throw;
+                }
+            }
+
         }
     }
 }

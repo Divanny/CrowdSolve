@@ -26,8 +26,8 @@ namespace CrowdSolve.Server.Models
         [Required(ErrorMessage = "Se debe especificar el estatus del usuario")]
         public int idEstatusUsuario { get; set; }
         public string? NombreEstatusUsuario { get; set; }
-
         public Participantes? InformacionParticipante { get; set; }
         public Empresas? InformacionEmpresa { get; set; }
+        public List<Identificaciones>? Identificaciones { get; set; }
     }
 }
