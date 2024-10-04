@@ -17,6 +17,11 @@ namespace CrowdSolve.Server.Models
         [StringLength(50, ErrorMessage = "No puede exceder a los 50 carácteres")]
         [Unicode(false)]
         public string? NombreUsuario { get; set; }
+
+        [Required(ErrorMessage = "Se debe especificar el correo electrónico")]
+        [EmailAddress(ErrorMessage = "El correo electrónico no es válido")]
+        [StringLength(50, ErrorMessage = "No puede exceder a los 100 carácteres")]
+        public string? CorreoElectronico { get; set; }
         public string? ContraseñaHashed { get; set; }
         public string? Contraseña { get; set; }
 
@@ -28,6 +33,5 @@ namespace CrowdSolve.Server.Models
         public string? NombreEstatusUsuario { get; set; }
         public Participantes? InformacionParticipante { get; set; }
         public Empresas? InformacionEmpresa { get; set; }
-        public List<Identificaciones>? Identificaciones { get; set; }
     }
 }

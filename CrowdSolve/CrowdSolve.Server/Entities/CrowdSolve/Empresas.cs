@@ -16,4 +16,10 @@ public partial class Empresas
     public string Telefono { get; set; }
 
     public string PaginaWeb { get; set; }
+
+    public int idTamañoEmpresa { get; set; }
+
+    public int idSector { get; set; }
+
+    public string Direccion { get; set; }
 }

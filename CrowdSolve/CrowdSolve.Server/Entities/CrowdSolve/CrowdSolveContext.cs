@@ -33,13 +33,13 @@ public partial class CrowdSolveContext : DbContext
 
     public virtual DbSet<HistorialCambioEstatus> HistorialCambioEstatus { get; set; }
 
-    public virtual DbSet<Identificaciones> Identificaciones { get; set; }
-
     public virtual DbSet<LogActividades> LogActividades { get; set; }
 
     public virtual DbSet<LogErrores> LogErrores { get; set; }
 
     public virtual DbSet<MetodosAutenticacion> MetodosAutenticacion { get; set; }
+
+    public virtual DbSet<NivelesEducativo> NivelesEducativo { get; set; }
 
     public virtual DbSet<Notificaciones> Notificaciones { get; set; }
 
@@ -53,13 +53,15 @@ public partial class CrowdSolveContext : DbContext
 
     public virtual DbSet<Procesos> Procesos { get; set; }
 
+    public virtual DbSet<Sectores> Sectores { get; set; }
+
     public virtual DbSet<Soluciones> Soluciones { get; set; }
 
     public virtual DbSet<Soportes> Soportes { get; set; }
 
-    public virtual DbSet<TiposEvaluacion> TiposEvaluacion { get; set; }
+    public virtual DbSet<TamañosEmpresa> TamañosEmpresa { get; set; }
 
-    public virtual DbSet<TiposIdentificacion> TiposIdentificacion { get; set; }
+    public virtual DbSet<TiposEvaluacion> TiposEvaluacion { get; set; }
 
     public virtual DbSet<Usuarios> Usuarios { get; set; }
 
@@ -146,6 +148,9 @@ public partial class CrowdSolveContext : DbContext
         {
             entity.HasKey(e => e.idEmpresa);
 
+            entity.Property(e => e.Direccion)
+                .IsRequired()
+                .IsUnicode(false);
             entity.Property(e => e.Nombre)
                 .IsRequired()
                 .HasMaxLength(150)
@@ -199,16 +204,6 @@ public partial class CrowdSolveContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Identificaciones>(entity =>
-        {
-            entity.HasKey(e => e.idIdentificacion);
-
-            entity.Property(e => e.Valor)
-                .IsRequired()
-                .HasMaxLength(250)
-                .IsUnicode(false);
-        });
-
         modelBuilder.Entity<LogActividades>(entity =>
         {
             entity.HasKey(e => e.idLogActividad);
@@ -257,6 +252,16 @@ public partial class CrowdSolveContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<NivelesEducativo>(entity =>
+        {
+            entity.HasKey(e => e.idNivelEducativo);
+
+            entity.Property(e => e.Nombre)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Notificaciones>(entity =>
         {
             entity.HasKey(e => e.idNotificacion);
@@ -279,6 +284,9 @@ public partial class CrowdSolveContext : DbContext
             entity.Property(e => e.Apellidos)
                 .IsRequired()
                 .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.DescripcionPersonal)
+                .HasMaxLength(500)
                 .IsUnicode(false);
             entity.Property(e => e.Nombres)
                 .IsRequired()
@@ -318,6 +326,16 @@ public partial class CrowdSolveContext : DbContext
             entity.Property(e => e.Fecha).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<Sectores>(entity =>
+        {
+            entity.HasKey(e => e.idSector);
+
+            entity.Property(e => e.Nombre)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Soluciones>(entity =>
         {
             entity.HasKey(e => e.idSolucion).HasName("PK_Soluciones_1");
@@ -342,24 +360,23 @@ public partial class CrowdSolveContext : DbContext
                 .IsUnicode(false);
         });
 
+        modelBuilder.Entity<TamañosEmpresa>(entity =>
+        {
+            entity.HasKey(e => e.idTamañoEmpresa);
+
+            entity.Property(e => e.Descripcion)
+                .HasMaxLength(150)
+                .IsUnicode(false);
+            entity.Property(e => e.Nombre)
+                .IsRequired()
+                .HasMaxLength(40)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<TiposEvaluacion>(entity =>
         {
             entity.HasKey(e => e.idTipoEvaluacion);
 
-            entity.Property(e => e.Nombre)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<TiposIdentificacion>(entity =>
-        {
-            entity.HasKey(e => e.idTipoIdentificacion);
-
-            entity.Property(e => e.Descripcion)
-                .IsRequired()
-                .HasMaxLength(250)
-                .IsUnicode(false);
             entity.Property(e => e.Nombre)
                 .IsRequired()
                 .HasMaxLength(50)
@@ -372,6 +389,10 @@ public partial class CrowdSolveContext : DbContext
 
             entity.Property(e => e.Contraseña)
                 .HasMaxLength(256)
+                .IsUnicode(false);
+            entity.Property(e => e.CorreoElectronico)
+                .IsRequired()
+                .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
             entity.Property(e => e.NombreUsuario)

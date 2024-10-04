@@ -82,6 +82,7 @@
     "useSyncExternalStore": true,
     "useToast": true,
     "useTransition": true,
-    "useAxios": true
+    "useAxios": true,
+    "SignupRegistroParticipante": true
   }
 }

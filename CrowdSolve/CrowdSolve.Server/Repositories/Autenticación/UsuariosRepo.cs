@@ -15,6 +15,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             {
                 idUsuario = u.idUsuario,
                 NombreUsuario = u.NombreUsuario,
+                CorreoElectronico = u.CorreoElectronico,
                 idPerfil = u.idPerfil,
                 idEstatusUsuario = u.idEstatusUsuario,
                 Contraseña = u.ContraseñaHashed,
@@ -33,15 +34,14 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                         {
                             idUsuario = u.idUsuario,
                             NombreUsuario = u.NombreUsuario,
-                            ContraseñaHashed = u.Contraseña,
+                            CorreoElectronico = u.CorreoElectronico,
                             idPerfil = u.idPerfil,
                             NombrePerfil = p.Nombre,
                             idEstatusUsuario = u.idEstatusUsuario,
                             NombreEstatusUsuario = e.Nombre,
                             FechaRegistro = u.FechaRegistro,
                             InformacionParticipante = pa,
-                            InformacionEmpresa = em,
-                            Identificaciones = DB.Set<Identificaciones>().Where(i => i.idUsuario == u.idUsuario).ToList()
+                            InformacionEmpresa = em
                         });
             }
         )
@@ -67,19 +67,14 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         }
         public override Usuarios Add(UsuariosModel model)
         {
-            using (var trx = dbContext.Database.BeginTransaction())
+            try
             {
-                try
-                {
-                    var result = base.Add(model);
-                    trx.Commit();
-                    return result;
-                }
-                catch (Exception E)
-                {
-                    trx.Rollback();
-                    throw;
-                }
+                var result = base.Add(model);
+                return result;
+            }
+            catch (Exception E)
+            {
+                throw;
             }
         }
 
@@ -96,15 +91,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                     usuario.idPerfil = model.idPerfil;
                     usuario.idEstatusUsuario = model.idEstatusUsuario;
 
-                    if (model.idPerfil == (int)PerfilesEnum.Participante && model.InformacionParticipante != null)
-                    {
-                        dbContext.Set<Participantes>().Update(model.InformacionParticipante);
-                    }
-                    else if (model.idPerfil == (int)PerfilesEnum.Empresa && model.InformacionEmpresa != null)
-                    {
-                        dbContext.Set<Empresas>().Update(model.InformacionEmpresa);
-                    }
-
                     SaveChanges();
                     base.Edit(usuario);
 
@@ -116,48 +102,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                     throw;
                 }
             }
-        }
-
-        public void CompletarInformacion(UsuariosModel model)
-        {
-            using (var trx = dbContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    var usuario = this.Get(x => x.idUsuario == model.idUsuario).FirstOrDefault();
-
-                    if (usuario == null) throw new Exception("El usuario no se ha encontrado");
-
-                    if (model.idPerfil == (int)PerfilesEnum.Participante)
-                    {
-                        usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
-
-                        model.InformacionParticipante.idUsuario = model.idUsuario;
-
-                        dbContext.Set<Participantes>().Add(model.InformacionParticipante);
-                    }
-
-                    if (usuario.idPerfil == (int)PerfilesEnum.Empresa)
-                    {
-                        usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Pendiente_de_validar;
-
-                        model.InformacionEmpresa.idUsuario = model.idUsuario;
-
-                        dbContext.Set<Empresas>().Add(model.InformacionEmpresa);
-                    }
-
-                    SaveChanges();
-                    base.Edit(usuario);
-
-                    trx.Commit();
-                }
-                catch (Exception E)
-                {
-                    trx.Rollback();
-                    throw;
-                }
-            }
-
         }
     }
 }

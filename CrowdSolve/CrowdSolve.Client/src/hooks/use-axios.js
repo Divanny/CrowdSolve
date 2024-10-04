@@ -1,9 +1,14 @@
 import axios from "axios";
-import { useState } from "react"
-import { toast } from "sonner"
+import { toast } from "sonner";
+import { useDispatch } from 'react-redux';
+import { setLoading } from '../redux/slices/loadingSlice';
+import { clearUser } from '../redux/slices/userSlice';
+import { useNavigate } from 'react-router-dom';
+import { store } from '../redux/store';
 
 const useAxios = () => {
-    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const api = axios.create({
         baseURL: import.meta.env.BASE_URL
@@ -12,10 +17,11 @@ const useAxios = () => {
     api.interceptors.request.use((config) => {
         const requireLoading = config.requireLoading !== false;
         if (requireLoading) {
-            setLoading(true);
+            dispatch(setLoading(true));
         }
 
-        const token = localStorage.getItem("token");
+        const state = store.getState();
+        const token = state.user.token;
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
@@ -26,34 +32,31 @@ const useAxios = () => {
 
     api.interceptors.response.use(
         (response) => {
-            setLoading(false);
+            dispatch(setLoading(false));
             return response;
         },
         (error) => {
-            setLoading(false);
-            if (error.response.status === 400) {
-                return Promise.resolve(error.response);
+            dispatch(setLoading(false));
+
+            if (error.response) {
+                const { status, data } = error.response;
+                if (status === 401) {
+                    dispatch(clearUser());
+                    navigate("/SignIn");
+                    toast.warning("Sesión expirada. Por favor, inicia sesión nuevamente.");
+                } else {
+                    // Manejar otros errores
+                    toast.error(data.message || "Ocurrió un error.");
+                }
+            } else {
+                toast.error("Error de red o servidor no disponible.");
             }
-            if (error.response.status === 401 && localStorage.getItem("token")) {
-                localStorage.removeItem("token");
-                localStorage.removeItem("sessionExpireTime");
-                // Handle screen lock logic here
-                toast.warning("Debe iniciar sesión para continuar");
-            } else if (error.response.status === 401) {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                localStorage.removeItem("sessionExpireTime");
-                // Redirect to login page
-                window.location.href = "/login";
-            } else if (error.response.status === 403) {
-                toast.warning("No tienes permisos para realizar esta acción");
-            }
-            
+
             return Promise.reject(error);
         }
     );
 
-    return { api, loading };
+    return { api };
 };
 
 export default useAxios;

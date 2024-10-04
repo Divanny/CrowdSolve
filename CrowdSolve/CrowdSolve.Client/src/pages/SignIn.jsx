@@ -1,4 +1,4 @@
-import CrowdSolveLogo from "@/assets/CrowdSolveLogo.svg";
+import CrowdSolveLogo from "@/assets/CrowdSolveLogo_light.svg";
 import { Button } from "@/components/ui/button";
 import { Loading02Icon } from "hugeicons-react"
 import { Input } from "@/components/ui/input";
@@ -9,14 +9,20 @@ import { toast } from "sonner";
 import { useNavigate, Link } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 import { Card } from "@/components/ui/card";
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../redux/slices/userSlice';
+import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 
 function SignIn() {
   const navigate = useNavigate();
-
+  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+
   const { api } = useAxios();
+  const isLoading = useSelector((state) => state.loading.isLoading);
+
+  const dispatch = useDispatch();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -27,22 +33,26 @@ function SignIn() {
       return;
     }
 
-    setLoading(true);
     try {
-      const response = await api.post("/api/Account/LogIn", {
+      const response = await api.post("/api/Account/SignIn", {
         username,
-        password,
+        password
       });
 
-      console.log(response);
-
       if (response.data.success) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem(
-          "user",
-          JSON.stringify(response.data.data.usuario.nombreUsuario)
-        );
-        navigate("/");
+        const { token, data } = response.data;
+
+        dispatch(setUser({
+          user: data.usuario,
+          token: token,
+          views: Array.isArray(data.vistas) ? data.vistas : []
+        }));
+
+        if (data.usuario.estatus === EstatusUsuarioEnum.Incompleto) {
+          navigate("/SignUp/Complete");
+        } else {
+          navigate("/");
+        }
         toast.success("Operación exitosa", {
           description: "Inicio de sesión exitoso",
         });
@@ -55,8 +65,6 @@ function SignIn() {
       toast.error("Operación fallida", {
         description: error.message,
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -66,11 +74,13 @@ function SignIn() {
         <div className="flex grow flex-col justify-center pt-2 [@media(min-height:800px)]:pt-6 [@media(min-height:900px)]:pt-10 w-full min-h-screen px-5">
           <div className="w-full max-w-md mx-auto">
             <div className="flex items-center justify-center mb-6 sm:mb-8">
-              <img
-                src={CrowdSolveLogo}
-                alt="CrowdSolve Logo"
-                className="h-14 sm:h-16"
-              />
+              <Link to="/">
+                <img
+                  src={CrowdSolveLogo}
+                  alt="CrowdSolve Logo"
+                  className="h-14 sm:h-16"
+                />
+              </Link>
             </div>
 
             <h2 className="mb-6 sm:mb-8 text-center">
@@ -82,7 +92,7 @@ function SignIn() {
                 ]}
                 typeSpeed={80}
                 loop
-                className="text-lg sm:text-3xl font-serif text-[#3c3c3c]"
+                className="text-lg sm:text-3xl font-serif"
                 style={{
                   fontFamily:
                     'font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif; !important',
@@ -95,13 +105,13 @@ function SignIn() {
             </h2>
 
             <Card className="p-4 sm:p-6 max-w-md shadow-sm">
-              <p className="text-sm text-center text-[#3c3c3c] mb-4">
+              <p className="text-sm text-center mb-4">
                 Empieza usando CrowdSolve para ti o tu empresa
               </p>
 
               <Button
                 variant="outline"
-                className="w-full  bg-white text-[#3c3c3c] border-[#d1d1d1]"
+                className="w-full"
                 tabIndex={1}
               >
                 <svg
@@ -173,7 +183,7 @@ function SignIn() {
                   />
                 </div>
 
-                {loading ? (
+                {isLoading ? (
                   <Button disabled className="w-full" tabIndex={5}>
                     <Loading02Icon className="mr-2 h-4 w-4 animate-spin" />
                     Por favor, espere

@@ -1,7 +1,5 @@
-﻿using CrowdSolve.Server.Entities.CrowdSolve;
-using CrowdSolve.Server.Infraestructure;
+﻿using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
-using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -73,13 +71,13 @@ namespace CrowdSolve.Server.Controllers
         /// </summary>
         /// <param name="credentials">Las credenciales de inicio de sesión.</param>
         /// <returns>El resultado de la operación de inicio de sesión.</returns>
-        [HttpPost("LogIn", Name = "LogIn")]
+        [HttpPost("SignIn", Name = "SignIn")]
         [AllowAnonymous]
-        public OperationResult LogIn(Credentials credentials)
+        public OperationResult SignIn(Credentials credentials)
         {
             try
             {
-                OperationResult result = _authentication.LogIn(credentials);
+                OperationResult result = _authentication.SignIn(credentials);
                 _logger.LogHttpRequest(result.Data);
                 return result;
             }

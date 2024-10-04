@@ -1,4 +1,4 @@
-import CrowdSolveLogo from "@/assets/CrowdSolveLogo.svg";
+import CrowdSolveLogo from "@/assets/CrowdSolveLogo_light.svg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -10,6 +10,9 @@ import { ReactTyped } from "react-typed";
 import { Card } from "@/components/ui/card";
 import { Loading02Icon } from "hugeicons-react"
 
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/slices/userSlice';
+
 function SignUp() {
   const navigate = useNavigate();
 
@@ -17,7 +20,9 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
   const { api } = useAxios();
+  const dispatch = useDispatch();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -37,11 +42,14 @@ function SignUp() {
       });
 
       if (response.data.success) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem(
-          "user",
-          JSON.stringify(response.data.data.usuario.nombreUsuario)
-        );
+        const { token, data } = response.data;
+
+        dispatch(setUser({
+          user: data.usuario,
+          token: token,
+          views: Array.isArray(data.vistas) ? data.vistas : []
+        }));
+
         navigate("/SignUp/Complete");
         toast.success("Operación exitosa", {
           description: response.data.message,
@@ -66,11 +74,13 @@ function SignUp() {
         <div className="flex grow flex-col justify-center pt-2 [@media(min-height:800px)]:pt-6 [@media(min-height:900px)]:pt-10 w-full min-h-screen px-5">
           <div className="w-full max-w-md mx-auto">
             <div className="flex items-center justify-center mb-6 sm:mb-8">
-              <img
-                src={CrowdSolveLogo}
-                alt="CrowdSolve Logo"
-                className="h-14 sm:h-16"
-              />
+              <Link to="/">
+                <img
+                  src={CrowdSolveLogo}
+                  alt="CrowdSolve Logo"
+                  className="h-14 sm:h-16"
+                />
+              </Link>
             </div>
 
             <h2 className="mb-6 sm:mb-8 text-center">
@@ -82,7 +92,7 @@ function SignUp() {
                 ]}
                 typeSpeed={80}
                 loop
-                className="text-lg sm:text-3xl font-serif text-[#3c3c3c]"
+                className="text-lg sm:text-3xl font-serif"
                 style={{
                   fontFamily:
                     'font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif; !important',
@@ -95,13 +105,13 @@ function SignUp() {
             </h2>
 
             <Card className="p-4 sm:p-6 max-w-md shadow-sm">
-              <p className="text-sm text-center text-[#3c3c3c] mb-4">
+              <p className="text-sm text-center mb-4">
                 Empieza usando CrowdSolve para ti o tu empresa
               </p>
 
               <Button
                 variant="outline"
-                className="w-full  bg-white text-[#3c3c3c] border-[#d1d1d1]"
+                className="w-full"
                 tabIndex={1}
               >
                 <svg
@@ -137,7 +147,7 @@ function SignUp() {
                   <span className="bg-card px-2 text-muted-foreground">O</span>
                 </div>
               </div>
-              
+
               <form onSubmit={handleSignUp} className="grid gap-4 mb-4">
                 {/* Username */}
                 <div className="grid gap-2">
@@ -198,7 +208,7 @@ function SignUp() {
                 </Link>
               </div>
 
-              <p className="text-xs text-[#3c3c3c] mt-4">
+              <p className="text-xs opacity-50 mt-4">
                 By continuing, you agree to CrowdSolve&apos;s Consumer Terms and
                 Usage Policy, and acknowledge their Privacy Policy.
               </p>

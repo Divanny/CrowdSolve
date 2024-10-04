@@ -5,13 +5,9 @@ using System.Collections.Generic;
 
 namespace CrowdSolve.Server.Entities.CrowdSolve;
 
-public partial class Identificaciones
+public partial class Sectores
 {
-    public int idIdentificacion { get; set; }
+    public int idSector { get; set; }
 
-    public int idUsuario { get; set; }
-
-    public int idTipoIdentificacion { get; set; }
-
-    public string Valor { get; set; }
+    public string Nombre { get; set; }
 }

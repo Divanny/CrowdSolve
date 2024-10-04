@@ -55,10 +55,6 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Identificaciones]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[LogActividades]",
          "ObjectType": 0
       },
@@ -68,6 +64,10 @@
       },
       {
          "Name": "[dbo].[MetodosAutenticacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NivelesEducativo]",
          "ObjectType": 0
       },
       {
@@ -95,6 +95,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Sectores]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Soluciones]",
          "ObjectType": 0
       },
@@ -103,11 +107,11 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[TiposEvaluacion]",
+         "Name": "[dbo].[TamañosEmpresa]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[TiposIdentificacion]",
+         "Name": "[dbo].[TiposEvaluacion]",
          "ObjectType": 0
       },
       {

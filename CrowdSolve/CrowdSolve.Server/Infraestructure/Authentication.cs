@@ -20,7 +20,6 @@ namespace CrowdSolve.Server.Infraestructure
         private readonly IPasswordHasher _passwordHasher;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
-        private readonly IdentificacionesRepo _identificacionesRepo;
 
         /// <summary>
         /// Constructor de la clase Authentication.
@@ -40,7 +39,6 @@ namespace CrowdSolve.Server.Infraestructure
             _passwordHasher = passwordHasher;
             _usuariosRepo = new UsuariosRepo(CrowdSolveContext);
             _perfilesRepo = new PerfilesRepo(CrowdSolveContext);
-            _identificacionesRepo = new IdentificacionesRepo(CrowdSolveContext);
         }
 
         /// <summary>
@@ -48,7 +46,7 @@ namespace CrowdSolve.Server.Infraestructure
         /// </summary>
         /// <param name="credentials">Credenciales de inicio de sesión.</param>
         /// <returns>Resultado de la operación de inicio de sesión.</returns>
-        public OperationResult LogIn(Credentials credentials)
+        public OperationResult SignIn(Credentials credentials)
         {
             OperationResult logInResult;
             if (credentials == null) return new OperationResult(false, "Credenciales no proporcionadas", false);
@@ -63,14 +61,14 @@ namespace CrowdSolve.Server.Infraestructure
                 }
             }
 
-            var usuario = _usuariosRepo.GetByUsername(credentials.Username);
+            var usuario = _CrowdSolveContext.Set<Usuarios>().Where(x => x.NombreUsuario.Equals(credentials.Username)).FirstOrDefault();
 
             if (usuario == null)
             {
                 return new OperationResult(false, "Usuario o contraseña incorrectos");
             }
 
-            if (!_passwordHasher.Check(usuario.ContraseñaHashed ?? "", credentials.Password))
+            if (!_passwordHasher.Check(usuario.Contraseña ?? "", credentials.Password))
             {
                 return new OperationResult(false, "Usuario o contraseña incorrectos");
             }
@@ -81,7 +79,7 @@ namespace CrowdSolve.Server.Infraestructure
 
             var data = new
             {
-                usuario = usuario,
+                usuario = _usuariosRepo.GetByUsername(credentials.Username),
                 vistas = vistas
             };
 
@@ -138,16 +136,10 @@ namespace CrowdSolve.Server.Infraestructure
                     {
                         idPerfil = idPerfilPorDefecto,
                         NombreUsuario = credentials.Username,
+                        CorreoElectronico = credentials.Email,
                         FechaRegistro = DateTime.Now,
                         ContraseñaHashed = _passwordHasher.Hash(credentials.Password),
                         idEstatusUsuario = (int)EstatusUsuariosEnum.Incompleto
-                    });
-
-                    var identificacion = _identificacionesRepo.Add(new IdentificacionesModel()
-                    {
-                        idUsuario = usuario.idUsuario,
-                        idTipoIdentificacion = (int)TiposIdentificacionEnum.Correo,
-                        Valor = credentials.Email
                     });
 
                     List<Vistas> vistas = _perfilesRepo.GetPermisos(Convert.ToInt32(usuario.idPerfil)).ToList();
@@ -156,7 +148,7 @@ namespace CrowdSolve.Server.Infraestructure
 
                     var data = new
                     {
-                        usuario = usuario,
+                        usuario = _usuariosRepo.GetByUsername(credentials.Username),
                         vistas = vistas
                     };
 

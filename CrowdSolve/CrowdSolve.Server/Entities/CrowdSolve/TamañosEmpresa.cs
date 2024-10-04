@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace CrowdSolve.Server.Entities.CrowdSolve;
 
-public partial class TiposIdentificacion
+public partial class TamañosEmpresa
 {
-    public int idTipoIdentificacion { get; set; }
+    public int idTamañoEmpresa { get; set; }
 
     public string Nombre { get; set; }
 

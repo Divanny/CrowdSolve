@@ -109,34 +109,5 @@ namespace CrowdSolve.Server.Controllers
                 throw;
             }
         }
-
-        /// <summary>
-        /// Completar la información de un usuario.
-        /// </summary>
-        /// <param name="usuariosModel"></param>
-        /// <returns></returns>
-        [Authorize]
-        [HttpPut("CompletarInformacion", Name = "CompletarInformacion")]
-        public OperationResult CompletarInformacionParticipante(UsuariosModel usuariosModel)
-        {
-            try
-            {
-                var usuario = _usuariosRepo.Get(x => x.idUsuario == usuariosModel.idUsuario).FirstOrDefault();
-
-                if (usuario == null) return new OperationResult(false, "El usuario no se ha encontrado");
-
-                if (usuario.idEstatusUsuario != (int)EstatusUsuariosEnum.Incompleto) return new OperationResult(false, "El usuario no tiene información pendiente de completar");
-
-                _usuariosRepo.CompletarInformacion(usuariosModel);
-                _logger.LogHttpRequest(usuariosModel);
-
-                return new OperationResult(true, "Información completada exitosamente", usuario);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex);
-                throw;
-            }
-        }
     }
 }

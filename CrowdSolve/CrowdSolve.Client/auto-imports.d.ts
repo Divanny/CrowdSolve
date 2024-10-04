@@ -8,6 +8,7 @@ export {}
 declare global {
   const LayoutNavbar: typeof import('@/components/layout/Navbar.jsx')['Navbar']
   const NotFound: typeof import('@/components/NotFound.jsx')['NotFound']
+  const SignupRegistroParticipante: typeof import('@/components/signup/RegistroParticipante.jsx')['RegistroParticipante']
   const UiAccordion: typeof import('@/components/ui/accordion.jsx')['accordion']
   const UiAlert: typeof import('@/components/ui/alert.jsx')['alert']
   const UiAlert-dialog: typeof import('@/components/ui/alert-dialog.jsx')['alert-dialog']
