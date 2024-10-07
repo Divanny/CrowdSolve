@@ -1,44 +1,22 @@
-import CrowdSolveLogo from '@/assets/CrowdSolveLogo_light.svg';
+import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
+import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { HamburgerMenuIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { clearUser } from '@/redux/slices/userSlice';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { toast } from "sonner";
-import { setTheme } from '@/redux/slices/themeSlice';
+import { useSelector } from 'react-redux';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuPortal,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { Check, Moon, Sun } from 'lucide-react';
+import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
+    
     const theme = useSelector((state) => state.theme.theme);
-
-    const handleLogout = () => {
-        dispatch(clearUser());
-        toast.success("Operación exitosa", {
-            description: "Has cerrado sesión exitosamente"
-        });
-    };
-
-    const handleTheme = (value) => {
-        dispatch(setTheme(value));
-    };
+    const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
     return (
         <nav className="relative flex w-full max-w-screen flex-wrap items-center justify-between py-2 lg:py-2">
@@ -65,73 +43,7 @@ const Navbar = () => {
                                         <AvatarFallback>{user[0]}</AvatarFallback>
                                     </Avatar>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-56 mr-2">
-                                    <DropdownMenuLabel>
-                                        <div className='flex items-center'>
-                                            <Avatar className="bg-accent" size="1">
-                                                <AvatarImage src={`https://robohash.org/${user.nombreUsuario}`} />
-                                                <AvatarFallback>{user[0]}</AvatarFallback>
-                                            </Avatar>
-                                            <div className='flex flex-col ml-2'>
-                                                <span className='text-sm font-semibold'>{user.nombreUsuario}</span>
-                                                {!user.informacionParticipante && <span className='text-xs text-muted-foreground font-light'>{user.nombrePerfil}</span>}
-                                                {user.informacionParticipante && <span className='text-xs text-muted-foreground'>{`${user.nombres} ${user.apellidos}`}</span>}
-                                            </div>
-                                        </div>
-                                    </DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem>
-                                            Mi perfil
-                                            <DropdownMenuShortcut>⇧P</DropdownMenuShortcut>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Mis soluciones
-                                            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Settings
-                                            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Keyboard shortcuts
-                                            <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuGroup>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuGroup>
-
-                                        <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger>
-                                                <span>Invite users</span>
-                                            </DropdownMenuSubTrigger>
-                                            <DropdownMenuPortal>
-                                                <DropdownMenuSubContent className="w-36 mr-2">
-                                                    <DropdownMenuItem onSelect={handleTheme('system')}>
-                                                        <Sun className="mr-2 h-4 w-4" />
-                                                        <span>Sistema</span>
-                                                        { theme == 'system' && <Check className="ml-auto h-4 w-4" />}
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem onSelect={handleTheme('light')}>
-                                                        <Sun className="mr-2 h-4 w-4" />
-                                                        <span>Claro</span>
-                                                        { theme == 'light' && <Check className="ml-auto h-4 w-4" />}
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem onSelect={handleTheme('dark')}>
-                                                        <Moon className="mr-2 h-4 w-4" />
-                                                        <span>Oscuro</span>
-                                                        { theme == 'dark' && <Check className="ml-auto h-4 w-4" />}
-                                                    </DropdownMenuItem>
-                                                </DropdownMenuSubContent>
-                                            </DropdownMenuPortal>
-                                        </DropdownMenuSub>
-                                    </DropdownMenuGroup>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem onSelect={handleLogout}>
-                                        Log out
-                                        <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
+                                <ProfileDropdownMenuContent user={user} />
                             </DropdownMenu>
 
                         </div>

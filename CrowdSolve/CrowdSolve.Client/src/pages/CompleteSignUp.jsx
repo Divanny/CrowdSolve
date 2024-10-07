@@ -1,5 +1,7 @@
-import CrowdSolveLogo from "@/assets/CrowdSolveLogo_light.svg";
+import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
+import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { useState } from "react";
+import { useSelector } from 'react-redux';
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -12,6 +14,9 @@ import Participantes from "@/assets/roles/Participantes.svg";
 function CompleteSignUp() {
   const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState(null);
+
+  const theme = useSelector((state) => state.theme.theme);
+  const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
   const handleRoleSelect = (role) => {
     if (selectedRole === role) {

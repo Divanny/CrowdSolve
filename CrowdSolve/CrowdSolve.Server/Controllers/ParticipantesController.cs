@@ -83,6 +83,7 @@ namespace CrowdSolve.Server.Controllers
                 usuario.idPerfil = (int)PerfilesEnum.Participante;
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
 
+                _usuariosRepo.Edit(usuario);
                 var created = _participantesRepo.Add(ParticipantesModel);
                 _logger.LogHttpRequest(ParticipantesModel);
                 return new OperationResult(true, "Se ha registrado la información del participante exitosamente", created);

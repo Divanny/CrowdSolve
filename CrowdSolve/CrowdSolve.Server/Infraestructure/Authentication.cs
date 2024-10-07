@@ -152,6 +152,8 @@ namespace CrowdSolve.Server.Infraestructure
                         vistas = vistas
                     };
 
+                    transaction.Commit();
+
                     return new OperationResult(true, "Usuario registrado con éxito", data, token);
                 }
                 catch (Exception ex)

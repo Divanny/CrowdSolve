@@ -1,17 +1,22 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from "@/components/ui/sonner"
-import { useSelector, useDispatch } from 'react-redux';
-import NotFound from './components/NotFound';
-import PageLoader from './components/PageLoader';
+import { useDispatch, useSelector } from 'react-redux';
+import NotFound from '@/components/NotFound';
+import PageLoader from '@/components/PageLoader';
 import Home from '@/pages/Home';
 import SignIn from '@/pages/SignIn';
 import SignUp from '@/pages/SignUp';
 import CompleteSignUp from '@/pages/CompleteSignUp';
 import CompleteSignUpForm from '@/pages/CompleteSignUpForm';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import useAxios from './hooks/use-axios';
+import { setUser } from '@/redux/slices/userSlice';
 
 function App() {
+    const { api } = useAxios();
+    const dispatch = useDispatch();
+
     const isLoading = useSelector((state) => state.loading.isLoading);
     const theme = useSelector((state) => state.theme.theme);
 
@@ -21,9 +26,29 @@ function App() {
             document.documentElement.classList.add(systemPrefersDark ? 'dark' : 'light');
         }
         else {
+            document.documentElement.classList.remove('light', 'dark');
             document.documentElement.classList.add(theme);
         }
     }, [theme]);
+
+    const token = useSelector((state) => state.user.token);
+
+    useEffect(() => {
+        const loadUser = async () => {
+            if (!token) return;
+
+            const response = await api.get('api/Account');
+
+            dispatch(setUser({
+                user: response.data.usuario,
+                token: token,
+                views: Array.isArray(response.data.vistas) ? response.data.vistas : []
+            }));
+        }
+
+        loadUser();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [token, window.location.pathname]);
 
     return (
         <>
@@ -36,7 +61,7 @@ function App() {
                 <Route path="/SignUp/Complete/:Role" element={<ProtectedRoute><CompleteSignUpForm /></ProtectedRoute>} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
-            <Toaster richColors toastOptions={{}} theme={'dark'} />
+            <Toaster />
         </>
     );
 }

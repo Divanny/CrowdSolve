@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useAxios from "@/hooks/use-axios";
+import { toast } from "sonner";
+import { useSelector } from 'react-redux';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,24 +25,46 @@ import {
     DialogTitle
 } from "@/components/ui/dialog"
 
+import { PhoneInput } from "@/components/ui/phone-input";
+
 import { DiplomaIcon } from "hugeicons-react";
 import { IdentityCardIcon } from "hugeicons-react";
 
 const RegistroEmpresa = () => {
-    const [openWelcomeDialog, setOpenWelcomeDialog] = useState(true);
-
     const navigate = useNavigate();
+    const { api } = useAxios();
+    const { user } = useSelector((state) => state.user);
+
+    const [relationalObjects, setRelationalObjects] = useState({});
+
     const [formData, setFormData] = useState({
+        idUsuario: user.idUsuario,
         nombre: '',
         telefono: '',
         paginaWeb: '',
-        sector: '',
-        tamanoEmpresa: '',
+        idSector: '',
+        idTamañoEmpresa: '',
         direccion: '',
         descripcion: '',
         personaContacto: '',
         emailContacto: ''
     })
+
+    useEffect(() => {
+        const loadRelationalObjects = async () => {
+            try {
+                const response = await api.get("api/Empresas/GetRelationalObjects");
+                setRelationalObjects(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        loadRelationalObjects();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const [openWelcomeDialog, setOpenWelcomeDialog] = useState(true);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -50,47 +75,99 @@ const RegistroEmpresa = () => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Datos del participante:", formData);
-        navigate("/perfil-participante");
+
+        if (!formData.nombre || !formData.telefono || !formData.idSector || !formData.idTamañoEmpresa || !formData.direccion) {
+            toast.warning("Operación fallida", {
+                description: "Por favor, complete todos los campos",
+            });
+            return;
+        }
+
+        try {
+            const response = await api.post("api/Empresas", formData);
+
+            if (response.data.success) {
+                navigate("/Company/WaitingVerification");
+                toast.success("Operación exitosa", {
+                    description: response.data.message,
+                });
+            } else {
+                toast.warning("Operación fallida", {
+                    description: response.data.message,
+                });
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-2">
             <div className="space-y-2">
                 <Label htmlFor="nombre">Nombre de la empresa</Label>
-                <Input id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} required />
+                <Input id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} required placeholder="Ingrese el nombre de la empresa" />
             </div>
-            <div className="space-y-2">
-                <Label htmlFor="telefono">Teléfono</Label>
-                <Input id="telefono" name="telefono" type="tel" value={formData.telefono} onChange={handleChange} required />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="telefono">Teléfono</Label>
+                    <PhoneInput
+                        placeholder="Ingrese el teléfono de la empresa"
+                        id="telefono"
+                        name="telefono"
+                        type="tel"
+                        value={formData.telefono}
+                        onChange={(value) => setFormData((prevData) => ({ ...prevData, telefono: value }))}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="sector">Sector</Label>
+                    <Select
+                        id="sector"
+                        onValueChange={(value) => handleSelectChange("idSector", value)}
+                        value={formData.idSector}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Seleccione">{formData.idSector ? relationalObjects.sectores.find((ne) => ne.idSector == formData.idSector).nombre : "Seleccione un sector"}</SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            {relationalObjects.sectores && relationalObjects.sectores.map((ne) => (
+                                <SelectItem key={ne.idSector} value={ne.idSector}>
+                                    {ne.nombre}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
             <div className="space-y-2">
                 <Label htmlFor="paginaWeb">Página web</Label>
-                <Input id="paginaWeb" name="paginaWeb" type="url" value={formData.paginaWeb} onChange={handleChange} />
-            </div>
-            <div className="space-y-2">
-                <Label htmlFor="sector">Sector</Label>
-                <Input id="sector" name="sector" value={formData.sector} onChange={handleChange} required />
+                <Input id="paginaWeb" name="paginaWeb" type="url" value={formData.paginaWeb} onChange={handleChange} placeholder="Ingrese la página web de la empresa" />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="tamanoEmpresa">Tamaño de la empresa</Label>
-                <Select onValueChange={(value) => handleSelectChange('tamanoEmpresa', value)}>
+                <Select
+                    id="tamanoEmpresa"
+                    onValueChange={(value) => handleSelectChange("idTamañoEmpresa", value)}
+                    value={formData.idTamañoEmpresa}
+                >
                     <SelectTrigger>
-                        <SelectValue placeholder="Selecciona el tamaño de la empresa" />
+                        <SelectValue placeholder="Seleccione">{formData.idTamañoEmpresa ? relationalObjects.tamañosEmpresa.find((ne) => ne.idTamañoEmpresa == formData.idTamañoEmpresa).nombre : "Seleccione un tamaño de empresa"}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="micro">Micro (1-9 empleados)</SelectItem>
-                        <SelectItem value="pequena">Pequeña (10-49 empleados)</SelectItem>
-                        <SelectItem value="mediana">Mediana (50-249 empleados)</SelectItem>
-                        <SelectItem value="grande">Grande (250+ empleados)</SelectItem>
+                        {relationalObjects.tamañosEmpresa && relationalObjects.tamañosEmpresa.map((ne) => (
+                            <SelectItem key={ne.idTamañoEmpresa} value={ne.idTamañoEmpresa}>
+                                {ne.descripcion}
+                            </SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
             </div>
             <div className="space-y-2">
                 <Label htmlFor="direccion">Dirección</Label>
-                <Textarea id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} rows={3} />
+                <Textarea id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} rows={3} placeholder="Ingrese la dirección de la empresa" />
             </div>
             <Button type="submit" className="w-full">
                 Registrarse
@@ -123,7 +200,7 @@ const RegistroEmpresa = () => {
                     <DialogFooter className="sm:justify-center">
                         <DialogClose asChild>
                             <Button type="button">
-                            ¡Perfecto!, continuar
+                                ¡Perfecto!, continuar
                             </Button>
                         </DialogClose>
                     </DialogFooter>

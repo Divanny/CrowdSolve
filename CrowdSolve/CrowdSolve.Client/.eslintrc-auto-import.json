@@ -83,6 +83,12 @@
     "useToast": true,
     "useTransition": true,
     "useAxios": true,
-    "SignupRegistroParticipante": true
+    "SignupRegistroParticipante": true,
+    "PageLoader": true,
+    "ProtectedRoute": true,
+    "SignupRegistroEmpresa": true,
+    "UiPhone-input": true,
+    "LayoutProfileDropdownMenuContent": true,
+    "UiDate-picker": true
   }
 }

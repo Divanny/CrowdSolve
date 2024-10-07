@@ -1,7 +1,9 @@
-import CrowdSolveLogo from "@/assets/CrowdSolveLogo_light.svg";
+import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
+import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { Button } from "@/components/ui/button";
 import { Loading02Icon } from "hugeicons-react"
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from '@/components/ui/password-input';
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import useAxios from "@/hooks/use-axios";
@@ -15,6 +17,9 @@ import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 
 function SignIn() {
   const navigate = useNavigate();
+
+  const theme = useSelector((state) => state.theme.theme);
+  const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
   
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -48,7 +53,9 @@ function SignIn() {
           views: Array.isArray(data.vistas) ? data.vistas : []
         }));
 
-        if (data.usuario.estatus === EstatusUsuarioEnum.Incompleto) {
+        console.log(data.usuario, EstatusUsuarioEnum.Incompleto);
+
+        if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
           navigate("/SignUp/Complete");
         } else {
           navigate("/");
@@ -62,9 +69,7 @@ function SignIn() {
         });
       }
     } catch (error) {
-      toast.error("Operación fallida", {
-        description: error.message,
-      });
+      console.error(error);
     }
   };
 
@@ -172,9 +177,8 @@ function SignIn() {
                       ¿Has olvidado tu contraseña?
                     </Link>
                   </div>
-                  <Input
+                  <PasswordInput
                     id="password"
-                    type="password"
                     placeholder="Ingrese su contraseña"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

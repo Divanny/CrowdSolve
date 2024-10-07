@@ -1,5 +1,7 @@
-﻿using CrowdSolve.Server.Infraestructure;
+﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +14,16 @@ namespace CrowdSolve.Server.Controllers
         private readonly Authentication _authentication;
         private readonly Logger _logger;
         private readonly int _idUsuarioOnline;
+        private readonly UsuariosRepo _usuariosRepo;
+        private readonly PerfilesRepo _perfilesRepo;
 
-        public AccountController(IUserAccessor userAccessor, Authentication authentication, Logger logger)
+        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger)
         {
             _authentication = authentication;
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
+            _usuariosRepo = new UsuariosRepo(crowdSolveContext);
+            _perfilesRepo = new PerfilesRepo(crowdSolveContext);
         }
 
         /// <summary>
@@ -28,10 +34,16 @@ namespace CrowdSolve.Server.Controllers
         [Authorize]
         public object GetUserData()
         {
-            return new
+            UsuariosModel usuario = _usuariosRepo.Get(_idUsuarioOnline);
+            List<Vistas> vistas = _perfilesRepo.GetPermisos(Convert.ToInt32(usuario.idPerfil)).ToList();
+
+            var data = new
             {
-                idUsuario = _idUsuarioOnline
+                usuario = usuario,
+                vistas = vistas
             };
+
+            return data;
         }
 
         /// <summary>

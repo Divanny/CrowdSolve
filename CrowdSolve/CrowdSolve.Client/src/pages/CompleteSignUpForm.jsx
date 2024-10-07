@@ -1,5 +1,8 @@
-import CrowdSolveLogo from "@/assets/CrowdSolveLogo_light.svg";
+import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
+import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
+
 import { Card } from "@/components/ui/card";
 import RegistroParticipante from "@/components/signup/RegistroParticipante";
 import { Button } from "@/components/ui/button";
@@ -8,6 +11,9 @@ import RegistroEmpresa from "@/components/signup/RegistroEmpresa";
 function CompleteSignUpForm() {
   const { Role } = useParams();
   const navigate = useNavigate();
+
+  const theme = useSelector((state) => state.theme.theme);
+  const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
   return (
     <div className="flex flex-col min-h-screen">

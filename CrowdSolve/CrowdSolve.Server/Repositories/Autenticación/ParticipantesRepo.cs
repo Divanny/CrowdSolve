@@ -17,6 +17,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 Nombres = p.Nombres,
                 Apellidos = p.Apellidos,
                 FechaNacimiento = p.FechaNacimiento,
+                Telefono = p.Telefono,
                 idNivelEducativo = p.idNivelEducativo,
                 DescripcionPersonal = p.DescripcionPersonal
             }),
@@ -31,9 +32,10 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             Nombres = p.Nombres,
                             Apellidos = p.Apellidos,
                             FechaNacimiento = p.FechaNacimiento,
+                            Telefono = p.Telefono,
                             idNivelEducativo = p.idNivelEducativo,
                             NivelEducativo = nivelEducativo.Nombre,
-                            DescripcionPersonal = p.DescripcionPersonal
+                            DescripcionPersonal = p.DescripcionPersonal,
                         });
             }
         )

@@ -1,6 +1,8 @@
-import CrowdSolveLogo from "@/assets/CrowdSolveLogo_light.svg";
+import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
+import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import useAxios from "@/hooks/use-axios";
@@ -10,11 +12,14 @@ import { ReactTyped } from "react-typed";
 import { Card } from "@/components/ui/card";
 import { Loading02Icon } from "hugeicons-react"
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../redux/slices/userSlice';
 
 function SignUp() {
   const navigate = useNavigate();
+
+  const theme = useSelector((state) => state.theme.theme);
+  const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -60,9 +65,7 @@ function SignUp() {
         });
       }
     } catch (error) {
-      toast.error("Operación fallida", {
-        description: error.message,
-      });
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -178,9 +181,8 @@ function SignUp() {
                 {/* Password */}
                 <div className="grid gap-2">
                   <Label htmlFor="password">Contraseña</Label>
-                  <Input
+                  <PasswordInput
                     id="password"
-                    type="password"
                     placeholder="Ingrese su contraseña"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

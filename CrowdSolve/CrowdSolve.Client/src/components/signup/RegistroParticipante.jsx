@@ -36,14 +36,13 @@ const RegistroParticipante = () => {
     const [relationalObjects, setRelationalObjects] = useState({});
 
     const [formData, setFormData] = useState({
+        idUsuario: user.idUsuario,
         nombres: "",
         apellidos: "",
         fechaNacimiento: null,
-        email: "",
         telefono: "",
-        nivelEducativo: 0,
         descripcionPersonal: "",
-        idUsuario: user.idUsuario
+        idNivelEducativo: 0,
     });
 
     useEffect(() => {
@@ -52,9 +51,7 @@ const RegistroParticipante = () => {
                 const response = await api.get("api/Participantes/GetRelationalObjects");
                 setRelationalObjects(response.data);
             } catch (error) {
-                toast.error("Operación fallida", {
-                    description: error.message,
-                });
+                console.error(error);
             }
         };
 
@@ -69,21 +66,22 @@ const RegistroParticipante = () => {
 
     const handleSelectChange = (name, value) => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
-        console.log(`Actualizando ${name} a`, value);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.nombres || !formData.apellidos || !formData.fechaNacimiento || !formData.telefono || !formData.nivelEducativo || !formData.descripcionPersonal) {
+        if (!formData.nombres || !formData.apellidos || !formData.fechaNacimiento || !formData.telefono || !formData.idNivelEducativo || !formData.descripcionPersonal) {
             toast.warning("Operación fallida", {
                 description: "Por favor, complete todos los campos",
             });
             return;
         }
 
+        formData.fechaNacimiento = format(formData.fechaNacimiento, "yyyy-MM-dd");
+
         try {
-            const response = await api.post("/api/Participantes", formData);
+            const response = await api.post("api/Participantes", formData);
 
             if (response.data.success) {
                 navigate("/");
@@ -96,9 +94,7 @@ const RegistroParticipante = () => {
                 });
             }
         } catch (error) {
-            toast.error("Operación fallida", {
-                description: error.message,
-            });
+            console.error(error);
         }
     };
 
@@ -149,9 +145,12 @@ const RegistroParticipante = () => {
                         <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                                 mode="single"
+                                captionLayout="dropdown-buttons"
                                 selected={formData.fechaNacimiento}
                                 onSelect={(date) => setFormData((prevData) => ({ ...prevData, fechaNacimiento: date }))}
-                                initialFocus
+                                autoFocus
+                                fromYear={1960}
+                                toYear={new Date().getFullYear()}
                             />
                         </PopoverContent>
                     </Popover>
@@ -171,11 +170,11 @@ const RegistroParticipante = () => {
             <div className="space-y-2">
                 <Label htmlFor="nivelEducativo">Nivel educativo</Label>
                 <Select
-                    onValueChange={(value) => handleSelectChange("nivelEducativo", value)}
-                    value={formData.nivelEducativo}
+                    onValueChange={(value) => handleSelectChange("idNivelEducativo", value)}
+                    value={formData.idNivelEducativo}
                 >
                     <SelectTrigger>
-                        <SelectValue placeholder="Seleccione">{formData.nivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == formData.nivelEducativo).nombre : "Seleccione un nivel educativo"}</SelectValue>                        
+                        <SelectValue placeholder="Seleccione">{formData.idNivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == formData.idNivelEducativo).nombre : "Seleccione un nivel educativo"}</SelectValue>                        
                     </SelectTrigger>
                     <SelectContent>
                         {relationalObjects.nivelesEducativos && relationalObjects.nivelesEducativos.map((ne) => (

@@ -7,7 +7,11 @@
 export {}
 declare global {
   const LayoutNavbar: typeof import('@/components/layout/Navbar.jsx')['Navbar']
+  const LayoutProfileDropdownMenuContent: typeof import('@/components/layout/ProfileDropdownMenuContent.jsx')['ProfileDropdownMenuContent']
   const NotFound: typeof import('@/components/NotFound.jsx')['NotFound']
+  const PageLoader: typeof import('@/components/PageLoader.jsx')['PageLoader']
+  const ProtectedRoute: typeof import('@/components/ProtectedRoute.jsx')['ProtectedRoute']
+  const SignupRegistroEmpresa: typeof import('@/components/signup/RegistroEmpresa.jsx')['RegistroEmpresa']
   const SignupRegistroParticipante: typeof import('@/components/signup/RegistroParticipante.jsx')['RegistroParticipante']
   const UiAccordion: typeof import('@/components/ui/accordion.jsx')['accordion']
   const UiAlert: typeof import('@/components/ui/alert.jsx')['alert']
@@ -25,6 +29,7 @@ declare global {
   const UiCollapsible: typeof import('@/components/ui/collapsible.jsx')['collapsible']
   const UiCommand: typeof import('@/components/ui/command.jsx')['command']
   const UiContext-menu: typeof import('@/components/ui/context-menu.jsx')['context-menu']
+  const UiDate-picker: typeof import('@/components/ui/date-picker.jsx')['date-picker']
   const UiDialog: typeof import('@/components/ui/dialog.jsx')['dialog']
   const UiDrawer: typeof import('@/components/ui/drawer.jsx')['drawer']
   const UiDropdown-menu: typeof import('@/components/ui/dropdown-menu.jsx')['dropdown-menu']
@@ -36,6 +41,7 @@ declare global {
   const UiMenubar: typeof import('@/components/ui/menubar.jsx')['menubar']
   const UiNavigation-menu: typeof import('@/components/ui/navigation-menu.jsx')['navigation-menu']
   const UiPagination: typeof import('@/components/ui/pagination.jsx')['pagination']
+  const UiPhone-input: typeof import('@/components/ui/phone-input.jsx')['phone-input']
   const UiPopover: typeof import('@/components/ui/popover.jsx')['popover']
   const UiProgress: typeof import('@/components/ui/progress.jsx')['progress']
   const UiRadio-group: typeof import('@/components/ui/radio-group.jsx')['radio-group']

@@ -292,6 +292,10 @@ public partial class CrowdSolveContext : DbContext
                 .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Telefono)
+                .IsRequired()
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Perfiles>(entity =>

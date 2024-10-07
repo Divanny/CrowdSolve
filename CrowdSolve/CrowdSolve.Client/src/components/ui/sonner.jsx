@@ -1,14 +1,14 @@
-import { useTheme } from "next-themes"
 import { Toaster as Sonner } from "sonner"
+import { useSelector } from 'react-redux';
 
 const Toaster = ({
   ...props
 }) => {
-  const { theme = "system" } = useTheme()
+  const theme = useSelector((state) => state.theme.theme);
 
   return (
     (<Sonner
-      theme={theme}
+      theme={theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme}
       className="toaster group"
       toastOptions={{
         classNames: {
@@ -19,6 +19,7 @@ const Toaster = ({
             "group-[.toast]:bg-primary group-[.toast]:text-primary-foreground",
           cancelButton:
             "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
+          icon: 'group-data-[type=error]:text-red-500 group-data-[type=success]:text-green-500 group-data-[type=warning]:text-amber-500 group-data-[type=info]:text-blue-500',
         },
       }}
       {...props} />)

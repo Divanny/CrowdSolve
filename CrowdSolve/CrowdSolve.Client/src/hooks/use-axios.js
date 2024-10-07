@@ -39,17 +39,21 @@ const useAxios = () => {
             dispatch(setLoading(false));
 
             if (error.response) {
-                const { status, data } = error.response;
+                const { status } = error.response;
                 if (status === 401) {
                     dispatch(clearUser());
                     navigate("/SignIn");
                     toast.warning("Sesión expirada. Por favor, inicia sesión nuevamente.");
                 } else {
                     // Manejar otros errores
-                    toast.error(data.message || "Ocurrió un error.");
+                    toast.error("Operación fallida", {
+                        description: error.message,
+                    });
                 }
             } else {
-                toast.error("Error de red o servidor no disponible.");
+                toast.error("Operación fallida", {
+                    description: error.message,
+                });
             }
 
             return Promise.reject(error);

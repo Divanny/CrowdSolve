@@ -76,8 +76,8 @@ const CountrySelect = ({ disabled, value, onChange, options }) => {
                 <Command>
                     <CommandList>
                         <ScrollArea className="h-72">
-                            <CommandInput placeholder="Search country..." />
-                            <CommandEmpty>No country found.</CommandEmpty>
+                            <CommandInput placeholder="Buscar pais..." />
+                            <CommandEmpty>No se han encontrado paises</CommandEmpty>
                             <CommandGroup>
                                 {options
                                     .filter((x) => x.value)
