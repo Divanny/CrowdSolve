@@ -13,11 +13,17 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
     const isLoading = useSelector((state) => state.loading.isLoading);
-    const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
+    const theme = useSelector((state) => state.theme.theme);
 
     useEffect(() => {
-        document.body.className = isDarkMode ? 'dark' : 'light';
-    }, [isDarkMode]);
+        if (theme == 'system') {
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.classList.add(systemPrefersDark ? 'dark' : 'light');
+        }
+        else {
+            document.documentElement.classList.add(theme);
+        }
+    }, [theme]);
 
     return (
         <>
@@ -30,7 +36,7 @@ function App() {
                 <Route path="/SignUp/Complete/:Role" element={<ProtectedRoute><CompleteSignUpForm /></ProtectedRoute>} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
-            <Toaster richColors toastOptions={{}} theme={isDarkMode ? 'dark' : 'light'} />
+            <Toaster richColors toastOptions={{}} theme={'dark'} />
         </>
     );
 }

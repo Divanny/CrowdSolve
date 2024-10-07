@@ -1,7 +1,7 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import loadingReducer from './slices/loadingSlice';
 import userReducer from './slices/userSlice';
-import darkModeReducer from './slices/darkModeSlice';
+import themeReducer from './slices/themeSlice';
 import {
   persistStore,
   persistReducer,
@@ -17,13 +17,13 @@ import storage from 'redux-persist/lib/storage';
 const rootReducer = combineReducers({
   loading: loadingReducer,
   user: userReducer,
-  darkMode: darkModeReducer
+  theme: themeReducer
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user', 'darkMode'], // Solo persistimos el estado del usuario
+  whitelist: ['user', 'theme'], // Solo persistimos el estado del usuario
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

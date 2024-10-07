@@ -6,8 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { clearUser } from '@/redux/slices/userSlice';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { toast } from "sonner";
-import { setDarkMode } from '@/redux/slices/darkModeSlice';
-
+import { setTheme } from '@/redux/slices/themeSlice';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,16 +19,15 @@ import {
     DropdownMenuSub,
     DropdownMenuSubContent,
     DropdownMenuSubTrigger,
-    DropdownMenuTrigger,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem
+    DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { Check, Moon, Sun } from 'lucide-react';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
-    const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
+    const theme = useSelector((state) => state.theme.theme);
 
     const handleLogout = () => {
         dispatch(clearUser());
@@ -38,9 +36,8 @@ const Navbar = () => {
         });
     };
 
-    const setIsDarkMode = (value) => {
-        console.log(value);
-        dispatch(setDarkMode(value === 'true'));
+    const handleTheme = (value) => {
+        dispatch(setTheme(value));
     };
 
     return (
@@ -85,11 +82,11 @@ const Navbar = () => {
                                     <DropdownMenuSeparator />
                                     <DropdownMenuGroup>
                                         <DropdownMenuItem>
-                                            Profile
+                                            Mi perfil
                                             <DropdownMenuShortcut>⇧P</DropdownMenuShortcut>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
-                                            Billing
+                                            Mis soluciones
                                             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
@@ -103,29 +100,32 @@ const Navbar = () => {
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuGroup>
-                                        <DropdownMenuItem>Team</DropdownMenuItem>
+
                                         <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
+                                            <DropdownMenuSubTrigger>
+                                                <span>Invite users</span>
+                                            </DropdownMenuSubTrigger>
                                             <DropdownMenuPortal>
-                                                <DropdownMenuSubContent>
-                                                    <DropdownMenuItem>Email</DropdownMenuItem>
-                                                    <DropdownMenuItem>Message</DropdownMenuItem>
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuItem>More...</DropdownMenuItem>
+                                                <DropdownMenuSubContent className="w-36 mr-2">
+                                                    <DropdownMenuItem onSelect={handleTheme('system')}>
+                                                        <Sun className="mr-2 h-4 w-4" />
+                                                        <span>Sistema</span>
+                                                        { theme == 'system' && <Check className="ml-auto h-4 w-4" />}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onSelect={handleTheme('light')}>
+                                                        <Sun className="mr-2 h-4 w-4" />
+                                                        <span>Claro</span>
+                                                        { theme == 'light' && <Check className="ml-auto h-4 w-4" />}
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onSelect={handleTheme('dark')}>
+                                                        <Moon className="mr-2 h-4 w-4" />
+                                                        <span>Oscuro</span>
+                                                        { theme == 'dark' && <Check className="ml-auto h-4 w-4" />}
+                                                    </DropdownMenuItem>
                                                 </DropdownMenuSubContent>
                                             </DropdownMenuPortal>
                                         </DropdownMenuSub>
-                                        <DropdownMenuItem>
-                                            New Team
-                                            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                                        </DropdownMenuItem>
                                     </DropdownMenuGroup>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuLabel>Tema</DropdownMenuLabel>
-                                    <DropdownMenuRadioGroup value={isDarkMode} onValueChange={setIsDarkMode}>
-                                        <DropdownMenuRadioItem value="false">Top</DropdownMenuRadioItem>
-                                        <DropdownMenuRadioItem value="true">Bottom</DropdownMenuRadioItem>
-                                    </DropdownMenuRadioGroup>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem onSelect={handleLogout}>
                                         Log out
