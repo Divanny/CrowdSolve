@@ -89,6 +89,7 @@
     "SignupRegistroEmpresa": true,
     "UiPhone-input": true,
     "LayoutProfileDropdownMenuContent": true,
-    "UiDate-picker": true
+    "UiDate-picker": true,
+    "UiPassword-input": true
   }
 }

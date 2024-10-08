@@ -41,6 +41,7 @@ declare global {
   const UiMenubar: typeof import('@/components/ui/menubar.jsx')['menubar']
   const UiNavigation-menu: typeof import('@/components/ui/navigation-menu.jsx')['navigation-menu']
   const UiPagination: typeof import('@/components/ui/pagination.jsx')['pagination']
+  const UiPassword-input: typeof import('@/components/ui/password-input.jsx')['password-input']
   const UiPhone-input: typeof import('@/components/ui/phone-input.jsx')['phone-input']
   const UiPopover: typeof import('@/components/ui/popover.jsx')['popover']
   const UiProgress: typeof import('@/components/ui/progress.jsx')['progress']

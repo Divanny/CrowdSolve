@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import NotFound from '@/components/NotFound';
 import PageLoader from '@/components/PageLoader';
 import Home from '@/pages/Home';
-import SignIn from '@/pages/SignIn';
-import SignUp from '@/pages/SignUp';
-import CompleteSignUp from '@/pages/CompleteSignUp';
-import CompleteSignUpForm from '@/pages/CompleteSignUpForm';
+import SignIn from '@/pages/auth/SignIn';
+import SignUp from '@/pages/auth/SignUp';
+import CompleteSignUp from '@/pages/auth/CompleteSignUp';
+import CompleteSignUpForm from '@/pages/auth/CompleteSignUpForm';
+import VerificationPending from '@/pages/company/VerificationPending';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import useAxios from './hooks/use-axios';
 import { setUser } from '@/redux/slices/userSlice';
@@ -59,6 +60,7 @@ function App() {
                 <Route path="/SignUp" element={<SignUp />} />
                 <Route path="/SignUp/Complete" element={<ProtectedRoute><CompleteSignUp /></ProtectedRoute>} />
                 <Route path="/SignUp/Complete/:Role" element={<ProtectedRoute><CompleteSignUpForm /></ProtectedRoute>} />
+                <Route path="/Company/VerificationPending" element={<ProtectedRoute><VerificationPending /></ProtectedRoute>} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

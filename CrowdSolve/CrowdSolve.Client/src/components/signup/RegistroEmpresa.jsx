@@ -89,7 +89,7 @@ const RegistroEmpresa = () => {
             const response = await api.post("api/Empresas", formData);
 
             if (response.data.success) {
-                navigate("/Company/WaitingVerification");
+                navigate("/Company/VerificationPending");
                 toast.success("Operación exitosa", {
                     description: response.data.message,
                 });

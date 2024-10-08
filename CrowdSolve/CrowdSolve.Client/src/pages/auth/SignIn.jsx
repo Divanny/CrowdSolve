@@ -1,8 +1,9 @@
 import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { Button } from "@/components/ui/button";
+import { Loading02Icon } from "hugeicons-react"
 import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
+import { PasswordInput } from '@/components/ui/password-input';
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import useAxios from "@/hooks/use-axios";
@@ -10,40 +11,37 @@ import { toast } from "sonner";
 import { useNavigate, Link } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 import { Card } from "@/components/ui/card";
-import { Loading02Icon } from "hugeicons-react"
-
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../redux/slices/userSlice';
+import { setUser } from '@/redux/slices/userSlice';
+import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 
-function SignUp() {
+function SignIn() {
   const navigate = useNavigate();
 
   const theme = useSelector((state) => state.theme.theme);
   const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const { api } = useAxios();
+  const isLoading = useSelector((state) => state.loading.isLoading);
+
   const dispatch = useDispatch();
 
-  const handleSignUp = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    if (!username || !password || !email) {
+    if (!username || !password) {
       toast.warning("Operación fallida", {
         description: "Por favor, complete todos los campos",
       });
       return;
     }
 
-    setLoading(true);
     try {
-      const response = await api.post("/api/Account/SignUp", {
+      const response = await api.post("/api/Account/SignIn", {
         username,
-        email,
-        password,
+        password
       });
 
       if (response.data.success) {
@@ -55,9 +53,17 @@ function SignUp() {
           views: Array.isArray(data.vistas) ? data.vistas : []
         }));
 
-        navigate("/SignUp/Complete");
+        console.log(data.usuario, EstatusUsuarioEnum.Incompleto);
+
+        if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.PendienteDeValidar) {
+          navigate("/Company/VerificationPending");
+        } else if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
+          navigate("/SignUp/Complete");
+        } else {
+          navigate("/");
+        }
         toast.success("Operación exitosa", {
-          description: response.data.message,
+          description: "Inicio de sesión exitoso",
         });
       } else {
         toast.warning("Operación fallida", {
@@ -66,14 +72,12 @@ function SignUp() {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="grid grid-cols-1 gap-4">
+      <main className="grid grid-cols-1 gap-4 min-[1000px]:grid-cols-2">
         <div className="flex grow flex-col justify-center pt-2 [@media(min-height:800px)]:pt-6 [@media(min-height:900px)]:pt-10 w-full min-h-screen px-5">
           <div className="w-full max-w-md mx-auto">
             <div className="flex items-center justify-center mb-6 sm:mb-8">
@@ -151,8 +155,7 @@ function SignUp() {
                 </div>
               </div>
 
-              <form onSubmit={handleSignUp} className="grid gap-4 mb-4">
-                {/* Username */}
+              <form onSubmit={handleSignIn} className="grid gap-4 mb-4">
                 <div className="grid gap-2">
                   <Label htmlFor="username">Nombre de usuario</Label>
                   <Input
@@ -165,22 +168,17 @@ function SignUp() {
                     tabIndex={2}
                   />
                 </div>
-                {/* Email */}
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Correo electrónico</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Ingrese su correo electrónico"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    tabIndex={3}
-                  />
-                </div>
-                {/* Password */}
-                <div className="grid gap-2">
-                  <Label htmlFor="password">Contraseña</Label>
+                  <div className="flex items-center">
+                    <Label htmlFor="password">Contraseña</Label>
+                    <Link
+                      to="/ForgotPassword"
+                      className="text-primary font-medium ml-auto inline-block text-xs"
+                      tabIndex={4}
+                    >
+                      ¿Has olvidado tu contraseña?
+                    </Link>
+                  </div>
                   <PasswordInput
                     id="password"
                     placeholder="Ingrese su contraseña"
@@ -191,35 +189,37 @@ function SignUp() {
                   />
                 </div>
 
-                {loading ? (
+                {isLoading ? (
                   <Button disabled className="w-full" tabIndex={5}>
                     <Loading02Icon className="mr-2 h-4 w-4 animate-spin" />
                     Por favor, espere
                   </Button>
                 ) : (
                   <Button type="submit" className="w-full" tabIndex={5}>
-                    Crear cuenta
+                    Iniciar sesión
                   </Button>
                 )}
               </form>
 
               <div className="mt-4 text-center text-xs">
-                ¿Ya tienes una cuenta?{" "}
-                <Link to="/SignIn" className="text-primary font-medium" tabIndex={6}>
-                  Iniciar Sesión
+                ¿No tienes una cuenta?{" "}
+                <Link
+                  to="/SignUp"
+                  className="text-primary font-medium"
+                  tabIndex={6}
+                >
+                  Registrarse
                 </Link>
               </div>
-
-              <p className="text-xs opacity-50 mt-4">
-                By continuing, you agree to CrowdSolve&apos;s Consumer Terms and
-                Usage Policy, and acknowledge their Privacy Policy.
-              </p>
             </Card>
           </div>
+        </div>
+        <div className="hidden min-[500px]:flex justify-center p-0 sm:p-4 ">
+          <div className="w-full rounded-xl bg-card"></div>
         </div>
       </main>
     </div>
   );
 }
 
-export default SignUp;
+export default SignIn;

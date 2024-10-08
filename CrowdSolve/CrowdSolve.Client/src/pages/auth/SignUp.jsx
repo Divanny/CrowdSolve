@@ -1,9 +1,8 @@
 import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { Button } from "@/components/ui/button";
-import { Loading02Icon } from "hugeicons-react"
 import { Input } from "@/components/ui/input";
-import { PasswordInput } from '@/components/ui/password-input';
+import { PasswordInput } from "@/components/ui/password-input";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import useAxios from "@/hooks/use-axios";
@@ -11,37 +10,48 @@ import { toast } from "sonner";
 import { useNavigate, Link } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 import { Card } from "@/components/ui/card";
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../redux/slices/userSlice';
-import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
+import { Loading02Icon } from "hugeicons-react"
 
-function SignIn() {
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '@/redux/slices/userSlice';
+
+function SignUp() {
   const navigate = useNavigate();
 
   const theme = useSelector((state) => state.theme.theme);
   const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
-  
+
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { api } = useAxios();
-  const isLoading = useSelector((state) => state.loading.isLoading);
-
   const dispatch = useDispatch();
 
-  const handleSignIn = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    if (!username || !password) {
+    if (!username || !password || !email) {
       toast.warning("Operación fallida", {
         description: "Por favor, complete todos los campos",
       });
       return;
     }
 
+    if (password !== confirmPassword) {
+      toast.warning("Operación fallida", {
+        description: "Las contraseñas no coinciden",
+      });
+      return;
+    }
+
+    setLoading(true);
     try {
-      const response = await api.post("/api/Account/SignIn", {
+      const response = await api.post("/api/Account/SignUp", {
         username,
-        password
+        email,
+        password,
       });
 
       if (response.data.success) {
@@ -53,15 +63,9 @@ function SignIn() {
           views: Array.isArray(data.vistas) ? data.vistas : []
         }));
 
-        console.log(data.usuario, EstatusUsuarioEnum.Incompleto);
-
-        if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
-          navigate("/SignUp/Complete");
-        } else {
-          navigate("/");
-        }
+        navigate("/SignUp/Complete");
         toast.success("Operación exitosa", {
-          description: "Inicio de sesión exitoso",
+          description: response.data.message,
         });
       } else {
         toast.warning("Operación fallida", {
@@ -70,12 +74,14 @@ function SignIn() {
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="grid grid-cols-1 gap-4 min-[1000px]:grid-cols-2">
+      <main className="grid grid-cols-1 gap-4">
         <div className="flex grow flex-col justify-center pt-2 [@media(min-height:800px)]:pt-6 [@media(min-height:900px)]:pt-10 w-full min-h-screen px-5">
           <div className="w-full max-w-md mx-auto">
             <div className="flex items-center justify-center mb-6 sm:mb-8">
@@ -153,7 +159,8 @@ function SignIn() {
                 </div>
               </div>
 
-              <form onSubmit={handleSignIn} className="grid gap-4 mb-4">
+              <form onSubmit={handleSignUp} className="grid gap-4 mb-4">
+                {/* Username */}
                 <div className="grid gap-2">
                   <Label htmlFor="username">Nombre de usuario</Label>
                   <Input
@@ -166,17 +173,22 @@ function SignIn() {
                     tabIndex={2}
                   />
                 </div>
+                {/* Email */}
                 <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Contraseña</Label>
-                    <Link
-                      to="/ForgotPassword"
-                      className="text-primary font-medium ml-auto inline-block text-xs"
-                      tabIndex={4}
-                    >
-                      ¿Has olvidado tu contraseña?
-                    </Link>
-                  </div>
+                  <Label htmlFor="email">Correo electrónico</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Ingrese su correo electrónico"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    tabIndex={3}
+                  />
+                </div>
+                {/* Password */}
+                <div className="grid gap-2">
+                  <Label htmlFor="password">Contraseña</Label>
                   <PasswordInput
                     id="password"
                     placeholder="Ingrese su contraseña"
@@ -186,38 +198,49 @@ function SignIn() {
                     tabIndex={3}
                   />
                 </div>
+                
+                {/* Confirm Password */}
+                <div className="grid gap-2">
+                  <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
+                  <PasswordInput
+                    id="confirmPassword"
+                    placeholder="Confirme su contraseña"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    tabIndex={4}
+                  />
+                </div>
 
-                {isLoading ? (
+                {loading ? (
                   <Button disabled className="w-full" tabIndex={5}>
                     <Loading02Icon className="mr-2 h-4 w-4 animate-spin" />
                     Por favor, espere
                   </Button>
                 ) : (
                   <Button type="submit" className="w-full" tabIndex={5}>
-                    Iniciar sesión
+                    Crear cuenta
                   </Button>
                 )}
               </form>
 
               <div className="mt-4 text-center text-xs">
-                ¿No tienes una cuenta?{" "}
-                <Link
-                  to="/SignUp"
-                  className="text-primary font-medium"
-                  tabIndex={6}
-                >
-                  Registrarse
+                ¿Ya tienes una cuenta?{" "}
+                <Link to="/SignIn" className="text-primary font-medium" tabIndex={6}>
+                  Iniciar Sesión
                 </Link>
               </div>
+
+              <p className="text-xs opacity-50 mt-4">
+                By continuing, you agree to CrowdSolve&apos;s Consumer Terms and
+                Usage Policy, and acknowledge their Privacy Policy.
+              </p>
             </Card>
           </div>
-        </div>
-        <div className="hidden min-[500px]:flex justify-center p-0 sm:p-4 ">
-          <div className="w-full rounded-xl bg-card"></div>
         </div>
       </main>
     </div>
   );
 }
 
-export default SignIn;
+export default SignUp;

@@ -86,6 +86,7 @@ namespace CrowdSolve.Server.Controllers
                 usuario.idPerfil = (int)PerfilesEnum.Empresa;
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Pendiente_de_validar;
 
+                _usuariosRepo.Edit(usuario);
                 var created = _empresasRepo.Add(empresasModel);
                 _logger.LogHttpRequest(empresasModel);
                 return new OperationResult(true, "La solicitud de creación de la empresa ha sido enviada. Se validará y activará la cuenta.", created);
