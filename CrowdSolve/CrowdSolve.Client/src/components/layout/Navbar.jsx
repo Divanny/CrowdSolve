@@ -48,8 +48,8 @@ const Navbar = () => {
 
                         </div>
                     ) : (<div className='flex items-center mx-2'>
-                        <Button className="mx-1 my-1 text-sm" variant="secondary" onClick={() => navigate('/SignIn')}>Iniciar sesión</Button>
-                        <Button className="mx-1 my-1 text-sm" onClick={() => navigate('/SignUp')}>Registrarse</Button>
+                        <Button className="mx-1 my-1 text-sm" variant="secondary" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
+                        <Button className="mx-1 my-1 text-sm" onClick={() => navigate('/sign-up')}>Registrarse</Button>
                     </div>)}
                 </div>
             </div>

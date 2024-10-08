@@ -56,11 +56,11 @@ function App() {
             {isLoading && <PageLoader />}
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/SignIn" element={<SignIn />} />
-                <Route path="/SignUp" element={<SignUp />} />
-                <Route path="/SignUp/Complete" element={<ProtectedRoute><CompleteSignUp /></ProtectedRoute>} />
-                <Route path="/SignUp/Complete/:Role" element={<ProtectedRoute><CompleteSignUpForm /></ProtectedRoute>} />
-                <Route path="/Company/VerificationPending" element={<ProtectedRoute><VerificationPending /></ProtectedRoute>} />
+                <Route path="/sign-in" element={<SignIn />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                <Route path="/sign-up/complete" element={<ProtectedRoute><CompleteSignUp /></ProtectedRoute>} />
+                <Route path="/sign-up/complete/:Role" element={<ProtectedRoute><CompleteSignUpForm /></ProtectedRoute>} />
+                <Route path="/company/pending-verification" element={<ProtectedRoute><VerificationPending /></ProtectedRoute>} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

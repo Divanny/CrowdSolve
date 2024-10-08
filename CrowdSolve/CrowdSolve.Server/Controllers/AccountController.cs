@@ -99,5 +99,55 @@ namespace CrowdSolve.Server.Controllers
                 return new OperationResult(false, ex.Message);
             }
         }
+
+        /// <summary>
+        /// Endpoint para iniciar sesión con Google.
+        /// </summary>
+        /// <param name="request">Solicitud de inicio de sesión con Google.</param>
+        /// <returns>Resultado de la operación.</returns>
+        [HttpPost("GoogleLogin", Name = "GoogleLogin")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+        {
+            if (request == null || string.IsNullOrEmpty(request.Token))
+                return BadRequest(new { success = false, message = "Token de Google no proporcionado." });
+
+            var result = await _authentication.GoogleLogin(request.Token);
+
+            if (result.Success)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    message = result.Message,
+                    data = result.Data,
+                    token = result.Token
+                });
+            }
+            else
+            {
+                return BadRequest(new { success = false, message = result.Message });
+            }
+        }
+
+        [HttpGet("MailTest", Name = "MailTest")]
+        [AllowAnonymous]
+        public OperationResult MailTest()
+        {
+            try
+            {
+                Mailing.SendMail(["divannyjpm@gmail.com"], "Probando CrowdSolve email", "Prueba", Enums.MailingUsers.noreply);
+                return new OperationResult(true, "Correo enviado correctamente");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        public class GoogleLoginRequest
+        {
+            public string? Token { get; set; }
+        }
     }
 }

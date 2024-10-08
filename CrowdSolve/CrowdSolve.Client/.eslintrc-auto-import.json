@@ -90,6 +90,7 @@
     "UiPhone-input": true,
     "LayoutProfileDropdownMenuContent": true,
     "UiDate-picker": true,
-    "UiPassword-input": true
+    "UiPassword-input": true,
+    "GoogleLoginButton": true
   }
 }

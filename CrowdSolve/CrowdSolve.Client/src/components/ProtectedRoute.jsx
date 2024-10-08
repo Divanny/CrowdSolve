@@ -10,15 +10,15 @@ const ProtectedRoute = ({ children, requiredView }) => {
     const location = useLocation();
 
     if (!token) {
-        return <Navigate to="/SignIn" replace state={{ from: location }} />;
+        return <Navigate to="/sign-in" replace state={{ from: location }} />;
     }
 
     if (user.idEstatusUsuario === EstatusUsuarioEnum.PendienteDeValidar && !location.pathname.includes('/Company/VerificationPending')) {
-        return <Navigate to="/Company/VerificationPending" replace state={{ from: location }} />;
+        return <Navigate to="/company/pending-verification" replace state={{ from: location }} />;
     }
 
-    if (user.idEstatusUsuario === EstatusUsuarioEnum.Incompleto && !location.pathname.includes('/SignUp/Complete')) {
-        return <Navigate to="/SignUp/Complete" replace state={{ from: location }}/>;
+    if (user.idEstatusUsuario === EstatusUsuarioEnum.Incompleto && !location.pathname.includes('/sign-up/Complete')) {
+        return <Navigate to="/sign-up/Complete" replace state={{ from: location }}/>;
     }
 
     if (requiredView && !userViews.map((view) => view.nombre).includes(requiredView)) {

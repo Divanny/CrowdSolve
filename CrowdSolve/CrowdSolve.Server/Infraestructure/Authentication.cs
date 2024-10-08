@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Google.Apis.Auth;
+using System.Linq.Expressions;
 
 namespace CrowdSolve.Server.Infraestructure
 {
@@ -20,7 +22,7 @@ namespace CrowdSolve.Server.Infraestructure
         private readonly IPasswordHasher _passwordHasher;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
-
+        private readonly CredencialesAutenticacionRepo _credencialesAutenticacionRepo;
         /// <summary>
         /// Constructor de la clase Authentication.
         /// </summary>
@@ -39,6 +41,7 @@ namespace CrowdSolve.Server.Infraestructure
             _passwordHasher = passwordHasher;
             _usuariosRepo = new UsuariosRepo(CrowdSolveContext);
             _perfilesRepo = new PerfilesRepo(CrowdSolveContext);
+            _credencialesAutenticacionRepo = new CredencialesAutenticacionRepo(CrowdSolveContext);
         }
 
         /// <summary>
@@ -48,9 +51,8 @@ namespace CrowdSolve.Server.Infraestructure
         /// <returns>Resultado de la operación de inicio de sesión.</returns>
         public OperationResult SignIn(Credentials credentials)
         {
-            OperationResult logInResult;
             if (credentials == null) return new OperationResult(false, "Credenciales no proporcionadas", false);
-            if (string.IsNullOrEmpty(credentials.Username)) return new OperationResult(false, "Nombre de usuario no proporcionado", false);
+            if (string.IsNullOrEmpty(credentials.Username)) return new OperationResult(false, "Nombre de usuario o correo electrónico no proporcionado", false);
             if (string.IsNullOrEmpty(credentials.Password)) return new OperationResult(false, "Contraseña no proporcionada", false);
 
             if (IsDevelopmentEnvironment())
@@ -61,7 +63,7 @@ namespace CrowdSolve.Server.Infraestructure
                 }
             }
 
-            var usuario = _CrowdSolveContext.Set<Usuarios>().Where(x => x.NombreUsuario.Equals(credentials.Username)).FirstOrDefault();
+            var usuario = _CrowdSolveContext.Set<Usuarios>().Where(x => x.NombreUsuario.Equals(credentials.Username) || x.CorreoElectronico.Equals(credentials.Username)).FirstOrDefault();
 
             if (usuario == null)
             {
@@ -75,11 +77,11 @@ namespace CrowdSolve.Server.Infraestructure
 
             List<Vistas> vistas = _perfilesRepo.GetPermisos(Convert.ToInt32(usuario.idPerfil)).ToList();
 
-            string token = TokenGenerator(credentials.Username, usuario.idUsuario, usuario.idPerfil);
+            string token = TokenGenerator(usuario.NombreUsuario, usuario.idUsuario, usuario.idPerfil);
 
             var data = new
             {
-                usuario = _usuariosRepo.GetByUsername(credentials.Username),
+                usuario = _usuariosRepo.GetByUsername(usuario.NombreUsuario),
                 vistas = vistas
             };
 
@@ -159,6 +161,92 @@ namespace CrowdSolve.Server.Infraestructure
                 catch (Exception ex)
                 {
                     transaction.Rollback();
+                    return new OperationResult(false, ex.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Método para iniciar sesión con Google.
+        /// </summary>
+        /// <param name="googleToken">Token de Google.</param>
+        /// <returns>Resultado de la operación de inicio de sesión.</returns>
+        public async Task<OperationResult> GoogleLogin(string googleToken)
+        {
+            if (string.IsNullOrEmpty(googleToken))
+                return new OperationResult(false, "Token de Google no proporcionado", false);
+
+            GoogleJsonWebSignature.Payload payload;
+            try
+            {
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string>() { _configuration["Google:ClientId"] }
+                };
+                payload = await GoogleJsonWebSignature.ValidateAsync(googleToken, settings);
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, "Token de Google inválido");
+            }
+
+            using (var trx = _CrowdSolveContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var email = payload.Email;
+                    var googleUserId = payload.Subject;
+                    var name = payload.Name;
+
+                    var cred = _credencialesAutenticacionRepo.Get().FirstOrDefault(c => c.idExterno == googleUserId && c.idMetodoAutenticacion == (int)MetodosAutenticacionEnum.Google);
+
+                    Usuarios usuario;
+                    if (cred != null)
+                    {
+                        usuario = _CrowdSolveContext.Set<Usuarios>().Where(x => x.idUsuario == cred.idUsuario).FirstOrDefault();
+                    }
+                    else
+                    {
+                        usuario = _CrowdSolveContext.Usuarios.FirstOrDefault(u => u.CorreoElectronico == email);
+
+                        if (usuario == null)
+                        {
+                            usuario = _usuariosRepo.Add(new UsuariosModel()
+                            {
+                                idPerfil = _perfilesRepo.GetPerfilDefault(),
+                                NombreUsuario = name,
+                                CorreoElectronico = email,
+                                FechaRegistro = DateTime.UtcNow,
+                                idEstatusUsuario = (int)EstatusUsuariosEnum.Incompleto
+                            });
+                        }
+
+                        var nuevaCredencial = _credencialesAutenticacionRepo.Add(new CredencialesAutenticacionModel()
+                        {
+                            idUsuario = usuario.idUsuario,
+                            idMetodoAutenticacion = (int)MetodosAutenticacionEnum.Google,
+                            idExterno = googleUserId,
+                            TokenAcceso = googleToken
+                        });
+                    }
+
+                    string token = TokenGenerator(usuario.NombreUsuario, usuario.idUsuario, usuario.idPerfil);
+
+                    List<Vistas> vistas = _perfilesRepo.GetPermisos(Convert.ToInt32(usuario.idPerfil)).ToList();
+
+                    var data = new
+                    {
+                        usuario = _usuariosRepo.GetByUsername(usuario.NombreUsuario),
+                        vistas = vistas
+                    };
+
+                    trx.Commit();
+
+                    return new OperationResult(true, "Inicio de sesión exitoso con Google", data, token);
+                }
+                catch (Exception ex)
+                {
+                    trx.Rollback();
                     return new OperationResult(false, ex.Message);
                 }
             }

@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const GoogleLoginButton: typeof import('@/components/GoogleLoginButton.jsx')['GoogleLoginButton']
   const LayoutNavbar: typeof import('@/components/layout/Navbar.jsx')['Navbar']
   const LayoutProfileDropdownMenuContent: typeof import('@/components/layout/ProfileDropdownMenuContent.jsx')['ProfileDropdownMenuContent']
   const NotFound: typeof import('@/components/NotFound.jsx')['NotFound']

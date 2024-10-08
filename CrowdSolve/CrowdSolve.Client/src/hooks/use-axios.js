@@ -42,7 +42,7 @@ const useAxios = () => {
                 const { status } = error.response;
                 if (status === 401) {
                     dispatch(clearUser());
-                    navigate("/SignIn");
+                    navigate("/sign-in");
                     toast.warning("Sesión expirada. Por favor, inicia sesión nuevamente.");
                 } else {
                     // Manejar otros errores

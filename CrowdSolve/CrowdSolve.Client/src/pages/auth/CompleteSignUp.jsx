@@ -28,7 +28,7 @@ function CompleteSignUp() {
 
   const handleNext = () => {
     if (selectedRole) {
-      navigate(`/SignUp/Complete/${selectedRole}`);
+      navigate(`/sign-up/Complete/${selectedRole}`);
     } else {
       toast.error("Operación fallida", {
         description: "Por favor selecciona un rol",

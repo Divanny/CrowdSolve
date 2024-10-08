@@ -1,5 +1,4 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
-using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using Microsoft.EntityFrameworkCore;
