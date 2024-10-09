@@ -108,10 +108,10 @@ namespace CrowdSolve.Server.Controllers
         [HttpPost("GoogleLogin", Name = "GoogleLogin")]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
         {
-            if (request == null || string.IsNullOrEmpty(request.Token))
-                return BadRequest(new { success = false, message = "Token de Google no proporcionado." });
-
-            var result = await _authentication.GoogleLogin(request.Token);
+            if (request == null || string.IsNullOrEmpty(request.Code))
+                return BadRequest(new { success = false, message = "Código de token de Google no proporcionado." });
+                
+            var result = await _authentication.GoogleLogin(request.Code);
 
             if (result.Success)
             {
@@ -147,7 +147,7 @@ namespace CrowdSolve.Server.Controllers
 
         public class GoogleLoginRequest
         {
-            public string? Token { get; set; }
+            public string? Code { get; set; }
         }
     }
 }

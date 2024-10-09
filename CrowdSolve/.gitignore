@@ -62,3 +62,6 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Environment directories
+.env

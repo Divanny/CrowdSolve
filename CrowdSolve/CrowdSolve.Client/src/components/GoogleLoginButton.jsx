@@ -12,11 +12,12 @@ function GoogleLoginButton() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const handleGoogleLoginSuccess = async (credentialResponse) => {
-        const { access_token } = credentialResponse;
+    const handleGoogleLoginSuccess = async (tokenResponse) => {
+        console.log(tokenResponse);
+        const { code } = tokenResponse;
 
         try {
-            const response = await api.post('api/Account/GoogleLogin', { token: access_token });
+            const response = await api.post('api/Account/GoogleLogin', { code: code });
 
             if (response.data.success) {
                 const { token, data } = response.data;
@@ -51,16 +52,15 @@ function GoogleLoginButton() {
         }
     };
 
-    const handleGoogleLoginFailure = (error) => {
-        console.error('Fallo en el inicio de sesión con Google:', error);
-        toast.error("Operación errónea", {
-            description: "Error al iniciar sesión con Google",
-        });
-    };
-
     const login = useGoogleLogin({
         onSuccess: handleGoogleLoginSuccess,
-        onFailure: handleGoogleLoginFailure
+        onError: (error) => {
+            console.error('Fallo en el inicio de sesión con Google:', error);
+            toast.error("Operación errónea", {
+                description: "Error al iniciar sesión con Google",
+            });
+        },
+        flow: 'auth-code',
     });
 
     return (

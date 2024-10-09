@@ -8,6 +8,9 @@ using System.Security.Claims;
 using System.Text;
 using Google.Apis.Auth;
 using System.Linq.Expressions;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Util.Store;
 
 namespace CrowdSolve.Server.Infraestructure
 {
@@ -171,23 +174,41 @@ namespace CrowdSolve.Server.Infraestructure
         /// </summary>
         /// <param name="googleToken">Token de Google.</param>
         /// <returns>Resultado de la operación de inicio de sesión.</returns>
-        public async Task<OperationResult> GoogleLogin(string googleToken)
+        public async Task<OperationResult> GoogleLogin(string code)
         {
-            if (string.IsNullOrEmpty(googleToken))
+            if (string.IsNullOrEmpty(code))
                 return new OperationResult(false, "Token de Google no proporcionado", false);
 
             GoogleJsonWebSignature.Payload payload;
             try
             {
+                var flow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
+                {
+                    ClientSecrets = new ClientSecrets
+                    {
+                        ClientId = _configuration["Google:ClientId"],
+                        ClientSecret = _configuration["Google:ClientSecret"]
+                    },
+                    Scopes = new[] { "email", "profile" },
+                    DataStore = new FileDataStore("Google.Apis.Auth")
+                });
+
+                var token = await flow.ExchangeCodeForTokenAsync(
+                    "user",
+                    code,
+                    "postmessage", // Este debe coincidir con la configuración en tu cliente
+                    CancellationToken.None);
+
                 var settings = new GoogleJsonWebSignature.ValidationSettings()
                 {
-                    Audience = new List<string>() { _configuration["Google:ClientId"] }
+                    Audience = new List<string?>() { _configuration["Google:ClientId"] }
                 };
-                payload = await GoogleJsonWebSignature.ValidateAsync(googleToken, settings);
+
+                payload = await GoogleJsonWebSignature.ValidateAsync(token.IdToken, settings);
             }
             catch (Exception ex)
             {
-                return new OperationResult(false, "Token de Google inválido");
+                throw new Exception("Error al validar el token de Google", ex);
             }
 
             using (var trx = _CrowdSolveContext.Database.BeginTransaction())
@@ -225,8 +246,7 @@ namespace CrowdSolve.Server.Infraestructure
                         {
                             idUsuario = usuario.idUsuario,
                             idMetodoAutenticacion = (int)MetodosAutenticacionEnum.Google,
-                            idExterno = googleUserId,
-                            TokenAcceso = googleToken
+                            idExterno = googleUserId
                         });
                     }
 

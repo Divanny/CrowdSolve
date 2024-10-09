@@ -34,7 +34,7 @@ namespace CrowdSolve.Server.Infraestructure
 
         public static void SendMail(MailMessage message, Credentials credentials)
         {
-            SmtpClient client = new SmtpClient("smtp.zoho.com", 465);
+            SmtpClient client = new SmtpClient("smtp.zoho.com", 587);
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
             client.Credentials = new System.Net.NetworkCredential(credentials.Email, credentials.Password);
