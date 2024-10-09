@@ -7,8 +7,9 @@ import PageLoader from '@/components/PageLoader';
 import Home from '@/pages/Home';
 import SignIn from '@/pages/auth/SignIn';
 import SignUp from '@/pages/auth/SignUp';
+import ForgotPassword from '@/pages/auth/ForgotPassword';
 import CompleteSignUp from '@/pages/auth/CompleteSignUp';
-import CompleteSignUpForm from '@/pages/auth/CompleteSignUpForm';
+import RoleSelection from '@/pages/auth/RoleSelection';
 import VerificationPending from '@/pages/company/VerificationPending';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import useAxios from './hooks/use-axios';
@@ -58,9 +59,10 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
-                <Route path="/sign-up/complete" element={<ProtectedRoute><CompleteSignUp /></ProtectedRoute>} />
-                <Route path="/sign-up/complete/:Role" element={<ProtectedRoute><CompleteSignUpForm /></ProtectedRoute>} />
+                <Route path="/sign-up/complete" element={<ProtectedRoute><RoleSelection /></ProtectedRoute>} />
+                <Route path="/sign-up/complete/:Role" element={<ProtectedRoute><CompleteSignUp /></ProtectedRoute>} />
                 <Route path="/company/pending-verification" element={<ProtectedRoute><VerificationPending /></ProtectedRoute>} />
+                <Route path="/forgot-password" element={<ForgotPassword/>} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

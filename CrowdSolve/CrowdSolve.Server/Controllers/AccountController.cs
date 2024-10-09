@@ -129,19 +129,39 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
-        [HttpGet("MailTest", Name = "MailTest")]
+        /// <summary>
+        /// Envia un correo electrónico con un enlace para restablecer la contraseña.
+        /// </summary>
+        /// <param name="email">El correo electrónico del usuario.</param>
+        /// <returns>El resultado de la operación.</returns>
+        [Route("ForgotPassword/{email}")]
+        [HttpGet]
         [AllowAnonymous]
-        public OperationResult MailTest()
+        public OperationResult ForgotPassword(string email)
         {
             try
             {
-                Mailing.SendMail(["divannyjpm@gmail.com"], "Probando CrowdSolve email", "Prueba", Enums.MailingUsers.noreply);
-                return new OperationResult(true, "Correo enviado correctamente");
+                if (string.IsNullOrEmpty(email))
+                {
+                    return new OperationResult(false, "No se proporcionó un correo electrónico.");
+                }
+
+                var usuario = _usuariosRepo.Get(x => x.CorreoElectronico == email).FirstOrDefault();
+
+                if (usuario == null)
+                {
+                    return new OperationResult(false, "El correo electrónico no está registrado.");
+                }
+
+                var result = _authentication.ForgotPassword(usuario);
+
+                _logger.LogHttpRequest(new { success = true, userName = usuario.NombreUsuario, correo = usuario.CorreoElectronico });
+                return new OperationResult(true, "Se ha enviado un correo con el código para restablecer la contraseña", usuario);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex);
-                throw;
+                return new OperationResult(false, ex.Message);
             }
         }
 

@@ -17,6 +17,8 @@ public partial class CrowdSolveContext : DbContext
 
     public virtual DbSet<ClasesProceso> ClasesProceso { get; set; }
 
+    public virtual DbSet<CodigosVerificacion> CodigosVerificacion { get; set; }
+
     public virtual DbSet<ComentariosProceso> ComentariosProceso { get; set; }
 
     public virtual DbSet<CredencialesAutenticacion> CredencialesAutenticacion { get; set; }
@@ -102,6 +104,17 @@ public partial class CrowdSolveContext : DbContext
                 .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<CodigosVerificacion>(entity =>
+        {
+            entity.HasKey(e => e.idCodigoVerificacion).HasName("PK_OTP");
+
+            entity.Property(e => e.Codigo)
+                .IsRequired()
+                .HasMaxLength(256)
+                .IsUnicode(false);
+            entity.Property(e => e.Fecha).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<ComentariosProceso>(entity =>

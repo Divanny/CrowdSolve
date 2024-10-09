@@ -73,6 +73,13 @@ namespace CrowdSolve.Server.Infraestructure
                 return new OperationResult(false, "Usuario o contraseña incorrectos");
             }
 
+            var credenciales = _credencialesAutenticacionRepo.Get().FirstOrDefault(x => x.idUsuario == usuario.idUsuario);
+
+            if (usuario.Contraseña == null && credenciales != null)
+            {
+                return new OperationResult(false, $"Este usuario se registró con {credenciales.MetodoAutenticacion}, inicie sesión con {credenciales.MetodoAutenticacion}");
+            }
+
             if (!_passwordHasher.Check(usuario.Contraseña ?? "", credentials.Password))
             {
                 return new OperationResult(false, "Usuario o contraseña incorrectos");
@@ -111,6 +118,11 @@ namespace CrowdSolve.Server.Infraestructure
                     if (_usuariosRepo.Any(x => x.NombreUsuario == credentials.Username))
                     {
                         return new OperationResult(false, "Este usuario ya existe");
+                    }
+
+                    if (_usuariosRepo.Any(x => x.CorreoElectronico == credentials.Email))
+                    {
+                        return new OperationResult(false, "Este correo electrónico ya está registrado");
                     }
 
                     // Validaciones de Contraseña
@@ -196,7 +208,7 @@ namespace CrowdSolve.Server.Infraestructure
                 var token = await flow.ExchangeCodeForTokenAsync(
                     "user",
                     code,
-                    "postmessage", // Este debe coincidir con la configuración en tu cliente
+                    "postmessage",
                     CancellationToken.None);
 
                 var settings = new GoogleJsonWebSignature.ValidationSettings()
@@ -269,6 +281,43 @@ namespace CrowdSolve.Server.Infraestructure
                     trx.Rollback();
                     return new OperationResult(false, ex.Message);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Método para recuperar la contraseña de un usuario.
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <returns></returns>
+        public OperationResult ForgotPassword(UsuariosModel usuario)
+        {
+            try
+            {
+                string codigo = OTP.GenerateOTP();
+
+                if (_CrowdSolveContext.CodigosVerificacion.Any(x => x.idUsuario == usuario.idUsuario))
+                {
+                    _CrowdSolveContext.CodigosVerificacion.RemoveRange(_CrowdSolveContext.CodigosVerificacion.Where(x => x.idUsuario == usuario.idUsuario));
+                }
+
+                _CrowdSolveContext.CodigosVerificacion.Add(new CodigosVerificacion()
+                {
+                    idUsuario = usuario.idUsuario,
+                    Codigo = codigo,
+                    Fecha = DateTime.Now
+                });
+
+                _CrowdSolveContext.SaveChanges();
+
+                string codigoFormatted = codigo.Substring(0, 3) + " " + codigo.Substring(3, 3);
+
+                Mailing.SendForgotPasswordMail(usuario.CorreoElectronico, codigoFormatted);
+                
+                return new OperationResult(true, "Código de verificación enviado con éxito");
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult(false, ex.Message);
             }
         }
 

@@ -21,13 +21,13 @@ namespace CrowdSolve.Server.Infraestructure
                     return new Credentials()
                     {
                         Email = "support@crowdsolve.site",
-                        Password = "-v6wnZ#aj"
+                        Password = "v6wnZ#aj"
                     };
                 default:
                     return new Credentials()
                     {
                         Email = "noreply@crowdsolve.site",
-                        Password = "l8e&-kecB"
+                        Password = "l8e&kecB"
                     };
             }
         }
@@ -59,6 +59,14 @@ namespace CrowdSolve.Server.Infraestructure
             message.From = new MailAddress(credentials.Email);
 
             SendMail(message, credentials);
+        }
+
+        public static void SendForgotPasswordMail(string to, string otp)
+        {
+            string subject = "Recuperación de contraseña";
+            string body = "<h1>Recuperación de contraseña</h1><p>Para recuperar tu contraseña, ingresa el siguiente código en la aplicación:</p><p><strong>" + otp + "</strong></p>";
+
+            SendMail(new string[] { to }, subject, body, MailingUsers.noreply);
         }
     }
 }

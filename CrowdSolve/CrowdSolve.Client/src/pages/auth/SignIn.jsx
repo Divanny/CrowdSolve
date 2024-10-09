@@ -128,11 +128,11 @@ function SignIn() {
 
               <form onSubmit={handleSignIn} className="grid gap-4 mb-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="username">Nombre de usuario</Label>
+                  <Label htmlFor="username">Nombre de usuario o correo electrónico</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="Ingrese su usuario"
+                    placeholder="Ingrese su usuario o su correo electrónico"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -143,7 +143,7 @@ function SignIn() {
                   <div className="flex items-center">
                     <Label htmlFor="password">Contraseña</Label>
                     <Link
-                      to="/ForgotPassword"
+                      to="/forgot-password"
                       className="text-primary font-medium ml-auto inline-block text-xs"
                       tabIndex={4}
                     >
