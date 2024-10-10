@@ -293,6 +293,15 @@ namespace CrowdSolve.Server.Infraestructure
         {
             try
             {
+                var usuarioDB = _CrowdSolveContext.Set<Usuarios>().Where(x => x.idUsuario == usuario.idUsuario).FirstOrDefault();
+
+                var credenciales = _credencialesAutenticacionRepo.Get().FirstOrDefault(x => x.idUsuario == usuario.idUsuario);
+
+                if (usuarioDB.Contraseña == null && credenciales != null)
+                {
+                    return new OperationResult(false, $"Este usuario se registró con {credenciales.MetodoAutenticacion}, inicie sesión con {credenciales.MetodoAutenticacion}");
+                }
+
                 string codigo = OTP.GenerateOTP();
 
                 if (_CrowdSolveContext.CodigosVerificacion.Any(x => x.idUsuario == usuario.idUsuario))
@@ -303,7 +312,7 @@ namespace CrowdSolve.Server.Infraestructure
                 _CrowdSolveContext.CodigosVerificacion.Add(new CodigosVerificacion()
                 {
                     idUsuario = usuario.idUsuario,
-                    Codigo = codigo,
+                    Codigo = _passwordHasher.Hash(codigo),
                     Fecha = DateTime.Now
                 });
 
@@ -313,11 +322,104 @@ namespace CrowdSolve.Server.Infraestructure
 
                 Mailing.SendForgotPasswordMail(usuario.CorreoElectronico, codigoFormatted);
                 
-                return new OperationResult(true, "Código de verificación enviado con éxito");
+                return new OperationResult(true, "Se ha enviado un correo con el código para restablecer la contraseña", usuario);
             }
             catch (Exception ex)
             {
-                return new OperationResult(false, ex.Message);
+                throw new Exception("Error al enviar el código de verificación", ex);
+            }
+        }
+
+        /// <summary>
+        /// Verifica el código de verificación para restablecer la contraseña.
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="codigo"></param>
+        /// <returns></returns>
+        public OperationResult VerifyCode(UsuariosModel usuario, string codigo)
+        {
+            try
+            {
+                if (usuario != null)
+                {
+                    var codigoVerificacion = _CrowdSolveContext.CodigosVerificacion.Where(x => x.idUsuario == usuario.idUsuario).OrderByDescending(x => x.idCodigoVerificacion).FirstOrDefault();
+
+                    if (codigoVerificacion == null)
+                        return new OperationResult(false, "No se ha encontrado un código de verificación para este usuario");
+
+                    if (codigo == null || codigo.Length != 6)
+                        return new OperationResult(false, "El código de verificación no es válido");
+
+                    if (!_passwordHasher.Check(codigoVerificacion.Codigo, codigo))
+                    {
+                        return new OperationResult(false, "Código de verificación incorrecto");
+                    }
+
+                    if (codigoVerificacion.Fecha != null && codigoVerificacion.Fecha.AddMinutes(15) < DateTime.Now)
+                        return new OperationResult(false, "El código de verificación ha expirado");
+
+                    return new OperationResult(true, "Código de verificación correcto", TokenGenerator(usuario.NombreUsuario, usuario.idUsuario, usuario.idPerfil));
+                }
+                else
+                {
+                    return new OperationResult(false, "Usuario no encontrado");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al verificar el código de verificación", ex);
+            }
+        }
+
+        /// <summary>
+        /// Restablece la contraseña de un usuario.
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="password"></param>
+        /// <param name="confirmPassword"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public OperationResult ResetPassword(UsuariosModel usuario, string password, string confirmPassword)
+        {
+            try
+            {
+                if (usuario != null)
+                {
+                    if (password == null || password.Length < 8)
+                        return new OperationResult(false, "La contraseña debe tener al menos 8 caracteres");
+
+                    if (!password.Any(char.IsUpper))
+                        return new OperationResult(false, "La contraseña debe tener al menos una letra mayúscula");
+
+                    if (!password.Any(char.IsLower))
+                        return new OperationResult(false, "La contraseña debe tener al menos una letra minúscula");
+
+                    if (!password.Any(char.IsDigit))
+                        return new OperationResult(false, "La contraseña debe tener al menos un número");
+
+                    if (password != confirmPassword)
+                        return new OperationResult(false, "Las contraseñas no coinciden");
+
+                    var usuarioDB = _CrowdSolveContext.Usuarios.FirstOrDefault(x => x.idUsuario == usuario.idUsuario);
+                    
+                    usuarioDB.Contraseña = _passwordHasher.Hash(password);
+
+                    _CrowdSolveContext.Usuarios.Update(usuarioDB);
+
+                    _CrowdSolveContext.CodigosVerificacion.RemoveRange(_CrowdSolveContext.CodigosVerificacion.Where(x => x.idUsuario == usuario.idUsuario));
+
+                    _CrowdSolveContext.SaveChanges();
+
+                    return new OperationResult(true, "Contraseña restablecida con éxito");
+                }
+                else
+                {
+                    return new OperationResult(false, "Usuario no encontrado");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al restablecer la contraseña", ex);
             }
         }
 
@@ -359,6 +461,8 @@ namespace CrowdSolve.Server.Infraestructure
 
             return stringToken;
         }
+
+
 
         /// <summary>
         /// Verifica si el entorno de desarrollo está activo.

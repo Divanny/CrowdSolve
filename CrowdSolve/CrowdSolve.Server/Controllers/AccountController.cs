@@ -156,7 +156,80 @@ namespace CrowdSolve.Server.Controllers
                 var result = _authentication.ForgotPassword(usuario);
 
                 _logger.LogHttpRequest(new { success = true, userName = usuario.NombreUsuario, correo = usuario.CorreoElectronico });
-                return new OperationResult(true, "Se ha enviado un correo con el código para restablecer la contraseña", usuario);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                return new OperationResult(false, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Verifica el código de verificación para restablecer la contraseña.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Route("VerifyCode", Name = "VerifyCode")]
+        [HttpPost]
+        [AllowAnonymous]
+        public OperationResult VerifyCode(CodeVerificationRequest request)
+        {
+            try
+            {
+                if (request == null || string.IsNullOrEmpty(request.Code))
+                {
+                    return new OperationResult(false, "No se proporcionó un código.");
+                }
+
+                var usuario = _usuariosRepo.Get(request.idUsuario);
+
+                if (usuario == null)
+                {
+                    return new OperationResult(false, "El usuario no existe.");
+                }
+
+                var result = _authentication.VerifyCode(usuario, request.Code);
+
+                _logger.LogHttpRequest(new { success = true, userName = usuario.NombreUsuario, correo = usuario.CorreoElectronico, codigo = request.Code });
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                return new OperationResult(false, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Restablece la contraseña del usuario.
+        /// </summary>
+        /// <param name="request">Solicitud de restablecimiento de contraseña.</param>
+        /// <returns>El resultado de la operación.</returns>
+        [Route("ResetPassword", Name = "ResetPassword")]
+        [HttpPost]
+        [Authorize]
+        public OperationResult ResetPassword(ResetPasswordRequest request)
+        {
+            try
+            {
+                if (request == null || string.IsNullOrEmpty(request.Password) || string.IsNullOrEmpty(request.ConfirmPassword))
+                {
+                    return new OperationResult(false, "No se proporcionó una contraseña.");
+                }
+
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
+
+                if (usuario == null)
+                {
+                    return new OperationResult(false, "El usuario no existe.");
+                }
+
+                var result = _authentication.ResetPassword(usuario, request.Password, request.ConfirmPassword);
+
+                _logger.LogHttpRequest(new { success = true, userName = usuario.NombreUsuario, correo = usuario.CorreoElectronico });
+                return result;
             }
             catch (Exception ex)
             {
@@ -168,6 +241,18 @@ namespace CrowdSolve.Server.Controllers
         public class GoogleLoginRequest
         {
             public string? Code { get; set; }
+        }
+
+        public class CodeVerificationRequest
+        {
+            public int idUsuario { get; set; }
+            public string? Code { get; set; }
+        }
+
+        public class ResetPasswordRequest
+        {
+            public string? Password { get; set; }
+            public string? ConfirmPassword { get; set; }
         }
     }
 }

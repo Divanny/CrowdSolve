@@ -1,4 +1,6 @@
 import { useState } from "react"
+import useAxios from "@/hooks/use-axios";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -15,23 +17,135 @@ import { PasswordInput } from "@/components/ui/password-input"
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1)
-  const [email, setEmail] = useState("")
+  const { api } = useAxios();
 
-  const handleSubmitEmail = (e) => {
+  const [step, setStep] = useState(1);
+
+  const [user, setUser] = useState({});
+  const [email, setEmail] = useState("");
+  const [otp, setOTP] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [jwtToken, setJwtToken] = useState("");
+
+  const handleSubmitEmail = async (e) => {
     e.preventDefault()
-    setStep(2)
+
+    if (!email) {
+      toast.warning("Operación fallida", {
+        description: "Por favor, complete todos los campos",
+      });
+      return
+    }
+
+    try {
+      const response = await api.get(`/api/Account/ForgotPassword/${email}`);
+
+      if (response.data.success) {
+        toast.success("Operación exitosa", {
+          description: "Se ha enviado un enlace de restablecimiento a su correo electrónico",
+        });
+
+        setUser(response.data.data);
+        setStep(2);
+      }
+      else {
+        toast.error("Operación fallida", {
+          description: response.data.message,
+        });
+      }
+    }
+    catch (error) {
+      toast.error("Operación fallida", {
+        description: error.message,
+      });
+    }
   }
 
-  const handleValidateOTP = () => {
-    setStep(3)
+  const handleValidateOTP = async (e) => {
+    e.preventDefault()
+
+    if (!otp) {
+      toast.warning("Operación fallida", {
+        description: "Por favor, complete todos los campos",
+      });
+      return
+    }
+
+    try {
+      const response = await api.post("/api/Account/VerifyCode", {
+        idUsuario: user.idUsuario,
+        code: otp,
+      });
+
+      if (response.data.success) {
+        toast.success("Operación exitosa", {
+          description: "Código de verificación correcto",
+        });
+
+        setJwtToken(response.data.data);
+        setStep(3);
+      }
+      else {
+        toast.error("Operación fallida", {
+          description: response.data.message,
+        });
+      }
+    }
+    catch (error) {
+      toast.error("Operación fallida", {
+        description: error.message,
+      });
+    }
   }
 
-  const handleSetNewPassword = (e) => {
+  const handleSetNewPassword = async (e) => {
     e.preventDefault()
-    // Here you would typically send the new password to your backend
-    alert("Password reset successfully!")
-    setStep(1)
+
+    if (!password || !confirmPassword) {
+      toast.warning("Operación fallida", {
+        description: "Por favor, complete todos los campos",
+      });
+      return
+    }
+
+    if (password !== confirmPassword) {
+      toast.warning("Operación fallida", {
+        description: "Las contraseñas no coinciden",
+      });
+      return
+    }
+
+    try {
+      const response = await api.post("/api/Account/ResetPassword", {
+        password: password,
+        confirmPassword: confirmPassword
+      }, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`
+        }
+      });
+
+      if (response.data.success) {
+        toast.success("Operación exitosa", {
+          description: "Contraseña restablecida correctamente",
+        });
+
+        navigate("/sign-in");
+      }
+      else {
+        toast.error("Operación fallida", {
+          description: response.data.message,
+        });
+      }
+    }
+
+    catch (error) {
+      toast.error("Operación fallida", {
+        description: error.message,
+      });
+    }
   }
 
   return (
@@ -82,19 +196,19 @@ export default function ForgotPassword() {
 
               <form onSubmit={handleValidateOTP}>
                 <div className="grid w-full items-center justify-center gap-4">
-                    <InputOTP id="otp" maxLength={6}>
-                      <InputOTPGroup>
-                        <InputOTPSlot index={0} />
-                        <InputOTPSlot index={1} />
-                        <InputOTPSlot index={2} />
-                      </InputOTPGroup>
-                      <InputOTPSeparator />
-                      <InputOTPGroup>
-                        <InputOTPSlot index={3} />
-                        <InputOTPSlot index={4} />
-                        <InputOTPSlot index={5} />
-                      </InputOTPGroup>
-                    </InputOTP>
+                  <InputOTP id="otp" maxLength={6} value={otp} onChange={(value) => setOTP(value)}>
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
                 </div>
                 <Button className="w-full mt-6" type="submit">
                   Validar enlace de restablecimiento
@@ -122,12 +236,14 @@ export default function ForgotPassword() {
               <form onSubmit={handleSetNewPassword}>
                 <div className="grid w-full items-center gap-4">
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="newPassword">New Password</Label>
-                    <PasswordInput id="newPassword" placeholder="Ingrese su contraseña" required />
+                    <Label htmlFor="newPassword">Nueva contraseña</Label>
+                    <PasswordInput id="newPassword" placeholder="Ingrese la nueva contraseña" required value={password}
+                      onChange={(e) => setPassword(e.target.value)} />
                   </div>
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                    <PasswordInput id="confirmPassword" placeholder="Ingrese su contraseña" required />
+                    <Label htmlFor="confirmPassword">Confirmar nueva contraseña</Label>
+                    <PasswordInput id="confirmPassword" placeholder="Confirme la nueva contraseña" required value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)} />
                   </div>
                 </div>
                 <Button className="w-full mt-6" type="submit">

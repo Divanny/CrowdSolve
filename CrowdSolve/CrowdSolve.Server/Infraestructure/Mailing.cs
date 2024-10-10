@@ -2,11 +2,13 @@
 using CrowdSolve.Server.Models;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Reflection.Metadata;
 
 namespace CrowdSolve.Server.Infraestructure
 {
     public static class Mailing
     {
+        private static string mailTemplatesPath = "wwwroot/MailTemplates";
         public static Credentials GetCredentials(MailingUsers mailUser)
         {
             switch (mailUser)
@@ -53,6 +55,9 @@ namespace CrowdSolve.Server.Infraestructure
 
             Credentials credentials = GetCredentials(mailUser);
 
+            string template = System.IO.File.ReadAllText($"{mailTemplatesPath}/mailing-template.html");
+            body = template.Replace("${content}", body);
+
             message.Subject = subject;
             message.Body = body;
             message.IsBodyHtml = true;
@@ -64,7 +69,8 @@ namespace CrowdSolve.Server.Infraestructure
         public static void SendForgotPasswordMail(string to, string otp)
         {
             string subject = "Recuperación de contraseña";
-            string body = "<h1>Recuperación de contraseña</h1><p>Para recuperar tu contraseña, ingresa el siguiente código en la aplicación:</p><p><strong>" + otp + "</strong></p>";
+            string template = System.IO.File.ReadAllText($"{mailTemplatesPath}/forgot-password-email.html");
+            string body = template.Replace("${otp}", otp);
 
             SendMail(new string[] { to }, subject, body, MailingUsers.noreply);
         }
