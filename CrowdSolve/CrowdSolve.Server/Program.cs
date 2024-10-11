@@ -73,6 +73,7 @@ builder.Services.AddMvcCore().ConfigureApiBehaviorOptions(options => {
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<Authentication>();
+builder.Services.AddScoped<Mailing>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 var app = builder.Build();

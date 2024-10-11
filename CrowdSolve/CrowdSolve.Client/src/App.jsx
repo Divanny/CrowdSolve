@@ -14,6 +14,7 @@ import VerificationPending from '@/pages/company/VerificationPending';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import useAxios from './hooks/use-axios';
 import { setUser } from '@/redux/slices/userSlice';
+import Layout from './components/layout/Layout';
 
 function App() {
     const { api } = useAxios();
@@ -56,7 +57,7 @@ function App() {
         <>
             {isLoading && <PageLoader />}
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Layout><Home /></Layout>} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
                 <Route path="/sign-up/complete" element={<ProtectedRoute><RoleSelection /></ProtectedRoute>} />

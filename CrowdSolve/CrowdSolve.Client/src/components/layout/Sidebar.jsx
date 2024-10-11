@@ -18,7 +18,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
-import { ChevronsUpDown } from 'lucide-react';
+import { ChevronsUpDown, Info, Flag, Building, Mail } from 'lucide-react';
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -56,10 +56,18 @@ const Sidebar = () => {
                     </Link>
                 </SheetHeader>
                 <div className="grid gap-4 py-4">
-                    <Button variant="ghost" className="w-full" onClick={() => navigate('/about-us')}>Sobre nosotros</Button>
-                    <Button variant="ghost" className="w-full" onClick={() => navigate('/challenges')}>Desafíos</Button>
-                    <Button variant="ghost" className="w-full" onClick={() => navigate('/companies')}>Empresas</Button>
-                    <Button variant="ghost" className="w-full" onClick={() => navigate('/contact')}>Contacto</Button>
+                    <Button variant="ghost" className="w-full justify-start" onClick={() => navigate('/about-us')}>
+                        <Info className="mr-2 h-4 w-4" /> Sobre nosotros
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start" onClick={() => navigate('/challenges')}>
+                        <Flag className="mr-2 h-4 w-4" /> Desafíos
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start" onClick={() => navigate('/companies')}>
+                        <Building className="mr-2 h-4 w-4" /> Empresas
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start" onClick={() => navigate('/contact')}>
+                        <Mail className="mr-2 h-4 w-4" /> Contacto
+                    </Button>
                 </div>
                 <SheetFooter className="mt-auto">
                     {user ? (

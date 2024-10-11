@@ -65,3 +65,7 @@ coverage
 
 # Environment directories
 .env
+
+# Dotenv environment variables file
+appsettings.json
+appsettings.*.json

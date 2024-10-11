@@ -26,12 +26,13 @@ namespace CrowdSolve.Server.Infraestructure
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
         private readonly CredencialesAutenticacionRepo _credencialesAutenticacionRepo;
+        private readonly Mailing _mailingService;
         /// <summary>
         /// Constructor de la clase Authentication.
         /// </summary>
         /// <param name="CrowdSolveContext">Contexto de la base de datos de CrowdSolve.</param>
         /// <param name="configuration">Configuración de la aplicación.</param>
-        public Authentication(CrowdSolveContext CrowdSolveContext, IConfiguration configuration, IPasswordHasher passwordHasher)
+        public Authentication(CrowdSolveContext CrowdSolveContext, IConfiguration configuration, IPasswordHasher passwordHasher, Mailing mailingService)
         {
             _CrowdSolveContext = CrowdSolveContext;
             _configuration = configuration;
@@ -45,6 +46,7 @@ namespace CrowdSolve.Server.Infraestructure
             _usuariosRepo = new UsuariosRepo(CrowdSolveContext);
             _perfilesRepo = new PerfilesRepo(CrowdSolveContext);
             _credencialesAutenticacionRepo = new CredencialesAutenticacionRepo(CrowdSolveContext);
+            _mailingService = mailingService;
         }
 
         /// <summary>
@@ -318,7 +320,7 @@ namespace CrowdSolve.Server.Infraestructure
 
                 _CrowdSolveContext.SaveChanges();
 
-                Mailing.SendForgotPasswordMail(usuario.CorreoElectronico, codigo);
+                _mailingService.SendForgotPasswordMail(usuario.CorreoElectronico, codigo);
                 
                 return new OperationResult(true, "Se ha enviado un correo con el código para restablecer la contraseña", usuario);
             }

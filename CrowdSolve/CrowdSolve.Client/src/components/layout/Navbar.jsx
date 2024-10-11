@@ -22,17 +22,17 @@ const Navbar = () => {
         <nav className="relative flex flex-wrap items-center justify-between py-2 lg:py-2">
             <div className="flex w-full flex-wrap items-center justify-between px-3">
                 <div>
-                    <Link className="flex items-center">
+                    <Link to="/" className="flex items-center">
                         <img className="me-2" src={CrowdSolveLogo} style={{ height: '50px' }} alt="CrowdSolve Logo" />
                     </Link>
                 </div>
                 <Sidebar />
                 <div className="hidden lg:flex flex-grow items-center justify-end gap-8">
                     <div className="flex items-center gap-2">
-                        <Button variant="ghost">Sobre nosotros</Button>
-                        <Button variant="ghost">Desafíos</Button>
-                        <Button variant="ghost">Empresas</Button>
-                        <Button variant="ghost">Contacto</Button>
+                        <Button onClick={() => navigate('/about-us')} variant="ghost">Sobre nosotros</Button>
+                        <Button onClick={() => navigate('/callenges')} variant="ghost">Desafíos</Button>
+                        <Button onClick={() => navigate('/companies')} variant="ghost">Empresas</Button>
+                        <Button onClick={() => navigate('/contact')} variant="ghost">Contacto</Button>
                     </div>
 
                     {user ? (

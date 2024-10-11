@@ -1,40 +1,32 @@
 ﻿using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Models;
 using System.Net.Mail;
-using System.Net.Mime;
-using System.Reflection.Metadata;
 
 namespace CrowdSolve.Server.Infraestructure
 {
-    public static class Mailing
+    public class Mailing
     {
-        private static string mailTemplatesPath = "wwwroot/MailTemplates";
-        public static Credentials GetCredentials(MailingUsers mailUser)
+        private string mailTemplatesPath = "wwwroot/MailTemplates";
+        private IConfiguration configuration;
+
+        public Mailing(IConfiguration config)
         {
-            switch (mailUser)
-            {
-                case MailingUsers.administration:
-                    return new Credentials()
-                    {
-                        Email = "",
-                        Password = ""
-                    };
-                case MailingUsers.support:
-                    return new Credentials()
-                    {
-                        Email = "support@crowdsolve.site",
-                        Password = "v6wnZ#aj"
-                    };
-                default:
-                    return new Credentials()
-                    {
-                        Email = "noreply@crowdsolve.site",
-                        Password = "l8e&kecB"
-                    };
-            }
+            configuration = config;
         }
 
-        public static void SendMail(MailMessage message, Credentials credentials)
+        public Credentials GetCredentials(MailingUsers mailUser)
+        {
+            string email = configuration.GetValue<string>($"Mailing:{mailUser}:Email");
+            string password = configuration.GetValue<string>($"Mailing:{mailUser}:Password");
+
+            return new Credentials()
+            {
+                Email = email,
+                Password = password
+            };
+        }
+
+        public void SendMail(MailMessage message, Credentials credentials)
         {
             SmtpClient client = new SmtpClient("smtp.zoho.com", 587);
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
@@ -44,7 +36,7 @@ namespace CrowdSolve.Server.Infraestructure
             client.Send(message);
         }
 
-        public static void SendMail(string[] to, string subject, string body, MailingUsers mailUser)
+        public void SendMail(string[] to, string subject, string body, MailingUsers mailUser)
         {
             MailMessage message = new MailMessage();
 
@@ -66,7 +58,7 @@ namespace CrowdSolve.Server.Infraestructure
             SendMail(message, credentials);
         }
 
-        public static void SendForgotPasswordMail(string to, string otp)
+        public void SendForgotPasswordMail(string to, string otp)
         {
             string subject = "Recuperación de contraseña";
             string template = System.IO.File.ReadAllText($"{mailTemplatesPath}/forgot-password-email.html");
