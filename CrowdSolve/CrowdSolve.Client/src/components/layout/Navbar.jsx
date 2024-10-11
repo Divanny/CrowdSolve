@@ -1,6 +1,6 @@
 import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
-import { HamburgerMenuIcon } from "@radix-ui/react-icons"
+import Sidebar from './Sidebar';
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -19,16 +19,14 @@ const Navbar = () => {
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
     return (
-        <nav className="relative flex w-full max-w-screen flex-wrap items-center justify-between py-2 lg:py-2">
+        <nav className="relative flex flex-wrap items-center justify-between py-2 lg:py-2">
             <div className="flex w-full flex-wrap items-center justify-between px-3">
                 <div>
-                    <Link className="mx-2 my-1 flex items-center lg:mb-0 lg:mt-0">
+                    <Link className="flex items-center">
                         <img className="me-2" src={CrowdSolveLogo} style={{ height: '50px' }} alt="CrowdSolve Logo" />
                     </Link>
                 </div>
-                <Button variant="ghost" size="icon" className="flex lg:hidden">
-                    <HamburgerMenuIcon className='h-5 w-5'/>
-                </Button>
+                <Sidebar />
                 <div className="hidden lg:flex flex-grow items-center justify-end gap-8">
                     <div className="flex items-center gap-2">
                         <Button variant="ghost">Sobre nosotros</Button>

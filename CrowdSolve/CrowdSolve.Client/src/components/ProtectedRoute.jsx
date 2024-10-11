@@ -13,12 +13,12 @@ const ProtectedRoute = ({ children, requiredView }) => {
         return <Navigate to="/sign-in" replace state={{ from: location }} />;
     }
 
-    if (user.idEstatusUsuario === EstatusUsuarioEnum.PendienteDeValidar && !location.pathname.includes('/Company/VerificationPending')) {
+    if (user.idEstatusUsuario === EstatusUsuarioEnum.PendienteDeValidar && !location.pathname.includes('/Company/pending-verification')) {
         return <Navigate to="/company/pending-verification" replace state={{ from: location }} />;
     }
 
-    if (user.idEstatusUsuario === EstatusUsuarioEnum.Incompleto && !location.pathname.includes('/sign-up/Complete')) {
-        return <Navigate to="/sign-up/Complete" replace state={{ from: location }}/>;
+    if (user.idEstatusUsuario === EstatusUsuarioEnum.Incompleto && !location.pathname.includes('/sign-up/complete')) {
+        return <Navigate to="/sign-up/complete" replace state={{ from: location }}/>;
     }
 
     if (requiredView && !userViews.map((view) => view.nombre).includes(requiredView)) {

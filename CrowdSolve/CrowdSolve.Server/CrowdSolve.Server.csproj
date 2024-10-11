@@ -47,4 +47,13 @@
     <None Include="efpt.config.json.user" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\MailTemplates\forgot-password-email.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\MailTemplates\mailing-template.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

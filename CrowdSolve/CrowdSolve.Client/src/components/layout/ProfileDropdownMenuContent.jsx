@@ -18,7 +18,7 @@ import {
 import { User, Send, Settings, BellRing, SunMoon, Globe, LogOut, Check, Moon, Sun, MonitorSmartphone } from 'lucide-react';
 import flags from "react-phone-number-input/flags";
 
-const ProfileDropdownMenuContent = ({ user }) => {
+const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
     const theme = useSelector((state) => state.theme.theme);
     const language = useSelector((state) => state.language.language);
 
@@ -41,7 +41,7 @@ const ProfileDropdownMenuContent = ({ user }) => {
 
     return (
         <DropdownMenuContent className="w-56 mr-2">
-            <DropdownMenuLabel>
+            { showHeader && <DropdownMenuLabel>
                 <div className='flex items-center'>
                     <Avatar className="bg-accent" size="1">
                         <AvatarImage src={`https://robohash.org/${user.nombreUsuario}`} />
@@ -53,8 +53,8 @@ const ProfileDropdownMenuContent = ({ user }) => {
                         {user.informacionParticipante && <span className='text-xs text-muted-foreground'>{`${user.informacionParticipante.nombres} ${user.informacionParticipante.apellidos}`}</span>}
                     </div>
                 </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            </DropdownMenuLabel> }
+            { showHeader && <DropdownMenuSeparator /> }
             <DropdownMenuGroup>
                 <DropdownMenuItem>
                     <User className="mr-2" size={16} />

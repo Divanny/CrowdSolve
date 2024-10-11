@@ -108,7 +108,7 @@ const RegistroEmpresa = () => {
         <form onSubmit={handleSubmit} className="space-y-2">
             <div className="space-y-2">
                 <Label htmlFor="nombre">Nombre de la empresa</Label>
-                <Input id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} required placeholder="Ingrese el nombre de la empresa" />
+                <Input id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} required placeholder="Ingrese el nombre de la empresa" autoComplete="organization" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -120,6 +120,7 @@ const RegistroEmpresa = () => {
                         type="tel"
                         value={formData.telefono}
                         onChange={(value) => setFormData((prevData) => ({ ...prevData, telefono: value }))}
+                        autoComplete="tel"
                     />
                 </div>
                 <div className="space-y-2">
@@ -144,7 +145,7 @@ const RegistroEmpresa = () => {
             </div>
             <div className="space-y-2">
                 <Label htmlFor="paginaWeb">Página web</Label>
-                <Input id="paginaWeb" name="paginaWeb" type="url" value={formData.paginaWeb} onChange={handleChange} placeholder="Ingrese la página web de la empresa" />
+                <Input id="paginaWeb" name="paginaWeb" type="url" value={formData.paginaWeb} onChange={handleChange} placeholder="Ingrese la página web de la empresa" autoComplete="url" />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="tamanoEmpresa">Tamaño de la empresa</Label>
@@ -167,7 +168,7 @@ const RegistroEmpresa = () => {
             </div>
             <div className="space-y-2">
                 <Label htmlFor="direccion">Dirección</Label>
-                <Textarea id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} rows={3} placeholder="Ingrese la dirección de la empresa" />
+                <Textarea id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} rows={3} placeholder="Ingrese la dirección de la empresa" autoComplete="street-address" />
             </div>
             <Button type="submit" className="w-full">
                 Registrarse

@@ -318,9 +318,7 @@ namespace CrowdSolve.Server.Infraestructure
 
                 _CrowdSolveContext.SaveChanges();
 
-                string codigoFormatted = codigo.Substring(0, 3) + " " + codigo.Substring(3, 3);
-
-                Mailing.SendForgotPasswordMail(usuario.CorreoElectronico, codigoFormatted);
+                Mailing.SendForgotPasswordMail(usuario.CorreoElectronico, codigo);
                 
                 return new OperationResult(true, "Se ha enviado un correo con el código para restablecer la contraseña", usuario);
             }
@@ -401,7 +399,16 @@ namespace CrowdSolve.Server.Infraestructure
                         return new OperationResult(false, "Las contraseñas no coinciden");
 
                     var usuarioDB = _CrowdSolveContext.Usuarios.FirstOrDefault(x => x.idUsuario == usuario.idUsuario);
-                    
+
+                    if (usuarioDB == null)
+                        return new OperationResult(false, "Usuario no encontrado");
+
+                    if (usuarioDB.Contraseña == null)
+                        return new OperationResult(false, "Este usuario no tiene una contraseña establecida");
+
+                    if (_passwordHasher.Check(usuarioDB.Contraseña, password))
+                        return new OperationResult(false, "La nueva contraseña no puede ser igual a la anterior");
+
                     usuarioDB.Contraseña = _passwordHasher.Hash(password);
 
                     _CrowdSolveContext.Usuarios.Update(usuarioDB);

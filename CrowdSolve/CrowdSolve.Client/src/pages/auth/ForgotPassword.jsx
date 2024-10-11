@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { KeyIcon, MailIcon, LockIcon, ArrowLeftIcon } from "lucide-react"
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   InputOTP,
   InputOTPGroup,
@@ -157,8 +157,8 @@ export default function ForgotPassword() {
               <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full inline-block">
                 <KeyIcon className="h-10 w-10 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-medium">¿Has olvidado tu contraseña?</CardTitle>
-              <CardDescription>No te preocupes, enviaremos a tu correo electrónico instrucciones para restablecerla.</CardDescription>
+              <CardTitle className="text-xl md:text-2xl font-medium">¿Has olvidado tu contraseña?</CardTitle>
+              <CardDescription className="text-sm md:text-base">No te preocupes, enviaremos a tu correo electrónico instrucciones para restablecerla.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmitEmail}>
@@ -172,6 +172,7 @@ export default function ForgotPassword() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
+                      autocomplete="email"
                     />
                   </div>
                 </div>
@@ -189,14 +190,13 @@ export default function ForgotPassword() {
               <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full inline-block">
                 <MailIcon className="h-10 w-10 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-medium">Revisa tu correo</CardTitle>
-              <CardDescription>Enviamos un enlace para restablecer la contraseña a<br />{email}</CardDescription>
+              <CardTitle className="text-xl md:text-2xl font-medium">Revisa tu correo</CardTitle>
+              <CardDescription className="text-sm md:text-base">Enviamos un enlace para restablecer la contraseña a<br />{email}</CardDescription>
             </CardHeader>
             <CardContent>
-
               <form onSubmit={handleValidateOTP}>
                 <div className="grid w-full items-center justify-center gap-4">
-                  <InputOTP id="otp" maxLength={6} value={otp} onChange={(value) => setOTP(value)}>
+                  <InputOTP id="otp" maxLength={6} value={otp} onChange={(value) => setOTP(value.replace(/\s/g, ''))}>
                     <InputOTPGroup>
                       <InputOTPSlot index={0} />
                       <InputOTPSlot index={1} />
@@ -215,9 +215,9 @@ export default function ForgotPassword() {
                 </Button>
               </form>
               <p className="text-center text-sm mt-4">
-                ¿No recibiste el código? <Link className="text-primary font-medium ml-auto inline-block" >
+                ¿No recibiste el código? <Button variant="link" className="text-primary font-medium ml-auto inline-block" onClick={(e) => handleSubmitEmail(e)}>
                   Reenviar código
-                </Link>
+                </Button>
               </p>
             </CardContent>
           </>
@@ -229,8 +229,8 @@ export default function ForgotPassword() {
               <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full inline-block">
                 <LockIcon className="h-10 w-10 text-primary" />
               </div>
-              <CardTitle className="text-2xl font-medium">Establecer nueva contraseña</CardTitle>
-              <CardDescription>Introduzca su nueva contraseña a continuación.</CardDescription>
+              <CardTitle className="text-xl md:text-2xl font-medium">Establecer nueva contraseña</CardTitle>
+              <CardDescription className="text-sm md:text-base">Introduzca su nueva contraseña a continuación.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSetNewPassword}>
@@ -238,12 +238,12 @@ export default function ForgotPassword() {
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="newPassword">Nueva contraseña</Label>
                     <PasswordInput id="newPassword" placeholder="Ingrese la nueva contraseña" required value={password}
-                      onChange={(e) => setPassword(e.target.value)} />
+                      onChange={(e) => setPassword(e.target.value)} autocomplete="new-password" />
                   </div>
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="confirmPassword">Confirmar nueva contraseña</Label>
                     <PasswordInput id="confirmPassword" placeholder="Confirme la nueva contraseña" required value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)} />
+                      onChange={(e) => setConfirmPassword(e.target.value)} autocomplete="new-password" />
                   </div>
                 </div>
                 <Button className="w-full mt-6" type="submit">

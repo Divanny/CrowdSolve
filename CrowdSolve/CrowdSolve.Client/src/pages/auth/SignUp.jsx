@@ -95,24 +95,25 @@ function SignUp() {
             </div>
 
             <h2 className="mb-6 sm:mb-8 text-center">
-              <ReactTyped
-                strings={[
-                  "Despierta tu creatividad",
-                  "Demuestra tu talento",
-                  "Resuelve problemas",
-                ]}
-                typeSpeed={80}
-                loop
-                className="text-lg sm:text-3xl font-serif"
-                style={{
-                  fontFamily:
-                    'font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif; !important',
-                }}
-                backSpeed={20}
-                cursorChar="|"
-                showCursor={true}
-                backDelay={1000}
-              />
+              <h2 className="mb-6 sm:mb-8 text-center text-base sm:text-lg">
+                <ReactTyped
+                  strings={[
+                    "Despierta tu creatividad",
+                    "Demuestra tu talento",
+                    "Resuelve problemas",
+                  ]}
+                  typeSpeed={80}
+                  loop
+                  className="text-lg sm:text-3xl font-serif"
+                  style={{
+                    fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
+                  }}
+                  backSpeed={20}
+                  cursorChar="|"
+                  showCursor={true}
+                  backDelay={1000}
+                />
+              </h2>
             </h2>
 
             <Card className="p-4 sm:p-6 max-w-md shadow-sm">
@@ -143,6 +144,7 @@ function SignUp() {
                     onChange={(e) => setUsername(e.target.value)}
                     required
                     tabIndex={2}
+                    autoComplete="username"
                   />
                 </div>
                 {/* Email */}
@@ -156,6 +158,7 @@ function SignUp() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     tabIndex={3}
+                    autoComplete="email"
                   />
                 </div>
                 {/* Password */}
@@ -168,9 +171,10 @@ function SignUp() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     tabIndex={3}
+                    autoComplete="new-password"
                   />
                 </div>
-                
+
                 {/* Confirm Password */}
                 <div className="grid gap-2">
                   <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
@@ -181,6 +185,7 @@ function SignUp() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     tabIndex={4}
+                    autoComplete="new-password"
                   />
                 </div>
 

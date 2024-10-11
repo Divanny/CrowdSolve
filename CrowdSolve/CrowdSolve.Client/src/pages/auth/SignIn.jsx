@@ -1,7 +1,7 @@
 import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { Button } from "@/components/ui/button";
-import { Loading02Icon } from "hugeicons-react"
+import { Loading02Icon } from "hugeicons-react";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from '@/components/ui/password-input';
 import { useState } from "react";
@@ -89,7 +89,7 @@ function SignIn() {
               </Link>
             </div>
 
-            <h2 className="mb-6 sm:mb-8 text-center">
+            <h2 className="mb-6 sm:mb-8 text-center text-base sm:text-lg">
               <ReactTyped
                 strings={[
                   "Despierta tu creatividad",
@@ -100,8 +100,7 @@ function SignIn() {
                 loop
                 className="text-lg sm:text-3xl font-serif"
                 style={{
-                  fontFamily:
-                    'font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif; !important',
+                  fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
                 }}
                 backSpeed={20}
                 cursorChar="|"
@@ -128,15 +127,16 @@ function SignIn() {
 
               <form onSubmit={handleSignIn} className="grid gap-4 mb-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="username">Nombre de usuario o correo electrónico</Label>
+                  <Label htmlFor="username">Usuario o correo electrónico</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="Ingrese su usuario o su correo electrónico"
+                    placeholder="Ingrese su de usuario o su correo electrónico"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
                     tabIndex={2}
+                    autocomplete="username email"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -144,7 +144,7 @@ function SignIn() {
                     <Label htmlFor="password">Contraseña</Label>
                     <Link
                       to="/forgot-password"
-                      className="text-primary font-medium ml-auto inline-block text-xs"
+                      className="text-primary font-medium ml-auto text-xs hidden sm:inline-block"
                       tabIndex={4}
                     >
                       ¿Has olvidado tu contraseña?
@@ -157,7 +157,15 @@ function SignIn() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     tabIndex={3}
+                    autocomplete="current-password"
                   />
+                  <Link
+                      to="/forgot-password"
+                      className="text-primary font-medium ml-auto text-xs inline-block sm:hidden"
+                      tabIndex={4}
+                    >
+                      ¿Has olvidado tu contraseña?
+                    </Link>
                 </div>
 
                 {isLoading ? (
