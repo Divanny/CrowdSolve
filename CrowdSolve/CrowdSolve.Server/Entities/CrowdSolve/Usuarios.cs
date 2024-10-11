@@ -18,4 +18,6 @@ public partial class Usuarios
     public DateTime FechaRegistro { get; set; }
 
     public int idEstatusUsuario { get; set; }
+
+    public string CorreoElectronico { get; set; }
 }

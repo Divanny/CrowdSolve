@@ -16,4 +16,10 @@ public partial class Participantes
     public string Apellidos { get; set; }
 
     public DateOnly FechaNacimiento { get; set; }
+
+    public string Telefono { get; set; }
+
+    public int idNivelEducativo { get; set; }
+
+    public string DescripcionPersonal { get; set; }
 }

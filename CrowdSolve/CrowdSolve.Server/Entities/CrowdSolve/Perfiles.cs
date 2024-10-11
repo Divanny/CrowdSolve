@@ -12,4 +12,6 @@ public partial class Perfiles
     public string Nombre { get; set; }
 
     public string Descripcion { get; set; }
+
+    public bool PorDefecto { get; set; }
 }
