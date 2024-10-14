@@ -91,6 +91,16 @@
     "LayoutProfileDropdownMenuContent": true,
     "UiDate-picker": true,
     "UiPassword-input": true,
-    "GoogleLoginButton": true
+    "GoogleLoginButton": true,
+    "LayoutFooter": true,
+    "LayoutLayout": true,
+    "LayoutSidebar": true,
+    "Landing-pageChallengesPost": true,
+    "Landing-pageHeroSection": true,
+    "Landing-pageTrustedBySection": true,
+    "Landing-pageWhyClientsLoveUs": true,
+    "Landing-pageCrowdSourcingEasy": true,
+    "Landing-pageFAQSection": true,
+    "ScrollAnimationWrapper": true
   }
 }

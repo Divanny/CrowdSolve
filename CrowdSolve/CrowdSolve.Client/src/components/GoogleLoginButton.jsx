@@ -13,7 +13,6 @@ function GoogleLoginButton() {
     const navigate = useNavigate();
 
     const handleGoogleLoginSuccess = async (tokenResponse) => {
-        console.log(tokenResponse);
         const { code } = tokenResponse;
 
         try {

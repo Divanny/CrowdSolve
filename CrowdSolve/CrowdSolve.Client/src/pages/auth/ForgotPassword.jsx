@@ -172,7 +172,7 @@ export default function ForgotPassword() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      autocomplete="email"
+                      autoComplete="email"
                     />
                   </div>
                 </div>
@@ -238,12 +238,12 @@ export default function ForgotPassword() {
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="newPassword">Nueva contraseña</Label>
                     <PasswordInput id="newPassword" placeholder="Ingrese la nueva contraseña" required value={password}
-                      onChange={(e) => setPassword(e.target.value)} autocomplete="new-password" />
+                      onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" />
                   </div>
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="confirmPassword">Confirmar nueva contraseña</Label>
                     <PasswordInput id="confirmPassword" placeholder="Confirme la nueva contraseña" required value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)} autocomplete="new-password" />
+                      onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="new-password" />
                   </div>
                 </div>
                 <Button className="w-full mt-6" type="submit">

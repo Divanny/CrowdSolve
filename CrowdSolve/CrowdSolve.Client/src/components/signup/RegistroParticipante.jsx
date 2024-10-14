@@ -110,7 +110,7 @@ const RegistroParticipante = () => {
                         value={formData.nombres}
                         onChange={handleChange}
                         required
-                        autocomplete="given-name"
+                        autoComplete="given-name"
                     />
                 </div>
                 <div className="space-y-2">
@@ -122,7 +122,7 @@ const RegistroParticipante = () => {
                         value={formData.apellidos}
                         onChange={handleChange}
                         required
-                        autocomplete="family-name"
+                        autoComplete="family-name"
                     />
                 </div>
             </div>
@@ -166,7 +166,7 @@ const RegistroParticipante = () => {
                         type="tel"
                         value={formData.telefono}
                         onChange={(value) => setFormData((prevData) => ({ ...prevData, telefono: value }))}
-                        autocomplete="tel"
+                        autoComplete="tel"
                     />
                 </div>
             </div>
@@ -197,7 +197,7 @@ const RegistroParticipante = () => {
                     value={formData.descripcionPersonal}
                     onChange={handleChange}
                     rows={4}
-                    autocomplete="off"
+                    autoComplete="off"
                 />
             </div>
             <Button
