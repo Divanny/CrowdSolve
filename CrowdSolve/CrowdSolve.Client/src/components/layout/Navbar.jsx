@@ -19,8 +19,8 @@ const Navbar = () => {
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
     return (
-        <nav className="relative flex flex-wrap items-center justify-between py-2 lg:py-2">
-            <div className="flex w-full flex-wrap items-center justify-between px-3">
+        <nav className="relative flex flex-wrap items-center justify-between py-2 lg:py-2 px-4 md:px-6">
+            <div className="flex w-full flex-wrap items-center justify-between">
                 <div>
                     <Link to="/" className="flex items-center">
                         <img className="me-2" src={CrowdSolveLogo} style={{ height: '50px' }} alt="CrowdSolve Logo" />
@@ -36,7 +36,7 @@ const Navbar = () => {
                     </div>
 
                     {user ? (
-                        <div className="flex items-center mx-2">
+                        <div className="flex items-center">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Avatar className="cursor-pointer bg-accent" size="1">
@@ -47,9 +47,9 @@ const Navbar = () => {
                                 <ProfileDropdownMenuContent user={user} />
                             </DropdownMenu>
                         </div>
-                    ) : (<div className='flex items-center mx-2'>
-                        <Button className="mx-1 my-1 text-sm" variant="secondary" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
-                        <Button className="mx-1 my-1 text-sm" onClick={() => navigate('/sign-up')}>Registrarse</Button>
+                    ) : (<div className='flex items-center gap-2'>
+                        <Button className="my-1 text-sm" variant="secondary" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
+                        <Button className="my-1 text-sm" onClick={() => navigate('/sign-up')}>Registrarse</Button>
                     </div>)}
                 </div>
             </div>
