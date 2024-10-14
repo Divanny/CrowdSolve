@@ -1,11 +1,15 @@
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 const Layout = ({ children }) => {
     return (
-        <div>
-            <Navbar />
+        <div className="flex flex-col min-h-screen sm:container mx-auto">
+        <Navbar />
+        <main className="flex-grow">
             {children}
-        </div>
+        </main>
+        <Footer />
+    </div>
     );
 };
 
