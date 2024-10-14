@@ -10,7 +10,7 @@ export default function Footer() {
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
     return (
-        <footer className="bg-background text-foreground py-12 px-4 md:px-6">
+        <footer className="container bg-background text-foreground py-12 px-4 md:px-6">
             <div className="flex flex-col lg:flex-row justify-between">
                 <div className="mb-8 lg:mb-0 lg:w-1/3">
                     <img

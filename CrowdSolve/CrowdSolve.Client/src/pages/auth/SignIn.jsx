@@ -136,7 +136,7 @@ function SignIn() {
                     onChange={(e) => setUsername(e.target.value)}
                     required
                     tabIndex={2}
-                    autocomplete="username email"
+                    autoComplete="username email"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -157,7 +157,7 @@ function SignIn() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     tabIndex={3}
-                    autocomplete="current-password"
+                    autoComplete="current-password"
                   />
                   <Link
                       to="/forgot-password"

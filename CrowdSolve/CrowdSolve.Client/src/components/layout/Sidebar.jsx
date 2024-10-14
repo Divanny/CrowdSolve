@@ -94,7 +94,7 @@ const Sidebar = () => {
                         </DropdownMenu>
                     ) : (
                         <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-                            <Button variant="secondary" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
+                            <Button variant="outline" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
                             <Button  onClick={() => navigate('/sign-up')}>Registrarse</Button>
                         </div>
                     )}
