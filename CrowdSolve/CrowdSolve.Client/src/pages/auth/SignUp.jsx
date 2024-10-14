@@ -105,9 +105,6 @@ function SignUp() {
                   typeSpeed={80}
                   loop
                   className="text-lg sm:text-3xl font-serif"
-                  style={{
-                    fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
-                  }}
                   backSpeed={20}
                   cursorChar="|"
                   showCursor={true}

@@ -40,7 +40,7 @@ const challenges = [
 
 const ChallengesPost = () => {
     return (
-        <motion.section 
+        <motion.section
             className="py-32"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -48,7 +48,7 @@ const ChallengesPost = () => {
             transition={{ duration: 0.5 }}
         >
             <div className="container flex flex-col items-center gap-16 lg:px-16">
-                <motion.div 
+                <motion.div
                     className="text-center"
                     initial={{ y: 20, opacity: 0 }}
                     whileInView={{ y: 0, opacity: 1 }}
