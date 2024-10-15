@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from "@/components/ui/sonner"
 import { useDispatch, useSelector } from 'react-redux';
-import NotFound from '@/components/NotFound';
+import NotFound from '@/pages/NotFound';
 import PageLoader from '@/components/PageLoader';
 import Home from '@/pages/Home';
 import AboutUs from '@/pages/AboutUs';
@@ -16,6 +16,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import useAxios from './hooks/use-axios';
 import { setUser } from '@/redux/slices/userSlice';
 import Layout from './components/layout/Layout';
+import AccessDenied from '@/pages/AccessDenied';
 
 function App() {
     const { api } = useAxios();
@@ -66,6 +67,7 @@ function App() {
                 <Route path="/sign-up/complete/:Role" element={<ProtectedRoute><CompleteSignUp /></ProtectedRoute>} />
                 <Route path="/company/pending-verification" element={<ProtectedRoute><VerificationPending /></ProtectedRoute>} />
                 <Route path="/forgot-password" element={<ForgotPassword/>} />
+                <Route path="/access-denied" element={<AccessDenied />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
