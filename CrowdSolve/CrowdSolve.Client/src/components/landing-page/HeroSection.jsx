@@ -1,9 +1,9 @@
-'use client'
-
 import React, { useState, useEffect } from 'react'
 import { ArrowRight, Globe, Sparkles, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion'
+import GirlImage from '@/assets/landing-page/girl-image.jpg'
+import KidImage from '@/assets/landing-page/kid-image.jpg'
 
 const HeroSection = () => {
     const [currentDesign, setCurrentDesign] = useState(0)
@@ -81,7 +81,7 @@ const HeroSection = () => {
                         transition={{ duration: 0.5 }}
                         className="relative aspect-[3/4]"
                     >
-                        <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                             <motion.svg
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
@@ -89,6 +89,7 @@ const HeroSection = () => {
                                 version="1.1"
                                 viewBox="0 0 800 800"
                                 className="size-full opacity-50"
+                                style={{ zIndex: -10000 }}
                             >
                                 {Array.from(Array(720).keys()).map((dot, index, array) => {
                                     const angle = 0.2 * index
@@ -115,7 +116,7 @@ const HeroSection = () => {
                             transition={{ delay: 0.2, duration: 0.5 }}
                             className="absolute left-[8%] top-[10%] flex aspect-[5/6] w-[38%] flex-col justify-between rounded-lg border border-border bg-cover bg-center p-4 text-white overflow-hidden"
                             style={{
-                                backgroundImage: 'url(https://images.pexels.com/photos/4709288/pexels-photo-4709288.jpeg)',
+                                backgroundImage: `url(${KidImage})`,
                                 boxShadow: 'inset 0 0 0 2000px rgba(0, 0, 0, 0.5)'
                             }}
                         >
@@ -141,7 +142,7 @@ const HeroSection = () => {
                             transition={{ delay: 0.6, duration: 0.5 }}
                             className="absolute bottom-[24%] right-[24%] flex aspect-[5/6] w-[38%] flex-col justify-end rounded-lg border border-border bg-cover bg-center p-4 text-white overflow-hidden"
                             style={{
-                                backgroundImage: 'url(https://images.pexels.com/photos/8297132/pexels-photo-8297132.jpeg)',
+                                backgroundImage: `url(${GirlImage})`,
                                 boxShadow: 'inset 0 0 0 2000px rgba(0, 0, 0, 0.5)'
                             }}
                         >

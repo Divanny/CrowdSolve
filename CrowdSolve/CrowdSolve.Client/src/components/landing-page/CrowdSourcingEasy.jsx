@@ -59,7 +59,7 @@ const CrowdSourcingEasy = () => {
                         <motion.div className="grid gap-10 md:grid-cols-3" variants={containerVariants}>
                             <motion.div className="flex flex-col" variants={itemVariants}>
                                 <motion.div
-                                    className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-accent"
+                                    className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-card"
                                     variants={iconVariants}
                                 >
                                     <FileUp className="size-5" />
@@ -73,7 +73,7 @@ const CrowdSourcingEasy = () => {
                             </motion.div>
                             <motion.div className="flex flex-col" variants={itemVariants}>
                                 <motion.div
-                                    className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-accent"
+                                    className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-card"
                                     variants={iconVariants}
                                 >
                                     <UsersRound className="size-5" />
@@ -87,7 +87,7 @@ const CrowdSourcingEasy = () => {
                             </motion.div>
                             <motion.div className="flex flex-col" variants={itemVariants}>
                                 <motion.div
-                                    className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-accent"
+                                    className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-card"
                                     variants={iconVariants}
                                 >
                                     <ClipboardCheck className="size-5" />

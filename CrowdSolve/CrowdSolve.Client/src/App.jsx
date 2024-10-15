@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import NotFound from '@/components/NotFound';
 import PageLoader from '@/components/PageLoader';
 import Home from '@/pages/Home';
+import AboutUs from '@/pages/AboutUs';
 import SignIn from '@/pages/auth/SignIn';
 import SignUp from '@/pages/auth/SignUp';
 import ForgotPassword from '@/pages/auth/ForgotPassword';
@@ -58,6 +59,7 @@ function App() {
             {isLoading && <PageLoader />}
             <Routes>
                 <Route path="/" element={<Layout><Home /></Layout>} />
+                <Route path="/about-us" element={<Layout><AboutUs /></Layout>} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
                 <Route path="/sign-up/complete" element={<ProtectedRoute><RoleSelection /></ProtectedRoute>} />

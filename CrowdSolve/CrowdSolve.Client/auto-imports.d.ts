@@ -6,6 +6,8 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const About-usAbout: typeof import('@/components/about-us/About.jsx')['About']
+  const About-usMeetOurTeam: typeof import('@/components/about-us/MeetOurTeam.jsx')['MeetOurTeam']
   const GoogleLoginButton: typeof import('@/components/GoogleLoginButton.jsx')['GoogleLoginButton']
   const Landing-pageChallengesPost: typeof import('@/components/landing-page/ChallengesPost.jsx')['ChallengesPost']
   const Landing-pageCrowdSourcingEasy: typeof import('@/components/landing-page/CrowdSourcingEasy.jsx')['CrowdSourcingEasy']
