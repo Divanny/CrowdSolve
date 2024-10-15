@@ -30,7 +30,7 @@ const people = [
 
 const MeetOurTeam = () => {
   return (
-    <section className="py-12">ñ
+    <section className="py-12">
       <div className="container flex flex-col items-center text-center">
         <h2 className="my-6 text-pretty text-2xl font-bold lg:text-4xl">
           Conoce a nuestro equipo

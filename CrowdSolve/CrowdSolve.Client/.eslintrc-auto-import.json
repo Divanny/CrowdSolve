@@ -101,6 +101,8 @@
     "Landing-pageWhyClientsLoveUs": true,
     "Landing-pageCrowdSourcingEasy": true,
     "Landing-pageFAQSection": true,
-    "ScrollAnimationWrapper": true
+    "ScrollAnimationWrapper": true,
+    "About-usAbout": true,
+    "About-usMeetOurTeam": true
   }
 }
