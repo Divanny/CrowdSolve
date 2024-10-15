@@ -367,9 +367,18 @@ public partial class CrowdSolveContext : DbContext
         {
             entity.HasKey(e => e.idSoporte);
 
+            entity.Property(e => e.Apellidos)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.CorreoElectronico)
+                .HasMaxLength(100)
+                .IsUnicode(false);
             entity.Property(e => e.Fecha).HasColumnType("datetime");
             entity.Property(e => e.Mensaje)
                 .IsRequired()
+                .IsUnicode(false);
+            entity.Property(e => e.Nombres)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Titulo)
                 .IsRequired()
