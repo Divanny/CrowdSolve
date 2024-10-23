@@ -94,6 +94,7 @@ declare global {
   const useImperativeHandle: typeof import('react')['useImperativeHandle']
   const useInRouterContext: typeof import('react-router')['useInRouterContext']
   const useInsertionEffect: typeof import('react')['useInsertionEffect']
+  const useIsMobile: typeof import('./src/hooks/use-mobile.jsx')['useIsMobile']
   const useLayoutEffect: typeof import('react')['useLayoutEffect']
   const useLocation: typeof import('react-router')['useLocation']
   const useMemo: typeof import('react')['useMemo']
