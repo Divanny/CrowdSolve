@@ -15,12 +15,14 @@ import {
     DropdownMenuSubContent,
     DropdownMenuSubTrigger
 } from "@/components/ui/dropdown-menu"
-import { User, Send, Settings, BellRing, SunMoon, Globe, LogOut, Check, Moon, Sun, MonitorSmartphone } from 'lucide-react';
+import { User, Send, Settings, BellRing, SunMoon, Globe, LogOut, Check, Moon, Sun, MonitorSmartphone, ShieldEllipsis } from 'lucide-react';
 import flags from "react-phone-number-input/flags";
+import { useNavigate } from 'react-router-dom';
 
 const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
     const theme = useSelector((state) => state.theme.theme);
     const language = useSelector((state) => state.language.language);
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -71,6 +73,10 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
                 <DropdownMenuItem>
                     <BellRing className="mr-2" size={16} />
                     Notificaciones
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate('/admin')}>
+                    <ShieldEllipsis className="mr-2" size={16} />
+                    Administración
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

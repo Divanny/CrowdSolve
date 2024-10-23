@@ -103,6 +103,7 @@
     "Landing-pageFAQSection": true,
     "ScrollAnimationWrapper": true,
     "About-usAbout": true,
-    "About-usMeetOurTeam": true
+    "About-usMeetOurTeam": true,
+    "useIsMobile": true
   }
 }
