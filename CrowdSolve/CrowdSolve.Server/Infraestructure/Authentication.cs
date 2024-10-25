@@ -186,7 +186,7 @@ namespace CrowdSolve.Server.Infraestructure
         /// <summary>
         /// Método para iniciar sesión con Google.
         /// </summary>
-        /// <param name="googleToken">Token de Google.</param>
+        /// <param name="code">Token de Google.</param>
         /// <returns>Resultado de la operación de inicio de sesión.</returns>
         public async Task<OperationResult> GoogleLogin(string code)
         {
@@ -252,7 +252,8 @@ namespace CrowdSolve.Server.Infraestructure
                                 NombreUsuario = name,
                                 CorreoElectronico = email,
                                 FechaRegistro = DateTime.UtcNow,
-                                idEstatusUsuario = (int)EstatusUsuariosEnum.Incompleto
+                                idEstatusUsuario = (int)EstatusUsuariosEnum.Incompleto,
+                                AvatarURL = payload.Picture
                             });
                         }
 

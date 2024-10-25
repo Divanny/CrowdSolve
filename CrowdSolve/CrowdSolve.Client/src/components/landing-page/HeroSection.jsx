@@ -4,9 +4,11 @@ import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion'
 import GirlImage from '@/assets/landing-page/girl-image.jpg'
 import KidImage from '@/assets/landing-page/kid-image.jpg'
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
     const [currentDesign, setCurrentDesign] = useState(0)
+    const navigate = useNavigate();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -37,7 +39,7 @@ const HeroSection = () => {
     return (
         <section>
             <div className="container">
-                <div className="grid items-center gap-8 lg:grid-cols-2">
+                <div className="my-8 lg:my-0 grid items-center gap-8 lg:grid-cols-2">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -66,11 +68,11 @@ const HeroSection = () => {
                             transition={{ delay: 0.6, duration: 0.5 }}
                             className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start"
                         >
-                            <Button className="w-full sm:w-auto">
+                            <Button className="w-full sm:w-auto" onClick={() => navigate('/challenges/publish')}>
                                 <ArrowRight className="mr-2 size-4" />
                                 Publicar un desafío
                             </Button>
-                            <Button variant="outline" className="w-full sm:w-auto">
+                            <Button variant="outline" className="w-full sm:w-auto" onClick={() => navigate('/sign-up')}>
                                 Unirse a la comunidad
                             </Button>
                         </motion.div>
@@ -120,8 +122,8 @@ const HeroSection = () => {
                                 boxShadow: 'inset 0 0 0 2000px rgba(0, 0, 0, 0.5)'
                             }}
                         >
-                            <div className="text-2xl font-bold">Innovación sin límites</div>
-                            <div className="text-sm">Desata el potencial creativo de la multitud</div>
+                            <div className="text-sm sm:text-2xl font-bold">Innovación sin límites</div>
+                            <div className="text-xs sm:text-sm">Desata el potencial creativo de la multitud</div>
                         </motion.div>
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -146,7 +148,7 @@ const HeroSection = () => {
                                 boxShadow: 'inset 0 0 0 2000px rgba(0, 0, 0, 0.5)'
                             }}
                         >
-                            <div className="text-xl font-semibold">Soluciones para desafíos complejos</div>
+                            <div className="text-sm sm:text-xl font-semibold">Soluciones para desafíos complejos</div>
                         </motion.div>
                     </motion.div>
                 </div>

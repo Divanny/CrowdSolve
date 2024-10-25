@@ -20,4 +20,6 @@ public partial class Usuarios
     public int idEstatusUsuario { get; set; }
 
     public string CorreoElectronico { get; set; }
+
+    public string AvatarURL { get; set; }
 }

@@ -29,6 +29,7 @@ import { PhoneInput } from "@/components/ui/phone-input";
 
 import { DiplomaIcon } from "hugeicons-react";
 import { IdentityCardIcon } from "hugeicons-react";
+import AvatarPicker from "../ui/avatar-picker";
 
 const RegistroEmpresa = () => {
     const navigate = useNavigate();
@@ -47,7 +48,8 @@ const RegistroEmpresa = () => {
         direccion: '',
         descripcion: '',
         personaContacto: '',
-        emailContacto: ''
+        emailContacto: '',
+        avatar: '',
     })
 
     useEffect(() => {
@@ -85,8 +87,17 @@ const RegistroEmpresa = () => {
             return;
         }
 
+        const formDataToSend = new FormData();
+        Object.keys(formData).forEach(key => {
+            formDataToSend.append(key, formData[key]);
+        });
+
         try {
-            const response = await api.post("api/Empresas", formData);
+            const response = await api.post("api/Empresas", formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
 
             if (response.data.success) {
                 navigate("/company/pending-verification");
@@ -107,8 +118,15 @@ const RegistroEmpresa = () => {
     return (
         <form onSubmit={handleSubmit} className="space-y-2">
             <div className="space-y-2">
+                <AvatarPicker avatar={formData.avatar} onAvatarChange={(value) => setFormData((prevData) => ({ ...prevData, avatar: value }))} />
+            </div>
+            <div className="space-y-2">
                 <Label htmlFor="nombre">Nombre de la empresa</Label>
                 <Input id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} required placeholder="Ingrese el nombre de la empresa" autoComplete="organization" />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="direccion">Descripción</Label>
+                <Textarea id="descripcion" name="descripcion" value={formData.descripcion} onChange={handleChange} rows={2} required placeholder="Ingrese una descripcion breve de la empresa" autoComplete="description" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">

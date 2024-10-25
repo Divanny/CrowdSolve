@@ -69,3 +69,6 @@ coverage
 # Dotenv environment variables file
 appsettings.json
 appsettings.*.json
+
+# Google Service Account Key
+crowdsolve-e4ade-firebase-adminsdk-4q77k-452ab49a66.json

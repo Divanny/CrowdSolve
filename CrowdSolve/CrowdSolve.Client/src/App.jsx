@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from "@/components/ui/sonner"
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import NotFound from '@/pages/NotFound';
 import PageLoader from '@/components/PageLoader';
 import Home from '@/pages/Home';
@@ -13,16 +13,12 @@ import CompleteSignUp from '@/pages/auth/CompleteSignUp';
 import RoleSelection from '@/pages/auth/RoleSelection';
 import VerificationPending from '@/pages/company/VerificationPending';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import useAxios from './hooks/use-axios';
-import { setUser } from '@/redux/slices/userSlice';
 import Layout from './components/layout/Layout';
 import AdminLayout from './components/layout/AdminLayout';
 import AccessDenied from '@/pages/AccessDenied';
+import CompanyListing from './pages/CompanyListing';
 
 function App() {
-    const { api } = useAxios();
-    const dispatch = useDispatch();
-
     const isLoading = useSelector((state) => state.loading.isLoading);
     const theme = useSelector((state) => state.theme.theme);
 
@@ -39,25 +35,6 @@ function App() {
         }
     }, [theme]);
 
-    const token = useSelector((state) => state.user.token);
-
-    useEffect(() => {
-        const loadUser = async () => {
-            if (!token) return;
-
-            const response = await api.get('api/Account');
-
-            dispatch(setUser({
-                user: response.data.usuario,
-                token: token,
-                views: Array.isArray(response.data.vistas) ? response.data.vistas : []
-            }));
-        }
-
-        loadUser();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [token, window.location.pathname]);
-
     return (
         <>
             {isLoading && <PageLoader />}
@@ -69,6 +46,7 @@ function App() {
                 <Route path="/sign-up/complete" element={<ProtectedRoute><RoleSelection /></ProtectedRoute>} />
                 <Route path="/sign-up/complete/:Role" element={<ProtectedRoute><CompleteSignUp /></ProtectedRoute>} />
                 <Route path="/company/pending-verification" element={<ProtectedRoute><VerificationPending /></ProtectedRoute>} />
+                <Route path="/companies" element={<Layout><CompanyListing /></Layout>} />
                 <Route path="/forgot-password" element={<ForgotPassword/>} />
                 <Route path="/access-denied" element={<AccessDenied />} />
                 <Route path="/404" element={<NotFound />} />

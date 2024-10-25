@@ -22,4 +22,6 @@ public partial class Empresas
     public int idSector { get; set; }
 
     public string Direccion { get; set; }
+
+    public string Descripcion { get; set; }
 }

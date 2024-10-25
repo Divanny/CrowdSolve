@@ -17,7 +17,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
-
+        
         /// <summary>
         /// Constructor de la clase UsuariosController.
         /// </summary>
@@ -42,6 +42,12 @@ namespace CrowdSolve.Server.Controllers
         public List<UsuariosModel> Get()
         {
             List<UsuariosModel> usuarios = _usuariosRepo.Get().ToList();
+
+            foreach (var usuario in usuarios)
+            {
+                usuario.ContraseñaHashed = null;
+            }
+
             return usuarios;
         }
 
@@ -55,6 +61,10 @@ namespace CrowdSolve.Server.Controllers
         public UsuariosModel Get(int idUsuario)
         {
             UsuariosModel usuario = _usuariosRepo.Get(idUsuario);
+
+            if (usuario == null) throw new Exception("Este usuario no se ha encontrado");
+
+            usuario.ContraseñaHashed = null;
             return usuario;
         }
 
@@ -99,8 +109,26 @@ namespace CrowdSolve.Server.Controllers
 
                 if (usuario == null) return new OperationResult(false, "El usuario no se ha encontrado");
 
-                _usuariosRepo.Edit(usuariosModel);
+                if (usuario.NombreUsuario != usuariosModel.NombreUsuario && _usuariosRepo.Any(x => x.NombreUsuario == usuariosModel.NombreUsuario)) return new OperationResult(false, "Este usuario ya existe en el sistema");
+
+                if (usuario.CorreoElectronico != usuariosModel.CorreoElectronico && _usuariosRepo.Any(x => x.CorreoElectronico == usuariosModel.CorreoElectronico)) return new OperationResult(false, "Este correo electrónico ya está registrado");
+
+                if (usuario.idPerfil != usuariosModel.idPerfil)
+                {
+                    var perfil = _perfilesRepo.Get(usuariosModel.idPerfil);
+                    if (perfil == null) return new OperationResult(false, "Este perfil no se ha encontrado");
+                }
+
+                usuario.NombreUsuario = usuariosModel.NombreUsuario;
+                usuario.CorreoElectronico = usuariosModel.CorreoElectronico;
+                usuario.idPerfil = usuariosModel.idPerfil;
+                usuario.idEstatusUsuario = usuariosModel.idEstatusUsuario;
+                usuario.AvatarURL = usuariosModel.AvatarURL;
+
+                _usuariosRepo.Edit(usuario);
                 _logger.LogHttpRequest(usuariosModel);
+
+                usuario.ContraseñaHashed = null;
                 return new OperationResult(true, "Usuario editado exitosamente", usuario);
             }
             catch (Exception ex)

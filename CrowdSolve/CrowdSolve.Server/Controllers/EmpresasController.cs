@@ -18,6 +18,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly EmpresasRepo _empresasRepo;
         private readonly ParticipantesRepo _participantesRepo;
         private readonly UsuariosRepo _usuariosRepo;
+        private readonly FirebaseStorageService _firebaseStorageService;
 
         /// <summary>
         /// Constructor de la clase EmpresasController.
@@ -25,7 +26,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
-        public EmpresasController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger)
+        public EmpresasController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseStorageService firebaseStorageService)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
@@ -33,6 +34,7 @@ namespace CrowdSolve.Server.Controllers
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
             _participantesRepo = new ParticipantesRepo(crowdSolveContext);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
+            _firebaseStorageService = firebaseStorageService;
         }
 
         /// <summary>
@@ -40,7 +42,6 @@ namespace CrowdSolve.Server.Controllers
         /// </summary>
         /// <returns>Lista de Empresas.</returns>
         [HttpGet(Name = "GetEmpresas")]
-        [Authorize]
         public List<EmpresasModel> Get()
         {
             List<EmpresasModel> Empresas = _empresasRepo.Get().ToList();
@@ -53,7 +54,6 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="idEmpresa">ID del Empresa.</param>
         /// <returns>Empresa encontrado.</returns>
         [HttpGet("{idEmpresa}", Name = "GetEmpresa")]
-        [Authorize]
         public EmpresasModel Get(int idEmpresa)
         {
             EmpresasModel? Empresa = _empresasRepo.Get(x => x.idEmpresa == idEmpresa).FirstOrDefault();
@@ -70,7 +70,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Resultado de la operación.</returns>
         [HttpPost(Name = "SaveEmpresa")]
         [Authorize]
-        public OperationResult Post(EmpresasModel empresasModel)
+        public OperationResult Post([FromForm] EmpresasModel empresasModel)
         {
             try
             {
@@ -85,6 +85,12 @@ namespace CrowdSolve.Server.Controllers
 
                 usuario.idPerfil = (int)PerfilesEnum.Empresa;
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Pendiente_de_validar;
+
+                if (empresasModel.Avatar != null)
+                {
+                    var logoUrl = _firebaseStorageService.UploadFileAsync(empresasModel.Avatar.OpenReadStream(), $"companies/{empresasModel.Nombre}/logo", empresasModel.Avatar.ContentType).Result;
+                    usuario.AvatarURL = logoUrl;
+                }
 
                 _usuariosRepo.Edit(usuario);
                 var created = _empresasRepo.Add(empresasModel);
@@ -115,6 +121,16 @@ namespace CrowdSolve.Server.Controllers
                 if (Empresa == null) return new OperationResult(false, "Esta empresa no se ha encontrado");
                 if (Empresa.idUsuario != empresasModel.idUsuario) return new OperationResult(false, "No tienes permisos para editar esta empresa");
 
+                var usuario = _usuariosRepo.Get(empresasModel.idUsuario);
+                if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+                if (empresasModel.Avatar != null)
+                {
+                    var logoUrl = _firebaseStorageService.UploadFileAsync(empresasModel.Avatar.OpenReadStream(), $"companies/{empresasModel.Nombre}/logo", empresasModel.Avatar.ContentType).Result;
+                    usuario.AvatarURL = logoUrl;
+                }
+                
+                _usuariosRepo.Edit(usuario);
                 _empresasRepo.Edit(empresasModel);
                 _logger.LogHttpRequest(empresasModel);
                 return new OperationResult(true, "Se ha editado la información de la empresa exitosamente", Empresa);
@@ -127,7 +143,6 @@ namespace CrowdSolve.Server.Controllers
         }
 
         [HttpGet("GetRelationalObjects")]
-        [Authorize]
         public object GetRelationalObjects()
         {
             var tamañosEmpresa = _crowdSolveContext.Set<TamañosEmpresa>();

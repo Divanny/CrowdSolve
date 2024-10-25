@@ -144,12 +144,12 @@ export default function Component({ children }) {
             <Sidebar variant="floating">
                 <SidebarHeader>
                     <div className="flex items-center gap-2">
-                    <Link to="/admin">
-                        <img src={CrowdSolveLogo} style={{ height: '40px' }} alt="CrowdSolve Logo" />
-                    </Link>
-                    <Button variant="ghost" className="ml-auto" size="icon" tooltip="Volver al inicio" onClick={() => navigate('/')}>
-                        <Home className='h-2 w-2' />
-                    </Button>
+                        <Link to="/admin">
+                            <img src={CrowdSolveLogo} style={{ height: '40px' }} alt="CrowdSolve Logo" />
+                        </Link>
+                        <Button variant="ghost" className="ml-auto" size="icon" tooltip="Volver al inicio" onClick={() => navigate('/')}>
+                            <Home className='h-2 w-2' />
+                        </Button>
                     </div>
                 </SidebarHeader>
                 <SidebarContent>
@@ -162,7 +162,7 @@ export default function Component({ children }) {
                                         <SidebarMenuItem key={item.title} onSelect={() => navigate('/')}>
                                             <SidebarMenuButton isActive={item.url == location.pathname} asChild>
                                                 <Link variant="secondary" className="w-full flex justify-start items-center gap-2" to={item.url}>
-                                                    {(item.icon != "" && item.icon != null) && <Icon name={item.icon} /> }
+                                                    {(item.icon != "" && item.icon != null) && <Icon name={item.icon} />}
                                                     {item.title}
                                                     {item.pending && <Badge variant="outline" className="ml-auto">{item.pending}</Badge>}
                                                 </Link>
@@ -178,7 +178,7 @@ export default function Component({ children }) {
                     {user ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full h-auto" onClick={() => navigate('/sign-in')}>
+                                <Button variant="outline" className="w-full h-auto px-2 py-1">
                                     <div className='flex items-center justify-between w-full'>
                                         <div className='flex items-center '>
                                             <Avatar className="bg-accent" size="1">

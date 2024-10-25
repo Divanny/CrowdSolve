@@ -104,6 +104,11 @@
     "ScrollAnimationWrapper": true,
     "About-usAbout": true,
     "About-usMeetOurTeam": true,
-    "useIsMobile": true
+    "useIsMobile": true,
+    "LayoutAdminLayout": true,
+    "UiIcon": true,
+    "UiSidebar": true,
+    "UiAvatar-picker": true,
+    "useAvatar": true
   }
 }

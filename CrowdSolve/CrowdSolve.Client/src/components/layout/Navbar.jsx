@@ -40,7 +40,7 @@ const Navbar = () => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Avatar className="cursor-pointer bg-accent" size="1">
-                                        <AvatarImage src={`https://robohash.org/${user.nombreUsuario}`} />
+                                        <AvatarImage src={(user.avatarBlobURL) ? user.avatarBlobURL : `https://robohash.org/${user.nombreUsuario}`} />
                                         <AvatarFallback>{user[0]}</AvatarFallback>
                                     </Avatar>
                                 </DropdownMenuTrigger>
