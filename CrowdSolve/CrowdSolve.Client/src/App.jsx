@@ -6,6 +6,7 @@ import NotFound from '@/components/NotFound';
 import PageLoader from '@/components/PageLoader';
 import Home from '@/pages/Home';
 import AboutUs from '@/pages/AboutUs';
+import ContactUs from '@/pages/ContactUs'
 import SignIn from '@/pages/auth/SignIn';
 import SignUp from '@/pages/auth/SignUp';
 import ForgotPassword from '@/pages/auth/ForgotPassword';
@@ -60,6 +61,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Layout><Home /></Layout>} />
                 <Route path="/about-us" element={<Layout><AboutUs /></Layout>} />
+                <Route path="/contact-us" element={<Layout><ContactUs /></Layout>} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
                 <Route path="/sign-up/complete" element={<ProtectedRoute><RoleSelection /></ProtectedRoute>} />
