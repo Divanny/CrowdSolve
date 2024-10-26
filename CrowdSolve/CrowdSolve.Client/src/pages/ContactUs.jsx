@@ -16,35 +16,13 @@ export default function ContactPage() {
   const [correoElectronico, setEmail] = useState("")
   const [mensaje, setMessage] = useState("")
   const [titulo, setTittle] = useState("")
-  const [idUsuario, setIdUsuario]=useState("")
-  const [nombreUsuario, setNombreUsuario]=useState("")
   const [captchaValue, setCaptchaValue] = useState("")
 
   const { api } = useAxios();
   const isLoading = useSelector((state) => state.loading.isLoading);
+  const idUsuario=useSelector((state) => state.user?.user?.idUsuario);
+  const nombreUsuario=useSelector((state) => state.user?.user?.nombreUsuario);
 
-
-  useEffect(() => {
-
-    if (localStorage.getItem('persist:root')) {
-      try {
-        const storedData = JSON.parse(localStorage.getItem('persist:root'));
-        const storedData2 = JSON.parse(storedData.user);
-        
-        const idUsuarioExtraido = storedData2?.user?.idUsuario;
-        const nombreUsuarioExtraido= storedData2?.user?.nombreUsuario;
-        
-        if (idUsuarioExtraido) {
-          setIdUsuario(idUsuarioExtraido);
-          setNombreUsuario(nombreUsuarioExtraido);
-        } 
-      } catch (error) {
-        console.error("Error al parsear los datos de localStorage:", error); //Agregar un toast
-      }
-    } else {
-      console.warn("No se encontró el usuario en localStorage."); //Agregar un toast
-    }
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,8 +59,7 @@ export default function ContactPage() {
         setEmail("")
         setMessage("")
         setTittle("");
-        setIdUsuario("")
-        setNombreUsuario("")
+        
       }
 
       if (typeof window !== 'undefined' && window.grecaptcha) {
