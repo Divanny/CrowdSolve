@@ -42,6 +42,8 @@ namespace CrowdSolve.Server.Controllers
         /// </summary>
         /// <returns>Lista de Empresas.</returns>
         [HttpGet(Name = "GetEmpresas")]
+        [Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Ver_Empresas)]
         public List<EmpresasModel> Get()
         {
             List<EmpresasModel> Empresas = _empresasRepo.Get().ToList();
@@ -70,6 +72,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Resultado de la operación.</returns>
         [HttpPost(Name = "SaveEmpresa")]
         [Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Crear_Empresa)]
         public OperationResult Post([FromForm] EmpresasModel empresasModel)
         {
             try
@@ -90,6 +93,10 @@ namespace CrowdSolve.Server.Controllers
                 {
                     var logoUrl = _firebaseStorageService.UploadFileAsync(empresasModel.Avatar.OpenReadStream(), $"companies/{empresasModel.Nombre}/logo", empresasModel.Avatar.ContentType).Result;
                     usuario.AvatarURL = logoUrl;
+                }
+                else
+                {
+                    return new OperationResult(false, "El logo de la empresa es requerido");
                 }
 
                 _usuariosRepo.Edit(usuario);
@@ -134,6 +141,117 @@ namespace CrowdSolve.Server.Controllers
                 _empresasRepo.Edit(empresasModel);
                 _logger.LogHttpRequest(empresasModel);
                 return new OperationResult(true, "Se ha editado la información de la empresa exitosamente", Empresa);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las empresas activas.
+        /// </summary>
+        /// <returns> Lista de empresas activas.</returns>
+        [HttpGet("GetEmpresasActivas")]
+        public List<EmpresasModel> GetEmpresasActivas()
+        {
+            var empresas = _empresasRepo.Get().Where(x => x.idEstatusUsuario == (int)EstatusUsuariosEnum.Activo).ToList();
+            return empresas;
+        }
+
+        /// <summary>
+        /// Obtiene todas las empresas pendientes de validar.
+        /// </summary>
+        /// <returns> Lista de empresas pendientes de validar.</returns>
+        [HttpGet("GetEmpresasPendientesValidar")]
+        [Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Solicitudes_Validar_Empresa)]
+        public List<EmpresasModel> GetEmpresasPendientesValidar()
+        {
+            var empresas = _empresasRepo.Get().Where(x => x.idEstatusUsuario == (int)EstatusUsuariosEnum.Pendiente_de_validar).ToList();
+            return empresas;
+        }
+
+        /// <summary>
+        /// Obtiene todas las empresas rechazadas.
+        /// </summary>
+        /// <returns> Lista de empresas rechazadas.</returns>
+        [HttpGet("GetEmpresasRechazadas")]
+        [Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Ver_Empresas_Rechazadas)]
+        public List<EmpresasModel> GetEmpresasRechazadas()
+        {
+            var empresas = _empresasRepo.Get().Where(x => x.idEstatusUsuario == (int)EstatusUsuariosEnum.Empresa_rechazada).ToList();
+            return empresas;
+        }
+
+        /// <summary>
+        /// Aprueba una empresa pendiente de validar.
+        /// </summary>
+        /// <param name="empresasModel"></param>
+        /// <returns> Resultado de la operación.</returns>
+        [HttpPost("AprobarEmpresa")]
+        [Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Aprobar_Empresa)]
+        public OperationResult AprobarEmpresa([FromBody] EmpresasModel empresasModel)
+        {
+            try
+            {
+                var Empresa = _empresasRepo.Get(x => x.idEmpresa == empresasModel.idEmpresa).FirstOrDefault();
+
+                if (Empresa == null) return new OperationResult(false, "Esta empresa no se ha encontrado");
+
+                var usuario = _usuariosRepo.Get(empresasModel.idUsuario);
+                if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+                if (Empresa.idEstatusUsuario != (int)EstatusUsuariosEnum.Pendiente_de_validar)
+                {
+                    return new OperationResult(false, "Esta empresa no está pendiente de validar");
+                }
+
+                usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
+                _usuariosRepo.Edit(usuario);
+
+                _logger.LogHttpRequest(empresasModel);
+                return new OperationResult(true, "Se ha aprobado la empresa exitosamente", Empresa);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Rechaza una empresa pendiente de validar.
+        /// </summary>
+        /// <param name="empresasModel"></param>
+        /// <returns> Resultado de la operación.</returns>
+        [HttpPost("RechazarEmpresa")]
+        [Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Rechazar_Empresa)]
+        public OperationResult RechazarEmpresa([FromBody] EmpresasModel empresasModel)
+        {
+            try
+            {
+                var Empresa = _empresasRepo.Get(x => x.idEmpresa == empresasModel.idEmpresa).FirstOrDefault();
+
+                if (Empresa == null) return new OperationResult(false, "Esta empresa no se ha encontrado");
+
+                var usuario = _usuariosRepo.Get(empresasModel.idUsuario);
+                if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+                if (Empresa.idEstatusUsuario != (int)EstatusUsuariosEnum.Pendiente_de_validar)
+                {
+                    return new OperationResult(false, "Esta empresa no está pendiente de validar");
+                }
+
+                usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Empresa_rechazada;
+                _usuariosRepo.Edit(usuario);
+
+                _logger.LogHttpRequest(empresasModel);
+                return new OperationResult(true, "Se ha rechazado la empresa exitosamente", Empresa);
             }
             catch (Exception ex)
             {

@@ -25,6 +25,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             (DB, filter) =>
             {
                 return (from e in DB.Set<Empresas>().Where(filter)
+                        join Usuario in DB.Set<Usuarios>() on e.idUsuario equals Usuario.idUsuario
+                        join EstatusUsuario in DB.Set<EstatusUsuarios>() on Usuario.idEstatusUsuario equals EstatusUsuario.idEstatusUsuario
                         join TamañosEmpresa in DB.Set<TamañosEmpresa>() on e.idTamañoEmpresa equals TamañosEmpresa.idTamañoEmpresa
                         join Sector in DB.Set<Sectores>() on e.idSector equals Sector.idSector
                         select new EmpresasModel()
@@ -39,7 +41,9 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             idTamañoEmpresa = e.idTamañoEmpresa,
                             TamañoEmpresa = TamañosEmpresa.Nombre,
                             idSector = e.idSector,
-                            Sector = Sector.Nombre
+                            Sector = Sector.Nombre,
+                            idEstatusUsuario = Usuario.idEstatusUsuario,
+                            EstatusUsuario = EstatusUsuario.Nombre
                         });
             }
         )

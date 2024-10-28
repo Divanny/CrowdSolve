@@ -36,10 +36,11 @@ namespace CrowdSolve.Server.Models
 
         [Required(ErrorMessage = "La dirección de la empresa es requerida")]
         public string? Direccion { get; set; }
-
-        [Required(ErrorMessage = "El avatar de la empresa es requerido")]
         public IFormFile? Avatar { get; set; }
         public int? CantidadDesafios { get; set; }
         public int? CantidadSoluciones { get; set; }
+
+        public int? idEstatusUsuario { get; set; }
+        public string? EstatusUsuario { get; set; }
     }
 }
