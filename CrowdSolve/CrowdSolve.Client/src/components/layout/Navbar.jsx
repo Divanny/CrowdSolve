@@ -32,7 +32,7 @@ const Navbar = () => {
                         <Button onClick={() => navigate('/about-us')} variant="ghost">Sobre nosotros</Button>
                         <Button onClick={() => navigate('/callenges')} variant="ghost">Desafíos</Button>
                         <Button onClick={() => navigate('/companies')} variant="ghost">Empresas</Button>
-                        <Button onClick={() => navigate('/contact')} variant="ghost">Contacto</Button>
+                        <Button onClick={() => navigate('/contact-us')} variant="ghost">Contáctanos</Button>
                     </div>
 
                     {user ? (
