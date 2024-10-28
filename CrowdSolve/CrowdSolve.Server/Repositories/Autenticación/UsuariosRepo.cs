@@ -18,7 +18,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 idPerfil = u.idPerfil,
                 idEstatusUsuario = u.idEstatusUsuario,
                 Contraseña = u.ContraseñaHashed,
-                FechaRegistro = u.FechaRegistro
+                FechaRegistro = u.FechaRegistro,
+                AvatarURL = u.AvatarURL
             }),
             (DB, filter) =>
             {
@@ -39,8 +40,10 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             idEstatusUsuario = u.idEstatusUsuario,
                             NombreEstatusUsuario = e.Nombre,
                             FechaRegistro = u.FechaRegistro,
+                            ContraseñaHashed = u.Contraseña,
                             InformacionParticipante = pa,
-                            InformacionEmpresa = em
+                            InformacionEmpresa = em,
+                            AvatarURL = u.AvatarURL
                         });
             }
         )
@@ -50,6 +53,11 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
         public UsuariosModel GetByUsername(string nombreUsuario)
         {
+            var usuarioModel = this.Get(x => x.NombreUsuario == nombreUsuario).FirstOrDefault();
+
+            if (usuarioModel == null) return new UsuariosModel();
+
+            usuarioModel.ContraseñaHashed = null;
             return this.Get(x => x.NombreUsuario == nombreUsuario).FirstOrDefault();
         }
 
@@ -89,6 +97,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
                     usuario.idPerfil = model.idPerfil;
                     usuario.idEstatusUsuario = model.idEstatusUsuario;
+                    usuario.AvatarURL = model.AvatarURL;
 
                     SaveChanges();
                     base.Edit(usuario);

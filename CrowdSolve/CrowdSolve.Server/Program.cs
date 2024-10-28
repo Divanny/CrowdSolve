@@ -1,5 +1,7 @@
 using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Infraestructure;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -99,13 +101,19 @@ builder.Services.AddMvcCore().ConfigureApiBehaviorOptions(options => {
             }
         }
 
-        return new BadRequestObjectResult(new OperationResult(false, "Los datos ingresados no son válidos", Errors));
+        return new BadRequestObjectResult(new OperationResult(false, "Los datos ingresados no son vï¿½lidos", Errors));
     };
+});
+
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile("crowdsolve-e4ade-firebase-adminsdk-4q77k-452ab49a66.json")
 });
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<Authentication>();
 builder.Services.AddScoped<Mailing>();
+builder.Services.AddScoped<FirebaseStorageService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 var app = builder.Build();

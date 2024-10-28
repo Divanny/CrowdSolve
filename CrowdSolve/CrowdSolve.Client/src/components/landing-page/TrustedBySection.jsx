@@ -73,7 +73,7 @@ const TrustedBySection = () => {
 
   return (
     <motion.section
-      className='bg-accent py-6 sm:pb-20'
+      className='bg-accent pb-20'
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -85,7 +85,7 @@ const TrustedBySection = () => {
         </motion.h1>
       </motion.div>
       <motion.div className="pt-10 md:pt-16 lg:pt-20" variants={itemVariants}>
-        <div className="relative mx-auto flex items-center justify-center lg:max-w-5xl">
+        <div className="relative mx-auto flex items-center justify-center lg:max-w-5xl w-full overflow-hidden">
           <Carousel
             opts={{ loop: true }}
             plugins={[AutoScroll({ playOnInit: true })]}

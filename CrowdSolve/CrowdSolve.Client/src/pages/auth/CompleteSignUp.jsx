@@ -29,7 +29,7 @@ function CompleteSignUp() {
             </div>
             <div className="my-4 sm:my-6">
               <h1 className="text-xl sm:text-2xl font-semibold text-center mb-2">
-                { Role == "Company" ? 'Formulario de empresa' : "Formulario de participante" }
+                { Role == "company" ? 'Formulario de empresa' : "Formulario de participante" }
               </h1>
             </div>
 
@@ -38,13 +38,13 @@ function CompleteSignUp() {
             </Button>
 
             <Card className="p-4 sm:p-6">
-              {Role == "Company" && (
+              {Role == "company" && (
                 <div>
                   <RegistroEmpresa />
                 </div>
               )}
 
-              {Role == "Participant" && (
+              {Role == "participant" && (
                 <div>
                   <RegistroParticipante />
                 </div>

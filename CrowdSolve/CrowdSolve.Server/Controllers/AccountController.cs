@@ -16,14 +16,16 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
+        private readonly FirebaseStorageService _firebaseStorageService;
 
-        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger)
+        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger, FirebaseStorageService firebaseStorageService)
         {
             _authentication = authentication;
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _perfilesRepo = new PerfilesRepo(crowdSolveContext);
+            _firebaseStorageService = firebaseStorageService;
         }
 
         /// <summary>
@@ -35,6 +37,8 @@ namespace CrowdSolve.Server.Controllers
         public object GetUserData()
         {
             UsuariosModel usuario = _usuariosRepo.Get(_idUsuarioOnline);
+            usuario.ContraseñaHashed = null;
+
             List<Vistas> vistas = _perfilesRepo.GetPermisos(Convert.ToInt32(usuario.idPerfil)).ToList();
 
             var data = new
@@ -236,6 +240,27 @@ namespace CrowdSolve.Server.Controllers
                 _logger.LogError(ex);
                 return new OperationResult(false, ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Obtiene el avatar de un usuario.
+        /// </summary>
+        /// <param name="idUsuario">ID del usuario.</param>
+        /// <returns>Avatar del usuario.</returns>
+        [HttpGet("GetAvatar/{idUsuario}", Name = "GetAvatar")]
+        public async Task<IActionResult> GetAvatar(int idUsuario){
+            var usuario = _usuariosRepo.Get(idUsuario);
+            if (usuario == null) return NotFound();
+
+            if (string.IsNullOrEmpty(usuario.AvatarURL)) return NoContent();
+
+            if (usuario.AvatarURL.Contains("http"))
+            {
+                return Redirect(usuario.AvatarURL);
+            }
+
+            var stream = await _firebaseStorageService.GetFileAsync(usuario.AvatarURL);
+            return File(stream, "image/jpeg");
         }
 
         public class GoogleLoginRequest

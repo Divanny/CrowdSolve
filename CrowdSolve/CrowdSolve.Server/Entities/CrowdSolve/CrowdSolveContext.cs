@@ -161,6 +161,10 @@ public partial class CrowdSolveContext : DbContext
         {
             entity.HasKey(e => e.idEmpresa);
 
+            entity.Property(e => e.Descripcion)
+                .IsRequired()
+                .HasMaxLength(500)
+                .IsUnicode(false);
             entity.Property(e => e.Direccion)
                 .IsRequired()
                 .IsUnicode(false);
@@ -413,6 +417,7 @@ public partial class CrowdSolveContext : DbContext
         {
             entity.HasKey(e => e.idUsuario);
 
+            entity.Property(e => e.AvatarURL).HasMaxLength(2083);
             entity.Property(e => e.Contraseña)
                 .HasMaxLength(256)
                 .IsUnicode(false);

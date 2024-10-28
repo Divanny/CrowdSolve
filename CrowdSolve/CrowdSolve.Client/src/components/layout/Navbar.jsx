@@ -30,9 +30,9 @@ const Navbar = () => {
                 <div className="hidden lg:flex flex-grow items-center justify-end gap-8">
                     <div className="flex items-center gap-2">
                         <Button onClick={() => navigate('/about-us')} variant="ghost">Sobre nosotros</Button>
-                        <Button onClick={() => navigate('/contact-us')} variant="ghost">Contactanos</Button>
                         <Button onClick={() => navigate('/callenges')} variant="ghost">Desafíos</Button>
                         <Button onClick={() => navigate('/companies')} variant="ghost">Empresas</Button>
+                        <Button onClick={() => navigate('/contact-us')} variant="ghost">Contáctanos</Button>
                     </div>
 
                     {user ? (
@@ -40,7 +40,7 @@ const Navbar = () => {
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Avatar className="cursor-pointer bg-accent" size="1">
-                                        <AvatarImage src={`https://robohash.org/${user.nombreUsuario}`} />
+                                        <AvatarImage src={(user.avatarBlobURL) ? user.avatarBlobURL : `https://robohash.org/${user.nombreUsuario}`} />
                                         <AvatarFallback>{user[0]}</AvatarFallback>
                                     </Avatar>
                                 </DropdownMenuTrigger>

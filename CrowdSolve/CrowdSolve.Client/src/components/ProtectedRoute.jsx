@@ -13,7 +13,7 @@ const ProtectedRoute = ({ children, requiredView }) => {
         return <Navigate to="/sign-in" replace state={{ from: location }} />;
     }
 
-    if (user.idEstatusUsuario === EstatusUsuarioEnum.PendienteDeValidar && !location.pathname.includes('/Company/pending-verification')) {
+    if (user.idEstatusUsuario === EstatusUsuarioEnum.PendienteDeValidar && !location.pathname.includes('/company/pending-verification')) {
         return <Navigate to="/company/pending-verification" replace state={{ from: location }} />;
     }
 

@@ -24,7 +24,7 @@ import {
           'Cualquier persona interesada en resolver problemas puede unirse a CrowdSolve. No se requieren habilidades específicas, solo un deseo de colaborar y contribuir.',
       },
       {
-        question: '¿Cuáles son los beneficios de usar CrowdSolve?',
+        question: '¿Cuáles son los beneficios?',
         answer:
           'Los beneficios de usar CrowdSolve incluyen acceso a una comunidad diversa de solucionadores de problemas, la posibilidad de encontrar soluciones innovadoras y la oportunidad de aprender de otros.',
       },

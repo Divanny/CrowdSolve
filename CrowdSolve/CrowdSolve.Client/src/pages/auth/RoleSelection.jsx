@@ -61,17 +61,17 @@ function RoleSelection() {
               <div className="justify-center my-4 sm:my-8 grid grid-cols-1 gap-4 min-[1000px]:grid-cols-2">
                 <Card
                   className={`cursor-pointer p-4 sm:p-6 transition-all duration-300 transform hover:scale-105 ${
-                    selectedRole === "Company"
+                    selectedRole === "company"
                       ? "border-primary"
                       : "border"
                   }`}
-                  onClick={() => handleRoleSelect("Company")}
+                  onClick={() => handleRoleSelect("company")}
                 >
                   <img
                     src={Empresas}
                     alt="Empresas"
                     className={`h-24 sm:h-36 mx-auto transition-all duration-300 ${
-                      selectedRole === "Company" ? "grayscale-0" : "grayscale"
+                      selectedRole === "company" ? "grayscale-0" : "grayscale"
                     }`}
                   />
                   <h3 className="text-center mt-4 text-base sm:text-lg font-semibold">
@@ -83,17 +83,17 @@ function RoleSelection() {
                 </Card>
                 <Card
                   className={`cursor-pointer p-4 sm:p-6 transition-all duration-300 transform hover:scale-105 ${
-                    selectedRole === "Participant"
+                    selectedRole === "participant"
                       ? "border-primary"
                       : "border"
                   }`}
-                  onClick={() => handleRoleSelect("Participant")}
+                  onClick={() => handleRoleSelect("participant")}
                 >
                   <img
                     src={Participantes}
                     alt="Participantes"
                     className={`h-24 sm:h-36 mx-auto transition-all duration-300 ${
-                      selectedRole === "Participant"
+                      selectedRole === "participant"
                         ? "grayscale-0"
                         : "grayscale"
                     }`}

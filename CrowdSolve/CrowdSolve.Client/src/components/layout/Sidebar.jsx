@@ -9,6 +9,7 @@ import {
     SheetContent,
     SheetFooter,
     SheetHeader,
+    SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { Link, useNavigate } from 'react-router-dom';
@@ -19,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
 import { ChevronsUpDown, Info, Flag, Building, Mail } from 'lucide-react';
+import { VisuallyHidden } from '@radix-ui/themes';
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -50,6 +52,11 @@ const Sidebar = () => {
                 </Button>
             </SheetTrigger>
             <SheetContent className="w-full max-w-[290px] sm:max-w-[290px] flex flex-col">
+                <SheetTitle>
+                    <VisuallyHidden>
+                        <h2>Menú</h2>
+                    </VisuallyHidden>
+                </SheetTitle>
                 <SheetHeader>
                     <Link className="flex items-center">
                         <img className="me-2" src={CrowdSolveLogo} style={{ height: '40px' }} alt="CrowdSolve Logo" />
@@ -73,11 +80,11 @@ const Sidebar = () => {
                     {user ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="w-full h-auto" onClick={() => navigate('/sign-in')}>
+                                <Button variant="outline" className="w-full h-auto px-2 py-1">
                                     <div className='flex items-center justify-between w-full'>
                                         <div className='flex items-center '>
                                             <Avatar className="bg-accent" size="1">
-                                                <AvatarImage src={`https://robohash.org/${user.nombreUsuario}`} />
+                                                <AvatarImage src={(user.avatarBlobURL) ? user.avatarBlobURL : `https://robohash.org/${user.nombreUsuario}`} />
                                                 <AvatarFallback>{user[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className='flex flex-col ml-2 text-left'>

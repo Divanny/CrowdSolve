@@ -46,7 +46,7 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
             { showHeader && <DropdownMenuLabel>
                 <div className='flex items-center'>
                     <Avatar className="bg-accent" size="1">
-                        <AvatarImage src={`https://robohash.org/${user.nombreUsuario}`} />
+                        <AvatarImage src={(user.avatarBlobURL) ? user.avatarBlobURL : `https://robohash.org/${user.nombreUsuario}`} />
                         <AvatarFallback>{user[0]}</AvatarFallback>
                     </Avatar>
                     <div className='flex flex-col ml-2'>
