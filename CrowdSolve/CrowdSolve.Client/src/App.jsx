@@ -18,6 +18,7 @@ import Layout from './components/layout/Layout';
 import AdminLayout from './components/layout/AdminLayout';
 import AccessDenied from '@/pages/AccessDenied';
 import CompanyListing from './pages/CompanyListing';
+import Participants from './pages/admin/Participants';
 
 function App() {
     const isLoading = useSelector((state) => state.loading.isLoading);
@@ -53,6 +54,7 @@ function App() {
                 <Route path="/access-denied" element={<AccessDenied />} />
                 <Route path="/404" element={<NotFound />} />
                 <Route path="/admin" element={<ProtectedRoute><AdminLayout></AdminLayout></ProtectedRoute>} />
+                <Route path="/admin/participants" element={<ProtectedRoute><AdminLayout><Participants /></AdminLayout></ProtectedRoute>} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

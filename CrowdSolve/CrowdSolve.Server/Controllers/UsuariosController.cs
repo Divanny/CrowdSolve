@@ -137,5 +137,15 @@ namespace CrowdSolve.Server.Controllers
                 throw;
             }
         }
+
+        /// <summary>
+        /// Obtiene los estatus de los usuarios.
+        /// </summary>
+        [HttpGet("GetEstatusUsuarios", Name = "GetEstatusUsuarios")]
+        [Authorize]
+        public List<EstatusUsuarios> GetEstatusUsuarios()
+        {
+            return _usuariosRepo.GetEstatusUsuarios();
+        }
     }
 }

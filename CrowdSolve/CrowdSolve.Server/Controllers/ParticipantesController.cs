@@ -128,10 +128,12 @@ namespace CrowdSolve.Server.Controllers
         public object GetRelationalObjects()
         {
             var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>(); 
+            var estatusUsuarios = _usuariosRepo.GetEstatusUsuarios();
 
             return new
             {
-                nivelesEducativos = nivelesEducativos
+                nivelesEducativos = nivelesEducativos,
+                estatusUsuarios = estatusUsuarios
             };
         }
     }

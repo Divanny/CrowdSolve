@@ -24,11 +24,19 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             (DB, filter) =>
             {
                 return (from p in DB.Set<Participantes>().Where(filter)
+                        join usuario in DB.Set<Usuarios>() on p.idUsuario equals usuario.idUsuario
+                        join estatusUsuario in DB.Set<EstatusUsuarios>() on usuario.idEstatusUsuario equals estatusUsuario.idEstatusUsuario
                         join nivelEducativo in DB.Set<NivelesEducativo>() on p.idNivelEducativo equals nivelEducativo.idNivelEducativo
+                        join solucionesSet in DB.Set<Soluciones>() on p.idUsuario equals solucionesSet.idUsuario into soLF
+                        from so in soLF.DefaultIfEmpty()
+
                         select new ParticipantesModel()
                         {
                             idParticipante = p.idParticipante,
                             idUsuario = p.idUsuario,
+                            NombreUsuario = usuario.NombreUsuario,
+                            FechaRegistro = usuario.FechaRegistro,
+                            CorreoElectronico = usuario.CorreoElectronico,
                             Nombres = p.Nombres,
                             Apellidos = p.Apellidos,
                             FechaNacimiento = p.FechaNacimiento,
@@ -36,6 +44,9 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             idNivelEducativo = p.idNivelEducativo,
                             NivelEducativo = nivelEducativo.Nombre,
                             DescripcionPersonal = p.DescripcionPersonal,
+                            idEstatusUsuario = usuario.idEstatusUsuario,
+                            EstatusUsuario = estatusUsuario.Nombre,
+                            Soluciones = soLF.ToList()
                         });
             }
         )

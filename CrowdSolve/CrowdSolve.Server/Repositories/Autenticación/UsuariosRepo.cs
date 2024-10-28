@@ -111,5 +111,10 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 }
             }
         }
+
+        public List<EstatusUsuarios> GetEstatusUsuarios()
+        {
+            return dbContext.Set<EstatusUsuarios>().ToList();
+        }
     }
 }
