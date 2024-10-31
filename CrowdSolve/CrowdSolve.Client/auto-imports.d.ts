@@ -8,6 +8,8 @@ export {}
 declare global {
   const About-usAbout: typeof import('@/components/about-us/About.jsx')['About']
   const About-usMeetOurTeam: typeof import('@/components/about-us/MeetOurTeam.jsx')['MeetOurTeam']
+  const AdminAdminLayout: typeof import('@/components/admin/AdminLayout.jsx')['AdminLayout']
+  const AdminParticipantsParticipantFormDialog: typeof import('@/components/admin/participants/ParticipantFormDialog.jsx')['ParticipantFormDialog']
   const GoogleLoginButton: typeof import('@/components/GoogleLoginButton.jsx')['GoogleLoginButton']
   const Landing-pageChallengesPost: typeof import('@/components/landing-page/ChallengesPost.jsx')['ChallengesPost']
   const Landing-pageCrowdSourcingEasy: typeof import('@/components/landing-page/CrowdSourcingEasy.jsx')['CrowdSourcingEasy']
@@ -15,7 +17,7 @@ declare global {
   const Landing-pageHeroSection: typeof import('@/components/landing-page/HeroSection.jsx')['HeroSection']
   const Landing-pageTrustedBySection: typeof import('@/components/landing-page/TrustedBySection.jsx')['TrustedBySection']
   const Landing-pageWhyClientsLoveUs: typeof import('@/components/landing-page/WhyClientsLoveUs.jsx')['WhyClientsLoveUs']
-  const LayoutAdminLayout: typeof import('@/components/layout/AdminLayout.jsx')['AdminLayout']
+  const LayoutAdminLayout: typeof import('@/components/admin/AdminLayout.jsx')['AdminLayout']
   const LayoutFooter: typeof import('@/components/layout/Footer.jsx')['Footer']
   const LayoutLayout: typeof import('@/components/layout/Layout.jsx')['Layout']
   const LayoutNavbar: typeof import('@/components/layout/Navbar.jsx')['Navbar']

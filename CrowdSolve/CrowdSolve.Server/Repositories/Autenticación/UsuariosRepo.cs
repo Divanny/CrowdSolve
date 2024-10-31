@@ -87,29 +87,39 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
         public override void Edit(UsuariosModel model)
         {
-            using (var trx = dbContext.Database.BeginTransaction())
+            try
             {
-                try
+                var usuario = this.Get(model.idUsuario);
+
+                if (usuario == null) throw new Exception("El usuario no se ha encontrado");
+
+                if (usuario.NombreUsuario != model.NombreUsuario && this.Any(x => x.NombreUsuario == model.NombreUsuario)) throw new Exception("Este usuario ya existe en el sistema");
+                if (usuario.CorreoElectronico != model.CorreoElectronico && this.Any(x => x.CorreoElectronico == model.CorreoElectronico)) throw new Exception("Este correo electrónico ya está registrado");
+
+                if (usuario.idPerfil != model.idPerfil)
                 {
-                    var usuario = this.Get(model.idUsuario);
-
-                    if (usuario == null) throw new Exception("El usuario no se ha encontrado");
-
-                    usuario.idPerfil = model.idPerfil;
-                    usuario.idEstatusUsuario = model.idEstatusUsuario;
-                    usuario.AvatarURL = model.AvatarURL;
-
-                    SaveChanges();
-                    base.Edit(usuario);
-
-                    trx.Commit();
+                    var perfil = dbContext.Set<Perfiles>().Find(model.idPerfil);
+                    if (perfil == null) throw new Exception("Este perfil no se ha encontrado");
                 }
-                catch (Exception E)
-                {
-                    trx.Rollback();
-                    throw;
-                }
+
+                usuario.NombreUsuario = model.NombreUsuario;
+                usuario.CorreoElectronico = model.CorreoElectronico;
+                usuario.idPerfil = model.idPerfil;
+                usuario.idEstatusUsuario = model.idEstatusUsuario;
+                usuario.AvatarURL = model.AvatarURL;
+
+                SaveChanges();
+                base.Edit(usuario);
             }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<EstatusUsuarios> GetEstatusUsuarios()
+        {
+            return dbContext.Set<EstatusUsuarios>().ToList();
         }
     }
 }

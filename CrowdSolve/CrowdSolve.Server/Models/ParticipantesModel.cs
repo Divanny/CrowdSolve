@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace CrowdSolve.Server.Models
@@ -8,6 +9,7 @@ namespace CrowdSolve.Server.Models
         public int idParticipante { get; set; }
 
         public int idUsuario { get; set; }
+        public string? NombreUsuario { get; set; }
 
         [Required(ErrorMessage = "El nombre del participante es requerido")]
         [StringLength(50, ErrorMessage = "El nombre del participante no puede exceder los 50 carácteres")]
@@ -35,5 +37,10 @@ namespace CrowdSolve.Server.Models
         [StringLength(500, ErrorMessage = "La descripción personal del participante no puede exceder los 500 carácteres")]
         [Unicode(false)]
         public string? DescripcionPersonal { get; set; }
+        public DateTime? FechaRegistro { get; set; }
+        public string? CorreoElectronico { get; set; }
+        public int? idEstatusUsuario { get; set; }
+        public string? EstatusUsuario { get; set; }
+        public List<Soluciones>? Soluciones { get; set; }
     }
 }

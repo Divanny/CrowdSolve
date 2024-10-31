@@ -30,8 +30,8 @@ import {
     DropdownMenu,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import ProfileDropdownMenuContent from '../layout/ProfileDropdownMenuContent';
+import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import GetLogo from "@/helpers/get-logo";
 import Icon from "@/components/ui/icon";
 import { Badge } from "@/components/ui/badge"
@@ -125,7 +125,7 @@ const sidebarItems = [
         ],
     },
 ]
-export default function Component({ children }) {
+export default function Component() {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -222,7 +222,7 @@ export default function Component({ children }) {
                     </Breadcrumb>
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                    {children}
+                    <Outlet />
                 </div>
             </SidebarInset>
         </SidebarProvider>

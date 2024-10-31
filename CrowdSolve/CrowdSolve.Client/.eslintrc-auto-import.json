@@ -109,6 +109,8 @@
     "UiIcon": true,
     "UiSidebar": true,
     "UiAvatar-picker": true,
-    "useAvatar": true
+    "useAvatar": true,
+    "AdminAdminLayout": true,
+    "AdminParticipantsParticipantFormDialog": true
   }
 }

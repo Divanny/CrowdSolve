@@ -66,7 +66,7 @@ namespace CrowdSolve.Server.Controllers
         /// <summary>
         /// Crea un nuevo Participante.
         /// </summary>
-        /// <param name="ParticipantesModel">Datos de la Participante a crear.</param>
+        /// <param name="ParticipantesModel">Datos del Participante a crear.</param>
         /// <returns>Resultado de la operación.</returns>
         [HttpPost(Name = "SaveParticipante")]
         [Authorize]
@@ -74,16 +74,19 @@ namespace CrowdSolve.Server.Controllers
         {
             try
             {
-                if (_participantesRepo.Any(x => x.idUsuario == ParticipantesModel.idUsuario)) return new OperationResult(false, "Este usuario ya tiene información de participante registrada");
-                if (_empresasRepo.Any(x => x.idUsuario == ParticipantesModel.idUsuario)) return new OperationResult(false, "Este usuario ya tiene un perfil de empresa registrado");
+                if (_participantesRepo.Any(x => x.idUsuario == _idUsuarioOnline)) return new OperationResult(false, "Este usuario ya tiene información de participante registrada");
+                if (_empresasRepo.Any(x => x.idUsuario == _idUsuarioOnline)) return new OperationResult(false, "Este usuario ya tiene un perfil de empresa registrado");
 
-                var usuario = _usuariosRepo.Get(ParticipantesModel.idUsuario);
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
                 if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+                if (usuario.idPerfil != (int)PerfilesEnum.Participante) return new OperationResult(false, "Este usuario no tiene permisos para registrarse como participante");
 
                 usuario.idPerfil = (int)PerfilesEnum.Participante;
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
 
                 _usuariosRepo.Edit(usuario);
+
                 var created = _participantesRepo.Add(ParticipantesModel);
                 _logger.LogHttpRequest(ParticipantesModel);
                 return new OperationResult(true, "Se ha registrado la información del participante exitosamente", created);
@@ -98,23 +101,55 @@ namespace CrowdSolve.Server.Controllers
         /// <summary>
         /// Actualiza una Participante existente.
         /// </summary>
-        /// <param name="ParticipantesModel">Datos de la Participante a actualizar.</param>
+        /// <param name="idParticipante">ID del Participante a actualizar.</param></param>
+        /// <param name="ParticipantesModel">Datos del Participante a actualizar.</param>
         /// <returns>Resultado de la operación.</returns>
-        [HttpPut(Name = "UpdateParticipante")]
+        [HttpPut("{idParticipante}", Name = "UpdateParticipante")]
         [Authorize]
         //[AuthorizeByPermission(PermisosEnum.Editar_Participante)]
-        public OperationResult Put(ParticipantesModel ParticipantesModel)
+        public OperationResult Put(int idParticipante, [FromForm] ParticipantesModel ParticipantesModel)
         {
             try
             {
-                var Participante = _participantesRepo.Get(x => x.idParticipante == ParticipantesModel.idParticipante).FirstOrDefault();
-
+                var Participante = _participantesRepo.Get(x => x.idParticipante == idParticipante).FirstOrDefault();
                 if (Participante == null) return new OperationResult(false, "Este participante no se ha encontrado");
-                if (Participante.idUsuario != ParticipantesModel.idUsuario) return new OperationResult(false, "No tienes permisos para editar este participante");
+
+                var usuario = _usuariosRepo.Get(Participante.idUsuario);
+                if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+                if (ParticipantesModel.NombreUsuario != usuario.NombreUsuario && _usuariosRepo.Any(x => x.NombreUsuario == ParticipantesModel.NombreUsuario)) return new OperationResult(false, "Este usuario ya existe en el sistema");
+                if (ParticipantesModel.CorreoElectronico != usuario.CorreoElectronico && _usuariosRepo.Any(x => x.CorreoElectronico == ParticipantesModel.CorreoElectronico)) return new OperationResult(false, "Este correo electrónico ya está registrado");
 
                 _participantesRepo.Edit(ParticipantesModel);
                 _logger.LogHttpRequest(ParticipantesModel);
                 return new OperationResult(true, "Se ha editado la información del participante exitosamente", Participante);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Actualiza el perfil de un participante.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("MiPerfil", Name = "UpdatePerfilParticipante")]
+        [Authorize]
+        public OperationResult MiPerfil(ParticipantesModel participantesModel)
+        {
+            try
+            {
+                var Participante = _participantesRepo.Get(x => x.idUsuario == _idUsuarioOnline).FirstOrDefault();
+
+                if (Participante == null) return new OperationResult(false, "Este participante no se ha encontrado");
+                if (participantesModel.idParticipante != Participante.idParticipante) return new OperationResult(false, "No tiene permisos para editar este perfil");
+
+                _participantesRepo.Edit(participantesModel);
+
+                _logger.LogHttpRequest(participantesModel);
+                return new OperationResult(true, "Se ha editado su perfil exitosamente", Participante);
             }
             catch (Exception ex)
             {
@@ -128,10 +163,12 @@ namespace CrowdSolve.Server.Controllers
         public object GetRelationalObjects()
         {
             var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>(); 
+            var estatusUsuarios = _usuariosRepo.GetEstatusUsuarios();
 
             return new
             {
-                nivelesEducativos = nivelesEducativos
+                nivelesEducativos = nivelesEducativos,
+                estatusUsuarios = estatusUsuarios
             };
         }
     }

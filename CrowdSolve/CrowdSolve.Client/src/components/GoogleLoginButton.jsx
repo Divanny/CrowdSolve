@@ -93,7 +93,7 @@ function GoogleLoginButton() {
             </svg>
             Continuar con Google
         </Button>
-            )
+    );
 }
 
 export default GoogleLoginButton;

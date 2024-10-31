@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { selectToken, selectUserViews, selectUser } from '../redux/selectors/userSelectors';
 import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 
-const ProtectedRoute = ({ children, requiredView }) => {
+const ProtectedRoute = ({ requiredView }) => {
     const token = useSelector(selectToken);
     const user = useSelector(selectUser);
     const userViews = useSelector(selectUserViews);
@@ -25,7 +25,7 @@ const ProtectedRoute = ({ children, requiredView }) => {
         return <Navigate to="/AccessDenied" replace />;
     }
 
-    return children;
+    return <Outlet />;
 };
 
 export default ProtectedRoute;
