@@ -40,7 +40,7 @@ export default function CompanyListing() {
     useEffect(() => {
         const loadCompanies = async () => {
             try {
-                const response = await api.get("api/Empresas");
+                const response = await api.get("api/Empresas/GetEmpresasActivas");
                 const companiesWithLogos = await Promise.all(response.data.map(async (company) => {
                     const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${company.idUsuario}`, { responseType: 'blob' });
                     const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] });

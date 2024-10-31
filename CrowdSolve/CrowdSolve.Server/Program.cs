@@ -101,7 +101,7 @@ builder.Services.AddMvcCore().ConfigureApiBehaviorOptions(options => {
             }
         }
 
-        return new BadRequestObjectResult(new OperationResult(false, "Los datos ingresados no son v�lidos", Errors));
+        return new BadRequestObjectResult(new OperationResult(false, "Los datos ingresados no son válidos", Errors));
     };
 });
 

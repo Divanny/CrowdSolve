@@ -43,8 +43,20 @@ const useAxios = () => {
                 if (status === 401) {
                     dispatch(clearUser());
                     navigate("/sign-in");
-                    toast.warning("Sesión expirada. Por favor, inicia sesión nuevamente.");
-                } else {
+
+                    const state = store.getState();
+                    const token = state.user.token;
+
+                    if (token) {
+                        toast.warning("Sesión expirada. Por favor, inicia sesión nuevamente.");
+                    }
+                    else {
+                        toast.warning("Acceso denegado", {
+                            description: "Debes iniciar sesión para acceder a esta página.",
+                        });
+                    }
+                }
+                else {
                     // Manejar otros errores
                     toast.error("Operación fallida", {
                         description: error.message,

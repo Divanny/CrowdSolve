@@ -7,6 +7,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 {
     public class ParticipantesRepo : Repository<Participantes, ParticipantesModel>
     {
+        public UsuariosRepo usuariosRepo;
         public ParticipantesRepo(DbContext dbContext) : base
         (
             dbContext,
@@ -51,7 +52,54 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
         )
         {
+            usuariosRepo = new UsuariosRepo(dbContext);
+        }
 
+        public ParticipantesModel GetByUserId(int idUsuario)
+        {
+            var participanteModel = this.Get(x => x.idUsuario == idUsuario).FirstOrDefault();
+
+            if (participanteModel == null) return new ParticipantesModel();
+
+            return participanteModel;
+        }
+
+        public override void Edit(ParticipantesModel model)
+        {
+            using (var trx = dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var participante = this.Get(x => x.idUsuario == model.idUsuario).FirstOrDefault();
+                    var usuario = usuariosRepo.Get(x => x.idUsuario == model.idUsuario).FirstOrDefault();
+                    
+                    if (participante == null) throw new Exception("Este participante no se ha encontrado");
+                    if (usuario == null) throw new Exception("Este usuario no se ha encontrado");
+
+                    participante.Nombres = model.Nombres;
+                    participante.Apellidos = model.Apellidos;
+                    participante.Telefono = model.Telefono;
+                    participante.FechaNacimiento = model.FechaNacimiento;
+                    participante.idNivelEducativo = model.idNivelEducativo;
+                    participante.DescripcionPersonal = model.DescripcionPersonal;
+
+                    base.Edit(participante, participante.idParticipante);
+
+                    usuario.NombreUsuario = model.NombreUsuario;
+                    usuario.CorreoElectronico = model.CorreoElectronico;
+                    usuario.idEstatusUsuario = model.idEstatusUsuario ?? usuario.idEstatusUsuario;
+
+                    usuariosRepo.Edit(usuario);
+
+                    trx.Commit();
+                }
+                catch (Exception ex)
+                {
+                    trx.Rollback();
+                    throw ex;
+                }
+            }
+            base.Edit(model);
         }
     }
 }

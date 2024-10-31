@@ -6,8 +6,8 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Camera } from 'lucide-react'
 import { useState } from 'react'
 
-export default function AvatarPicker({ onAvatarChange }) {
-    const [preview, setPreview] = useState(null)
+export default function AvatarPicker({ onAvatarChange, avatarURL, disabled }) {
+    const [preview, setPreview] = useState(avatarURL || null)
 
     const onDrop = useCallback((acceptedFiles) => {
         const file = acceptedFiles[0]
@@ -26,12 +26,13 @@ export default function AvatarPicker({ onAvatarChange }) {
         accept: {
             'image/*': ['.jpeg', '.jpg', '.png', '.gif']
         },
-        multiple: false
+        multiple: false,
+        disabled: disabled
     })
 
     return (
-        <div {...getRootProps()} className="relative w-24 h-24 mx-auto">
-            <input {...getInputProps()} aria-label="Seleccionar imagen de avatar" />
+        <div {...getRootProps()} className={`relative w-24 h-24 mx-auto rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring ${disabled ? 'disabled:cursor-not-allowed disabled:opacity-50' : ''}`}>
+            <input {...getInputProps()} aria-label="Seleccionar imagen de avatar" disabled={disabled} />
             <Avatar className="w-24 h-24 border-2 border-gray-200">
                 {preview ? (
                     <AvatarImage src={preview} alt="Avatar seleccionado" />

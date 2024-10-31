@@ -55,7 +55,7 @@ const CountrySelect = ({ disabled, value, onChange, options }) => {
     );
 
     return (
-        <Popover>
+        <Popover modal={true}>
             <PopoverTrigger asChild>
                 <Button
                     type="button"
@@ -118,7 +118,7 @@ const FlagComponent = ({ country, countryName }) => {
     const Flag = flags[country];
 
     return (
-        <span className="bg-foreground/20 flex h-4 w-6 overflow-hidden rounded-sm">
+        <span className="bg-foreground/20 h-4 w-6 overflow-hidden rounded-sm">
             {Flag && <Flag title={countryName} />}
         </span>
     );
