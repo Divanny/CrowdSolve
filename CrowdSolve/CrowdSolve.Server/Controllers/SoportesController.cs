@@ -30,7 +30,7 @@ namespace CrowdSolve.Server.Controllers
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            _soportesRepo = new SoportesRepo(crowdSolveContext);
+            _soportesRepo = new SoportesRepo(crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _mailingService = mailing;
         }
@@ -150,7 +150,7 @@ namespace CrowdSolve.Server.Controllers
                 if (errors.Count > 0) return new OperationResult(false, "Se encontraron errores en la información proporcionada", errors);
 
                 soporteModel.Fecha = DateTime.Now;
-
+                soporteModel.idUsuario = _idUsuarioOnline;
                 var created = _soportesRepo.Add(soporteModel);
                 _logger.LogHttpRequest(soporteModel);
 
