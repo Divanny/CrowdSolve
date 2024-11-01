@@ -17,5 +17,7 @@ public partial class Procesos
 
     public int idClaseProceso { get; set; }
 
+    public int? idUsuarioAsignado { get; set; }
+
     public DateTime Fecha { get; set; }
 }
