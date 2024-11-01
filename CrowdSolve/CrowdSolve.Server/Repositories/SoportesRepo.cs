@@ -1,4 +1,5 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 {
     public class SoportesRepo : Repository<Soportes, SoportesModel>
     {
-        public SoportesRepo(DbContext dbContext) : base
+        public ProcesosRepo procesosRepo;
+        public SoportesRepo(DbContext dbContext, int idUsuarioEnLinea) : base
         (
             dbContext,
             new ObjectsMapper<SoportesModel, Soportes>(s => new Soportes()
@@ -41,7 +43,35 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
         )
         {
+            procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Soporte, dbContext, idUsuarioEnLinea);
+        }
+        public override Soportes Add(SoportesModel model)
+        {
+            using (var trx = dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    model.Fecha = DateTime.Now;
+                    var creado = base.Add(model);
 
+                    ProcesosModel procesoModel = new ProcesosModel
+                    {
+                        idEstatusProceso = (int)EstatusProcesoEnum.Soporte_Enviada,
+                        idUsuario = model.idUsuario ?? 0,
+                        idRelacionado = creado.idSoporte,                        
+                    };
+                    procesosRepo.Add(procesoModel);
+
+                    trx.Commit();
+                    return creado;
+                }
+                catch (Exception ex)
+                {
+                    trx.Rollback();
+                    throw ex;
+                }
+            }
         }
     }
+  
 }
