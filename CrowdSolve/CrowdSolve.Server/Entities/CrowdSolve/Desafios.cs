@@ -18,4 +18,6 @@ public partial class Desafios
     public DateTime FechaRegistro { get; set; }
 
     public DateTime FechaLimite { get; set; }
+
+    public DateTime FechaInicio { get; set; }
 }
