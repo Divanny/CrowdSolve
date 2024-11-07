@@ -187,6 +187,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             procesosRepoProcesoEvaluacion.Add(procesoModelEvaluacion);
                         }
                     }
+
+                    trx.Commit();
                 }
                 catch (Exception)
                 {

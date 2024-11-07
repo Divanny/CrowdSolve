@@ -87,6 +87,24 @@ export default function ChallengeForm() {
     })
 
     useEffect(() => {
+        const fetchDesafio = async () => {
+            try {
+                const response = await api.get(`/api/Desafios/${id}`)
+                const desafio = response.data
+                form.reset({
+                    ...desafio,
+                    fechaInicio: new Date(desafio.fechaInicio),
+                    fechaLimite: new Date(desafio.fechaLimite),
+                    procesoEvaluacion: desafio.procesoEvaluacion.map(p => ({
+                        ...p,
+                        fechaFinalizacion: new Date(p.fechaFinalizacion)
+                    })),
+                })
+            } catch (error) {
+                console.error('Error fetching desafio:', error)
+            }
+        }
+
         const fetchRelationalObjects = async () => {
             try {
                 const response = await api.get('/api/Desafios/GetRelationalObjects')
@@ -99,30 +117,17 @@ export default function ChallengeForm() {
             }
         }
 
-        fetchRelationalObjects()
-
-        if (modoEdicion) {
-            const fetchDesafio = async () => {
-                try {
-                    const response = await api.get(`/api/Desafios/${id}`)
-                    const desafio = response.data
-                    console.log(desafio);
-                    form.reset({
-                        ...desafio,
-                        fechaInicio: new Date(desafio.fechaInicio),
-                        fechaLimite: new Date(desafio.fechaLimite),
-                        procesoEvaluacion: desafio.procesoEvaluacion.map(p => ({
-                            ...p,
-                            fechaFinalizacion: new Date(p.fechaFinalizacion)
-                        })),
-                    })
-                    console.log(form.getValues('categorias'));
-                } catch (error) {
-                    console.error('Error fetching desafio:', error)
-                }
+        const fetchData = async () => {
+            try {
+                if (modoEdicion) await fetchDesafio()
+                await fetchRelationalObjects()
+            } catch (error) {
+                console.error('Error fetching data:', error)
             }
-            fetchDesafio()
         }
+
+        fetchData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, modoEdicion, form])
 
     const onSubmit = async (data) => {
@@ -133,7 +138,7 @@ export default function ChallengeForm() {
                 toast.success("Operación exitosa", {
                     description: response.data.message,
                 });
-                navigate(-1)
+                navigate('/company/challenges')
             } else {
                 // Handle validation errors
                 if (response.data.errors) {
@@ -193,11 +198,15 @@ export default function ChallengeForm() {
     return (
         <div className="container mx-auto py-8">
             <div className="mx-auto space-y-8">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                    <div>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                    {!modoEdicion && <div>
                         <h1 className="text-2xl font-bold">Publicar desafío</h1>
                         <p className="text-muted-foreground">Complete el formulario para publicar un nuevo desafío</p>
-                    </div>
+                    </div>}
+                    {modoEdicion && <div>
+                        <h1 className="text-2xl font-bold">Editar desafío</h1>
+                        <p className="text-muted-foreground">Complete el formulario para editar un desafío</p>
+                    </div>}
                     <div className='flex items-center gap-4'>
                         <Button variant="outline" className="text-sm" onClick={() => navigate(-1)}>
                             <ArrowLeft className="mr-1 h-4 w-4" /> Volver
@@ -223,23 +232,37 @@ export default function ChallengeForm() {
                             )}
                         />
 
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                             <FormField
                                 control={form.control}
                                 name="categorias"
                                 render={({ field }) => (
                                     <FormItem className="md:col-span-2">
                                         <FormLabel>Categorías</FormLabel>
-                                        <FormControl>
-                                            <MultiSelect
-                                                options={categoriasDisponibles.map(c => ({ value: c.idCategoria, label: c.nombre }))}
-                                                onValueChange={(values) => field.onChange(values.map(v => ({ idCategoria: v })))}
-                                                value={field.value.map(c => c.idCategoria)}
-                                                placeholder="Seleccione las categorías"
-                                                variant="inverted"
-                                                maxCount={6}
-                                            />
-                                        </FormControl>
+                                        {(modoEdicion && categoriasDisponibles.length > 0) &&
+                                            <FormControl>
+                                                <MultiSelect
+                                                    options={categoriasDisponibles.map(c => ({ value: c.idCategoria, label: c.nombre }))}
+                                                    onValueChange={(values) => field.onChange(values.map(v => ({ idCategoria: v })))}
+                                                    defaultValue={field.value.map(c => c.idCategoria)}
+                                                    placeholder="Seleccione las categorías"
+                                                    variant="inverted"
+                                                    maxCount={6}
+                                                />
+                                            </FormControl>
+                                        }
+                                        {(!modoEdicion && categoriasDisponibles.length > 0) &&
+                                            <FormControl>
+                                                <MultiSelect
+                                                    options={categoriasDisponibles.map(c => ({ value: c.idCategoria, label: c.nombre }))}
+                                                    onValueChange={(values) => field.onChange(values.map(v => ({ idCategoria: v })))}
+                                                    defaultValue={field.value.map(c => c.idCategoria)}
+                                                    placeholder="Seleccione las categorías"
+                                                    variant="inverted"
+                                                    maxCount={6}
+                                                />
+                                            </FormControl>
+                                        }
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -315,7 +338,7 @@ export default function ChallengeForm() {
                             name="procesoEvaluacion"
                             render={({ field }) => (
                                 <FormItem>
-                                    <div className="flex justify-between items-center mb-2">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                                         <FormLabel>Procesos de Evaluación</FormLabel>
                                         <Dialog open={dialogoAbierto} onOpenChange={setDialogoAbierto}>
                                             <DialogTrigger asChild>
@@ -412,8 +435,9 @@ export default function ChallengeForm() {
                                     <FormControl>
                                         <div className='mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 relative rounded-md border'>
                                             <div className="relative flex size-full min-h-[350px] flex-col p-0 items-start">
-                                                <div className="size-full grow bg-card">
-                                                    <PlateEditor value={field.value} onChange={({ value }) => field.onChange(JSON.stringify(value))} placeholder="Ingrese el contenido del desafío" />
+                                                <div className="size-full flex flex-col grow bg-card">
+                                                    {modoEdicion && field.value != '' && <PlateEditor value={field.value} onChange={({ value }) => field.onChange(JSON.stringify(value))} placeholder="Ingrese el contenido del desafío" />}
+                                                    {!modoEdicion && <PlateEditor onChange={({ value }) => field.onChange(JSON.stringify(value))} placeholder="Ingrese el contenido del desafío" />}
                                                 </div>
                                             </div>
                                         </div>

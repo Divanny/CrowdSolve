@@ -42,7 +42,7 @@ const AppRoutes = () => (
     <Route path="/404" element={<LazyComponent component={NotFound} />} />
     <Route element={<ProtectedRoute />}>
       <Route path="/sign-up/complete" element={<LazyComponent component={RoleSelection} />} />
-      <Route path="/sign-up/complete/:Role" element={<LazyComponent component={CompleteSignUp} />} />
+      <Route path="/sign-up/complete/:role" element={<LazyComponent component={CompleteSignUp} />} />
       <Route path="/company/pending-verification" element={<LazyComponent component={VerificationPending} />} />
       {/* Administration */}
       <Route element={<AdminLayout />}>

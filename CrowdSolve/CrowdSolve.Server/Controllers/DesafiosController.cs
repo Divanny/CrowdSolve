@@ -136,6 +136,11 @@ namespace CrowdSolve.Server.Controllers
                 var desafio = _desafiosRepo.Get(x => x.idDesafio == desafioModel.idDesafio).FirstOrDefault();
                 if (desafio == null) return new OperationResult(false, "Este desafío no se ha encontrado");
 
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
+                var empresa = _empresasRepo.GetByUserId(_idUsuarioOnline);
+
+                if (usuario.idPerfil == (int)PerfilesEnum.Empresa && empresa.idEmpresa != desafio.idEmpresa) return new OperationResult(false, "Este usuario no tiene permisos para editar este desafío");
+
                 var proceso = _desafiosRepo.procesosRepo.Get(x => x.idRelacionado == desafio.idDesafio).FirstOrDefault();
                 if (proceso == null) return new OperationResult(false, "No se ha encontrado el proceso relacionado con este desafío");
 
@@ -144,13 +149,13 @@ namespace CrowdSolve.Server.Controllers
                 if (desafioModel.Categorias == null || desafioModel.Categorias.Count == 0) return new OperationResult(false, "No se proporcionó información de las categorías del desafio");
                 if (desafioModel.ProcesoEvaluacion == null || desafioModel.ProcesoEvaluacion.Count == 0) return new OperationResult(false, "No se proporcionó información del proceso de evaluación del desafio");
 
-                if (desafioModel.FechaInicio - DateTime.Now < TimeSpan.FromDays(5)) return new OperationResult(false, "La fecha de inicio debe ser al menos 5 días después de la fecha actual");
+                if (desafioModel.FechaInicio < desafio.FechaInicio) return new OperationResult(false, "La fecha de inicio no puede ser menor a la fecha de inicio original");
                 if (desafioModel.FechaInicio > desafioModel.FechaLimite) return new OperationResult(false, "La fecha de inicio no puede ser mayor a la fecha de fin");
-                if (desafioModel.FechaInicio - desafioModel.FechaLimite < TimeSpan.FromDays(5)) return new OperationResult(false, "La fecha de fin debe ser al menos 5 días después de la fecha de inicio");
+                if (desafioModel.FechaLimite - desafioModel.FechaInicio < TimeSpan.FromDays(5)) return new OperationResult(false, "La fecha de fin debe ser al menos 5 días después de la fecha de inicio");
 
-                if (desafioModel.ProcesoEvaluacion.Any(ProcesoEvaluacion => ProcesoEvaluacion.idTipoEvaluacion == 0)) return new OperationResult(false, "No se proporcionó información del tipo de evaluación del proceso de evaluación");
                 if (desafioModel.ProcesoEvaluacion.Any(ProcesoEvaluacion => ProcesoEvaluacion.FechaFinalizacion <= desafioModel.FechaLimite)) return new OperationResult(false, "La fecha de finalización del proceso de evaluación no puede ser menor o igual a la fecha de fin del desafío");
                 if (desafioModel.ProcesoEvaluacion.Any(ProcesoEvaluacion => ProcesoEvaluacion.FechaFinalizacion <= DateTime.Now)) return new OperationResult(false, "La fecha de finalización del proceso de evaluación no puede ser menor o igual a la fecha actual");
+                if (desafioModel.ProcesoEvaluacion.Any(ProcesoEvaluacion => ProcesoEvaluacion.idTipoEvaluacion == 0)) return new OperationResult(false, "No se proporcionó información del tipo de evaluación del proceso de evaluación");
 
                 for (int i = 0; i < desafioModel.ProcesoEvaluacion.Count; i++)
                 {
@@ -160,12 +165,12 @@ namespace CrowdSolve.Server.Controllers
 
                     var procesoEvaluacionSiguiente = desafioModel.ProcesoEvaluacion[i + 1];
                     if (procesoEvaluacionActual.FechaFinalizacion > procesoEvaluacionSiguiente.FechaFinalizacion) return new OperationResult(false, "La fecha de finalización del proceso de evaluación actual no puede ser mayor a la fecha de finalización del proceso de evaluación siguiente");
-                    if (procesoEvaluacionActual.FechaFinalizacion - procesoEvaluacionSiguiente.FechaFinalizacion < TimeSpan.FromDays(5)) return new OperationResult(false, "La fecha de finalización del proceso de evaluación siguiente debe ser al menos 5 días después de la fecha de finalización del proceso de evaluación actual");
+                    if (procesoEvaluacionSiguiente.FechaFinalizacion - procesoEvaluacionActual.FechaFinalizacion < TimeSpan.FromDays(5)) return new OperationResult(false, "La fecha de finalización del proceso de evaluación siguiente debe ser al menos 5 días después de la fecha de finalización del proceso de evaluación actual");
                 }
 
-                _desafiosRepo.Edit(desafio);
-                _logger.LogHttpRequest(desafio);
-                return new OperationResult(true, "Se ha editado la información del desafío exitosamente", desafio);
+                _desafiosRepo.Edit(desafioModel);
+                _logger.LogHttpRequest(desafioModel);
+                return new OperationResult(true, "Se ha editado la información del desafío exitosamente", desafioModel);
             }
             catch (Exception ex)
             {

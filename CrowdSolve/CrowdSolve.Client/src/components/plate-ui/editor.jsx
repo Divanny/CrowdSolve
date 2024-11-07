@@ -59,9 +59,9 @@ const editorVariants = cva(cn(
       aiChat:
         'max-h-[min(70vh,320px)] w-full max-w-[700px] overflow-y-auto px-3 py-2 text-sm',
       default:
-        'min-h-full w-full px-2 sm:px-16 pb-24 pt-4 text-base',
+        'min-h-full w-full grow px-6 sm:px-16 pb-24 pt-4 text-base',
       demo: 'min-h-full w-full px-16 pb-24 pt-4 text-base',
-      fullWidth: 'min-h-full w-full px-2 sm:px-16 pb-24 pt-4 text-base',
+      fullWidth: 'min-h-full grow w-full px-6 sm:px-16 pb-24 pt-4 text-base',
     },
   },
 });

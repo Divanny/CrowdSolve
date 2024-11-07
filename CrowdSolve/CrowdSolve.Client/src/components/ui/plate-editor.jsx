@@ -72,8 +72,6 @@ import { FloatingToolbar } from '@/components/plate-ui/floating-toolbar';
 import { FloatingToolbarButtons } from '@/components/plate-ui/floating-toolbar-buttons';
 import { withPlaceholders } from '@/components/plate-ui/placeholder';
 import { withDraggables } from '@/components/plate-ui/with-draggables';
-import { EmojiInputElement } from '@/components/plate-ui/emoji-input-element';
-import { TooltipProvider } from '@/components/plate-ui/tooltip';
 
 const createMyEditor = (initialValue = []) => createPlateEditor({
   plugins: [
@@ -239,6 +237,14 @@ const createMyEditor = (initialValue = []) => createPlateEditor({
 });
 
 export function PlateEditor({ value, onChange, ...props }) {
+  if (value === '') {
+    value = [{ type: 'p', children: [{ text: '' }] }];
+  }
+  else if (value != null && typeof value === 'string') {
+    console.log(value);
+    value = JSON.parse(value);
+  }
+
   const [editor] = React.useState(() => createMyEditor(value))
 
   React.useEffect(() => {
@@ -249,13 +255,11 @@ export function PlateEditor({ value, onChange, ...props }) {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Plate editor={editor} initialValue={value} onChange={onChange} {...props}>
+      <Plate editor={editor} onChange={onChange} {...props}>
         <FixedToolbar>
           <FixedToolbarButtons />
         </FixedToolbar>
-        
         <Editor />
-        
         <FloatingToolbar>
           <FloatingToolbarButtons />
         </FloatingToolbar>
