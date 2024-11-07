@@ -114,7 +114,7 @@ namespace CrowdSolve.Server.Repositories
             model.idUsuarioAsignado = objCambioEstatus.idUsuarioAsignado;
             model.MotivoCambioEstatus = objCambioEstatus.MotivoCambioEstatus;
 
-            base.Edit(model, model.idProceso);
+            base.Edit(model);
 
             HistorialCambioEstatusModel modelHistEstatus = new HistorialCambioEstatusModel();
             modelHistEstatus.idProceso = model.idProceso;

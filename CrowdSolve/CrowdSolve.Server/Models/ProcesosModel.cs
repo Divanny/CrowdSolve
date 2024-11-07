@@ -20,6 +20,11 @@ namespace CrowdSolve.Server.Models
             this.idEstatusProceso = (int)estatus;
             this.idUsuarioAsignado = asignadoA;
         }
+        public ProcesosModel(Enums.EstatusProcesoEnum estatus, string motivo)
+        {
+            this.idEstatusProceso = (int)estatus;
+            this.MotivoCambioEstatus = motivo;
+        }
         public int idProceso { get; set; }
         public int idUsuario { get; set; }
         public int idRelacionado { get; set; }

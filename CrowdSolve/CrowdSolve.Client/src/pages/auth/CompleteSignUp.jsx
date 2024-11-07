@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import RegistroEmpresa from "@/components/signup/RegistroEmpresa";
 
 function CompleteSignUp() {
-  const { Role } = useParams();
+  const { role } = useParams();
   const navigate = useNavigate();
 
   const theme = useSelector((state) => state.theme.theme);
@@ -29,7 +29,7 @@ function CompleteSignUp() {
             </div>
             <div className="my-4 sm:my-6">
               <h1 className="text-xl sm:text-2xl font-semibold text-center mb-2">
-                { Role == "company" ? 'Formulario de empresa' : "Formulario de participante" }
+                { role == "company" ? 'Formulario de empresa' : "Formulario de participante" }
               </h1>
             </div>
 
@@ -38,13 +38,13 @@ function CompleteSignUp() {
             </Button>
 
             <Card className="p-4 sm:p-6">
-              {Role == "company" && (
+              {role == "company" && (
                 <div>
                   <RegistroEmpresa />
                 </div>
               )}
 
-              {Role == "participant" && (
+              {role == "participant" && (
                 <div>
                   <RegistroParticipante />
                 </div>

@@ -19,6 +19,7 @@ const AccessDenied = lazy(() => import('@/pages/AccessDenied'));
 const CompanyListing = lazy(() => import('@/pages/CompanyListing'));
 const Participants = lazy(() => import('@/pages/admin/participants/Participants'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
+const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
 
 const LazyComponent = ({ component: Component, ...props }) => (
   <Suspense fallback={<PageLoader />}>
@@ -41,11 +42,28 @@ const AppRoutes = () => (
     <Route path="/404" element={<LazyComponent component={NotFound} />} />
     <Route element={<ProtectedRoute />}>
       <Route path="/sign-up/complete" element={<LazyComponent component={RoleSelection} />} />
-      <Route path="/sign-up/complete/:Role" element={<LazyComponent component={CompleteSignUp} />} />
+      <Route path="/sign-up/complete/:role" element={<LazyComponent component={CompleteSignUp} />} />
       <Route path="/company/pending-verification" element={<LazyComponent component={VerificationPending} />} />
+      {/* Administration */}
       <Route element={<AdminLayout />}>
         <Route path="/admin" element={<div>Admin Dashboard</div>} />
         <Route path="/admin/participants" element={<LazyComponent component={Participants} />} />
+      </Route>
+      {/* Company */}
+      <Route element={<Layout />}>
+        <Route path="/company" element={<div>Company Dashboard</div>} />
+        <Route path="/company/challenges" element={<div>Company Challenges</div>} />
+        <Route path="/company/challenge/new" element={<LazyComponent component={ChallengeForm} />} />
+        <Route path="/company/challenge/:id" element={<div>Company Challenge</div>} />
+        <Route path="/company/challenge/:id/edit" element={<LazyComponent component={ChallengeForm} />} />
+        <Route path="/company/challenge/:id/solutions" element={<div>Company Solutions</div>} />
+        <Route path="/company/challenge/:id/solution/:solutionId" element={<div>Company Solution</div>} />
+      </Route>
+      {/* Participant */}
+      <Route element={<Layout />}>
+        <Route path="/my-profile" element={<div>My profile</div>} />
+        <Route path="/my-solutions" element={<div>My solutions</div>} />
+        <Route path="/my-solutions/:id" element={<div>My solution</div>} />
       </Route>
     </Route>
     <Route path="*" element={<LazyComponent component={NotFound} />} />
