@@ -207,6 +207,7 @@ declare global {
   const useOutlet: typeof import('react-router')['useOutlet']
   const useOutletContext: typeof import('react-router')['useOutletContext']
   const useParams: typeof import('react-router')['useParams']
+  const usePermisoAcceso: typeof import('./src/hooks/use-permiso-acceso.js')['default']
   const useReducer: typeof import('react')['useReducer']
   const useRef: typeof import('react')['useRef']
   const useResolvedPath: typeof import('react-router')['useResolvedPath']

@@ -6,7 +6,7 @@ export default function NotFound() {
     const navigate = useNavigate()
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="flex items-center justify-center flex-col grow bg-background">
             <div className="text-center space-y-6 max-w-md px-4">
                 <div className="flex items-center justify-center space-x-4">
                     <div className="bg-accent rounded-full p-3 mx-auto my-2">

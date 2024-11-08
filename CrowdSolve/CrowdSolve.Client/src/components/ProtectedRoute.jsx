@@ -1,13 +1,21 @@
 import { useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { selectToken, selectUserViews, selectUser } from '../redux/selectors/userSelectors';
+import { Navigate, Outlet, useLocation, useMatches } from 'react-router-dom';
+import { selectToken, selectUser } from '../redux/selectors/userSelectors';
 import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
+import usePermisoAcceso from '@/hooks/use-permiso-acceso';
 
-const ProtectedRoute = ({ requiredView }) => {
+const ProtectedRoute = () => {
     const token = useSelector(selectToken);
     const user = useSelector(selectUser);
-    const userViews = useSelector(selectUserViews);
+
     const location = useLocation();
+    const matches = useMatches();
+
+    const currentRoute = matches[matches.length - 1];
+    const permission = currentRoute?.handle?.permission;
+    
+    console.log(permission);
+    const hasPermission  = usePermisoAcceso(permission);
 
     if (!token) {
         return <Navigate to="/sign-in" replace state={{ from: location }} />;
@@ -21,7 +29,7 @@ const ProtectedRoute = ({ requiredView }) => {
         return <Navigate to="/sign-up/complete" replace state={{ from: location }}/>;
     }
 
-    if (requiredView && !userViews.map((view) => view.nombre).includes(requiredView)) {
+    if (permission && !hasPermission ) {
         return <Navigate to="/AccessDenied" replace />;
     }
 

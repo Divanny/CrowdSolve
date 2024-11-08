@@ -2,7 +2,6 @@
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
 {
@@ -33,32 +32,18 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             var model = base.Get(p => p.idPerfil == Id).FirstOrDefault();
             return model;
         }
-        public IEnumerable<Vistas> GetPermisos(int? idPerfil)
+        public IEnumerable<Vistas> GetPermisos(int idPerfil)
         {
-            int id = idPerfil ?? 0;
-            var permisosSet = dbContext.Set<PerfilesVistas>().Where(p => p.idPerfil == id);
+            var idsPermisos = dbContext.Set<PerfilesVistas>().Where(p => p.idPerfil == idPerfil).Select(x => x.idVista);
 
-            var vistas = from v in dbContext.Set<Vistas>()/*.OrderBy(x => x.Orden)*/
-                   select new
-                   {
-                       idVista = v.idVista,
-                       Nombre = v.Nombre,
-                       URL = v.URL,
-                       Permiso = permisosSet.Any(a => a.idVista == v.idVista),
-                       EsPrincipal = v.EsPrincipal,
-                       ClaseIcono = v.ClaseIcono,
-                       idVistaPadre = v.idVistaPadre,
-                   };
+            var vistas = GetPermisos();
 
-            return vistas.Where(x => x.Permiso).Select(v => new Vistas()
-            {
-                idVista = v.idVista,
-                Nombre = v.Nombre,
-                URL = v.URL,
-                EsPrincipal = v.EsPrincipal,
-                ClaseIcono = v.ClaseIcono,
-                idVistaPadre = v.idVistaPadre
-            }).ToList();
+            return vistas.Where(x => idsPermisos.Contains(x.idVista)).ToList();
+        }
+        public IEnumerable<Vistas> GetPermisos()
+        {
+            var vistas = dbContext.Set<Vistas>();
+            return vistas;
         }
         public IEnumerable<UsuariosModel> GetUsuarios(int idPerfil)
         {
