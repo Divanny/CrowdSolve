@@ -144,7 +144,6 @@ public partial class CrowdSolveContext : DbContext
             entity.Property(e => e.Contenido)
                 .IsRequired()
                 .IsUnicode(false);
-            entity.Property(e => e.FechaInicio).HasColumnType("datetime");
             entity.Property(e => e.FechaLimite).HasColumnType("datetime");
             entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
             entity.Property(e => e.Titulo)

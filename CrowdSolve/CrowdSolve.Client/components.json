@@ -1,9 +1,5 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils"
-  },
   "style": "new-york",
   "rsc": false,
   "tsx": false,
@@ -14,18 +10,8 @@
     "cssVariables": true,
     "prefix": ""
   },
-  "registries": {
-    "plate": {
-      "style": "default",
-      "tailwind": {
-        "baseColor": "neutral"
-      },
-      "aliases": {
-        "ui": "@/components/plate-ui",
-        "components": "@/components",
-        "utils": "@/lib/utils"
-      },
-      "url": "https://platejs.org/r"
-    }
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils"
   }
 }

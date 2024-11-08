@@ -68,7 +68,7 @@ const HeroSection = () => {
                             transition={{ delay: 0.6, duration: 0.5 }}
                             className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start"
                         >
-                            <Button className="w-full sm:w-auto" onClick={() => navigate('/company/challenge/new')}>
+                            <Button className="w-full sm:w-auto" onClick={() => navigate('/challenges/publish')}>
                                 <ArrowRight className="mr-2 size-4" />
                                 Publicar un desafío
                             </Button>

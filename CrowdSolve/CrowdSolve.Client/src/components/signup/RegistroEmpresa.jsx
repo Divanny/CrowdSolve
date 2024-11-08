@@ -115,6 +115,7 @@ const RegistroEmpresa = () => {
         }
     };
 
+    console.log(formData);
     return (
         <form onSubmit={handleSubmit} className="space-y-2">
             <div className="space-y-2">
@@ -188,6 +189,11 @@ const RegistroEmpresa = () => {
                 <Label htmlFor="direccion">Dirección</Label>
                 <Textarea id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} rows={3} placeholder="Ingrese la dirección de la empresa" autoComplete="street-address" />
             </div>
+            <div className="space-y-2">
+                <Label htmlFor="descripcion">Descripcion</Label>
+                <Textarea id="descripcion" name="descripcion" value={formData.descripcion} onChange={handleChange} rows={3} placeholder="Ingrese la descripcion de la empresa" autoComplete="street-address" />
+            </div>
+            
             <Button type="submit" className="w-full">
                 Registrarse
             </Button>

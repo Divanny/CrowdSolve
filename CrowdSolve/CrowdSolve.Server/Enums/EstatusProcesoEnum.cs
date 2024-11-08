@@ -17,10 +17,6 @@
         Soporte_Enviada = 17,
         Soporte_En_progreso = 18,
         Soporte_Finalizada = 19,
-        Soporte_Descartada = 20,
-        Desafío_Sin_iniciar = 21,
-        Desafío_Sin_validar = 22,
-        Desafío_Rechazado = 23,
-        Desafío_Descartado = 25
+        Soporte_Descartada = 20
     }
 }

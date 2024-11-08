@@ -189,20 +189,20 @@ namespace CrowdSolve.Server.Controllers
         /// <summary>
         /// Aprueba una empresa pendiente de validar.
         /// </summary>
-        /// <param name="idEmpresa"></param>
+        /// <param name="empresasModel"></param>
         /// <returns> Resultado de la operación.</returns>
-        [HttpPut("Aprobar/{idEmpresa}")]
+        [HttpPost("AprobarEmpresa")]
         [Authorize]
         //[AuthorizeByPermission(PermisosEnum.Aprobar_Empresa)]
-        public OperationResult AprobarEmpresa(int idEmpresa)
+        public OperationResult AprobarEmpresa([FromBody] EmpresasModel empresasModel)
         {
             try
             {
-                var Empresa = _empresasRepo.Get(x => x.idEmpresa == idEmpresa).FirstOrDefault();
+                var Empresa = _empresasRepo.Get(x => x.idEmpresa == empresasModel.idEmpresa).FirstOrDefault();
 
                 if (Empresa == null) return new OperationResult(false, "Esta empresa no se ha encontrado");
 
-                var usuario = _usuariosRepo.Get(idEmpresa);
+                var usuario = _usuariosRepo.Get(empresasModel.idUsuario);
                 if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
                 if (Empresa.idEstatusUsuario != (int)EstatusUsuariosEnum.Pendiente_de_validar)
@@ -213,7 +213,7 @@ namespace CrowdSolve.Server.Controllers
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
                 _usuariosRepo.Edit(usuario);
 
-                _logger.LogHttpRequest(idEmpresa);
+                _logger.LogHttpRequest(empresasModel);
                 return new OperationResult(true, "Se ha aprobado la empresa exitosamente", Empresa);
             }
             catch (Exception ex)
@@ -228,18 +228,18 @@ namespace CrowdSolve.Server.Controllers
         /// </summary>
         /// <param name="empresasModel"></param>
         /// <returns> Resultado de la operación.</returns>
-        [HttpPut("Rechazar/{idEmpresa}")]
+        [HttpPost("RechazarEmpresa")]
         [Authorize]
         //[AuthorizeByPermission(PermisosEnum.Rechazar_Empresa)]
-        public OperationResult RechazarEmpresa(int idEmpresa)
+        public OperationResult RechazarEmpresa([FromBody] EmpresasModel empresasModel)
         {
             try
             {
-                var Empresa = _empresasRepo.Get(x => x.idEmpresa == idEmpresa).FirstOrDefault();
+                var Empresa = _empresasRepo.Get(x => x.idEmpresa == empresasModel.idEmpresa).FirstOrDefault();
 
                 if (Empresa == null) return new OperationResult(false, "Esta empresa no se ha encontrado");
 
-                var usuario = _usuariosRepo.Get(idEmpresa);
+                var usuario = _usuariosRepo.Get(empresasModel.idUsuario);
                 if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
                 if (Empresa.idEstatusUsuario != (int)EstatusUsuariosEnum.Pendiente_de_validar)
@@ -250,7 +250,7 @@ namespace CrowdSolve.Server.Controllers
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Empresa_rechazada;
                 _usuariosRepo.Edit(usuario);
 
-                _logger.LogHttpRequest(idEmpresa);
+                _logger.LogHttpRequest(empresasModel);
                 return new OperationResult(true, "Se ha rechazado la empresa exitosamente", Empresa);
             }
             catch (Exception ex)

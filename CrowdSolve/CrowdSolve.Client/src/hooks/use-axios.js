@@ -40,7 +40,7 @@ const useAxios = () => {
 
             if (error.response) {
                 const { status } = error.response;
-                if (status === 401 && window.location.pathname !== "/sign-in") {
+                if (status === 401) {
                     dispatch(clearUser());
                     navigate("/sign-in");
 
