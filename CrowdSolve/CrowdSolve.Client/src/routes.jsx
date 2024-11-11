@@ -8,6 +8,9 @@ import AdminLayout from './components/admin/AdminLayout';
 // Lazy load components
 const Home = lazy(() => import('@/pages/Home'));
 const AboutUs = lazy(() => import('@/pages/AboutUs'));
+const TermsOfService = lazy(() => import('@/pages/TermsOfService'));
+const PrivacyPolicy = lazy(() => import('@/pages/PrivacyPolicy'));
+const UsagePolicy = lazy(() => import('@/pages/UsagePolicy'));
 const ContactUs = lazy(() => import('@/pages/ContactUs'));
 const SignIn = lazy(() => import('@/pages/auth/SignIn'));
 const SignUp = lazy(() => import('@/pages/auth/SignUp'));
@@ -38,6 +41,9 @@ const AppRoutes = () => (
     <Route path="/sign-in" element={<LazyComponent component={SignIn} />} />
     <Route path="/sign-up" element={<LazyComponent component={SignUp} />} />
     <Route path="/forgot-password" element={<LazyComponent component={ForgotPassword} />} />
+    <Route path="/terms-of-service" element={<LazyComponent component={TermsOfService} />} />
+    <Route path="/privacy-policy" element={<LazyComponent component={PrivacyPolicy} />} />
+    <Route path="/usage-policy" element={<LazyComponent component={UsagePolicy} />} />
     <Route path="/access-denied" element={<LazyComponent component={AccessDenied} />} />
     <Route path="/404" element={<LazyComponent component={NotFound} />} />
     <Route element={<ProtectedRoute />}>
