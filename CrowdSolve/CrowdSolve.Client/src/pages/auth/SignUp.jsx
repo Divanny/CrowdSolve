@@ -1,19 +1,19 @@
-import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
-import { useState } from "react";
-import { Label } from "@/components/ui/label";
-import useAxios from "@/hooks/use-axios";
-import { toast } from "sonner";
-import { useNavigate, Link } from "react-router-dom";
-import { ReactTyped } from "react-typed";
-import { Card } from "@/components/ui/card";
-import { Loading02Icon } from "hugeicons-react"
+import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import GoogleLoginButton from '@/components/GoogleLoginButton';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
+import useAxios from "@/hooks/use-axios";
 import { setUser } from '@/redux/slices/userSlice';
+import { Loading02Icon } from "hugeicons-react";
+import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from "react-router-dom";
+import { ReactTyped } from "react-typed";
+import { toast } from "sonner";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -206,8 +206,9 @@ function SignUp() {
               </div>
 
               <p className="text-xs opacity-50 mt-4">
-                By continuing, you agree to CrowdSolve&apos;s Consumer Terms and
-                Usage Policy, and acknowledge their Privacy Policy.
+                By continuing, you agree to CrowdSolve&apos;s Consumer <Link to="/terms-of-service" target="_blank" className="text-primary font-medium">Terms</Link> and
+                <Link to="/usage-policy" target="_blank" className="text-primary font-medium"> Usage Policy</Link>, and acknowledge their
+                <Link to="/privacy-policy" target="_blank" className="text-primary font-medium"> Privacy Policy</Link>.
               </p>
             </Card>
           </div>
