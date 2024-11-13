@@ -29,12 +29,9 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 return (from d in DB.Set<Desafios>().Where(filter)
                         join empresa in DB.Set<Empresas>() on d.idEmpresa equals empresa.idEmpresa
                         join usuario in DB.Set<Usuarios>() on empresa.idUsuario equals usuario.idUsuario
-                        join proceso in DB.Set<Procesos>() on d.idDesafio equals proceso.idRelacionado where proceso.idClaseProceso == (int)ClasesProcesoEnum.Desafío
+                        join proceso in DB.Set<Procesos>() on d.idDesafio equals proceso.idRelacionado
+                        where proceso.idClaseProceso == (int)ClasesProcesoEnum.Desafío
                         join estatusProceso in DB.Set<EstatusProceso>() on proceso.idEstatusProceso equals estatusProceso.idEstatusProceso
-                        join categorias in DB.Set<DesafiosCategoria>() on d.idDesafio equals categorias.idDesafio into cLF
-                        from c in cLF.DefaultIfEmpty()
-                        join procesosEvaluacion in DB.Set<ProcesoEvaluacion>() on d.idDesafio equals procesosEvaluacion.idDesafio into peLF
-                        from pe in peLF.DefaultIfEmpty()
 
                         select new DesafiosModel()
                         {
@@ -47,8 +44,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             FechaInicio = d.FechaInicio,
                             FechaLimite = d.FechaLimite,
                             FechaRegistro = d.FechaRegistro,
-                            Categorias = cLF.ToList(),
-                            ProcesoEvaluacion = peLF.ToList(),
                             idEstatusDesafio = estatusProceso.idEstatusProceso,
                             EstatusDesafio = estatusProceso.Nombre
                         });
@@ -160,7 +155,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                         foreach (var idProceso in procesoEvaluacionDesafio)
                         {
                             var proceso = procesosRepoProcesoEvaluacion.Get(x => x.idRelacionado == idProceso.idProcesoEvaluacion).FirstOrDefault();
-                            
+
                             if (proceso != null)
                             {
                                 procesosRepoProcesoEvaluacion.Delete(proceso.idProceso);
@@ -198,7 +193,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
         }
 
-        public void ValidarDesafio (int idDesafio)
+        public void ValidarDesafio(int idDesafio)
         {
             procesosRepo.CambiarEstatusProceso(idDesafio, new ProcesosModel(EstatusProcesoEnum.Desafío_Sin_iniciar));
         }
@@ -234,6 +229,22 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         {
             var procesoEvaluacion = dbContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == idDesafio).ToList();
             return procesoEvaluacion;
+        }
+
+        public List<DesafiosModel> GetDesafiosValidados()
+        {
+            List<int> estatusProcesoEnums = new List<int>
+            {
+                (int)EstatusProcesoEnum.Desafío_Sin_iniciar, //// ELIMINAR ESTE ESTATUS
+                (int)EstatusProcesoEnum.Desafío_En_progreso,
+                (int)EstatusProcesoEnum.Desafío_En_evaluación,
+                (int)EstatusProcesoEnum.Desafío_En_espera_de_entrega_de_premios,
+                (int)EstatusProcesoEnum.Desafío_Finalizado
+            };
+
+            var idRelacionados = procesosRepo.Get(x => estatusProcesoEnums.Contains(x.idEstatusProceso)).Select(x => x.idRelacionado).ToList();
+            var desafios = this.Get(x => idRelacionados.Contains(x.idDesafio)).ToList();
+            return desafios;
         }
 
         public List<DesafiosModel> GetDesafiosSinValidar()

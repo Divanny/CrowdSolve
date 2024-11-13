@@ -125,7 +125,7 @@ const sidebarItems = [
         ],
     },
 ]
-export default function Component() {
+export default function AdminLayout() {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -182,7 +182,7 @@ export default function Component() {
                                     <div className='flex items-center justify-between w-full'>
                                         <div className='flex items-center '>
                                             <Avatar className="bg-accent" size="1">
-                                                <AvatarImage src={`https://robohash.org/${user.nombreUsuario}`} />
+                                                <AvatarImage src={(user.avatarURL) ? user.avatarURL : `https://robohash.org/${user.nombreUsuario}`} />
                                                 <AvatarFallback>{user[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className='flex flex-col ml-2 text-left'>

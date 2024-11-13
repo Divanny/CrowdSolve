@@ -16,6 +16,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly DesafiosRepo _desafiosRepo;
+        private readonly CategoriasRepo _categoriasRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly EmpresasRepo _empresasRepo;
         private readonly Mailing _mailingService;
@@ -34,6 +35,7 @@ namespace CrowdSolve.Server.Controllers
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
+            _categoriasRepo = new CategoriasRepo(crowdSolveContext);
             _mailingService = mailing;
         }
 
@@ -46,6 +48,29 @@ namespace CrowdSolve.Server.Controllers
         public List<DesafiosModel> Get()
         {
             List<DesafiosModel> desafios = _desafiosRepo.Get().ToList();
+            desafios.ForEach(desafio =>
+            {
+                desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+                desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            });
+
+            return desafios;
+        }
+
+        /// <summary>
+        /// Obtiene todos los desafíos validados.
+        /// </summary>
+        /// <returns>Lista de desafíos validados.</returns>
+        [HttpGet("GetDesafiosValidados", Name = "GetDesafiosValidados")]
+        public List<DesafiosModel> GetDesafiosValidados()
+        {
+            List<DesafiosModel> desafios = _desafiosRepo.GetDesafiosValidados().ToList();
+            desafios.ForEach(desafio =>
+            {
+                desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+                desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            });
+
             return desafios;
         }
 
@@ -225,7 +250,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Resultado de la operación</returns>
         [HttpPut("Rechazar/{idDesafio}", Name = "RechazarDesafio")]
         [Authorize]
-        public OperationResult RechazarDesafio(int idDesafio, string motivo )
+        public OperationResult RechazarDesafio(int idDesafio, string motivo)
         {
             try
             {
@@ -276,13 +301,27 @@ namespace CrowdSolve.Server.Controllers
         }
 
         [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
-        public object GetRelationalObjects()
+        public object GetRelationalObjects(bool allEstatuses = false)
         {
+            List<int> estatusProcesoEnums = new List<int>();
+
+            if (!allEstatuses)
+            {
+                estatusProcesoEnums = new List<int>
+                {
+                    (int)EstatusProcesoEnum.Desafío_Sin_iniciar, //// ELIMINAR ESTE ESTATUS
+                    (int)EstatusProcesoEnum.Desafío_En_progreso,
+                    (int)EstatusProcesoEnum.Desafío_En_evaluación,
+                    (int)EstatusProcesoEnum.Desafío_En_espera_de_entrega_de_premios,
+                    (int)EstatusProcesoEnum.Desafío_Finalizado
+                };
+            }
+
             return new
             {
                 Categorias = _desafiosRepo.GetCategorias(),
                 TiposEvaluacion = _desafiosRepo.GetTiposEvaluacion(),
-                EstatusDesafios = _desafiosRepo.GetEstatusDesafios(),
+                EstatusDesafios = (allEstatuses) ? _desafiosRepo.GetEstatusDesafios() : _desafiosRepo.GetEstatusDesafios().Where(x => estatusProcesoEnums.Contains(x.idEstatusProceso)),
             };
         }
     }
