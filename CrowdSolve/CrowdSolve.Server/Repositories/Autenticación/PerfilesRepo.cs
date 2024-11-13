@@ -129,17 +129,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                                 idPerfil = model.idPerfil,
                                 idVista = p.idVista
                             }));
-
-                            foreach (var p in newPermisos)
-                            {
-                                var VistasHijos = dbContext.Set<Vistas>().Where(x => x.idVistaPadre == p.idVista).ToList();
-
-                                permisosSet.AddRange(VistasHijos.Select(v => new PerfilesVistas()
-                                {
-                                    idPerfil = model.idPerfil,
-                                    idVista = v.idVista
-                                }));
-                            }
                         }
                         SaveChanges();
                     }
