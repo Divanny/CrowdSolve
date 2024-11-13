@@ -23,6 +23,7 @@ const AccessDenied = lazy(() => import('@/pages/AccessDenied'));
 const CompanyListing = lazy(() => import('@/pages/CompanyListing'));
 const ChallengeCatalog = lazy(() => import('@/pages/ChallengeCatalog'));
 const Participants = lazy(() => import('@/pages/admin/participants/Participants'));
+const Categories = lazy(() => import('@/pages/admin/categories/Categories'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
 const RolesAndPermissions = lazy(() => import('@/pages/admin/RolesAndPermissions'));
@@ -59,6 +60,7 @@ const AppRoutes = () => (
       <Route path="/admin" element={<AdminLayout />} >
         <Route index element={<div>Admin Dashboard</div>} handle={{ permission: () => PermisosEnum.Administrador_Dashboard}} />
         <Route path="participants" element={<LazyComponent component={Participants} />} handle={{ permission: () => PermisosEnum.Administrar_Participantes}} />
+        <Route path="categories" element={<LazyComponent component={Categories} />} handle={{ permission: () => PermisosEnum.Administrar_Categorias}} />
         <Route path="permissions" element={<LazyComponent component={RolesAndPermissions} />} handle={{ permission: () => PermisosEnum.Administrar_Roles_y_Permisos}} />
         <Route path="*" element={<LazyComponent component={NotFound} />} />
       </Route>
