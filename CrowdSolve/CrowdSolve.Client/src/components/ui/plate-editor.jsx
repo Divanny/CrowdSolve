@@ -241,7 +241,6 @@ export function PlateEditor({ value, onChange, ...props }) {
     value = [{ type: 'p', children: [{ text: '' }] }];
   }
   else if (value != null && typeof value === 'string') {
-    console.log(value);
     value = JSON.parse(value);
   }
 

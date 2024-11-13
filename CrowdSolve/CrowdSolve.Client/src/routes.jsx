@@ -4,6 +4,7 @@ import PageLoader from '@/components/PageLoader';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import Layout from './components/layout/Layout';
 import AdminLayout from './components/admin/AdminLayout';
+import PermisosEnum from './enums/PermisosEnum';
 
 // Lazy load components
 const Home = lazy(() => import('@/pages/Home'));
@@ -23,6 +24,7 @@ const CompanyListing = lazy(() => import('@/pages/CompanyListing'));
 const Participants = lazy(() => import('@/pages/admin/participants/Participants'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
+const RolesAndPermissions = lazy(() => import('@/pages/admin/RolesAndPermissions'));
 
 const LazyComponent = ({ component: Component, ...props }) => (
   <Suspense fallback={<PageLoader />}>
@@ -37,6 +39,7 @@ const AppRoutes = () => (
       <Route path="/about-us" element={<LazyComponent component={AboutUs} />} />
       <Route path="/contact-us" element={<LazyComponent component={ContactUs} />} />
       <Route path="/companies" element={<LazyComponent component={CompanyListing} />} />
+      <Route path="*" element={<LazyComponent component={NotFound} />} />
     </Route>
     <Route path="/sign-in" element={<LazyComponent component={SignIn} />} />
     <Route path="/sign-up" element={<LazyComponent component={SignUp} />} />
@@ -47,32 +50,32 @@ const AppRoutes = () => (
     <Route path="/access-denied" element={<LazyComponent component={AccessDenied} />} />
     <Route path="/404" element={<LazyComponent component={NotFound} />} />
     <Route element={<ProtectedRoute />}>
-      <Route path="/sign-up/complete" element={<LazyComponent component={RoleSelection} />} />
-      <Route path="/sign-up/complete/:role" element={<LazyComponent component={CompleteSignUp} />} />
-      <Route path="/company/pending-verification" element={<LazyComponent component={VerificationPending} />} />
+      <Route path="/sign-up/complete" element={<LazyComponent component={RoleSelection} />} handle={{ permission: () => PermisosEnum.Seleccionar_Rol}} />
+      <Route path="/sign-up/complete/:role" element={<LazyComponent component={CompleteSignUp} />} handle={{ permission: () => PermisosEnum.Completar_Registro}} />
+      <Route path="/company/pending-verification" element={<LazyComponent component={VerificationPending} />} handle={{ permission: () => PermisosEnum.Empresa_Pendiente_Verificacion}} />
       {/* Administration */}
-      <Route element={<AdminLayout />}>
-        <Route path="/admin" element={<div>Admin Dashboard</div>} />
-        <Route path="/admin/participants" element={<LazyComponent component={Participants} />} />
+      <Route path="/admin" element={<AdminLayout />} >
+        <Route index element={<div>Admin Dashboard</div>} handle={{ permission: () => PermisosEnum.Administrador_Dashboard}} />
+        <Route path="participants" element={<LazyComponent component={Participants} />} handle={{ permission: () => PermisosEnum.Administrar_Participantes}} />
+        <Route path="permissions" element={<LazyComponent component={RolesAndPermissions} />} handle={{ permission: () => PermisosEnum.Administrar_Roles_y_Permisos}} />
+        <Route path="*" element={<LazyComponent component={NotFound} />} />
       </Route>
       {/* Company */}
-      <Route element={<Layout />}>
-        <Route path="/company" element={<div>Company Dashboard</div>} />
-        <Route path="/company/challenges" element={<div>Company Challenges</div>} />
-        <Route path="/company/challenge/new" element={<LazyComponent component={ChallengeForm} />} />
-        <Route path="/company/challenge/:id" element={<div>Company Challenge</div>} />
-        <Route path="/company/challenge/:id/edit" element={<LazyComponent component={ChallengeForm} />} />
-        <Route path="/company/challenge/:id/solutions" element={<div>Company Solutions</div>} />
-        <Route path="/company/challenge/:id/solution/:solutionId" element={<div>Company Solution</div>} />
+      <Route path="/company" element={<Layout />} >
+        <Route index element={<div>Company Dashboard</div>} handle={{ permission: () => PermisosEnum.Empresa_Dashboard}} />
+        <Route path="challenges" element={<div>Company Challenges</div>} handle={{ permission: () => PermisosEnum.Empresa_Desafios}} />
+        <Route path="challenge/new" element={<LazyComponent component={ChallengeForm} />} handle={{ permission: () => PermisosEnum.Empresa_Crear_Desafio}} />
+        <Route path="challenge/:challengeId" element={<div>Company Challenge</div>} handle={{ permission: () => PermisosEnum.Empresa_Ver_Desafio}} />
+        <Route path="challenge/:challengeId/edit" element={<LazyComponent component={ChallengeForm} />} handle={{ permission: () => PermisosEnum.Empresa_Editar_Desafio}} />
+        <Route path="challenge/:challengeId/solutions" element={<div>Company Solutions</div>} handle={{ permission: () => PermisosEnum.Empresa_Ver_Soluciones_Desafio}} />
+        <Route path="challenge/:challengeId/solution/:solutionId" element={<div>Company Solution</div>} handle={{ permission: () => PermisosEnum.Empresa_Ver_Solucion_Desafio}} />
       </Route>
       {/* Participant */}
       <Route element={<Layout />}>
-        <Route path="/my-profile" element={<div>My profile</div>} />
-        <Route path="/my-solutions" element={<div>My solutions</div>} />
-        <Route path="/my-solutions/:id" element={<div>My solution</div>} />
+        <Route path="/my-profile" element={<div>My profile</div>} handle={{ permission: () => PermisosEnum.Mi_perfil}} />
+        <Route path="/my-solutions" element={<div>My solutions</div>} handle={{ permission: () => PermisosEnum.Mis_Soluciones}}/>
       </Route>
     </Route>
-    <Route path="*" element={<LazyComponent component={NotFound} />} />
   </Routes>
 );
 

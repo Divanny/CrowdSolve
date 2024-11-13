@@ -208,6 +208,7 @@
     "UiMulti-select": true,
     "useDebounce": true,
     "useMounted": true,
-    "UiPlate-editor": true
+    "UiPlate-editor": true,
+    "usePermisoAcceso": true
   }
 }

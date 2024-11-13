@@ -1,0 +1,18 @@
+export default {
+	Seleccionar_Rol: 4,
+	Completar_Registro: 5,
+	Empresa_Pendiente_Verificacion: 6,
+	Empresa_Dashboard: 7,
+	Empresa_Desafios: 8,
+	Empresa_Crear_Desafio: 9,
+	Empresa_Editar_Desafio: 10,
+	Ver_Desafio: 13,
+	Empresa_Ver_Desafio: 14,
+	Empresa_Ver_Soluciones_Desafio: 15,
+	Empresa_Ver_Solucion_Desafio: 17,
+	Mi_perfil: 19,
+	Mis_Soluciones: 20,
+	Administrador_Dashboard: 21,
+	Administrar_Participantes: 22,
+	Administrar_Roles_y_Permisos: 23
+};

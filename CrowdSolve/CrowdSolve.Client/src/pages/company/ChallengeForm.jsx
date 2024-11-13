@@ -61,8 +61,8 @@ const formSchema = z.object({
 export default function ChallengeForm() {
     const { api } = useAxios()
     const navigate = useNavigate()
-    const { id } = useParams()
-    const modoEdicion = id !== undefined
+    const { challengeId } = useParams()
+    const modoEdicion = challengeId !== undefined
 
     const [categoriasDisponibles, setCategoriasDisponibles] = useState([])
     const [tiposEvaluacionDisponibles, setTiposEvaluacionDisponibles] = useState([])
@@ -89,7 +89,7 @@ export default function ChallengeForm() {
     useEffect(() => {
         const fetchDesafio = async () => {
             try {
-                const response = await api.get(`/api/Desafios/${id}`)
+                const response = await api.get(`/api/Desafios/${challengeId}`)
                 const desafio = response.data
                 form.reset({
                     ...desafio,
@@ -128,7 +128,7 @@ export default function ChallengeForm() {
 
         fetchData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, modoEdicion, form])
+    }, [challengeId, modoEdicion, form])
 
     const onSubmit = async (data) => {
         try {
