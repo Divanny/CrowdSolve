@@ -21,6 +21,7 @@ const RoleSelection = lazy(() => import('@/pages/auth/RoleSelection'));
 const VerificationPending = lazy(() => import('@/pages/company/VerificationPending'));
 const AccessDenied = lazy(() => import('@/pages/AccessDenied'));
 const CompanyListing = lazy(() => import('@/pages/CompanyListing'));
+const ChallengeCatalog = lazy(() => import('@/pages/ChallengeCatalog'));
 const Participants = lazy(() => import('@/pages/admin/participants/Participants'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
@@ -38,6 +39,7 @@ const AppRoutes = () => (
       <Route path="/" element={<LazyComponent component={Home} />} />
       <Route path="/about-us" element={<LazyComponent component={AboutUs} />} />
       <Route path="/contact-us" element={<LazyComponent component={ContactUs} />} />
+      <Route path="/contact-us" element={<LazyComponent component={ChallengeCatalog} />} />
       <Route path="/companies" element={<LazyComponent component={CompanyListing} />} />
       <Route path="*" element={<LazyComponent component={NotFound} />} />
     </Route>
