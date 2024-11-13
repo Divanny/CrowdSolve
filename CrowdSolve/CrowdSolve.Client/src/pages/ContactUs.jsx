@@ -1,11 +1,11 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Instagram, Facebook, Mail, MapPin, Phone } from "lucide-react"
 import { toast } from "sonner"
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import useAxios from "@/hooks/use-axios";
 import { Loading02Icon } from "hugeicons-react";
 import ReCAPTCHA from "react-google-recaptcha"
@@ -69,7 +69,6 @@ export default function ContactPage() {
     } catch (error) {
       console.error(error)
       toast.error("Error al enviar el mensaje")
-    } finally {
     }
   }
 
@@ -78,11 +77,11 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-['Poppins',sans-serif] p-6">
+    <div className="bg-background text-foreground font-['Poppins',sans-serif] p-6">
       <main className="container mx-auto mt-12">
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div>
-            <h1 className="text-3xl font-bold mb-4">¡¡Puedes Encontrarnos en Nuestras Redes y Contactarnos!!</h1>
+            <h1 className="text-3xl font-bold mb-4">Puedes encontrarnos en nuestras redes y contactarnos</h1>
             <p className="mb-8 text-muted-foreground">
               Si tienes preguntas, comentarios o necesitas más información sobre nuestros desafíos, no dudes en ponerte en contacto con nosotros. Tu opinión es importante y estamos comprometidos en brindarte el apoyo que necesites. Completa el formulario a continuación o utiliza cualquiera de nuestros canales de contacto para comunicarse con nosotros. ¡Esperamos saber de ti pronto!
             </p>
@@ -109,13 +108,13 @@ export default function ContactPage() {
               </a>
             </div>
           </div>
-          <div className="md:mt-24">
+          <div>
             <Card className="bg-card rounded-3xl shadow-lg">
               <CardContent className="p-6">
                 <h2 className="text-2xl font-bold mb-6">¡Contáctanos!</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <Input  
-                      placeholder="Asunto del Mensaje" 
+                      placeholder="Asunto del mensaje" 
                       className="bg-background text-foreground border-input"
                       value={titulo}
                       onChange={(e) => setTittle(e.target.value)}
@@ -140,14 +139,14 @@ export default function ContactPage() {
                   </div>
                   <Input 
                     type="email" 
-                    placeholder="Correo Electrónico" 
+                    placeholder="Correo electrónico" 
                     className="bg-background text-foreground border-input"
                     value={correoElectronico}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                   <Textarea 
-                    placeholder="¿En qué te Podemos Ayudar?" 
+                    placeholder="¿En qué te podemos ayudar?" 
                     rows={4} 
                     className="bg-background text-foreground border-input"
                     value={mensaje}

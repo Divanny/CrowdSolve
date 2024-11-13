@@ -437,7 +437,6 @@ public partial class CrowdSolveContext : DbContext
             entity.HasKey(e => e.idVista);
 
             entity.Property(e => e.ClaseIcono)
-                .IsRequired()
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Nombre)
