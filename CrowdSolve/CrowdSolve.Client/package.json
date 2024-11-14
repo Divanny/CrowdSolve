@@ -70,7 +70,7 @@
     "@udecode/plate-heading": "^39.0.0",
     "@udecode/plate-highlight": "^39.0.0",
     "@udecode/plate-horizontal-rule": "^39.0.0",
-    "@udecode/plate-html": "^40.0.0",
+    "@udecode/plate-html": "^39.0.0",
     "@udecode/plate-indent": "^39.0.0",
     "@udecode/plate-indent-list": "^39.1.10",
     "@udecode/plate-juice": "^39.0.0",

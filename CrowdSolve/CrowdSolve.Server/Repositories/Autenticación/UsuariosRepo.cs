@@ -108,8 +108,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 usuario.idEstatusUsuario = model.idEstatusUsuario;
                 usuario.AvatarURL = model.AvatarURL;
 
-                SaveChanges();
-                base.Edit(usuario, usuario.idUsuario);
+                base.Edit(usuario);
             }
             catch (Exception)
             {
