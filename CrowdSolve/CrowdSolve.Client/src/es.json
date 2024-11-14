@@ -1,0 +1,25 @@
+{
+    "about": {
+      "title": "Conectando personas",
+      "description": "CrowdSolve es una plataforma diseñada para conectar a personas que buscan resolver problemas de manera colaborativa. Su objetivo es reunir a diferentes tipos de usuarios, como expertos, empresas y participantes interesados en encontrar soluciones innovadoras para desafíos específicos.",
+      "mission": "NUESTRA MISIÓN",
+      "mission_description": "CrowdSolve busca fomentar la colaboración abierta, donde las ideas y las soluciones se compartan y evalúen, permitiendo que los problemas se resuelvan de forma eficiente. Además, se enfoca en crear un espacio donde los usuarios puedan demostrar sus habilidades, trabajar en conjunto, y aportar valor tanto a nivel individual como a nivel organizacional.",
+      "section_title": "Facilitando la Creación de Soluciones Innovadoras",
+      "section_description": "Nuestro objetivo es empoderar a equipos y personas para que colaboren y encuentren soluciones innovadoras a desafíos específicos. Aquí es cómo planeamos lograrlo.",
+      "features": [
+        {
+          "title": "Fomentando la Colaboración Abierta",
+          "description": "Creemos que no hay lugar para grandes egos y siempre hay tiempo para ayudarnos mutuamente. Nos esforzamos por dar y recibir retroalimentación, ideas y perspectivas."
+        },
+        {
+          "title": "Avanzando con Claridad",
+          "description": "Audazmente, con valentía y con objetivos claros. Buscamos las grandes oportunidades y nos enfocamos en las cosas más importantes en las que trabajar."
+        },
+        {
+          "title": "Optimizando para el Empoderamiento",
+          "description": "Creemos que todos deberían estar empoderados para hacer lo que consideren mejor para los intereses de la empresa."
+        }
+      ]
+    }
+}
+  
