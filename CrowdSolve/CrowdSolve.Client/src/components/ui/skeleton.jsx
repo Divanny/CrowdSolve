@@ -6,7 +6,7 @@ function Skeleton({
 }) {
   return (
     (<div
-      className={cn("animate-pulse rounded-md bg-card/10", className)}
+      className={cn("animate-pulse rounded-md bg-foreground/10", className)}
       {...props} />)
   );
 }

@@ -84,7 +84,7 @@ const Sidebar = () => {
                                     <div className='flex items-center justify-between w-full'>
                                         <div className='flex items-center '>
                                             <Avatar className="bg-accent" size="1">
-                                                <AvatarImage src={(user.avatarBlobURL) ? user.avatarBlobURL : `https://robohash.org/${user.nombreUsuario}`} />
+                                                <AvatarImage src={(user.avatarURL) ? user.avatarURL : `https://robohash.org/${user.nombreUsuario}`} />
                                                 <AvatarFallback>{user[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className='flex flex-col ml-2 text-left'>

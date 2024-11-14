@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectToken } from '@/redux/selectors/userSelectors';
+import { setUser } from '@/redux/slices/userSlice';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,8 +32,10 @@ import { PhoneInput } from "@/components/ui/phone-input";
 
 const RegistroParticipante = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { api } = useAxios();
     const { user } = useSelector((state) => state.user);
+    const token = useSelector(selectToken);
 
     const [relationalObjects, setRelationalObjects] = useState({});
 
@@ -85,6 +89,17 @@ const RegistroParticipante = () => {
 
             if (response.data.success) {
                 navigate("/");
+
+                const { data } = await api.get("/api/Account");
+
+                if (data) {
+                    dispatch(setUser({
+                        user: data.usuario,
+                        token: token,
+                        views: Array.isArray(data.vistas) ? data.vistas : []
+                    }));
+                }
+
                 toast.success("Operación exitosa", {
                     description: response.data.message,
                 });

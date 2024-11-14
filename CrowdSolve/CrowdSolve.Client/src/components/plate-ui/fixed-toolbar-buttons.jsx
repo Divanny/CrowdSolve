@@ -130,10 +130,6 @@ export function FixedToolbarButtons() {
         </>
       )}
       <div className="grow" />
-      <ToolbarGroup>
-        <CommentToolbarButton />
-        <ModeDropdownMenu />
-      </ToolbarGroup>
     </div>)
   );
 }

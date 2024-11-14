@@ -1,0 +1,113 @@
+/* Encabezados */
+.slate-h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.slate-h2 {
+    font-size: 1.75em;
+    font-weight: bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.slate-h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.slate-h4 {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.slate-h5 {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.slate-h6 {
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/* Listas */
+.slate-ul {
+    padding-left: 1.5em;
+    list-style-type: disc;
+}
+
+.slate-ol {
+    padding-left: 1.5em;
+    list-style-type: decimal;
+}
+
+.slate-li {
+    margin-bottom: 0.25em;
+}
+
+/* Texto */
+.slate-p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    line-height: 1.5;
+}
+
+.slate-strong {
+    font-weight: bold;
+}
+
+.slate-em {
+    font-style: italic;
+}
+
+.slate-u {
+    text-decoration: underline;
+}
+
+/* Bloque de citas */
+.slate-blockquote {
+    padding-left: 1em;
+    border-left: 4px solid;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/* Código */
+.slate-pre {
+    background-color: #f5f5f5;
+    padding: 1em;
+    margin: 0.5em 0;
+    border-radius: 4px;
+    overflow: auto;
+}
+
+.slate-code {
+    font-family: monospace;
+    padding: 0.2em 0.4em;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+}
+
+/* Enlaces */
+.slate-a {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Imágenes */
+.slate-img {
+    max-width: 100%;
+    height: auto;
+    margin: 0.5em 0;
+}

@@ -11,6 +11,10 @@ html {
   height: 100vh;
 }
 
+body {
+  pointer-events: auto !important;
+}
+
 @layer base {
   :root {
     --background: 45 30% 92%;

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useState, useEffect } from 'react'
 import { Search, Globe, Mail, Building, Users, ChevronDown, Bell, Trophy, FilterX } from 'lucide-react'
@@ -27,6 +27,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import { Skeleton } from "@/components/ui/skeleton"
 import useAxios from '@/hooks/use-axios'
 
 export default function CompanyListing() {
@@ -36,13 +37,14 @@ export default function CompanyListing() {
     const [tamañoFilter, setTamañoFilter] = useState("")
     const [relationalObjects, setRelationalObjects] = useState({});
     const [companies, setCompanies] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadCompanies = async () => {
             try {
-                const response = await api.get("api/Empresas/GetEmpresasActivas");
+                const response = await api.get("api/Empresas/GetEmpresasActivas", { requireLoading: false });
                 const companiesWithLogos = await Promise.all(response.data.map(async (company) => {
-                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${company.idUsuario}`, { responseType: 'blob' });
+                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${company.idUsuario}`, { responseType: 'blob', requireLoading: false });
                     const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] });
                     const url = URL.createObjectURL(avatarBlob);
                     return { ...company, logo: url };
@@ -55,15 +57,14 @@ export default function CompanyListing() {
 
         const loadRelationalObjects = async () => {
             try {
-                const response = await api.get("api/Empresas/GetRelationalObjects");
+                const response = await api.get("api/Empresas/GetRelationalObjects", { requireLoading: false });
                 setRelationalObjects(response.data);
             } catch (error) {
                 console.error(error);
             }
         };
 
-        loadRelationalObjects();
-        loadCompanies();
+        Promise.all([loadRelationalObjects(), loadCompanies()]).then(() => setLoading(false));
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -82,8 +83,8 @@ export default function CompanyListing() {
 
     return (
         <div className="bg-background text-foreground min-h-screen">
-            <section className="py-20 bg-gradient-to-b from-primary/10 to-background">
-                <div className="container px-4 md:px-6">
+            <section className="-mt-[64px] pt-[64px] py-20 bg-gradient-to-b from-primary/10 to-background">
+                <div className="container px-4 md:px-6 mt-12">
                     <Badge variant="outline" className="mb-4 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
                         <Bell className="mr-1 h-3 w-3" />
                         Descubre las últimas empresas que se han unido a CrowdSolve
@@ -97,7 +98,7 @@ export default function CompanyListing() {
                 </div>
             </section>
 
-            <div className="container mx-auto px-4 py-12">
+            <div className="container mx-auto px-4 md:px-6 py-12">
                 <h2 className="text-3xl font-bold mb-8">Empresas asociadas</h2>
 
                 <div className="flex flex-col md:flex-row gap-4 mb-8">
@@ -119,11 +120,15 @@ export default function CompanyListing() {
                                 <SelectValue placeholder="Sector" />
                             </SelectTrigger>
                             <SelectContent>
-                                {relationalObjects.sectores?.map((sector) => (
-                                    <SelectItem key={sector.idSector} value={sector.idSector.toString()}>
-                                        {sector.nombre}
-                                    </SelectItem>
-                                ))}
+                                {loading ? (
+                                    <SelectItem value="loading"><Skeleton className="h-4 w-full" /></SelectItem>
+                                ) : (
+                                    relationalObjects.sectores?.map((sector) => (
+                                        <SelectItem key={sector.idSector} value={sector.idSector.toString()}>
+                                            {sector.nombre}
+                                        </SelectItem>
+                                    ))
+                                )}
                             </SelectContent>
                         </Select>
                         <Select value={tamañoFilter} onValueChange={setTamañoFilter}>
@@ -131,11 +136,15 @@ export default function CompanyListing() {
                                 <SelectValue placeholder="Tamaño de empresa" />
                             </SelectTrigger>
                             <SelectContent>
-                                {relationalObjects.tamañosEmpresa?.map((tamaño) => (
-                                    <SelectItem key={tamaño.idTamañoEmpresa} value={tamaño.idTamañoEmpresa.toString()}>
-                                        {tamaño.descripcion}
-                                    </SelectItem>
-                                ))}
+                                {loading ? (
+                                    <SelectItem value="loading"><Skeleton className="h-4 w-full" /></SelectItem>
+                                ) : (
+                                    relationalObjects.tamañosEmpresa?.map((tamaño) => (
+                                        <SelectItem key={tamaño.idTamañoEmpresa} value={tamaño.idTamañoEmpresa.toString()}>
+                                            {tamaño.descripcion}
+                                        </SelectItem>
+                                    ))
+                                )}
                             </SelectContent>
                         </Select>
                     </div>
@@ -144,65 +153,98 @@ export default function CompanyListing() {
                     </Button>}
                 </div>
 
-                {filteredCompanies.length > 0 ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredCompanies.map(company => (
-                        <Card key={company.idEmpresa} className="flex flex-col h-full">
-                            <CardHeader>
-                                <div className="flex items-center space-x-4">
-                                    <img src={company.logo} alt={`${company.nombre} logo`} className="w-12 h-12 rounded-full object-cover" />
-                                    <div>
-                                        <CardTitle className="mb-1">{company.nombre}</CardTitle>
-                                        <CardDescription>{relationalObjects.tamañosEmpresa?.find(t => t.idTamañoEmpresa == company.idTamañoEmpresa)?.descripcion}</CardDescription>
+                {loading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[...Array(6)].map((_, index) => (
+                            <Card key={index} className="flex flex-col h-full">
+                                <CardHeader>
+                                    <div className="flex items-center space-x-4">
+                                        <Skeleton className="w-12 h-12 rounded-full" />
+                                        <div>
+                                            <Skeleton className="h-6 w-32 mb-1" />
+                                            <Skeleton className="h-4 w-24" />
+                                        </div>
                                     </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="flex-grow">
-                                <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{company.descripcion}</p>
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    <Badge variant="secondary">
-                                        {relationalObjects.sectores?.find(s => s.idSector == company.idSector)?.nombre}
-                                    </Badge>
-                                </div>
-                                <div className="flex justify-between text-sm text-muted-foreground">
-                                    <span className="flex items-center">
-                                        <Trophy className="mr-1 h-4 w-4" />
-                                        {company.challenges ?? 0} desafíos
-                                    </span>
-                                    <span className="flex items-center">
-                                        <Users className="mr-1 h-4 w-4" />
-                                        {company.activeSolutions ?? 0} soluciones
-                                    </span>
-                                </div>
-                            </CardContent>
-                            <CardFooter className="flex flex-col sm:flex-row justify-between gap-2 mt-auto">
-                                <Button variant="outline" className="w-full sm:w-auto" asChild>
-                                    <a href={company.paginaWeb} target="_blank" rel="noopener noreferrer">
-                                        <Globe className="mr-2 h-4 w-4" /> Sitio web
-                                    </a>
-                                </Button>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="outline" className="w-full sm:w-auto">
-                                            <ChevronDown className="mr-2 h-4 w-4" /> Más opciones
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                        <DropdownMenuItem onSelect={() => window.location.href = `mailto:${company.correo}`}>
-                                            <Mail className="mr-2 h-4 w-4" />
-                                            <span>Contactar</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            <Building className="mr-2 h-4 w-4" />
-                                            <span>Ver desafíos</span>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </CardFooter>
-                        </Card>
-                    ))}
-                </div> 
-                : <p className='text-center text-muted-foreground'>No se encontraron empresas que coincidan con los filtros seleccionados.</p>}
+                                </CardHeader>
+                                <CardContent className="flex-grow">
+                                    <Skeleton className="h-4 w-full mb-2" />
+                                    <Skeleton className="h-4 w-3/4 mb-2" />
+                                    <Skeleton className="h-4 w-1/2 mb-4" />
+                                    <Skeleton className="h-6 w-24 mb-4" />
+                                    <div className="flex justify-between">
+                                        <Skeleton className="h-4 w-20" />
+                                        <Skeleton className="h-4 w-20" />
+                                    </div>
+                                </CardContent>
+                                <CardFooter className="flex flex-col sm:flex-row justify-between gap-2 mt-auto">
+                                    <Skeleton className="h-10 w-full sm:w-1/2" />
+                                    <Skeleton className="h-10 w-full sm:w-1/2" />
+                                </CardFooter>
+                            </Card>
+                        ))}
+                    </div>
+                ) : filteredCompanies.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredCompanies.map(company => (
+                            <Card key={company.idEmpresa} className="flex flex-col h-full">
+                                <CardHeader>
+                                    <div className="flex items-center space-x-4">
+                                        <img src={company.logo} alt={`${company.nombre} logo`} className="w-12 h-12 rounded-full object-cover" />
+                                        <div>
+                                            <CardTitle className="mb-1">{company.nombre}</CardTitle>
+                                            <CardDescription>{relationalObjects.tamañosEmpresa?.find(t => t.idTamañoEmpresa == company.idTamañoEmpresa)?.descripcion}</CardDescription>
+                                        </div>
+                                    </div>
+                                </CardHeader>
+                                <CardContent className="flex-grow">
+                                    <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{company.descripcion}</p>
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        <Badge variant="secondary">
+                                            {relationalObjects.sectores?.find(s => s.idSector == company.idSector)?.nombre}
+                                        </Badge>
+                                    </div>
+                                    <div className="flex justify-between text-sm text-muted-foreground">
+                                        <span className="flex items-center">
+                                            <Trophy className="mr-1 h-4 w-4" />
+                                            {company.challenges ?? 0} desafíos
+                                        </span>
+                                        <span className="flex items-center">
+                                            <Users className="mr-1 h-4 w-4" />
+                                            {company.activeSolutions ?? 0} soluciones
+                                        </span>
+                                    </div>
+                                </CardContent>
+                                <CardFooter className="flex flex-col sm:flex-row justify-between gap-2 mt-auto">
+                                    <Button variant="outline" className="w-full sm:w-auto" asChild>
+                                        <a href={company.paginaWeb} target="_blank" rel="noopener noreferrer">
+                                            <Globe className="mr-2 h-4 w-4" /> Sitio web
+                                        </a>
+                                    </Button>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="outline" className="w-full sm:w-auto">
+                                                <ChevronDown className="mr-2 h-4 w-4" /> Más opciones
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                                            <DropdownMenuItem onSelect={() => window.location.href = `mailto:${company.correo}`}>
+                                                <Mail className="mr-2 h-4 w-4" />
+                                                <span>Contactar</span>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                                <Building className="mr-2 h-4 w-4" />
+                                                <span>Ver desafíos</span>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </CardFooter>
+                            </Card>
+                        ))}
+                    </div>
+                ) : (
+                    <p className='text-center text-muted-foreground'>No se encontraron empresas que coincidan con los filtros seleccionados.</p>
+                )}
             </div>
         </div>
     )
