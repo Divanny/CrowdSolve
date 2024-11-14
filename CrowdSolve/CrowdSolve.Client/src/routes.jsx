@@ -41,7 +41,7 @@ const AppRoutes = () => (
       <Route path="/" element={<LazyComponent component={Home} />} />
       <Route path="/about-us" element={<LazyComponent component={AboutUs} />} />
       <Route path="/contact-us" element={<LazyComponent component={ContactUs} />} />
-      <Route path="/challenges/:searchQuery?" element={<LazyComponent component={ChallengeCatalog} />} />
+      <Route path="/challenges/:search?" element={<LazyComponent component={ChallengeCatalog} />} />
       <Route path="/challenge/:challengeId" element={<LazyComponent component={Challenge} />} />
       <Route path="/companies" element={<LazyComponent component={CompanyListing} />} />
       <Route path="/terms-of-service" element={<LazyComponent component={TermsOfService} />} />

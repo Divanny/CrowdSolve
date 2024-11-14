@@ -80,15 +80,17 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="idDesafio">ID del desafío.</param>
         /// <returns>Desafío encontrado.</returns>
         [HttpGet("{idDesafio}", Name = "GetDesafio")]
-        [Authorize]
         public IActionResult Get(int idDesafio)
         {
-            DesafiosModel? desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+            DesafiosModel? desafio = _desafiosRepo.GetDesafiosValidados(x => x.idDesafio == idDesafio).FirstOrDefault();
 
             if (desafio == null)
             {
                 return NotFound("Desafío no encontrado");
             }
+
+            desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
 
             return Ok(desafio);
         }

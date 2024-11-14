@@ -231,7 +231,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             return procesoEvaluacion;
         }
 
-        public List<DesafiosModel> GetDesafiosValidados()
+        public List<DesafiosModel> GetDesafiosValidados(Func<Desafios, bool>? filter = null)
         {
             List<int> estatusProcesoEnums = new List<int>
             {
@@ -243,7 +243,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             };
 
             var idRelacionados = procesosRepo.Get(x => estatusProcesoEnums.Contains(x.idEstatusProceso)).Select(x => x.idRelacionado).ToList();
-            var desafios = this.Get(x => idRelacionados.Contains(x.idDesafio)).ToList();
+            var desafios = filter != null ? this.Get(x => idRelacionados.Contains(x.idDesafio) && filter(x)).ToList() : this.Get(x => idRelacionados.Contains(x.idDesafio)).ToList();
             return desafios;
         }
 

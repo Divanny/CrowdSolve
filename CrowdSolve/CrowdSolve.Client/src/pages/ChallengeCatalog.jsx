@@ -27,7 +27,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
 import useAxios from '@/hooks/use-axios'
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 function getTimeAgo(date) {
   const now = new Date()
@@ -67,6 +67,7 @@ export default function ChallengeCatalog() {
   })
   const [challenges, setChallenges] = React.useState([])
   const [loading, setLoading] = React.useState(true);
+  const { search } = useParams();
 
   React.useEffect(() => {
     const loadChallenges = async () => {
@@ -98,6 +99,12 @@ export default function ChallengeCatalog() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  React.useEffect(() => {
+    if (search) {
+      setSearchQuery(search);
+    }
+  }, [search]);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories(prev =>
