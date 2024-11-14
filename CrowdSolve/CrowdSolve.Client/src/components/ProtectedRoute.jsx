@@ -65,6 +65,7 @@ const ProtectedRoute = () => {
         const view = userViews.find(view => compareRoutes(view.url, location.pathname));
 
         if (!view) {
+            // eslint-disable-next-line no-undef
             if (process.env.NODE_ENV === 'development') {
                 toast.warning('Advertencia - Vista sin acceso', {
                     description: `La vista "${location.pathname}" no tiene acceso asignado. Por motivos de desarrollo, se permitirá el acceso.`

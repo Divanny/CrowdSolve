@@ -80,7 +80,7 @@ namespace CrowdSolve.Server.Controllers
                 var usuario = _usuariosRepo.Get(_idUsuarioOnline);
                 if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
-                if (usuario.idPerfil != (int)PerfilesEnum.Participante) return new OperationResult(false, "Este usuario no tiene permisos para registrarse como participante");
+                if (usuario.idPerfil != (int)PerfilesEnum.Sin_perfil) return new OperationResult(false, "Este usuario no tiene permisos para registrarse como participante");
 
                 usuario.idPerfil = (int)PerfilesEnum.Participante;
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
@@ -101,7 +101,7 @@ namespace CrowdSolve.Server.Controllers
         /// <summary>
         /// Actualiza una Participante existente.
         /// </summary>
-        /// <param name="idParticipante">ID del Participante a actualizar.</param></param>
+        /// <param name="idParticipante">ID del Participante a actualizar.</param>
         /// <param name="ParticipantesModel">Datos del Participante a actualizar.</param>
         /// <returns>Resultado de la operación.</returns>
         [HttpPut("{idParticipante}", Name = "UpdateParticipante")]

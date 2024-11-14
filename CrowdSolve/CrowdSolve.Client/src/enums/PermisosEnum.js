@@ -14,5 +14,6 @@ export default {
 	Mis_Soluciones: 20,
 	Administrador_Dashboard: 21,
 	Administrar_Participantes: 22,
-	Administrar_Roles_y_Permisos: 23
+	Administrar_Roles_y_Permisos: 23,
+	Administrar_Categorias: 1016
 };

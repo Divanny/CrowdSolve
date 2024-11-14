@@ -22,7 +22,9 @@ const VerificationPending = lazy(() => import('@/pages/company/VerificationPendi
 const AccessDenied = lazy(() => import('@/pages/AccessDenied'));
 const CompanyListing = lazy(() => import('@/pages/CompanyListing'));
 const ChallengeCatalog = lazy(() => import('@/pages/ChallengeCatalog'));
+const Challenge = lazy(() => import('@/pages/Challenge'));
 const Participants = lazy(() => import('@/pages/admin/participants/Participants'));
+const Categories = lazy(() => import('@/pages/admin/categories/Categories'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
 const RolesAndPermissions = lazy(() => import('@/pages/admin/RolesAndPermissions'));
@@ -40,6 +42,7 @@ const AppRoutes = () => (
       <Route path="/about-us" element={<LazyComponent component={AboutUs} />} />
       <Route path="/contact-us" element={<LazyComponent component={ContactUs} />} />
       <Route path="/challenges/:searchQuery?" element={<LazyComponent component={ChallengeCatalog} />} />
+      <Route path="/challenge/:challengeId" element={<LazyComponent component={Challenge} />} />
       <Route path="/companies" element={<LazyComponent component={CompanyListing} />} />
       <Route path="/terms-of-service" element={<LazyComponent component={TermsOfService} />} />
       <Route path="/privacy-policy" element={<LazyComponent component={PrivacyPolicy} />} />
@@ -57,9 +60,10 @@ const AppRoutes = () => (
       <Route path="/company/pending-verification" element={<LazyComponent component={VerificationPending} />} handle={{ permission: () => PermisosEnum.Empresa_Pendiente_Verificacion }} />
       {/* Administration */}
       <Route path="/admin" element={<AdminLayout />} >
-        <Route index element={<div>Admin Dashboard</div>} handle={{ permission: () => PermisosEnum.Administrador_Dashboard }} />
-        <Route path="participants" element={<LazyComponent component={Participants} />} handle={{ permission: () => PermisosEnum.Administrar_Participantes }} />
-        <Route path="permissions" element={<LazyComponent component={RolesAndPermissions} />} handle={{ permission: () => PermisosEnum.Administrar_Roles_y_Permisos }} />
+        <Route index element={<div>Admin Dashboard</div>} handle={{ permission: () => PermisosEnum.Administrador_Dashboard}} />
+        <Route path="participants" element={<LazyComponent component={Participants} />} handle={{ permission: () => PermisosEnum.Administrar_Participantes}} />
+        <Route path="categories" element={<LazyComponent component={Categories} />} handle={{ permission: () => PermisosEnum.Administrar_Categorias}} />
+        <Route path="permissions" element={<LazyComponent component={RolesAndPermissions} />} handle={{ permission: () => PermisosEnum.Administrar_Roles_y_Permisos}} />
         <Route path="*" element={<LazyComponent component={NotFound} />} />
       </Route>
       {/* Company */}

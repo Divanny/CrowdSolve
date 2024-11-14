@@ -209,6 +209,7 @@
     "useDebounce": true,
     "useMounted": true,
     "UiPlate-editor": true,
-    "usePermisoAcceso": true
+    "usePermisoAcceso": true,
+    "AdminCategoriesCategoryFormDialog": true
   }
 }
