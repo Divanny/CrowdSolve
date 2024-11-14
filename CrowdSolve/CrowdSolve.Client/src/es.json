@@ -20,6 +20,265 @@
           "description": "Creemos que todos deberían estar empoderados para hacer lo que consideren mejor para los intereses de la empresa."
         }
       ]
+    },
+
+    "MeetOurteam": {
+    "title": "Conoce a nuestro equipo"
+  },
+
+  "authAdminLayout": {
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse"
+  },
+
+  "CategoryFormdialog": {
+    "editTitle": "Editar Categoria",
+    "viewTitle": "Ver Categoria",
+    "nameLabel": "Nombre Categoria",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Ingrese una descripción",
+    "saveChanges": "Guardar cambios",
+    "close": "Cerrar"
+  },
+
+  "challengesPost": {
+    "sectionLabel": "Desafíos",
+    "sectionTitle": "Desafíos publicados por empresas",
+    "sectionDescription": "Participa en los desafíos publicados por diversas empresas y demuestra tus habilidades. ¡Grandes oportunidades te esperan!",
+    "exploreChallengesButton": "Explorar todos los desafíos",
+    "readMore": "Leer más"
+  },
+
+  "CrowdSourcingEasy": {
+    "sectionLabel": "¿Cómo funciona?",
+    "sectionTitle": "El crowdsourcing es fácil",
+    "sectionDescription": "CrowdSolve simplifica el proceso de crowdsourcing en tres fases claves: publicación del desafío, participación de la comunidad y evaluación colaborativa.",
+    "publishChallenges": {
+      "title": "Publicar desafíos",
+      "description": "Describe tu problema e invita a la comunidad CrowdSolve a brindar soluciones innovadoras."
+    },
+    "engageCommunity": {
+      "title": "Involucrar a la comunidad",
+      "description": "Acceda a una red global de solucionadores de problemas y colabore en las mejores soluciones."
+    },
+    "evaluateCollaboratively": {
+      "title": "Evaluar colaborativamente",
+      "description": "Revisar las soluciones propuestas y seleccionar las más prometedoras a través de un proceso colaborativo."
     }
+  },
+
+  "ParticipantFormDialog": {
+    "title_edit": "Editar Participante",
+    "title_view": "Ver Participante",
+    "username_label": "Nombre de usuario",
+    "email_label": "Correo Electrónico",
+    "first_name_label": "Nombres",
+    "last_name_label": "Apellidos",
+    "birthdate_label": "Fecha de nacimiento",
+    "birthdate_placeholder": "Seleccione una fecha",
+    "phone_label": "Teléfono",
+    "education_level_label": "Nivel educativo",
+    "education_level_placeholder": "Seleccione un nivel educativo",
+    "user_status_label": "Estatus del usuario",
+    "user_status_placeholder": "Seleccione un estatus",
+    "description_label": "Descripción personal",
+    "description_placeholder": "Ingrese una descripción personal",
+    "button_save_changes": "Guardar cambios",
+    "button_close": "Cerrar"
+  },
+  "faq_section": {
+    "title": "Preguntas frecuentes sobre CrowdSolve",
+    "faqs": [
+      {
+        "question": "¿Qué es CrowdSolve?",
+        "answer": "CrowdSolve es una plataforma colaborativa donde los usuarios pueden trabajar juntos para resolver problemas complejos."
+      },
+      {
+        "question": "¿Cómo funciona CrowdSolve?",
+        "answer": "CrowdSolve permite a los usuarios publicar problemas y colaborar con otros para encontrar soluciones a través de la inteligencia colectiva."
+      },
+      {
+        "question": "¿Quién puede usar CrowdSolve?",
+        "answer": "Cualquier persona interesada en resolver problemas puede unirse a CrowdSolve. No se requieren habilidades específicas, solo un deseo de colaborar y contribuir."
+      },
+      {
+        "question": "¿Cuáles son los beneficios?",
+        "answer": "Los beneficios de usar CrowdSolve incluyen acceso a una comunidad diversa de solucionadores de problemas, la posibilidad de encontrar soluciones innovadoras y la oportunidad de aprender de otros."
+      }
+    ]
+  },
+
+  "Herosection": {
+    "title": "Desbloquea soluciones creativas con CrowdSolve",
+    "description": "CrowdSolve es una poderosa plataforma de crowdsourcing que conecta empresas con una comunidad global para resolver desafíos complejos. Publique su desafío, involucre a la multitud y colabore en soluciones innovadoras.",
+    "buttons": {
+      "post_challenge": "Publicar un desafío",
+      "join_community": "Unirse a la comunidad"
+    },
+    "card_texts": {
+      "innovation": {
+        "title": "Innovación sin límites",
+        "subtitle": "Desata el potencial creativo de la multitud"
+      },
+      "solutions": {
+        "title": "Soluciones para desafíos complejos"
+      }
+    },
+    "design": {
+      "innovative_design": {
+        "text": "Innovación sin límites",
+        "gradient": "bg-gradient-to-br from-[#9F5638] to-[#F98E2E]",
+        "icon": "InnovationIcon"
+      },
+      "creative_solution": {
+        "text": "Soluciones creativas",
+        "gradient": "bg-gradient-to-br from-[#1F3B73] to-[#00A9F1]",
+        "icon": "CreativeSolutionIcon"
+      }
+    }
+  },
+
+  "TrustedBysection": {
+    "title": "Confiado por estas empresas"
+  },
+
+  "WhyClientsLoveUs": {
+    "title": "¿Por qué nuestros usuarios nos aman?"
+  },
+
+  "footer": {
+    "logoAlt": "Logo de CrowdSolve",
+    "description": "Conectamos mentes brillantes con desafíos empresariales innovadores.",
+    "socialLinks": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn"
+    },
+    "sections": {
+      "product": {
+        "title": "Producto",
+        "links": {
+          "howItWorks": "Cómo funciona",
+          "challenges": "Desafíos",
+          "registeredCompanies": "Empresas Registradas"
+        }
+      },
+      "company": {
+        "title": "Empresa",
+        "links": {
+          "aboutUs": "Sobre Nosotros",
+          "team": "Equipo",
+          "contact": "Contacto"
+        }
+      }
+    },
+    "copyright": "&copy; {year} CrowdSolve. Todos los derechos reservados.",
+    "terms": "Términos y Condiciones",
+    "privacy": "Política de Privacidad"
+  },
+
+  "navbar": {
+    "logoAlt": "Logo de CrowdSolve",
+    "links": {
+      "aboutUs": "Sobre nosotros",
+      "challenges": "Desafíos",
+      "companies": "Empresas",
+      "contactUs": "Contáctanos"
+    },
+    "auth": {
+      "signIn": "Iniciar sesión",
+      "signUp": "Registrarse"
+    }
+  },
+
+  "ProfileDropdownMenuContent":{
+  "profile": "Perfil",
+  "solutions": "Soluciones",
+  "settings": "Configuración",
+  "notifications": "Notificaciones",
+  "admin": "Administración",
+  "appearance": "Apariencia",
+  "language": "Idioma",
+  "logout": "Cerrar sesión",
+  "theme": {
+    "system": "Sistema",
+    "light": "Claro",
+    "dark": "Oscuro"
+  },
+  "language_options": {
+    "es": "Español",
+    "en": "Inglés"
+  },
+  "user": {
+    "name": "Nombre de Usuario",
+    "profile": "Nombre del Perfil",
+    "participant_info": "Información del Participante",
+    "first_name": "Nombres",
+    "last_name": "Apellidos"
+  }
+},
+
+"Sidebar": {
+    "hamburgerIconAlt": "Ícono de menú",
+    "aboutUs": "Sobre nosotros",
+    "challenges": "Desafíos",
+    "companies": "Empresas",
+    "contact": "Contacto",
+    "userProfile": {
+      "defaultAvatar": "Avatar de usuario",
+      "userName": "Nombre de usuario",
+      "userProfileName": "Nombre de perfil"
+    },
+    "buttons": {
+      "signIn": "Iniciar sesión",
+      "signUp": "Registrarse"
+    },
+    "footer": {
+      "menuTrigger": "Desplegar menú",
+      "logOut": "Cerrar sesión"
+    }
+  },
+
+  "GoogleLoginbutton": {
+    "continueWithGoogle": "Continuar con Google"
+  },
+
+  "RegistroEmpresa": {
+    "companyName": "Nombre de la empresa",
+    "companyDescription": "Descripción",
+    "phone": "Teléfono",
+    "sector": "Sector",
+    "website": "Página web",
+    "companySize": "Tamaño de la empresa",
+    "address": "Dirección",
+    "register": "Registrarse"
+  },
+  "RegistroEmpresaEntry": {
+    "welcomeTitle": "Bienvenido a CrowdSolve",
+    "welcomeDescription": "Un par de cosas clave que debe saber antes de crear su cuenta de empresa:",
+    "moderationTitle": "Moderamos todos los desafíos antes de su publicación.",
+    "moderationDescription": "Nuestro equipo editorial revisa manualmente cada desafío y puede realizar cambios en su bandeja de desafíos antes de aprobar la publicación.",
+    "verificationTitle": "Tu empresa será verificada antes de la activación de la cuenta.",
+    "verificationDescription": "Después de crear la cuenta, verificaremos la autenticidad de la información proporcionada sobre tu empresa. Este proceso es necesario para garantizar la validez de los datos.",
+    "continueButton": "¡Perfecto!, continuar"
+  },
+
+  "RegistroParticipante": {
+  "nombres": "Nombres",
+  "apellidos": "Apellidos",
+  "fechaNacimiento": "Fecha de Nacimiento",
+  "telefono": "Teléfono",
+  "nivelEducativo": "Nivel Educativo",
+  "descripcionPersonal": "Descripción Personal",
+  "registrarse": "Registrarse",
+  "selectDate": "Seleccione una fecha",
+  "selectLevel": "Seleccione un nivel educativo",
+  "enterFirstName": "Ingrese sus nombres",
+  "enterLastName": "Ingrese sus apellidos",
+  "enterPhoneNumber": "Ingrese su teléfono",
+  "enterPersonalDescription": "Ingrese una descripción personal"
+  }
+
 }
   
