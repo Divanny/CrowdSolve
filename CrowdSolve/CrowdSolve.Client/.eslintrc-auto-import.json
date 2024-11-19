@@ -225,5 +225,7 @@
     "useConvertToHtml": true,
     "usePlateSerialization": true,
     "createEditorToConvertToHtml": true
+    "usePermisoAcceso": true,
+    "AdminCategoriesCategoryFormDialog": true
   }
 }
