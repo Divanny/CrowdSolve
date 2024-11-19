@@ -278,7 +278,528 @@
   "enterLastName": "Ingrese sus apellidos",
   "enterPhoneNumber": "Ingrese su teléfono",
   "enterPersonalDescription": "Ingrese una descripción personal"
+  },
+  "ContinueGoogle":{
+    "continueWithGoogle": "Continuar con Google"
+  },
+  
+  "LoadingPage":{
+    "loading": "Cargando..."
+  },
+  
+  "ProtectedRoute":{
+    "errorFetchingUserInfo": "Error al obtener la información del usuario"
+  },
+
+  "use-axios":{
+  "sessionExpired": "Sesión expirada. Por favor, inicia sesión nuevamente.",
+  "accessDenied": "Acceso denegado",
+  "signInRequired": "Debes iniciar sesión para acceder a esta página.",
+  "operationFailed": "Operación fallida"
+  },
+
+  "Categories":{
+    "table": {
+    "selectAll": "Seleccionar todo",
+    "selectRow": "Seleccionar fila",
+    "columns": {
+      "nombre": "Nombre Categoria",
+      "descripcion": "Descripción",
+      "icono": "Icono",
+      "cantidadDesafios": "Cantidad Desafíos",
+      "actions": "Acciones"
+    },
+    "actionsMenu": {
+      "edit": "Editar",
+      "viewDetails": "Ver detalles"
+    },
+    "searchPlaceholder": "Buscar por nombre de Categoria",
+    "noResults": "No se encontraron resultados.",
+    "rowsSelected": "{count} de {total} fila(s) seleccionada(s).",
+    "buttons": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "clearFilters": "Limpiar filtros",
+      "columns": "Columnas"
+    },
+    "pagination": {
+      "selected": "Seleccionado",
+      "rows": "filas"
+    }
+  },
+  "notifications": {
+    "sessionExpired": "Sesión expirada. Por favor, inicia sesión nuevamente.",
+    "accessDenied": {
+      "title": "Acceso denegado",
+      "description": "Debes iniciar sesión para acceder a esta página."
+    },
+    "operationFailed": {
+      "title": "Operación fallida",
+      "description": "Ha ocurrido un error. Por favor, intenta nuevamente."
+    }
+  }
+  },
+
+      "Participants":{
+        "select_all": "Seleccionar todo",
+        "select_row": "Seleccionar fila",
+        "nombre_usuario": "Nombre de Usuario",
+        "correo_electronico": "Correo Electrónico",
+      "nombre_completo": "Nombre Completo",
+      "telefono": "Teléfono",
+      "fecha_nacimiento": "Fecha de Nacimiento",
+      "nivel_educativo": "Nivel Educativo",
+      "soluciones_enviadas": "Soluciones Enviadas",
+      "fecha_registro": "Fecha de Registro",
+      "estatus_usuario": "Estatus",
+      "acciones": "Acciones",
+     "ver_detalles": "Ver detalles",
+       "editar": "Editar",
+      "ver_soluciones": "Ver soluciones",
+      "buscar": "Buscar por nombre de usuario, correo o nombre completo...",
+      "filtro_nivel_educativo": "Nivel Educativo",
+      "filtro_estatus_usuario": "Estatus Usuario",
+      "limpiar_filtro": "Limpiar filtro",
+      "columna": "Columnas",
+      "no_resultados": "No se encontraron resultados."
+      },
+
+      "RoleAndPermissions":{
+        "saveChanges": {
+        "success": {
+            "title": "Operación exitosa",
+            "description": "Los cambios se guardaron correctamente."
+        },
+        "failure": {
+            "title": "Operación fallida",
+            "description": "No se pudieron guardar los cambios."
+        },
+        "error": {
+            "title": "Error al guardar los cambios",
+            "description": "Ocurrió un error al guardar los cambios, por favor intenta de nuevo."
+        }
+        },
+        "title": "Roles y permisos",
+        "description": "Administra los permisos y accesos para cada rol del sistema",
+        "saveChanges2": "Guardar cambios",
+        "permission": "Permiso"
+      },
+
+      "CompleteSignUp":{
+        "companyForm": "Formulario de empresa",
+        "participantForm": "Formulario de participante",
+        "backToRoleSelection": "← Volver a seleccionar rol"
+      },
+
+      "ForgotPassword":{
+        "passwordRecovery": {
+    "forgotPasswordTitle": "¿Has olvidado tu contraseña?",
+    "forgotPasswordDescription": "No te preocupes, enviaremos a tu correo electrónico instrucciones para restablecerla.",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "Ingrese su correo electrónico",
+    "resetPasswordButton": "Restablecer contraseña",
+    "checkEmailTitle": "Revisa tu correo",
+    "checkEmailDescription": "Enviamos un enlace para restablecer la contraseña a",
+    "validateLinkButton": "Validar enlace de restablecimiento",
+    "resendCodeLink": "¿No recibiste el código? Reenviar código",
+    "setNewPasswordTitle": "Establecer nueva contraseña",
+    "setNewPasswordDescription": "Introduzca su nueva contraseña a continuación.",
+    "newPasswordLabel": "Nueva contraseña",
+    "confirmPasswordLabel": "Confirmar nueva contraseña",
+    "setNewPasswordButton": "Establecer nueva contraseña",
+    "backToSignInButton": "Volver a iniciar sesión"
+  },
+  "toastMessages": {
+    "operationFailed": "Operación fallida",
+    "pleaseCompleteFields": "Por favor, complete todos los campos",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "operationSuccessful": "Operación exitosa",
+    "resetPasswordLinkSent": "Se ha enviado un enlace de restablecimiento a su correo electrónico",
+    "verificationCodeCorrect": "Código de verificación correcto",
+    "passwordResetSuccessful": "Contraseña restablecida correctamente"
+  }
+      },
+
+      "RoleSelection":{
+        "selectRoleTitle": "Selecciona tu rol en CrowdSolve",
+      "selectRoleSubtitle": "¿Cómo quieres participar en nuestra plataforma?",
+      "companyRoleTitle": "Empresa",
+      "companyRoleDescription": "Conecta con talento y soluciones innovadoras.",
+      "participantRoleTitle": "Participante",
+      "participantRoleDescription": "Únete a proyectos y desarrolla tus habilidades.",
+      "nextButton": "Siguiente",
+      "errorMessage": "Operación fallida",
+       "errorMessageDescription": "Por favor selecciona un rol"
+      },
+
+      "SignIn":{
+        "signInTitle": "Iniciar sesión",
+  "signInSubtitle": "Empieza usando CrowdSolve para ti o tu empresa",
+  "usernamePlaceholder": "Ingrese su de usuario o su correo electrónico",
+  "passwordPlaceholder": "Ingrese su contraseña",
+  "forgotPassword": "¿Has olvidado tu contraseña?",
+  "loadingText": "Por favor, espere",
+  "signInButton": "Iniciar sesión",
+  "signUpLink": "Registrarse",
+  "errorMessage": "Operación fallida",
+  "errorMessageDescription": "Por favor, complete todos los campos",
+  "successMessage": "Operación exitosa",
+  "successMessageDescription": "Inicio de sesión exitoso",
+  "creativeMessage": "Despierta tu creatividad",
+  "showTalentMessage": "Demuestra tu talento",
+  "solveProblemsMessage": "Resuelve problemas"
+      },
+
+      "SignUp":{
+        "signUpTitle": "Crear cuenta",
+  "signUpSubtitle": "Empieza usando CrowdSolve para ti o tu empresa",
+  "usernamePlaceholder": "Ingrese su usuario",
+  "emailPlaceholder": "Ingrese su correo electrónico",
+  "passwordPlaceholder": "Ingrese su contraseña",
+  "confirmPasswordPlaceholder": "Confirme su contraseña",
+  "loadingText": "Por favor, espere",
+  "signUpButton": "Crear cuenta",
+  "signInLink": "Iniciar Sesión",
+  "errorMessage": "Operación fallida",
+  "errorMessageDescription": "Por favor, complete todos los campos",
+  "passwordMismatch": "Las contraseñas no coinciden",
+  "successMessage": "Operación exitosa",
+  "successMessageDescription": "Cuenta creada exitosamente",
+  "termsOfServiceLink": "Términos",
+  "usagePolicyLink": "Política de uso",
+  "privacyPolicyLink": "Política de privacidad",
+  "creativeMessage": "Despierta tu creatividad",
+  "showTalentMessage": "Demuestra tu talento",
+  "solveProblemsMessage": "Resuelve problemas"
+      },
+
+      "AccessDenied":{
+        "accessDeniedTitle": "Acceso Denegado",
+        "accessDeniedMessage": "Lo sentimos, no tienes permiso para acceder a esta página. Si crees que esto es un error, por favor contacta al administrador.",
+        "goBackButton": "Volver",
+        "goHomeButton": "Ir al inicio"
+      },
+
+
+    "ChallengeCatalog":{
+      "pageTitle": "Explora en nuestra sección de Desafíos",
+  "searchPlaceholder": "Buscar",
+  "filters": {
+    "all": "Todos",
+    "design": "Diseño",
+    "software": "Software",
+    "data": "Datos",
+    "ai": "IA",
+    "cybersecurity": "CiberSeguridad"
+  },
+  "categories": {
+    "label": "Categoría",
+    "company": "Empresa",
+    "endDate": "Fecha de finalización"
+  },
+  "noResults": {
+    "title": "No encontrado",
+    "imageAlt": "No encontrado"
+  },
+  "pagination": {
+    "page": "Página",
+    "of": "de"
+  },
+  "buttons": {
+    "viewMore": "Ver más",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  }
+    },
+
+    "CompanyListing":{
+      "general": {
+        "searchPlaceholder": "Buscar empresas...",
+        "sectorPlaceholder": "Sector",
+        "companySizePlaceholder": "Tamaño de empresa",
+        "clearFilters": "Limpiar filtros",
+        "notFoundMessage": "No se encontraron empresas que coincidan con los filtros seleccionados.",
+        "website": "Sitio web",
+        "moreOptions": "Más opciones",
+        "actions": "Acciones",
+        "contact": "Contactar",
+        "viewChallenges": "Ver desafíos"
+      },
+      "header": {
+        "badge": {
+          "message": "Descubre las últimas empresas que se han unido a CrowdSolve"
+        },
+        "title": "Potencia tu innovación con CrowdSolve.",
+        "description": "Conecta con empresas líderes, resuelve desafíos emocionantes y forma parte de la revolución del crowdsourcing."
+      },
+      "companies": {
+        "title": "Empresas asociadas",
+        "challenges": "desafíos",
+        "solutions": "soluciones",
+        "actions": {
+          "contact": "Contactar",
+          "viewChallenges": "Ver desafíos"
+        }
+      }
+    },
+
+  
+    "ContactUs":{
+      "contact": {
+    "title": "Puedes encontrarnos en nuestras redes y contactarnos",
+    "description": "Si tienes preguntas, comentarios o necesitas más información sobre nuestros desafíos, no dudes en ponerte en contacto con nosotros. Tu opinión es importante y estamos comprometidos en brindarte el apoyo que necesites. Completa el formulario a continuación o utiliza cualquiera de nuestros canales de contacto para comunicarse con nosotros. ¡Esperamos saber de ti pronto!",
+    "socials": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "email": "Correo",
+      "location": "Ubicación",
+      "phone": "Teléfono"
+    },
+    "form": {
+      "title": "¡Contáctanos!",
+      "fields": {
+        "subject": "Asunto del mensaje",
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "email": "Correo electrónico",
+        "message": "¿En qué te podemos ayudar?"
+      },
+      "captchaWarning": "Por favor, complete el captcha",
+      "submit": {
+        "default": "Enviar Formulario",
+        "loading": "Por favor, espere"
+      },
+      "toasts": {
+        "incompleteFields": "Por favor, complete todos los campos",
+        "success": "Mensaje enviado con éxito",
+        "error": "Error al enviar el mensaje"
+      }
+    }
+  }
+    },
+
+    "errorPage": {
+    "title": "Error",
+    "subtitle": "Algo salió mal",
+    "description": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde o contacte al soporte si el problema persiste.",
+    "buttons": {
+      "goBack": "Regresar",
+      "goHome": "Ir al Inicio"
+    }
+  },
+
+  "notFoundPage": {
+    "title": "404",
+    "subtitle": "Página no encontrada",
+    "description": "Es posible que la página que está buscando se haya eliminado, se haya cambiado de nombre o no esté disponible temporalmente.",
+    "buttons": {
+      "goBack": "Volver",
+      "goHome": "Ir al inicio"
+    }
+  },
+
+  "privacyPolicy": {
+    "title": "Política de Privacidad",
+    "effectiveDate": "Efectiva desde el 8 de agosto, 2024",
+    "intro": "En CrowdSolve, valoramos y respetamos tu privacidad. Esta Política de Privacidad explica cómo recopilamos, utilizamos y protegemos tu información personal cuando utilizas nuestra plataforma y servicios.",
+    "sections": {
+      "informationCollected": {
+        "title": "1. Información que Recopilamos",
+        "description": "Recopilamos la siguiente información:",
+        "list": [
+          "Información de registro: nombre, dirección de correo electrónico, contraseña.",
+          "Información de perfil: experiencia profesional, habilidades, foto de perfil (opcional).",
+          "Contenido generado por el usuario: propuestas, comentarios, votaciones.",
+          "Información de uso: interacciones con la plataforma, participación en desafíos.",
+          "Información de pago: para procesar recompensas (solo para participantes ganadores)."
+        ]
+      },
+      "informationUsage": {
+        "title": "2. Cómo Utilizamos tu Información",
+        "description": "Utilizamos tu información para:",
+        "list": [
+          "Proporcionar y mejorar nuestros servicios.",
+          "Facilitar la participación en desafíos y la colaboración entre usuarios.",
+          "Procesar pagos y recompensas.",
+          "Enviar notificaciones relacionadas con el servicio y actualizaciones.",
+          "Prevenir fraudes y garantizar la seguridad de la plataforma."
+        ]
+      },
+      "informationSharing": {
+        "title": "3. Compartir Información",
+        "description": "Compartimos tu información en las siguientes circunstancias:",
+        "list": [
+          "Con empresas que publican desafíos, limitado a la información necesaria para evaluar propuestas.",
+          "Con proveedores de servicios que nos ayudan a operar la plataforma.",
+          "Cuando sea requerido por ley o para proteger nuestros derechos legales."
+        ]
+      },
+      "dataSecurity": {
+        "title": "4. Seguridad de Datos",
+        "description": "Implementamos medidas de seguridad técnicas y organizativas para proteger tu información personal contra acceso no autorizado, pérdida o alteración. Sin embargo, ninguna transmisión de datos por Internet es 100% segura."
+      },
+      "userRights": {
+        "title": "5. Tus Derechos",
+        "description": "Tienes derecho a:",
+        "list": [
+          "Acceder a tu información personal.",
+          "Corregir datos inexactos.",
+          "Solicitar la eliminación de tus datos.",
+          "Oponerte al procesamiento de tus datos.",
+          "Solicitar la portabilidad de tus datos."
+        ]
+      },
+      "cookies": {
+        "title": "6. Cookies y Tecnologías Similares",
+        "description": "Utilizamos cookies y tecnologías similares para mejorar la experiencia del usuario, analizar el tráfico y personalizar el contenido. Puedes controlar el uso de cookies a través de la configuración de tu navegador."
+      },
+      "policyChanges": {
+        "title": "7. Cambios en la Política de Privacidad",
+        "description": "Podemos actualizar esta Política de Privacidad ocasionalmente. Te notificaremos sobre cambios significativos mediante un aviso en nuestra plataforma o por correo electrónico."
+      },
+      "contact": {
+        "description": "Si tienes preguntas sobre esta Política de Privacidad, por favor contáctanos en",
+        "email": "soporte@crowdsolve.site"
+      }
+    },
+    "buttons": {
+      "termsOfService": "Ver Términos de Servicio",
+      "usagePolicy": "Ver Política de Uso Aceptable"
+    }
+  },
+
+  "Termsofservice":{
+    "title": "Términos de Servicio",
+  "effectiveDate": "8 de agosto, 2024",
+  "intro": "¡Bienvenido a CrowdSolve! Antes de acceder a nuestros servicios, por favor lee estos Términos de Servicio.",
+  "overview": "Estos Términos de Servicio ('Términos') rigen tu uso de CrowdSolve, incluyendo nuestra plataforma web, herramientas de colaboración, y todos los servicios asociados (en conjunto, nuestros 'Servicios'). Estos Términos son un contrato entre tú y CrowdSolve. Al acceder a nuestros Servicios, aceptas estos Términos.",
+  "privacyPolicyLink": {
+    "text": "Política de Privacidad",
+    "url": "/privacy-policy"
+  },
+  "sections": [
+    {
+      "title": "1. Uso de nuestros Servicios",
+      "content": "Nuestros Servicios están diseñados para conectar empresas con una comunidad global de solucionadores. Debes seguir todas las políticas puestas a tu disposición dentro de los Servicios. Solo puedes usar nuestros Servicios según lo permitido por la ley. Podemos suspender o dejar de proporcionarte nuestros Servicios si no cumples con nuestros términos o políticas o si estamos investigando una sospecha de mala conducta."
+    },
+    {
+      "title": "2. Tu Cuenta",
+      "content": "Necesitas una cuenta para utilizar CrowdSolve. Eres responsable de mantener la seguridad de tu cuenta y de cualquier actividad que ocurra a través de ella. Mantén tu contraseña segura y contáctanos inmediatamente si detectas cualquier uso no autorizado de tu cuenta. Tu cuenta puede ser para una empresa que publica desafíos o para un participante que propone soluciones."
+    },
+    {
+      "title": "3. Publicación de Desafíos y Participación",
+      "content": "Las empresas pueden publicar desafíos en nuestra plataforma. Al hacerlo, aceptas proporcionar información precisa sobre los requisitos, plazos y recompensas. Los participantes pueden enviar propuestas para estos desafíos. Al participar, garantizas que tu propuesta es original y no infringe los derechos de terceros."
+    },
+    {
+      "title": "4. Propiedad Intelectual",
+      "content": "Los derechos de propiedad intelectual de las propuestas ganadoras se transferirán a la empresa que publicó el desafío, según los términos específicos de cada reto. CrowdSolve no reclama la propiedad de las propuestas no ganadoras. Respetamos los derechos de propiedad intelectual y esperamos que todos los usuarios hagan lo mismo."
+    },
+    {
+      "title": "5. Pagos y Recompensas",
+      "content": "Las empresas son responsables de proporcionar las recompensas prometidas a los ganadores de los desafíos. CrowdSolve facilita el proceso de pago pero no es responsable de los incumplimientos por parte de las empresas. Los participantes son responsables de cualquier impuesto aplicable a las recompensas recibidas."
+    },
+    {
+      "title": "6. Privacidad y Protección de Datos",
+      "content": "Nuestra política de privacidad explica cómo tratamos tus datos personales y protegemos tu privacidad cuando utilizas nuestros Servicios. Al usar CrowdSolve, aceptas que podemos usar dichos datos de acuerdo con nuestra política de privacidad. Nos comprometemos a proteger la confidencialidad de la información sensible compartida en los desafíos."
+    },
+    {
+      "title": "7. Modificaciones a los Términos",
+      "content": "Podemos modificar estos Términos de vez en cuando. Te notificaremos de cualquier cambio significativo en los Términos. Tu uso continuado de nuestros Servicios después de dichos cambios constituye tu aceptación de los nuevos Términos."
+    }
+  ],
+  "contact": {
+    "text": "Si tienes alguna pregunta sobre estos Términos, contáctanos en",
+    "email": "soporte@crowdsolve.site",
+    "emailLink": "mailto:soporte@crowdsolve.site"
+  },
+  "buttons": [
+    {
+      "text": "Ver Política de Uso Aceptable",
+      "link": "/usage-policy"
+    },
+    {
+      "text": "Ver Política de Privacidad",
+      "link": "/privacy-policy"
+    }
+  ]
+  },
+
+  "UsagePolicy":{
+    "title": "Política de Uso Aceptable",
+  "effectiveDate": "Efectiva desde el 8 de agosto, 2024",
+  "generalConduct": {
+    "header": "1. Conducta General",
+    "content": [
+      "Cumplir con todas las leyes aplicables.",
+      "Respetar los derechos de propiedad intelectual.",
+      "Ser honestos y transparentes en todas las interacciones.",
+      "Mantener la confidencialidad de la información sensible compartida en los desafíos.",
+      "Tratar a otros usuarios con respeto y profesionalismo."
+    ]
+  },
+  "prohibitedActivities": {
+    "header": "2. Actividades Prohibidas",
+    "content": [
+      "Publicar contenido ilegal, difamatorio, acosador, obsceno o fraudulento.",
+      "Infringir los derechos de propiedad intelectual de terceros.",
+      "Utilizar la plataforma para distribuir spam o malware.",
+      "Intentar acceder sin autorización a cuentas o sistemas de otros usuarios.",
+      "Manipular los sistemas de votación o evaluación de la plataforma.",
+      "Crear múltiples cuentas para eludir las reglas o ganar ventaja injusta.",
+      "Revelar información confidencial de otros usuarios o empresas sin autorización."
+    ]
+  },
+  "challengeContent": {
+    "header": "3. Contenido de los Desafíos",
+    "content": [
+      "Proporcionar información precisa y clara sobre los requisitos del desafío.",
+      "Establecer términos justos para la transferencia de propiedad intelectual.",
+      "Cumplir con las promesas de recompensas y plazos establecidos.",
+      "No solicitar soluciones para actividades ilegales o no éticas."
+    ]
+  },
+  "proposalsAndSolutions": {
+    "header": "4. Propuestas y Soluciones",
+    "content": [
+      "Presentar solo trabajo original o tener los derechos necesarios para el contenido enviado.",
+      "Respetar la confidencialidad de la información proporcionada en los desafíos.",
+      "No copiar o plagiar el trabajo de otros participantes.",
+      "Proporcionar información precisa sobre sus habilidades y experiencia."
+    ]
+  },
+  "platformUsage": {
+    "header": "5. Uso de la Plataforma",
+    "content": [
+      "Intentar interferir con el funcionamiento adecuado de la plataforma.",
+      "Utilizar bots, scrapers u otros medios automatizados para acceder a CrowdSolve.",
+      "Recopilar información de otros usuarios sin su consentimiento.",
+      "Vender o transferir su cuenta a terceros."
+    ]
+  },
+  "nonComplianceConsequences": {
+    "header": "6. Consecuencias del Incumplimiento",
+    "content": [
+      "Eliminación del contenido infractor.",
+      "Suspensión o terminación de la cuenta del usuario.",
+      "Descalificación de desafíos actuales o futuros.",
+      "Acciones legales en casos graves de violación."
+    ]
+  },
+  "reportingViolations": {
+    "header": "7. Reportar Violaciones",
+    "content": "Si observas contenido o comportamiento que viola esta PUA, por favor repótalo inmediatamente a nuestro equipo de moderación. Valoramos tu ayuda para mantener CrowdSolve como un espacio seguro y productivo para todos."
+  },
+  "contact": {
+    "header": "Si tienes preguntas sobre esta Política de Uso Aceptable, por favor contáctanos en",
+    "email": "soporte@crowdsolve.site"
+  },
+  "buttons": {
+    "termsOfService": "Ver Términos de Servicio",
+    "privacyPolicy": "Ver Política de Privacidad"
+  }
   }
 
+  
+  
 }
   
