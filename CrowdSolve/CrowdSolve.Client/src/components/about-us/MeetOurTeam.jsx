@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useTranslation } from 'react-i18next';
 
 const people = [
   {
@@ -12,7 +13,6 @@ const people = [
     name: 'Divanny Pérez',
     role: 'Developer Fullstack',
     avatar: 'https://www.shadcnblocks.com/images/block/avatar-5.webp',
-
   },
   {
     id: 'person-3',
@@ -29,11 +29,13 @@ const people = [
 ];
 
 const MeetOurTeam = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="py-12">
       <div className="container flex flex-col items-center text-center">
         <h2 className="my-6 text-pretty text-2xl font-bold lg:text-4xl">
-          Conoce a nuestro equipo
+          {t('MeetOurteam.title')}
         </h2>
       </div>
       <div className="container mt-16 grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-4">
