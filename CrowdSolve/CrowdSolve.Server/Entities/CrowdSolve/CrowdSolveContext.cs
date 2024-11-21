@@ -365,7 +365,15 @@ public partial class CrowdSolveContext : DbContext
             entity.Property(e => e.ArchivoRuta)
                 .IsRequired()
                 .IsUnicode(false);
+            entity.Property(e => e.Descripcion)
+                .IsRequired()
+                .HasMaxLength(500)
+                .IsUnicode(false);
             entity.Property(e => e.FechaRegistro).HasColumnType("datetime");
+            entity.Property(e => e.Titulo)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Soportes>(entity =>

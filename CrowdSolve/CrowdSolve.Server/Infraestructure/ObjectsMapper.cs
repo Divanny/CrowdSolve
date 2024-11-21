@@ -12,7 +12,7 @@
         /// <summary>
         /// Constructor, requires a mapping callback
         /// </summary>
-        /// <param name="Map">Mapping callback</param>
+        /// <param name="MapCB">Mapping callback</param>
         public ObjectsMapper(MapCallback MapCB)
         {
             this.MapCB = MapCB;

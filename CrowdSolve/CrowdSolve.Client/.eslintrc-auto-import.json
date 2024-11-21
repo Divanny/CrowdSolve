@@ -224,6 +224,9 @@
     "useConvertToHt": true,
     "useConvertToHtml": true,
     "usePlateSerialization": true,
-    "createEditorToConvertToHtml": true
+    "createEditorToConvertToHtml": true,
+    "AdminAdministratorsAdministratorFormDialog": true,
+    "AdminCompaniesCompanyFormDialog": true,
+    "useMediaQuery": true
   }
 }

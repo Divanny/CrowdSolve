@@ -1,0 +1,185 @@
+﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using CrowdSolve.Server.Enums;
+using CrowdSolve.Server.Infraestructure;
+using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Repositories.Autenticación;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CrowdSolve.Server.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class SolucionesController : Controller
+    {
+        private readonly Logger _logger;
+        private readonly int _idUsuarioOnline;
+        private readonly CrowdSolveContext _crowdSolveContext;
+        private readonly SolucionesRepo _solucionesRepo;
+        private readonly DesafiosRepo _desafiosRepo;
+        private readonly UsuariosRepo _usuariosRepo;
+        private readonly Mailing _mailingService;
+
+        /// <summary>
+        /// Constructor de la clase SoportesController.
+        /// </summary>
+        /// <param name="userAccessor"></param>
+        /// <param name="crowdSolveContext"></param>
+        /// <param name="logger"></param>
+        /// <param name="mailing"></param>
+        public SolucionesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing)
+        {
+            _logger = logger;
+            _idUsuarioOnline = userAccessor.idUsuario;
+            _crowdSolveContext = crowdSolveContext;
+            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
+            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
+            _usuariosRepo = new UsuariosRepo(crowdSolveContext);
+            _mailingService = mailing;
+        }
+
+        /// <summary>
+        /// Obtiene todas las soluciones.
+        /// </summary>
+        /// <returns>Lista de soluciones.</returns>
+        [HttpGet(Name = "GetSoluciones")]
+        [Authorize]
+        public List<SolucionesModel> Get()
+        {
+            List<SolucionesModel> soluciones = _solucionesRepo.Get().ToList();
+            return soluciones;
+        }
+
+        /// <summary>
+        /// Obtiene todas las soluciones de un desafío.
+        /// </summary>
+        /// <param name="idDesafio">ID del desafío.</param>
+        /// <returns>Lista de soluciones del desafio.</returns>
+        [HttpGet("GetSolucionesDesafio/{idDesafio}", Name = "GetSolucionesDesafio")]
+        public List<SolucionesModel> GetSolucionesDesafio(int idDesafio)
+        {
+            List<SolucionesModel> soluciones = _solucionesRepo.Get(x => x.idDesafio == idDesafio).ToList();
+            return soluciones;
+        }
+
+        /// <summary>
+        /// Obtiene una solución por su ID.
+        /// </summary>
+        /// <param name="idSolucion">ID de la solución.</param>
+        /// <returns>Solución encontrada.</returns>
+        [HttpGet("{idSolucion}", Name = "GetDesafio")]
+        public IActionResult Get(int idSolucion)
+        {
+            SolucionesModel? desafio = _solucionesRepo.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+
+            if (desafio == null)
+            {
+                return NotFound("Desafío no encontrado");
+            }
+
+            return Ok(desafio);
+        }
+
+        /// <summary>
+        /// Guarda una nueva solución.
+        /// </summary>
+        /// <param name="solucionesModel">Datos de la solución a crear.</param>
+        /// <returns>Resultado de la operación.</returns>
+        [HttpPost(Name = "SaveSolucion")]
+        [Authorize]
+        public OperationResult Post([FromForm]SolucionesModel solucionesModel)
+        {
+            try
+            {
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
+                if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+                if (!_desafiosRepo.GetDesafiosEnProgreso().Any(x => x.idDesafio == solucionesModel.idDesafio))
+                {
+                    return new OperationResult(false, "No se puede enviar una solución a un desafío que no está en progreso");
+                }
+
+                if (solucionesModel.Archivos == null || solucionesModel.Archivos.Length == 0) return new OperationResult(false, "Debe proporcionar al menos un archivo");
+
+                var created = _solucionesRepo.Add(solucionesModel);
+                _logger.LogHttpRequest(solucionesModel);
+                return new OperationResult(true, "Se ha enviado la solución exitosamente", created);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Actualiza una solución existente.
+        /// </summary>
+        /// <param name="idSolucion">ID de la solución a actualizar.</param>
+        /// <param name="solucionesModel">Datos de la solución a actualizar.</param>
+        /// <returns>Resultado de la operación.</returns>
+        [HttpPut("{idSolucion}", Name = "UpdateDesafio")]
+        [Authorize]
+        public OperationResult Put(int idSolucion, SolucionesModel solucionesModel)
+        {
+            try
+            {
+                var solucion = _solucionesRepo.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+                if (solucion == null) return new OperationResult(false, "Esta solución no se ha encontrado");
+
+                if (solucion.idUsuario != _idUsuarioOnline) return new OperationResult(false, "No tiene permiso para editar esta solución");
+
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
+                if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+                if (!_desafiosRepo.GetDesafiosEnProgreso().Any(x => x.idDesafio == solucionesModel.idDesafio))
+                {
+                    return new OperationResult(false, "No se puede editar una solución de un desafío que no está en progreso");
+                }
+
+                _solucionesRepo.Edit(solucionesModel);
+                _logger.LogHttpRequest(solucionesModel);
+                return new OperationResult(true, "Se ha editado la información de la solución exitosamente", solucionesModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Convertir solución en pública.
+        /// </summary>
+        [HttpPut("Publicar/{idSolucion}", Name = "PublicarSolucion")]
+        [Authorize]
+        public OperationResult Publicar(int idSolucion)
+        {
+            try
+            {
+                var solucion = _solucionesRepo.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+                if (solucion == null) return new OperationResult(false, "Esta solución no se ha encontrado");
+
+                if (solucion.idUsuario != _idUsuarioOnline) return new OperationResult(false, "No tiene permiso para editar esta solución");
+
+                solucion.Publica = true;
+                _solucionesRepo.Edit(solucion);
+                _logger.LogHttpRequest(solucion);
+                return new OperationResult(true, "Se ha publicado la solución exitosamente", solucion);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        [HttpGet("GetMisSoluciones", Name = "GetMisSoluciones")]
+        [Authorize]
+        public List<SolucionesModel> GetMisSoluciones()
+        {
+            List<SolucionesModel> soluciones = _solucionesRepo.Get(x => x.idUsuario == _idUsuarioOnline).ToList();
+            return soluciones;
+        }
+    }
+}

@@ -32,6 +32,8 @@ namespace CrowdSolve.Server.Infraestructure
         /// </summary>
         /// <param name="CrowdSolveContext">Contexto de la base de datos de CrowdSolve.</param>
         /// <param name="configuration">Configuración de la aplicación.</param>
+        /// <param name="passwordHasher"></param>
+        /// <param name="mailingService"></param>
         public Authentication(CrowdSolveContext CrowdSolveContext, IConfiguration configuration, IPasswordHasher passwordHasher, Mailing mailingService)
         {
             _CrowdSolveContext = CrowdSolveContext;

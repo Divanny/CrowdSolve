@@ -79,7 +79,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 var result = base.Add(model);
                 return result;
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 throw;
             }

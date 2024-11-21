@@ -10,7 +10,23 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Calendar, Users, Clock, ArrowLeft } from 'lucide-react'
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-
+import ChallengeDetail from '@/components/challenge/ChallengeDetail';
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer"
+import { useMediaQuery } from '@/hooks/use-media-query'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import ImageUpload from '@/components/ui/image-upload'
 import createEditorToConvertToHtml from '@/hooks/createEditorToConvertToHtml'
 
 const editor = createEditorToConvertToHtml();
@@ -23,6 +39,10 @@ const Challenge = () => {
     const [desafio, setDesafio] = useState(null)
     const [htmlContent, setHtmlContent] = useState('')
     const [relationalObjects, setRelationalObjects] = useState({})
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const [solutionTitle, setSolutionTitle] = useState('')
+    const [solutionDescription, setSolutionDescription] = useState('')
+    const isDesktop = useMediaQuery("(min-width: 768px)")
 
     useEffect(() => {
         const getChallenge = async () => {
@@ -87,6 +107,35 @@ const Challenge = () => {
         return diffDays > 0 ? diffDays : 0;
     }
 
+    const handleSubmitSolution = (e) => {
+        e.preventDefault()
+        // Handle the solution submission logic here
+        console.log('Title:', solutionTitle)
+        console.log('Description:', solutionDescription)
+        // Close the drawer/dialog after submission
+        setIsDrawerOpen(false)
+    }
+
+    const SolutionForm = ({ className }) => (
+        <form className={`grid items-start gap-4 ${className}`} onSubmit={handleSubmitSolution}>
+            <div className="grid gap-2">
+                <Label htmlFor="solutionTitle">Título de la solución</Label>
+                <Input id="solutionTitle" value={solutionTitle} onChange={(e) => setSolutionTitle(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+                <Label htmlFor="solutionDescription">Descripción</Label>
+                <Textarea id="solutionDescription" value={solutionDescription} onChange={(e) => setSolutionDescription(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+                <Label>Subir Archivo</Label>
+                <ImageUpload />
+            </div>
+            <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                Enviar Solución
+            </Button>
+        </form>
+    )
+
     if (loading) {
         return <LoadingSkeleton />
     }
@@ -108,30 +157,7 @@ const Challenge = () => {
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className='flex-1 order-2 lg:order-1'>
                         <Card className="bg-card text-card-foreground p-6 mb-6">
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
-                                <img
-                                    src={desafio.logoEmpresa}
-                                    alt={`Logo de ${desafio.empresa}`}
-                                    className="w-16 h-16 rounded-full object-cover"
-                                />
-                                <div>
-                                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground mb-1">
-                                        {desafio.titulo}
-                                    </h1>
-                                    <p className="text-base sm:text-lg text-primary">{desafio.empresa}</p>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-wrap gap-2 mb-4">
-                                {desafio.categorias.map((categoria) => (
-                                    <Badge key={categoria.idDesafioCategoria} variant="outline" className="bg-secondary/10">
-                                        {getCategoryName(categoria.idCategoria)}
-                                    </Badge>
-                                ))}
-                            </div>
-                            <div className="prose prose-invert max-w-none">
-                                <div dangerouslySetInnerHTML={{ __html: htmlContent }} className='text-foreground' />
-                            </div>
+                            <ChallengeDetail desafio={desafio} htmlContent={htmlContent} getCategoryName={getCategoryName} />
                         </Card>
                     </div>
                     <div className='w-full lg:w-1/3 order-1 lg:order-2'>
@@ -163,9 +189,43 @@ const Challenge = () => {
                                     </div>
                                 </div>
                             </div>
-                            <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
-                                Participar en el Desafío
-                            </Button>
+
+                            {isDesktop ? (
+                                <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                                    <DialogTrigger asChild>
+                                        <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
+                                            Participar en el Desafío
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px]">
+                                        <DialogHeader>
+                                            <DialogTitle>Participar en el Desafío</DialogTitle>
+                                            <DialogDescription>Complete el formulario para participar en el desafío.</DialogDescription>
+                                        </DialogHeader>
+                                        <SolutionForm />
+                                    </DialogContent>
+                                </Dialog>
+                            ) : (
+                                <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                                    <DrawerTrigger asChild>
+                                        <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
+                                            Participar en el Desafío
+                                        </Button>
+                                    </DrawerTrigger>
+                                    <DrawerContent>
+                                        <DrawerHeader className="text-left">
+                                            <DrawerTitle>Participar en el Desafío</DrawerTitle>
+                                            <DrawerDescription>Complete el formulario para participar en el desafío.</DrawerDescription>
+                                        </DrawerHeader>
+                                        <SolutionForm className="px-4" />
+                                        <DrawerFooter className="pt-2">
+                                            <DrawerClose asChild>
+                                                <Button variant="outline">Cancelar</Button>
+                                            </DrawerClose>
+                                        </DrawerFooter>
+                                    </DrawerContent>
+                                </Drawer>
+                            )}
                         </Card>
                     </div>
                 </div>
