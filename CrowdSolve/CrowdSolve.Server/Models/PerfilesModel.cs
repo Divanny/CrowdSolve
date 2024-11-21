@@ -17,6 +17,7 @@ namespace CrowdSolve.Server.Models
         [StringLength(250, ErrorMessage = "La descripción del perfil no puede exceder los 250 carácteres")]
         [Unicode(false)]
         public string? Descripcion { get; set; }
+        public bool PorDefecto { get; set; }
         public IEnumerable<Vistas>? Vistas { get; set; }
         public IEnumerable<Usuarios>? Usuarios { get; set; }
     }

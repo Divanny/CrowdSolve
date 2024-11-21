@@ -210,6 +210,20 @@
     "useMounted": true,
     "UiPlate-editor": true,
     "usePermisoAcceso": true,
-    "AdminCategoriesCategoryFormDialog": true
+    "AdminCategoriesCategoryFormDialog": true,
+    "convertToHTML": true,
+    "editor": true,
+    "u": true,
+    "use": true,
+    "useC": true,
+    "useConver": true,
+    "useConvertT": true,
+    "useConvertTo": true,
+    "useConvertToHmt": true,
+    "useConvertToHm": true,
+    "useConvertToHt": true,
+    "useConvertToHtml": true,
+    "usePlateSerialization": true,
+    "createEditorToConvertToHtml": true
   }
 }

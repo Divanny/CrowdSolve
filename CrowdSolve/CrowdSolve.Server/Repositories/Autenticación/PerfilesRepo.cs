@@ -14,14 +14,16 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             {
                 idPerfil = p.idPerfil,
                 Nombre = p.Nombre,
-                Descripcion = p.Descripcion
+                Descripcion = p.Descripcion,
+                PorDefecto = p.PorDefecto
             }),
                     (DB, filter) => (from p in DB.Set<Perfiles>().Where(filter)
                                      select new PerfilesModel()
                                      {
                                          idPerfil = p.idPerfil,
                                          Nombre = p.Nombre,
-                                         Descripcion = p.Descripcion
+                                         Descripcion = p.Descripcion,
+                                         PorDefecto = p.PorDefecto
                                      })
         )
         {

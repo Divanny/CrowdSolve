@@ -1,155 +1,575 @@
-'use client'
-import { useState, useRef, useEffect } from 'react'
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom';
+"use client"
+
+import * as React from "react"
+import { Search, Calendar, Users, BookmarkPlus, Filter, Lightbulb, Code, Cpu } from 'lucide-react'
+import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Skeleton } from "@/components/ui/skeleton"
+import useAxios from '@/hooks/use-axios'
+import { useNavigate, useParams } from "react-router-dom"
 
-// Mock data for challenges s
-const challengesData = [
-  { id: 1, name: 'Desafío de Programación', category: 'Software', image: 'https://jessup.edu/wp-content/uploads/2023/12/Programming-in-Computer-Science.jpg', company: 'Tech Corp', endDate: '2024-12-31' },
-  { id: 2, name: 'Reto de Diseño UI', category: 'Diseño', image: 'https://www.elegantthemes.com/blog/wp-content/uploads/2018/10/000-Web-UI-Design.png', company: 'Design Studio', endDate: '2024-11-15' },
-  { id: 3, name: 'Desafío de Base de Datos', category: 'Datos', image: 'https://media.licdn.com/dms/image/D4D12AQEQgBaMF_Q1kA/article-cover_image-shrink_600_2000/0/1685983138455?e=2147483647&v=beta&t=NPavE5eVdVnVbwlggdNdk6DUDILSOVV-GVlqF2Lmpac', company: 'Data Experts', endDate: '2024-12-05' },
-  { id: 4, name: 'Reto de Seguridad', category: 'CiberSeguridad', image: 'https://www.starkcloud.com/hubfs/Imported_Blog_Media/Que-es-Ciberseguridad.webp', company: 'CyberSafe', endDate: '2025-01-10' },
-  { id: 5, name: 'Desafío de Optimización', category: 'Software', image: 'https://jessup.edu/wp-content/uploads/2023/12/Programming-in-Computer-Science.jpg', company: 'Optimize Solutions', endDate: '2024-11-30' },
-  { id: 6, name: 'Reto de Frontend', category: 'Software', image: 'https://jessup.edu/wp-content/uploads/2023/12/Programming-in-Computer-Science.jpg', company: 'Web Wonders', endDate: '2024-12-20' },
-  { id: 7, name: 'Desafío de Backend', category: 'Software', image: 'https://jessup.edu/wp-content/uploads/2023/12/Programming-in-Computer-Science.jpg', company: 'Backbone Tech', endDate: '2024-12-25' },
-  { id: 8, name: 'Reto de Machine Learning', category: 'IA', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCnWhQaVLqlcDE4LYfmcTKsDPpWUG4xkTzuA&s', company: 'AI Labs', endDate: '2025-01-05' },
-  { id: 9, name: 'Desafío de DevOps', category: 'Software', image: 'https://jessup.edu/wp-content/uploads/2023/12/Programming-in-Computer-Science.jpg', company: 'DevOps World', endDate: '2024-11-22' },
-  { id: 10, name: 'Reto de Mobile', category: 'Software', image: 'https://jessup.edu/wp-content/uploads/2023/12/Programming-in-Computer-Science.jpg', company: 'Mobile Masters', endDate: '2024-12-15' },
-  { id: 11, name: 'Desafío de Cloud Computing', category: 'IA', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCnWhQaVLqlcDE4LYfmcTKsDPpWUG4xkTzuA&s', company: 'Cloud Innovators', endDate: '2024-12-10' },
-  { id: 12, name: 'Reto de Data Science', category: 'Datos', image: 'https://media.licdn.com/dms/image/D4D12AQEQgBaMF_Q1kA/article-cover_image-shrink_600_2000/0/1685983138455?e=2147483647&v=beta&t=NPavE5eVdVnVbwlggdNdk6DUDILSOVV-GVlqF2Lmpac', company: 'Data Insights', endDate: '2024-11-28' },
-];
+function getTimeAgo(date) {
+  const now = new Date()
+  const diffTime = Math.abs(now.getTime() - date.getTime())
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-export default function Component() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [currentFilter, setCurrentFilter] = useState('Todos')
-  const [currentPage, setCurrentPage] = useState(1)
-  const challengesPerPage = 9
-  const filterScrollRef = useRef(null)
-  
-  const navigate = useNavigate();
-  const filters = ['Todos', 'Diseño', 'Software', 'Datos', 'IA', 'CiberSeguridad']
+  if (diffDays === 1) return "hace 1 día"
+  if (diffDays < 7) return `hace ${diffDays} días`
+  if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7)
+    return `hace ${weeks} ${weeks === 1 ? 'semana' : 'semanas'}`
+  }
+  const months = Math.floor(diffDays / 30)
+  return `hace ${months} ${months === 1 ? 'mes' : 'meses'}`
+}
 
-  const filteredChallenges = challengesData.filter(challenge => 
-    challenge.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (currentFilter === 'Todos' || challenge.category === currentFilter)
-  )
+function getTimeRemaining(deadline) {
+  const now = new Date()
+  const timeRemaining = deadline.getTime() - now.getTime()
+  const daysRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24))
 
-  const indexOfLastChallenge = currentPage * challengesPerPage
-  const indexOfFirstChallenge = indexOfLastChallenge - challengesPerPage
-  const currentChallenges = filteredChallenges.slice(indexOfFirstChallenge, indexOfLastChallenge)
+  if (daysRemaining < 0) return "Cerrado"
+  if (daysRemaining === 0) return "Cierra hoy"
+  if (daysRemaining === 1) return "1 día restante"
+  return `${daysRemaining} días restantes`
+}
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+export default function ChallengeCatalog() {
+  const { api } = useAxios();
+  const [searchQuery, setSearchQuery] = React.useState("")
+  const [selectedCategories, setSelectedCategories] = React.useState([])
+  const [selectedStatus, setSelectedStatus] = React.useState([])
+  const [isFilterOpen, setIsFilterOpen] = React.useState(false)
+  const [relationalObjects, setRelationalObjects] = React.useState({
+    categorias: [],
+    estatusDesafios: []
+  })
+  const [challenges, setChallenges] = React.useState([])
+  const [loading, setLoading] = React.useState(true);
+  const { search } = useParams();
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (filterScrollRef.current) {
-        const scrollWidth = filterScrollRef.current.scrollWidth
-        const clientWidth = filterScrollRef.current.clientWidth
-        filterScrollRef.current.style.justifyContent = scrollWidth > clientWidth ? 'flex-start' : 'center'
+  React.useEffect(() => {
+    const loadChallenges = async () => {
+      try {
+        const response = await api.get("api/Desafios/GetDesafiosValidados", { requireLoading: false });
+        const challengesWithLogoEmpresa = await Promise.all(response.data.map(async (challenge) => {
+          const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${challenge.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false });
+          const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] });
+          const url = URL.createObjectURL(avatarBlob);
+          return { ...challenge, logoEmpresa: url, fechaInicio: new Date(challenge.fechaInicio), fechaLimite: new Date(challenge.fechaLimite) };
+        }));
+
+        setChallenges(challengesWithLogoEmpresa);
+      } catch (error) {
+        console.error(error);
       }
+    };
+
+    const loadRelationalObjects = async () => {
+      try {
+        const response = await api.get("api/Desafios/GetRelationalObjects", { requireLoading: false });
+        setRelationalObjects(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    Promise.all([loadRelationalObjects(), loadChallenges()]).then(() => setLoading(false));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (search) {
+      setSearchQuery(search);
     }
+  }, [search]);
 
-    window.addEventListener('resize', handleResize)
-    handleResize()
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategories(prev =>
+      prev.includes(categoryId)
+        ? prev.filter(c => c !== categoryId)
+        : [...prev, categoryId]
+    )
+  }
 
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  const handleStatusChange = (statusId) => {
+    setSelectedStatus(prev =>
+      prev.includes(statusId)
+        ? prev.filter(s => s !== statusId)
+        : [...prev, statusId]
+    )
+  }
+
+  const filteredDesafios = challenges.filter(desafio => {
+    const matchesSearch = desafio.titulo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      desafio.empresa.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesCategory = selectedCategories.length === 0 ||
+      desafio.categorias.some(cat => selectedCategories.includes(cat.idCategoria))
+    const matchesStatus = selectedStatus.length === 0 ||
+      selectedStatus.includes(desafio.idEstatusDesafio)
+    return matchesSearch && matchesCategory && matchesStatus
+  })
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">Explora en nuestra sección de Desafíos</h1>
-      
-      <div className="mb-6 relative">
-        <input
-          type="text"
-          placeholder="Buscar"
-          className="w-full p-2 pl-10 rounded-md border border-input bg-background"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <Search className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-      </div>
-
-      <div className="relative mb-8">
-        <div
-          ref={filterScrollRef}
-          className="flex overflow-x-auto pb-2 space-x-4 scrollbar-hide"
-          style={{
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-            WebkitOverflowScrolling: 'touch',
-          }}
-        >
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              className={`px-4 py-2 rounded-md whitespace-nowrap ${
-                currentFilter === filter
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-accent text-accent-foreground hover:bg-accent/80'
-              }`}
-              onClick={() => setCurrentFilter(filter)}
+    <div className="min-h-screen bg-background text-foreground">
+      <section className="relative overflow-hidden bg-background pt-24 pb-4 -mt-[64px]">
+        <div className="container px-4 md:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              {filter}
-            </button>
-          ))}
-        </div>
-      </div>
+              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl mb-6">
+                Encuentra tu próximo
+                <span className="block text-primary">desafío innovador</span>
+              </h1>
+              <p className="text-xl text-muted-foreground max-w-[42rem] mb-8">
+                Explora los últimos desafíos de innovación y demuestra tu talento en nuestra plataforma líder.
+              </p>
+            </motion.div>
 
-      {filteredChallenges.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentChallenges.map((challenge) => (
-            <div key={challenge.id} className="bg-card rounded-lg shadow-md overflow-hidden">
-              <div className="px-4 pt-4 pb-2">
-                <img src={challenge.image} alt={challenge.name} className="w-full h-48 object-cover rounded-lg" />
-              </div>
-              <div className="px-4 pb-4">
-                <h3 className="font-semibold text-lg mb-2 mt-3">{challenge.name}</h3>
-                <p className="text-muted-foreground text-sm"><strong>Categoría:</strong> {challenge.category}</p>
-                <p className="text-muted-foreground text-sm"><strong>Empresa:</strong> {challenge.company}</p>
-                <p className="text-muted-foreground text-sm"><strong>Fecha de finalización:</strong> {challenge.endDate}</p>
-                <div className="flex justify-end mt-4">
-                  <Button onClick={()=>navigate(`/challengesDetails/`)} className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
-                    Ver más
-                  </Button>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="relative h-[400px] hidden lg:block"
+            >
+              <motion.div
+                className="absolute top-1/4 left-1/4"
+                animate={{
+                  y: [0, -20, 0],
+                  rotate: [0, 10, 0]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <div className="bg-primary/10 p-4 rounded-2xl">
+                  <Lightbulb className="w-8 h-8 text-primary" />
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="absolute top-1/2 right-1/4"
+                animate={{
+                  y: [0, 20, 0],
+                  rotate: [0, -10, 0]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 0.5
+                }}
+              >
+                <div className="bg-secondary/10 p-4 rounded-2xl">
+                  <Code className="w-8 h-8 text-primary" />
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="absolute bottom-1/4 left-1/3"
+                animate={{
+                  y: [0, 15, 0],
+                  rotate: [0, 5, 0]
+                }}
+                transition={{
+                  duration: 3.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: 1
+                }}
+              >
+                <div className="bg-primary/10 p-4 rounded-2xl">
+                  <Cpu className="w-8 h-8 text-primary" />
+                </div>
+              </motion.div>
+
+              <svg className="absolute inset-0 w-full h-full">
+                <motion.path
+                  d="M100,100 C150,150 200,150 250,100"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  className="text-muted-foreground/20"
+                  fill="none"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatType: "reverse"
+                  }}
+                />
+                <motion.path
+                  d="M150,200 C200,250 250,250 300,200"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  className="text-muted-foreground/20"
+                  fill="none"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatType: "reverse",
+                    delay: 0.5
+                  }}
+                />
+              </svg>
+
+              <motion.div
+                className="absolute top-10 right-10 w-40 h-40 bg-primary/10 rounded-3xl"
+                animate={{
+                  rotate: [0, 90],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{
+                  duration: 20,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              />
+              <motion.div
+                className="absolute bottom-10 right-20 w-32 h-32 bg-secondary/10 rounded-3xl"
+                animate={{
+                  rotate: [0, -90],
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{
+                  duration: 15,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              />
+              <motion.div
+                className="absolute top-1/2 left-1/4 w-24 h-24 bg-accent/10 rounded-full"
+                animate={{
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <div className="container mx-auto px-4 md:px-6 py-12 -mt-16 relative z-20">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Filtros para pantallas grandes */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="hidden lg:block w-64 space-y-6"
+          >
+            <Card className="space-y-6 p-4">
+              <FilterContent
+                selectedCategories={selectedCategories}
+                selectedStatus={selectedStatus}
+                handleCategoryChange={handleCategoryChange}
+                handleStatusChange={handleStatusChange}
+                categorias={relationalObjects.categorias}
+                estatus={relationalObjects.estatusDesafios}
+                loading={loading}
+              />
+            </Card>
+          </motion.div>
+
+          {/* Filtros para pantallas pequeñas */}
+          <div className="lg:hidden mb-4">
+            <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="w-full">
+                  <Filter className="mr-2 h-4 w-4" />
+                  Filtros
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left">
+                <SheetHeader>
+                  <SheetTitle>Filtros</SheetTitle>
+                  <SheetDescription>
+                    Ajusta tus preferencias de búsqueda
+                  </SheetDescription>
+                </SheetHeader>
+                <ScrollArea className="h-[calc(100vh-10rem)] pr-4">
+                  <FilterContent
+                    selectedCategories={selectedCategories}
+                    selectedStatus={selectedStatus}
+                    handleCategoryChange={handleCategoryChange}
+                    handleStatusChange={handleStatusChange}
+                    categorias={relationalObjects.categorias}
+                    estatus={relationalObjects.estatusDesafios}
+                    loading={loading}
+                  />
+                </ScrollArea>
+              </SheetContent>
+            </Sheet>
+          </div>
+
+          {/* Lista de desafíos */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="flex-1"
+          >
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+              <div className="flex-1 w-full">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" />
+                  <Input
+                    type="search"
+                    placeholder="Buscar desafíos..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9 bg-card"
+                  />
                 </div>
               </div>
+              <Select defaultValue="recent">
+                <SelectTrigger className="w-[180px] bg-card">
+                  <SelectValue placeholder="Ordenar por" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="recent">Más recientes</SelectItem>
+                  <SelectItem value="popular">Más populares</SelectItem>
+                  <SelectItem value="closing">Próximos a cerrar</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <AnimatePresence>
+              {loading ? (
+                Array(5).fill(0).map((_, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <SkeletonCard />
+                  </motion.div>
+                ))
+              ) : (
+                filteredDesafios.map((desafio) => (
+                  <motion.div
+                    key={desafio.idDesafio}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChallengeCard 
+                      desafio={desafio} 
+                      categorias={relationalObjects.categorias}
+                      estatus={relationalObjects.estatusDesafios}
+                    />
+                  </motion.div>
+                ))
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function FilterContent({ selectedCategories, selectedStatus, handleCategoryChange, handleStatusChange, categorias, estatus, loading }) {
+  if (loading) {
+    return (
+      <>
+        <div>
+          <Label className="text-sm font-medium mb-3 block">Categorías</Label>
+          <div className="space-y-2">
+            {Array(5).fill(0).map((_, index) => (
+              <Skeleton key={index} className="h-6 w-full" />
+            ))}
+          </div>
+        </div>
+        <div>
+          <Label className="text-sm font-medium mb-3 block">Estatus</Label>
+          <div className="space-y-2">
+            {Array(3).fill(0).map((_, index) => (
+              <Skeleton key={index} className="h-6 w-full" />
+            ))}
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <div>
+        <Label className="text-sm font-medium mb-3 block">Categorías</Label>
+        <div className="space-y-2">
+          {categorias.map(categoria => (
+            <div key={categoria.idCategoria} className="flex items-center">
+              <Checkbox
+                id={`category-${categoria.idCategoria}`}
+                checked={selectedCategories.includes(categoria.idCategoria)}
+                onCheckedChange={() => handleCategoryChange(categoria.idCategoria)}
+              />
+              <label
+                htmlFor={`category-${categoria.idCategoria}`}
+                className="ml-2 text-sm cursor-pointer"
+              >
+                {categoria.nombre}
+              </label>
             </div>
           ))}
         </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center h-64 bg-accent bg-opacity-50 rounded-lg">
-          <img
-            src="/placeholder.svg?height=100&width=100"
-            alt="No encontrado"
-            className="w-24 h-24 mb-4 opacity-50"
-          />
-          <h2 className="text-3xl font-bold text-muted-foreground">No encontrado</h2>
-        </div>
-      )}
+      </div>
 
-      {filteredChallenges.length > 0 && (
-        <div className="mt-8 flex justify-center items-center space-x-4">
-          <button
-            onClick={() => paginate(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="p-2 rounded-md bg-accent text-accent-foreground hover:bg-accent/80 disabled:opacity-50"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <span className="text-muted-foreground">
-            Página {currentPage} de {Math.ceil(filteredChallenges.length / challengesPerPage)}
-          </span>
-          <button
-            onClick={() => paginate(currentPage + 1)}
-            disabled={indexOfLastChallenge >= filteredChallenges.length}
-            className="p-2 rounded-md bg-accent text-accent-foreground hover:bg-accent/80 disabled:opacity-50"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
+      <div>
+        <Label className="text-sm font-medium mb-3 block">Estatus</Label>
+        <div className="space-y-2">
+          {estatus.map(status => (
+            <div key={status.idEstatusProceso} className="flex items-center">
+              <Checkbox
+                id={`status-${status.idEstatusProceso}`}
+                checked={selectedStatus.includes(status.idEstatusProceso)}
+                onCheckedChange={() => handleStatusChange(status.idEstatusProceso)}
+              />
+              <label
+                htmlFor={`status-${status.idEstatusProceso}`}
+                className="ml-2 text-sm cursor-pointer"
+              >
+                {status.nombre}
+              </label>
+            </div>
+          ))}
         </div>
-      )}
-    </div>
+      </div>
+    </>
+  )
+}
+
+function ChallengeCard({ desafio, categorias, estatus }) {
+  const navigate = useNavigate();
+
+  const getCategoryName = (idCategoria) => {
+    const category = categorias.find(cat => cat.idCategoria === idCategoria);
+    return category ? category.nombre : 'Desconocida';
+  };
+
+  const getStatusName = (idEstatusDesafio) => {
+    const status = estatus.find(stat => stat.idEstatusProceso === idEstatusDesafio);
+    return status ? status.nombre : 'Desconocido';
+  };
+
+  return (
+    <Card className="group overflow-hidden mb-4 hover:shadow-lg transition-shadow duration-300 hover:cursor-pointer" onClick={() => navigate(`/challenge/${desafio.idDesafio}`)}>
+      <CardContent className="p-6">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center align-items-center gap-2">
+              <img
+                src={desafio.logoEmpresa}
+                alt={`Logo de ${desafio.empresa}`}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <div>
+                <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">
+                  {desafio.titulo}
+                </h3>
+                <p className="text-sm text-muted-foreground">{desafio.empresa}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">
+                {getTimeAgo(desafio.fechaInicio)}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="transition-transform group-hover:scale-110"
+              >
+                <BookmarkPlus className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 mt-2">
+            <Badge variant="secondary" className="bg-primary/10 text-primary">
+              {getStatusName(desafio.idEstatusDesafio)}
+            </Badge>
+            {desafio.categorias.map((categoria) => (
+              <Badge
+                key={categoria.idCategoria}
+                variant="outline"
+                className="bg-secondary/10"
+              >
+                {getCategoryName(categoria.idCategoria)}
+              </Badge>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              {getTimeRemaining(desafio.fechaLimite)}
+            </span>
+            <span className="flex items-center gap-1">
+              <Users className="h-4 w-4" />
+              {desafio.soluciones ? desafio.soluciones.length : 'Sin'} soluciones
+            </span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+function SkeletonCard() {
+  return (
+    <Card className="mb-4">
+      <CardContent className="p-6">
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-12 w-12 rounded-full" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-[250px]" />
+            <Skeleton className="h-4 w-[200px]" />
+          </div>
+        </div>
+        <div className="mt-4 space-y-2">
+          <Skeleton className="h-4 w-[100px]" />
+          <Skeleton className="h-4 w-[150px]" />
+        </div>
+      </CardContent>
+    </Card>
   )
 }
