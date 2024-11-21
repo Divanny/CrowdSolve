@@ -16,5 +16,6 @@ export default {
 	Administrar_Participantes: 22,
 	Administrar_Roles_y_Permisos: 23,
 	Administrar_Categorias: 1016,
-	Administrar_Empresas: 1017
+	Administrar_Empresas: 1017,
+	Administrar_Administradores: 1019
 };
