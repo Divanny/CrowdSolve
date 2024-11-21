@@ -202,7 +202,7 @@ namespace CrowdSolve.Server.Controllers
 
                 if (Empresa == null) return new OperationResult(false, "Esta empresa no se ha encontrado");
 
-                var usuario = _usuariosRepo.Get(idEmpresa);
+                var usuario = _usuariosRepo.Get(Empresa.idUsuario);
                 if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
                 if (Empresa.idEstatusUsuario != (int)EstatusUsuariosEnum.Pendiente_de_validar)
@@ -239,7 +239,7 @@ namespace CrowdSolve.Server.Controllers
 
                 if (Empresa == null) return new OperationResult(false, "Esta empresa no se ha encontrado");
 
-                var usuario = _usuariosRepo.Get(idEmpresa);
+                var usuario = _usuariosRepo.Get(Empresa.idUsuario);
                 if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
                 if (Empresa.idEstatusUsuario != (int)EstatusUsuariosEnum.Pendiente_de_validar)
