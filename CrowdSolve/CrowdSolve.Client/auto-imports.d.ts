@@ -10,6 +10,7 @@ declare global {
   const About-usMeetOurTeam: typeof import('@/components/about-us/MeetOurTeam.jsx')['MeetOurTeam']
   const AdminAdminLayout: typeof import('@/components/admin/AdminLayout.jsx')['AdminLayout']
   const AdminCategoriesCategoryFormDialog: typeof import('@/components/admin/categories/CategoryFormDialog.jsx')['CategoryFormDialog']
+  const AdminCompaniesCompanyFormDialog: typeof import('@/components/admin/companies/CompanyFormDialog.jsx')['CompanyFormDialog']
   const AdminParticipantsParticipantFormDialog: typeof import('@/components/admin/participants/ParticipantFormDialog.jsx')['ParticipantFormDialog']
   const ErrorBoundary: typeof import('@/components/ErrorBoundary.jsx')['ErrorBoundary']
   const GoogleLoginButton: typeof import('@/components/GoogleLoginButton.jsx')['GoogleLoginButton']
