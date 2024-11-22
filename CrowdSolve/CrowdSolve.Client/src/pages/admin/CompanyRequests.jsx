@@ -45,7 +45,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CategoryFormDialog } from "../../../components/admin/categories/CategoryFormDialog";
+import { ValidateCompanyDialog } from "../../components/admin/Requests/ValidateCompanyDialog";
 
 export default function CompanyRequests() {
   const { api } = useAxios();
@@ -66,59 +66,6 @@ export default function CompanyRequests() {
   const [sectorSearch, setSectorSearch] = useState("");
   const [tamañoEmpresaSearch, setTamañoEmpresaSearch] = useState("");
 
-
-  const validarEmpresa = async (id) => {
-    try {
-      const response = await api.put(`api/Empresas/Aprobar/${id}`,null, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log(id);
-  
-       // Check if the response was successful
-    if (response.data.success) {
-      toast.success("Operación exitosa", {
-        description: response.data.message,
-      });
-    } else {
-      toast.warning("Operación fallida", {
-        description: response.data.message,
-      });
-      console.log(response.data);
-    }
-    } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
-      console.error('Error:', error);
-    }
-  };
-
-  const rechazarEmpresa = async (id) => {
-    try {
-      const response = await api.put(`api/Empresas/Rechazar/${id}`,null, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log(id);
-  
-       // Check if the response was successful
-    if (response.data.success) {
-      toast.success("Operación exitosa", {
-        description: response.data.message,
-      });
-    } else {
-      toast.warning("Operación fallida", {
-        description: response.data.message,
-      });
-      console.log(response.data);
-    }
-    } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
-      console.error('Error:', error);
-    }
-  };
-  
 
   
 
@@ -316,13 +263,21 @@ export default function CompanyRequests() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => validarEmpresa(row.original.idEmpresa)}
+              onClick={() => {
+                setSelectedCompanyRequest(row.original.idEmpresa)
+                setDialogMode("validate")
+                setIsDialogOpen(true)
+              }}
             >
               <CircleCheckBig className="mr-2 h-4 w-4" />
               Validar Empresa
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => rechazarEmpresa(row.original.idEmpresa)}
+              onClick={() => {
+                setSelectedCompanyRequest(row.original.idEmpresa)
+                setDialogMode("decline")
+                setIsDialogOpen(true)
+              }}
             >
               <CircleSlash2 className="mr-2 h-4 w-4" />
               Rechazar Empresa
@@ -639,14 +594,14 @@ export default function CompanyRequests() {
       </div>
 
       {selectedCompanyRequest && (
-        <CategoryFormDialog
+        <ValidateCompanyDialog
           isOpen={isDialogOpen}
           onClose={() => setIsDialogOpen(false)}
           onSaved={() => {
             setIsDialogOpen(false);
             fetchData();
           }}
-          category={selectedCompanyRequest}
+          estatusId={selectedCompanyRequest}
           mode={dialogMode}
           /* relationalObjects={{ nivelesEducativos, estatusUsuarios }} */
         />
