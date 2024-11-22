@@ -109,7 +109,7 @@ const sidebarItems = [
                 title: "Solicitudes de soporte",
                 url: "/admin/support-requests",
                 icon: "Headset",
-                pending: 1,
+                pending: 0,
             },
         ],
     },
@@ -128,10 +128,37 @@ const sidebarItems = [
 export default function AdminLayout() {
     const location = useLocation();
     const navigate = useNavigate();
+    const [data, setData] = useState([]);
+    const { api } = useAxios();
+    const [isLoading, setIsLoading] = useState(true);
 
     const user = useSelector((state) => state.user.user);
 
     const CrowdSolveLogo = GetLogo();
+
+    const fetchData = async () => {
+        try {
+          const [countRequestsResponse, relationalObjectsResponse] =
+            await Promise.all([
+              api.get("/api/Soportes/GetCantidadRegistros", { requireLoading: false }),,
+            ]);
+    
+          setData(countRequestsResponse.data);
+          sidebarItems[3].items[0].pending=countRequestsResponse.data.cantidadEmpresas;
+          sidebarItems[3].items[1].pending=countRequestsResponse.data.cantidadSoportes;
+          
+    
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+    
+      useEffect(() => {
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
 
     return (
         <SidebarProvider
@@ -164,7 +191,7 @@ export default function AdminLayout() {
                                                 <Link variant="secondary" className="w-full flex justify-start items-center gap-2" to={item.url}>
                                                     {(item.icon != "" && item.icon != null) && <Icon name={item.icon} />}
                                                     {item.title}
-                                                    {item.pending && <Badge variant="outline" className="ml-auto">{item.pending}</Badge>}
+                                                    {item.pending >0 && <Badge variant="outline" className="ml-auto">{item.pending}</Badge>}
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>

@@ -176,5 +176,35 @@ namespace CrowdSolve.Server.Controllers
                 throw;
             }
         }
+
+        [HttpGet("GetCantidadRegistros")]
+        [Authorize]
+        public IActionResult GetCantidadRegistros()
+        {
+            try
+            {
+                // Obtener la cantidad de empresas con idEstatusUsuario igual a 1
+                var cantidadEmpresas = _usuariosRepo
+                    .Get()
+                    .Where(x => x.idEstatusUsuario == 1003 && x.idPerfil==3)
+                    .Count();
+
+                // Obtener la cantidad total de soportes
+                var cantidadSoportes = _soportesRepo.Get().Count();
+
+                // Devolver el resultado
+                return Ok(new
+                {
+                    CantidadEmpresas = cantidadEmpresas,
+                    CantidadSoportes = cantidadSoportes
+                });
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return StatusCode(500, new { Error = ex.Message });
+            }
+        }
+
     }
 }
