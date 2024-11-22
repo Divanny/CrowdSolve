@@ -13,6 +13,8 @@ public partial class CrowdSolveContext : DbContext
     {
     }
 
+    public virtual DbSet<AdjuntosSoluciones> AdjuntosSoluciones { get; set; }
+
     public virtual DbSet<Categorias> Categorias { get; set; }
 
     public virtual DbSet<ClasesProceso> ClasesProceso { get; set; }
@@ -73,6 +75,25 @@ public partial class CrowdSolveContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AdjuntosSoluciones>(entity =>
+        {
+            entity.HasKey(e => e.idAdjunto);
+
+            entity.Property(e => e.ContentType)
+                .IsRequired()
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.FechaSubida).HasColumnType("datetime");
+            entity.Property(e => e.Nombre)
+                .IsRequired()
+                .HasMaxLength(255)
+                .IsUnicode(false);
+            entity.Property(e => e.RutaArchivo)
+                .IsRequired()
+                .HasMaxLength(500)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Categorias>(entity =>
         {
             entity.HasKey(e => e.idCategoria);
@@ -362,9 +383,6 @@ public partial class CrowdSolveContext : DbContext
         {
             entity.HasKey(e => e.idSolucion).HasName("PK_Soluciones_1");
 
-            entity.Property(e => e.ArchivoRuta)
-                .IsRequired()
-                .IsUnicode(false);
             entity.Property(e => e.Descripcion)
                 .IsRequired()
                 .HasMaxLength(500)

@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Calendar, Users, Clock, ArrowLeft } from 'lucide-react'
+import { Calendar, Users, Clock, ArrowLeft, Send } from 'lucide-react'
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import ChallengeDetail from '@/components/challenge/ChallengeDetail';
@@ -23,10 +23,10 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
+import { FileUploader } from '@/components/FileUploader'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
-import ImageUpload from '@/components/ui/image-upload'
 import createEditorToConvertToHtml from '@/hooks/createEditorToConvertToHtml'
 
 const editor = createEditorToConvertToHtml();
@@ -42,6 +42,7 @@ const Challenge = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [solutionTitle, setSolutionTitle] = useState('')
     const [solutionDescription, setSolutionDescription] = useState('')
+    const [solutionFiles, setSolutionFiles] = useState([])
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
     useEffect(() => {
@@ -79,7 +80,6 @@ const Challenge = () => {
         const html = editor.api.htmlReact.serialize({
             nodes: editor.children,
             convertNewLinesToHtmlBr: true,
-            // if you use @udecode/plate-dnd
             dndWrapper: (props) => <DndProvider backend={HTML5Backend} {...props} />,
         });
         setHtmlContent(html);
@@ -107,12 +107,20 @@ const Challenge = () => {
         return diffDays > 0 ? diffDays : 0;
     }
 
-    const handleSubmitSolution = (e) => {
+    const handleSubmitSolution = async (e) => {
         e.preventDefault()
-        // Handle the solution submission logic here
-        console.log('Title:', solutionTitle)
-        console.log('Description:', solutionDescription)
-        // Close the drawer/dialog after submission
+        const formData = new FormData()
+        formData.append("Titulo", solutionTitle)
+        formData.append("Descripcion", solutionDescription)
+        solutionFiles.forEach((file, index) => {
+            formData.append(`Archivos[${index}]`, file)
+        })
+        try {
+            const response = await api.post("/api/Soluciones", formData)
+            console.log(response.data)
+        } catch (error) {
+            console.error(error)
+        }
         setIsDrawerOpen(false)
     }
 
@@ -127,11 +135,17 @@ const Challenge = () => {
                 <Textarea id="solutionDescription" value={solutionDescription} onChange={(e) => setSolutionDescription(e.target.value)} />
             </div>
             <div className="grid gap-2">
-                <Label>Subir Archivo</Label>
-                <ImageUpload />
+                <Label>Archivos</Label>
+                <FileUploader value={solutionFiles} onValueChange={setSolutionFiles} multiple={true} maxFileCount={Infinity} />
+            </div>
+            <div className="grid gap-2">
+                <p className="text-xs text-muted-foreground">
+                    Al participar en este desafío, usted acepta que su solución puede ser utilizada por la empresa organizadora y que ha leído y comprendido los términos y condiciones.
+                </p>
             </div>
             <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                Enviar Solución
+                <Send className="h-4 w-4" />
+                Enviar solución
             </Button>
         </form>
     )

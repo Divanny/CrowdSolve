@@ -2,6 +2,7 @@
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
@@ -21,7 +22,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 Titulo = s.Titulo,
                 Descripcion = s.Descripcion,
                 FechaRegistro = s.FechaRegistro,
-                ArchivoRuta = s.ArchivoRuta,
                 Publica = s.Publica,
                 Puntuacion = s.Puntuacion
             }),
@@ -42,11 +42,11 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             Titulo = s.Titulo,
                             Descripcion = s.Descripcion,
                             FechaRegistro = s.FechaRegistro,
-                            ArchivoRuta = s.ArchivoRuta,
                             idEstatusProceso = proceso.idEstatusProceso,
                             EstatusProceso = estatusProceso.Nombre,
                             Publica = s.Publica,
-                            Puntuacion = s.Puntuacion
+                            Puntuacion = s.Puntuacion,
+                            Adjuntos = DB.Set<AdjuntosSoluciones>().Where(a => a.idSolucion == s.idSolucion).ToList()
                         });
             }
         )
@@ -64,6 +64,11 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                     model.idUsuario = _idUsuarioEnLinea;
 
                     var creado = base.Add(model);
+
+                    if (model.Adjuntos != null && model.Adjuntos.Count > 0)
+                    {
+                        dbContext.Set<AdjuntosSoluciones>().AddRange(model.Adjuntos);
+                    }
 
                     ProcesosModel procesoModel = new ProcesosModel
                     {
@@ -95,6 +100,12 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                     if (desafio == null)
                     {
                         throw new Exception("No se encontró el desafío");
+                    }
+
+                    if (model.Adjuntos != null && model.Adjuntos.Count > 0)
+                    {
+                        dbContext.Set<AdjuntosSoluciones>().RemoveRange(dbContext.Set<AdjuntosSoluciones>().Where(x => x.idSolucion == model.idSolucion));
+                        dbContext.Set<AdjuntosSoluciones>().AddRange(model.Adjuntos);
                     }
 
                     desafio.Titulo = model.Titulo;

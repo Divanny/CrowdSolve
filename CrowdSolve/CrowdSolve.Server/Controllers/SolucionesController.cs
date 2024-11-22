@@ -19,6 +19,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly DesafiosRepo _desafiosRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly Mailing _mailingService;
+        private readonly FirebaseStorageService _firebaseStorageService;
 
         /// <summary>
         /// Constructor de la clase SoportesController.
@@ -27,7 +28,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
         /// <param name="mailing"></param>
-        public SolucionesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing)
+        public SolucionesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing, FirebaseStorageService firebaseStorageService)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
@@ -36,6 +37,7 @@ namespace CrowdSolve.Server.Controllers
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _mailingService = mailing;
+            _firebaseStorageService = firebaseStorageService;
         }
 
         /// <summary>
@@ -56,6 +58,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="idDesafio">ID del desafío.</param>
         /// <returns>Lista de soluciones del desafio.</returns>
         [HttpGet("GetSolucionesDesafio/{idDesafio}", Name = "GetSolucionesDesafio")]
+        [Authorize]
         public List<SolucionesModel> GetSolucionesDesafio(int idDesafio)
         {
             List<SolucionesModel> soluciones = _solucionesRepo.Get(x => x.idDesafio == idDesafio).ToList();
@@ -67,17 +70,18 @@ namespace CrowdSolve.Server.Controllers
         /// </summary>
         /// <param name="idSolucion">ID de la solución.</param>
         /// <returns>Solución encontrada.</returns>
-        [HttpGet("{idSolucion}", Name = "GetDesafio")]
+        [HttpGet("{idSolucion}", Name = "GetSolucion")]
+        [Authorize]
         public IActionResult Get(int idSolucion)
         {
-            SolucionesModel? desafio = _solucionesRepo.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+            SolucionesModel? solucion = _solucionesRepo.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
 
-            if (desafio == null)
+            if (solucion == null)
             {
-                return NotFound("Desafío no encontrado");
+                return NotFound("Solución no encontrada");
             }
 
-            return Ok(desafio);
+            return Ok(solucion);
         }
 
         /// <summary>
@@ -99,7 +103,36 @@ namespace CrowdSolve.Server.Controllers
                     return new OperationResult(false, "No se puede enviar una solución a un desafío que no está en progreso");
                 }
 
+                solucionesModel.idUsuario = _idUsuarioOnline;
+
+                if (_solucionesRepo.Any(x => x.idDesafio == solucionesModel.idDesafio && x.idUsuario == _idUsuarioOnline))
+                {
+                    return new OperationResult(false, "Ya ha enviado una solución a este desafío");
+                }
+
                 if (solucionesModel.Archivos == null || solucionesModel.Archivos.Length == 0) return new OperationResult(false, "Debe proporcionar al menos un archivo");
+
+                else
+                {
+                    List<AdjuntosSoluciones> adjuntos = new List<AdjuntosSoluciones>();
+
+                    foreach (var archivo in solucionesModel.Archivos)
+                    {
+                        var logoUrl = _firebaseStorageService.UploadFileAsync(archivo.OpenReadStream(), $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}", archivo.ContentType).Result;
+
+                        adjuntos.Add(new AdjuntosSoluciones
+                        {
+                            idSolucion = solucionesModel.idSolucion,
+                            Nombre = archivo.FileName,
+                            Tamaño = archivo.Length,
+                            ContentType = archivo.ContentType,
+                            RutaArchivo = logoUrl,
+                            FechaSubida = DateTime.Now
+                        });
+                    }
+
+                    solucionesModel.Adjuntos = adjuntos;
+                }
 
                 var created = _solucionesRepo.Add(solucionesModel);
                 _logger.LogHttpRequest(solucionesModel);
@@ -118,9 +151,9 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="idSolucion">ID de la solución a actualizar.</param>
         /// <param name="solucionesModel">Datos de la solución a actualizar.</param>
         /// <returns>Resultado de la operación.</returns>
-        [HttpPut("{idSolucion}", Name = "UpdateDesafio")]
+        [HttpPut("{idSolucion}", Name = "UpdateSolucion")]
         [Authorize]
-        public OperationResult Put(int idSolucion, SolucionesModel solucionesModel)
+        public async Task<OperationResult> Put(int idSolucion, [FromForm]SolucionesModel solucionesModel)
         {
             try
             {
@@ -135,6 +168,38 @@ namespace CrowdSolve.Server.Controllers
                 if (!_desafiosRepo.GetDesafiosEnProgreso().Any(x => x.idDesafio == solucionesModel.idDesafio))
                 {
                     return new OperationResult(false, "No se puede editar una solución de un desafío que no está en progreso");
+                }
+
+                solucionesModel.idUsuario = _idUsuarioOnline;
+
+                if (solucionesModel.Archivos != null && solucionesModel.Archivos.Length > 0)
+                {
+                    List<AdjuntosSoluciones> adjuntos = new List<AdjuntosSoluciones>();
+
+                    if (solucion.Adjuntos != null && solucion.Adjuntos.Count > 0)
+                    { 
+                        foreach (var adjunto in solucion.Adjuntos)
+                        {
+                            await _firebaseStorageService.DeleteFileAsync(adjunto.RutaArchivo);
+                        }                    
+                    }
+
+                    foreach (var archivo in solucionesModel.Archivos)
+                    {
+                        var logoUrl = _firebaseStorageService.UploadFileAsync(archivo.OpenReadStream(), $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}", archivo.ContentType).Result;
+
+                        adjuntos.Add(new AdjuntosSoluciones
+                        {
+                            idSolucion = solucionesModel.idSolucion,
+                            Nombre = archivo.FileName,
+                            Tamaño = archivo.Length,
+                            ContentType = archivo.ContentType,
+                            RutaArchivo = logoUrl,
+                            FechaSubida = DateTime.Now
+                        });
+                    }
+
+                    solucionesModel.Adjuntos = adjuntos;
                 }
 
                 _solucionesRepo.Edit(solucionesModel);
@@ -179,6 +244,14 @@ namespace CrowdSolve.Server.Controllers
         public List<SolucionesModel> GetMisSoluciones()
         {
             List<SolucionesModel> soluciones = _solucionesRepo.Get(x => x.idUsuario == _idUsuarioOnline).ToList();
+            return soluciones;
+        }
+
+        [HttpGet("GetSolucionesUsuario", Name = "GetSolucionesUsuario")]
+        [AllowAnonymous]
+        public List<SolucionesModel> GetSolucionesUsuario(int idUsuario)
+        {
+            List<SolucionesModel> soluciones = _solucionesRepo.Get(x => x.idUsuario == idUsuario && x.Publica == true).ToList();
             return soluciones;
         }
     }

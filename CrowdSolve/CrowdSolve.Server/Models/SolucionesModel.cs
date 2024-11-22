@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using System.ComponentModel.DataAnnotations;
 
 namespace CrowdSolve.Server.Models;
 
@@ -32,4 +33,8 @@ public class SolucionesModel
     public bool? Publica { get; set; }
 
     public int? Puntuacion { get; set; }
+    public List<AdjuntosSoluciones>? Adjuntos { get; set; }
+
+    [Required(ErrorMessage = "Debe aceptar los términos y condiciones")]
+    public bool AceptaTerminos { get; set; }
 }

@@ -227,6 +227,10 @@
     "createEditorToConvertToHtml": true,
     "AdminAdministratorsAdministratorFormDialog": true,
     "AdminCompaniesCompanyFormDialog": true,
-    "useMediaQuery": true
+    "useMediaQuery": true,
+    "ChallengeChallengeDetail": true,
+    "UiImage-upload": true,
+    "useCallbackRef": true,
+    "useControllableState": true
   }
 }

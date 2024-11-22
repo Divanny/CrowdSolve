@@ -19,8 +19,6 @@ public partial class Soluciones
 
     public DateTime FechaRegistro { get; set; }
 
-    public string ArchivoRuta { get; set; }
-
     public bool? Publica { get; set; }
 
     public int? Puntuacion { get; set; }
