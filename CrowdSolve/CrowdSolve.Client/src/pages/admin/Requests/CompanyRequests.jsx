@@ -45,7 +45,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ValidateCompanyDialog } from "../../components/admin/Requests/ValidateCompanyDialog";
+import { ValidateCompanyDialog } from "../../../components/admin/Requests/ValidateCompanyDialog";
 
 export default function CompanyRequests() {
   const { api } = useAxios();

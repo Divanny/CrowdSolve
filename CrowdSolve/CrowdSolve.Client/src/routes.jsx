@@ -30,7 +30,7 @@ const Administrators = lazy(() => import('@/pages/admin/administrators/Administr
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
 const RolesAndPermissions = lazy(() => import('@/pages/admin/RolesAndPermissions'));
-const CompanyRequest = lazy(() => import('@/pages/admin/CompanyRequests'));
+const CompanyRequest = lazy(() => import('@/pages/admin/Requests/CompanyRequests'));
 
 const LazyComponent = ({ component: Component, ...props }) => (
   <Suspense fallback={<PageLoader />}>
