@@ -720,77 +720,77 @@
   },
 
   "UsagePolicy": {
-    "title": "Política de Uso Aceptable",
-    "effectiveDate": "Efectiva desde el 8 de agosto, 2024",
+    "title": "Acceptable Use Policy",
+    "effectiveDate": "Effective since August 8, 2024",
     "generalConduct": {
-      "header": "1. Conducta General",
+      "header": "1. General Conduct",
       "content": [
-        "Cumplir con todas las leyes aplicables.",
-        "Respetar los derechos de propiedad intelectual.",
-        "Ser honestos y transparentes en todas las interacciones.",
-        "Mantener la confidencialidad de la información sensible compartida en los desafíos.",
-        "Tratar a otros usuarios con respeto y profesionalismo."
+        "Comply with all applicable laws.",
+        "Respect intellectual property rights.",
+        "Be honest and transparent in all interactions.",
+        "Maintain confidentiality of sensitive information shared in challenges.",
+        "Treat other users with respect and professionalism."
       ]
     },
     "prohibitedActivities": {
-      "header": "2. Actividades Prohibidas",
+      "header": "2. Prohibited Activities",
       "content": [
-        "Publicar contenido ilegal, difamatorio, acosador, obsceno o fraudulento.",
-        "Infringir los derechos de propiedad intelectual de terceros.",
-        "Utilizar la plataforma para distribuir spam o malware.",
-        "Intentar acceder sin autorización a cuentas o sistemas de otros usuarios.",
-        "Manipular los sistemas de votación o evaluación de la plataforma.",
-        "Crear múltiples cuentas para eludir las reglas o ganar ventaja injusta.",
-        "Revelar información confidencial de otros usuarios o empresas sin autorización."
+        "Post illegal, defamatory, harassing, obscene, or fraudulent content.",
+        "Infringe on the intellectual property rights of others.",
+        "Use the platform to distribute spam or malware.",
+        "Attempt to access other users' accounts or systems without authorization.",
+        "Manipulate the platform's voting or evaluation systems.",
+        "Create multiple accounts to bypass rules or gain an unfair advantage.",
+        "Disclose confidential information of other users or companies without authorization."
       ]
     },
     "challengeContent": {
-      "header": "3. Contenido de los Desafíos",
+      "header": "3. Challenge Content",
       "content": [
-        "Proporcionar información precisa y clara sobre los requisitos del desafío.",
-        "Establecer términos justos para la transferencia de propiedad intelectual.",
-        "Cumplir con las promesas de recompensas y plazos establecidos.",
-        "No solicitar soluciones para actividades ilegales o no éticas."
+        "Provide accurate and clear information about the challenge requirements.",
+        "Set fair terms for the transfer of intellectual property.",
+        "Fulfill promises regarding rewards and deadlines.",
+        "Do not request solutions for illegal or unethical activities."
       ]
     },
     "proposalsAndSolutions": {
-      "header": "4. Propuestas y Soluciones",
+      "header": "4. Proposals and Solutions",
       "content": [
-        "Presentar solo trabajo original o tener los derechos necesarios para el contenido enviado.",
-        "Respetar la confidencialidad de la información proporcionada en los desafíos.",
-        "No copiar o plagiar el trabajo de otros participantes.",
-        "Proporcionar información precisa sobre sus habilidades y experiencia."
+        "Submit only original work or have the necessary rights for the content submitted.",
+        "Respect the confidentiality of information provided in challenges.",
+        "Do not copy or plagiarize other participants' work.",
+        "Provide accurate information about your skills and experience."
       ]
     },
     "platformUsage": {
-      "header": "5. Uso de la Plataforma",
+      "header": "5. Platform Usage",
       "content": [
-        "Intentar interferir con el funcionamiento adecuado de la plataforma.",
-        "Utilizar bots, scrapers u otros medios automatizados para acceder a CrowdSolve.",
-        "Recopilar información de otros usuarios sin su consentimiento.",
-        "Vender o transferir su cuenta a terceros."
+        "Do not attempt to interfere with the proper functioning of the platform.",
+        "Do not use bots, scrapers, or other automated means to access CrowdSolve.",
+        "Do not collect information from other users without their consent.",
+        "Do not sell or transfer your account to third parties."
       ]
     },
     "nonComplianceConsequences": {
-      "header": "6. Consecuencias del Incumplimiento",
+      "header": "6. Consequences of Non-Compliance",
       "content": [
-        "Eliminación del contenido infractor.",
-        "Suspensión o terminación de la cuenta del usuario.",
-        "Descalificación de desafíos actuales o futuros.",
-        "Acciones legales en casos graves de violación."
+        "Removal of infringing content.",
+        "Suspension or termination of the user's account.",
+        "Disqualification from current or future challenges.",
+        "Legal actions in cases of serious violations."
       ]
     },
     "reportingViolations": {
-      "header": "7. Reportar Violaciones",
-      "content": "Si observas contenido o comportamiento que viola esta PUA, por favor repótalo inmediatamente a nuestro equipo de moderación. Valoramos tu ayuda para mantener CrowdSolve como un espacio seguro y productivo para todos."
+      "header": "7. Reporting Violations",
+      "content": "If you notice content or behavior that violates this AUP, please report it immediately to our moderation team. We appreciate your help in keeping CrowdSolve a safe and productive space for everyone."
     },
     "contact": {
-      "header": "Si tienes preguntas sobre esta Política de Uso Aceptable, por favor contáctanos en",
+      "header": "If you have questions about this Acceptable Use Policy, please contact us at",
       "email": "soporte@crowdsolve.site"
     },
     "buttons": {
-      "termsOfService": "Ver Términos de Servicio",
-      "privacyPolicy": "Ver Política de Privacidad"
+      "termsOfService": "View Terms of Service",
+      "privacyPolicy": "View Privacy Policy"
     }
   }
 
