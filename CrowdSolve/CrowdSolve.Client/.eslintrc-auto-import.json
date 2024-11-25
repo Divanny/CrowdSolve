@@ -231,6 +231,8 @@
     "ChallengeChallengeDetail": true,
     "UiImage-upload": true,
     "useCallbackRef": true,
-    "useControllableState": true
+    "useControllableState": true,
+    "FileUploader": true,
+    "LayoutAppSidebar": true
   }
 }

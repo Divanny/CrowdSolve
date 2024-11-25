@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from "react-router-dom"
 import useAxios from '@/hooks/use-axios'
+import { toast } from 'sonner'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -28,6 +29,7 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import createEditorToConvertToHtml from '@/hooks/createEditorToConvertToHtml'
+import { useSelector } from 'react-redux'
 
 const editor = createEditorToConvertToHtml();
 
@@ -44,6 +46,7 @@ const Challenge = () => {
     const [solutionDescription, setSolutionDescription] = useState('')
     const [solutionFiles, setSolutionFiles] = useState([])
     const isDesktop = useMediaQuery("(min-width: 768px)")
+    const user = useSelector((state) => state.user.user);
 
     useEffect(() => {
         const getChallenge = async () => {
@@ -66,6 +69,7 @@ const Challenge = () => {
                 setDesafio({ ...desafioResponse.data, logoEmpresa: url })
                 setRelationalObjects(relationalObjectsResponse.data)
             } catch (error) {
+                toast.error("No se pudo cargar el desafío.")
                 console.error(error)
             }
             setLoading(false)
@@ -112,43 +116,39 @@ const Challenge = () => {
         const formData = new FormData()
         formData.append("Titulo", solutionTitle)
         formData.append("Descripcion", solutionDescription)
-        solutionFiles.forEach((file, index) => {
-            formData.append(`Archivos[${index}]`, file)
+        solutionFiles.forEach((file) => {
+            formData.append("Archivos", file)
         })
-        try {
-            const response = await api.post("/api/Soluciones", formData)
-            console.log(response.data)
-        } catch (error) {
-            console.error(error)
-        }
-        setIsDrawerOpen(false)
-    }
+        formData.append("idDesafio", desafio.idDesafio)
 
-    const SolutionForm = ({ className }) => (
-        <form className={`grid items-start gap-4 ${className}`} onSubmit={handleSubmitSolution}>
-            <div className="grid gap-2">
-                <Label htmlFor="solutionTitle">Título de la solución</Label>
-                <Input id="solutionTitle" value={solutionTitle} onChange={(e) => setSolutionTitle(e.target.value)} />
-            </div>
-            <div className="grid gap-2">
-                <Label htmlFor="solutionDescription">Descripción</Label>
-                <Textarea id="solutionDescription" value={solutionDescription} onChange={(e) => setSolutionDescription(e.target.value)} />
-            </div>
-            <div className="grid gap-2">
-                <Label>Archivos</Label>
-                <FileUploader value={solutionFiles} onValueChange={setSolutionFiles} multiple={true} maxFileCount={Infinity} />
-            </div>
-            <div className="grid gap-2">
-                <p className="text-xs text-muted-foreground">
-                    Al participar en este desafío, usted acepta que su solución puede ser utilizada por la empresa organizadora y que ha leído y comprendido los términos y condiciones.
-                </p>
-            </div>
-            <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                <Send className="h-4 w-4" />
-                Enviar solución
-            </Button>
-        </form>
-    )
+        try {
+            const response = await api.post("/api/Soluciones", formData,
+                { requireLoading: true, headers: { 'Content-Type': 'multipart/form-data' } }
+            )
+
+            if (response.data.success) {
+                toast.success("Operación exitosa",
+                    { description: "La solución se ha enviado correctamente." }
+                )
+
+                setIsDrawerOpen(false);
+                setSolutionTitle('');
+                setSolutionDescription('');
+                setSolutionFiles([]);
+
+                setDesafio({ ...desafio, yaParticipo: true });
+            }
+            else {
+                toast.warning("Error al enviar la solución",
+                    { description: response.data.message }
+                )
+            }
+        } catch (error) {
+            toast.error("Error al enviar la solución",
+                { description: error.message }
+            )
+        }
+    }
 
     if (loading) {
         return <LoadingSkeleton />
@@ -204,41 +204,68 @@ const Challenge = () => {
                                 </div>
                             </div>
 
-                            {isDesktop ? (
-                                <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                                    <DialogTrigger asChild>
-                                        <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
-                                            Participar en el Desafío
-                                        </Button>
-                                    </DialogTrigger>
-                                    <DialogContent className="sm:max-w-[425px]">
-                                        <DialogHeader>
-                                            <DialogTitle>Participar en el Desafío</DialogTitle>
-                                            <DialogDescription>Complete el formulario para participar en el desafío.</DialogDescription>
-                                        </DialogHeader>
-                                        <SolutionForm />
-                                    </DialogContent>
-                                </Dialog>
+                            {desafio.yaParticipo === true ? (
+                                <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/my-solutions')}>
+                                    <Users className="mr-2 h-4 w-4" /> Ver estatus de mi solución
+                                </Button>
+                            ) : !user ? (
+                                <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/sign-in')}>
+                                    Iniciar sesión para participar
+                                </Button>
                             ) : (
-                                <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                                    <DrawerTrigger asChild>
-                                        <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
-                                            Participar en el Desafío
-                                        </Button>
-                                    </DrawerTrigger>
-                                    <DrawerContent>
-                                        <DrawerHeader className="text-left">
-                                            <DrawerTitle>Participar en el Desafío</DrawerTitle>
-                                            <DrawerDescription>Complete el formulario para participar en el desafío.</DrawerDescription>
-                                        </DrawerHeader>
-                                        <SolutionForm className="px-4" />
-                                        <DrawerFooter className="pt-2">
-                                            <DrawerClose asChild>
-                                                <Button variant="outline">Cancelar</Button>
-                                            </DrawerClose>
-                                        </DrawerFooter>
-                                    </DrawerContent>
-                                </Drawer>
+                                isDesktop ? (
+                                    <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                                        <DialogTrigger asChild>
+                                            <Button className="w-full mt-6">
+                                                <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[425px]">
+                                            <DialogHeader>
+                                                <DialogTitle>Participar en el Desafío</DialogTitle>
+                                                <DialogDescription>Complete el formulario para participar en el desafío.</DialogDescription>
+                                            </DialogHeader>
+                                            <SolutionForm
+                                                solutionTitle={solutionTitle}
+                                                setSolutionTitle={setSolutionTitle}
+                                                solutionDescription={solutionDescription}
+                                                setSolutionDescription={setSolutionDescription}
+                                                solutionFiles={solutionFiles}
+                                                setSolutionFiles={setSolutionFiles}
+                                                handleSubmitSolution={handleSubmitSolution}
+                                            />
+                                        </DialogContent>
+                                    </Dialog>
+                                ) : (
+                                    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                                        <DrawerTrigger asChild>
+                                            <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
+                                                <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
+                                            </Button>
+                                        </DrawerTrigger>
+                                        <DrawerContent>
+                                            <DrawerHeader className="text-left">
+                                                <DrawerTitle>Participar en el Desafío</DrawerTitle>
+                                                <DrawerDescription>Complete el formulario para participar en el desafío.</DrawerDescription>
+                                            </DrawerHeader>
+                                            <SolutionForm
+                                                className="px-4"
+                                                solutionTitle={solutionTitle}
+                                                setSolutionTitle={setSolutionTitle}
+                                                solutionDescription={solutionDescription}
+                                                setSolutionDescription={setSolutionDescription}
+                                                solutionFiles={solutionFiles}
+                                                setSolutionFiles={setSolutionFiles}
+                                                handleSubmitSolution={handleSubmitSolution}
+                                            />
+                                            <DrawerFooter className="pt-2">
+                                                <DrawerClose asChild>
+                                                    <Button variant="outline">Cancelar</Button>
+                                                </DrawerClose>
+                                            </DrawerFooter>
+                                        </DrawerContent>
+                                    </Drawer>
+                                )
                             )}
                         </Card>
                     </div>
@@ -247,6 +274,32 @@ const Challenge = () => {
         </div>
     )
 }
+
+const SolutionForm = ({ className, solutionTitle, setSolutionTitle, solutionDescription, setSolutionDescription, solutionFiles, setSolutionFiles, handleSubmitSolution }) => (
+    <form className={`grid items-start gap-4 ${className}`} onSubmit={handleSubmitSolution}>
+        <div className="grid gap-2">
+            <Label htmlFor="solutionTitle">Título de la solución</Label>
+            <Input id="solutionTitle" value={solutionTitle} onChange={(e) => setSolutionTitle(e.target.value)} />
+        </div>
+        <div className="grid gap-2">
+            <Label htmlFor="solutionDescription">Descripción</Label>
+            <Textarea id="solutionDescription" value={solutionDescription} onChange={(e) => setSolutionDescription(e.target.value)} />
+        </div>
+        <div className="grid gap-2">
+            <Label>Archivos</Label>
+            <FileUploader value={solutionFiles} onValueChange={setSolutionFiles} multiple={true} maxFileCount={Infinity} maxSize={1024 * 1024 * 1024} />
+        </div>
+        <div className="grid gap-2">
+            <p className="text-xs text-muted-foreground">
+                Al participar en este desafío, usted acepta que su solución puede ser utilizada por la empresa organizadora y que ha leído y comprendido los términos y condiciones.
+            </p>
+        </div>
+        <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Send className="h-4 w-4" />
+            Enviar solución
+        </Button>
+    </form>
+)
 
 const LoadingSkeleton = () => (
     <div className="container mx-auto px-4 md:px-6 py-8">

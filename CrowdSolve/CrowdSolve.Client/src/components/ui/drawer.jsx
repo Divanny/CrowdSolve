@@ -7,7 +7,7 @@ const Drawer = ({
   shouldScaleBackground = true,
   ...props
 }) => (
-  <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
+  <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} onOpenAutoFocus={(e) => e.preventDefault()} repositionInputs={false} {...props} />
 )
 Drawer.displayName = "Drawer"
 
@@ -30,13 +30,14 @@ const DrawerContent = React.forwardRef(({ className, children, ...props }, ref) 
     <DrawerOverlay />
     <DrawerPrimitive.Content
       ref={ref}
+      onOpenAutoFocus={(e) => e.preventDefault()}
       className={cn(
         "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
         className
       )}
       {...props}>
       <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
-      {children}
+      <div className="z-50">{children}</div>
     </DrawerPrimitive.Content>
   </DrawerPortal>
 ))

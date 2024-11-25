@@ -67,6 +67,11 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
                     if (model.Adjuntos != null && model.Adjuntos.Count > 0)
                     {
+                        foreach (var adjuntos in model.Adjuntos)
+                        {
+                            adjuntos.idSolucion = creado.idSolucion;
+                        }
+
                         dbContext.Set<AdjuntosSoluciones>().AddRange(model.Adjuntos);
                     }
 
@@ -105,6 +110,13 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                     if (model.Adjuntos != null && model.Adjuntos.Count > 0)
                     {
                         dbContext.Set<AdjuntosSoluciones>().RemoveRange(dbContext.Set<AdjuntosSoluciones>().Where(x => x.idSolucion == model.idSolucion));
+
+
+                        foreach (var adjuntos in model.Adjuntos)
+                        {
+                            adjuntos.idSolucion = model.idSolucion;
+                        }
+
                         dbContext.Set<AdjuntosSoluciones>().AddRange(model.Adjuntos);
                     }
 

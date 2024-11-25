@@ -16,6 +16,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly DesafiosRepo _desafiosRepo;
+        private readonly SolucionesRepo _solucionesRepo;
         private readonly CategoriasRepo _categoriasRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly EmpresasRepo _empresasRepo;
@@ -34,6 +35,7 @@ namespace CrowdSolve.Server.Controllers
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
+            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
             _categoriasRepo = new CategoriasRepo(crowdSolveContext);
@@ -53,6 +55,7 @@ namespace CrowdSolve.Server.Controllers
             {
                 desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
                 desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+                desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
             });
 
             return desafios;
@@ -70,6 +73,7 @@ namespace CrowdSolve.Server.Controllers
             {
                 desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
                 desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+                desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
             });
 
             return desafios;
@@ -90,8 +94,23 @@ namespace CrowdSolve.Server.Controllers
                 return NotFound("Desafío no encontrado");
             }
 
+            if (_idUsuarioOnline != 0)
+            {
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
+
+                if (usuario == null)
+                {
+                    return NotFound("Usuario no encontrado");
+                }
+
+                var solucion = _solucionesRepo.Get(x => x.idDesafio == idDesafio && x.idUsuario == _idUsuarioOnline).FirstOrDefault();
+
+                desafio.YaParticipo = solucion != null;
+            }
+
             desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
             desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
 
             return Ok(desafio);
         }

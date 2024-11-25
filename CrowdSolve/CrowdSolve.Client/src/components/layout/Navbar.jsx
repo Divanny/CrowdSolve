@@ -19,7 +19,7 @@ const Navbar = () => {
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
     return (
-        <nav className="relative z-50"> {/* Changed to relative positioning with high z-index */}
+        <nav className="relative z-50">
             <div className="container relative flex flex-wrap items-center justify-between py-2 lg:py-2 px-4 md:px-6">
                 <div className="flex w-full flex-wrap items-center justify-between">
                     <div>

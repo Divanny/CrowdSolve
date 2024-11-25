@@ -8,6 +8,7 @@ public class SolucionesModel
     public int idSolucion { get; set; }
 
     [Required(ErrorMessage = "Debe especificar el desafío al que pertenece la solución")]
+    [Range(1, int.MaxValue, ErrorMessage = "Debe especificar el desafío al que pertenece la solución")]
     public int idDesafio { get; set; }
 
     public int idUsuario { get; set; }
@@ -34,7 +35,4 @@ public class SolucionesModel
 
     public int? Puntuacion { get; set; }
     public List<AdjuntosSoluciones>? Adjuntos { get; set; }
-
-    [Required(ErrorMessage = "Debe aceptar los términos y condiciones")]
-    public bool AceptaTerminos { get; set; }
 }

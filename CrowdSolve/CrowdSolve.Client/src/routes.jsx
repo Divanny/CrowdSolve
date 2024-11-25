@@ -21,14 +21,14 @@ const RoleSelection = lazy(() => import('@/pages/auth/RoleSelection'));
 const VerificationPending = lazy(() => import('@/pages/company/VerificationPending'));
 const AccessDenied = lazy(() => import('@/pages/AccessDenied'));
 const CompanyListing = lazy(() => import('@/pages/CompanyListing'));
-const ChallengeCatalog = lazy(() => import('@/pages/ChallengeCatalog'));
-const Challenge = lazy(() => import('@/pages/Challenge'));
+const ChallengeCatalog = lazy(() => import('@/pages/challenges/ChallengeCatalog'));
+const Challenge = lazy(() => import('@/pages/challenges/Challenge'));
 const Participants = lazy(() => import('@/pages/admin/participants/Participants'));
 const Categories = lazy(() => import('@/pages/admin/categories/Categories'));
 const Companies = lazy(() => import('@/pages/admin/companies/Companies'));
 const Administrators = lazy(() => import('@/pages/admin/administrators/Administrators'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
-const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
+const ChallengeForm = lazy(() => import('@/pages/challenges/ChallengeForm'));
 const RolesAndPermissions = lazy(() => import('@/pages/admin/RolesAndPermissions'));
 
 const LazyComponent = ({ component: Component, ...props }) => (

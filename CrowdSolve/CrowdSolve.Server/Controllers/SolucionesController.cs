@@ -27,7 +27,8 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
-        /// <param name="mailing"></param>
+        /// <param name="mailing"></param>.
+        /// <param name="firebaseStorageService"></param>
         public SolucionesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing, FirebaseStorageService firebaseStorageService)
         {
             _logger = logger;
@@ -91,7 +92,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Resultado de la operación.</returns>
         [HttpPost(Name = "SaveSolucion")]
         [Authorize]
-        public OperationResult Post([FromForm]SolucionesModel solucionesModel)
+        public async Task<OperationResult> Post([FromForm]SolucionesModel solucionesModel)
         {
             try
             {
@@ -118,11 +119,11 @@ namespace CrowdSolve.Server.Controllers
 
                     foreach (var archivo in solucionesModel.Archivos)
                     {
-                        var logoUrl = _firebaseStorageService.UploadFileAsync(archivo.OpenReadStream(), $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}", archivo.ContentType).Result;
+                        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(archivo.FileName);
+                        var logoUrl = await _firebaseStorageService.UploadFileAsync(archivo.OpenReadStream(), $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}/{fileNameWithoutExtension}", archivo.ContentType);
 
                         adjuntos.Add(new AdjuntosSoluciones
                         {
-                            idSolucion = solucionesModel.idSolucion,
                             Nombre = archivo.FileName,
                             Tamaño = archivo.Length,
                             ContentType = archivo.ContentType,
@@ -186,7 +187,8 @@ namespace CrowdSolve.Server.Controllers
 
                     foreach (var archivo in solucionesModel.Archivos)
                     {
-                        var logoUrl = _firebaseStorageService.UploadFileAsync(archivo.OpenReadStream(), $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}", archivo.ContentType).Result;
+                        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(archivo.FileName);
+                        var logoUrl = await _firebaseStorageService.UploadFileAsync(archivo.OpenReadStream(), $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}/{fileNameWithoutExtension}", archivo.ContentType);
 
                         adjuntos.Add(new AdjuntosSoluciones
                         {
