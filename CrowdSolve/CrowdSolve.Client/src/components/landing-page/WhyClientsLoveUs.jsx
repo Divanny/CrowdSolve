@@ -63,7 +63,7 @@ const WhyClientsLoveUs = () => {
       transition={{ duration: 0.5 }}
     >
       <div className="container">
-        <Carousel className="w-full">
+        <Carousel>
           <motion.div 
             className="mb-8 flex justify-between px-1 lg:mb-12"
             initial={{ y: 20, opacity: 0 }}

@@ -56,18 +56,8 @@ const useAxios = () => {
                         });
                     }
                 }
-                else {
-                    // Manejar otros errores
-                    toast.error("Operación fallida", {
-                        description: error.message,
-                    });
-                }
-            } else {
-                toast.error("Operación fallida", {
-                    description: error.message,
-                });
             }
-
+            
             return Promise.reject(error);
         }
     );

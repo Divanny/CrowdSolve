@@ -1,6 +1,5 @@
 import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
-import Sidebar from './Sidebar';
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -10,6 +9,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Navbar = () => {
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
     return (
-        <nav className="relative z-50"> {/* Changed to relative positioning with high z-index */}
+        <nav className="relative z-50">
             <div className="container relative flex flex-wrap items-center justify-between py-2 lg:py-2 px-4 md:px-6">
                 <div className="flex w-full flex-wrap items-center justify-between">
                     <div>
@@ -27,7 +27,7 @@ const Navbar = () => {
                             <img className="me-2" src={CrowdSolveLogo} style={{ height: '50px' }} alt="CrowdSolve Logo" />
                         </Link>
                     </div>
-                    <Sidebar />
+                    <SidebarTrigger className="lg:hidden" />
                     <div className="hidden lg:flex flex-grow items-center justify-end gap-8">
                         <div className="flex items-center gap-2">
                             <Button onClick={() => navigate('/about-us')} variant="ghost">Sobre nosotros</Button>

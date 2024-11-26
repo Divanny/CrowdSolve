@@ -23,7 +23,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
-        public PerfilesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing)
+        public PerfilesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;

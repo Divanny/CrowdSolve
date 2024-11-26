@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '@/redux/slices/userSlice';
 import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 import GoogleLoginButton from '@/components/GoogleLoginButton';
+import Lottie from 'lottie-react';
+import animationData from '@/assets/sign-in.json';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -191,7 +193,9 @@ function SignIn() {
           </div>
         </div>
         <div className="hidden min-[500px]:flex justify-center p-0 sm:p-4 ">
-          <div className="w-full rounded-xl bg-card"></div>
+          <div className="w-full rounded-xl bg-card flex flex-col justify-center">
+            <Lottie animationData={animationData} loop={true} className="w-3/4 h-3/4 mx-auto" />
+          </div>
         </div>
       </main>
     </div>

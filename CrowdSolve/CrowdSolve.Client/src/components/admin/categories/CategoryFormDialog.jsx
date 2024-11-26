@@ -10,21 +10,9 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { PhoneInput } from "@/components/ui/phone-input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import useAxios from "@/hooks/use-axios"
 import { toast } from "sonner";
 import AvatarPicker from "@/components/ui/avatar-picker";
-import { CalendarIcon } from "@radix-ui/react-icons"
-import { format } from "date-fns"
-
-import { cn } from "@/lib/utils"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 
 export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }) {
   const { api } = useAxios();
@@ -37,10 +25,6 @@ export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setEditedCategory((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSelectChange = (name, value) => {
     setEditedCategory((prev) => ({ ...prev, [name]: value }))
   }
 
