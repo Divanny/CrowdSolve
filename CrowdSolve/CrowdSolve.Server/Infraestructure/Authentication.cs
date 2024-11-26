@@ -66,7 +66,7 @@ namespace CrowdSolve.Server.Infraestructure
             {
                 if (_testUsers.ContainsKey(credentials.Username) && _testUsers[credentials.Username] == credentials.Password)
                 {
-                    return new OperationResult(true, "Inicio de sesión exitoso", null, TokenGenerator(credentials.Username, 1, 1));
+                    return new OperationResult(true, "Inicio de sesión exitoso", new object(), TokenGenerator(credentials.Username, 1, 1));
                 }
             }
 

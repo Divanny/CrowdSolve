@@ -1,4 +1,5 @@
-﻿using CrowdSolve.Server.Entities.CrowdSolve;
+﻿using AntiVirus;
+using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
@@ -20,6 +21,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly UsuariosRepo _usuariosRepo;
         private readonly Mailing _mailingService;
         private readonly FirebaseStorageService _firebaseStorageService;
+        private readonly Scanner _scanner;
+        private readonly string _filesTempDir;
 
         /// <summary>
         /// Constructor de la clase SoportesController.
@@ -37,6 +40,8 @@ namespace CrowdSolve.Server.Controllers
             _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
+            _filesTempDir = Path.Combine(Directory.GetCurrentDirectory(), "Temp", "Soluciones");
+            _scanner = new Scanner();
             _mailingService = mailing;
             _firebaseStorageService = firebaseStorageService;
         }
@@ -85,6 +90,66 @@ namespace CrowdSolve.Server.Controllers
             return Ok(solucion);
         }
 
+        [HttpPost("SubirArchivos/{guid?}", Name = "SubirArchivos")]
+        [AuthorizeByPermission(PermisosEnum.Ver_Desafio)]
+        public OperationResult Subir([FromForm] IFormFile filePart, string? guid = null)
+        {
+            var tempDir = Path.Combine(_filesTempDir, _idUsuarioOnline.ToString());
+
+            try
+            {
+                var fileName = Request.Headers["X-File-Name"].ToString();
+
+                Directory.CreateDirectory(tempDir);
+
+                var currentPart = int.Parse(Request.Headers["X-Part-Number"].ToString());
+
+                Directory.CreateDirectory(Path.Combine(tempDir, "Partes"));
+
+                var tempFilePath = Path.Combine(tempDir, "Partes", $"{fileName}.part{currentPart}");
+
+                using (var fileStream = new FileStream(tempFilePath, FileMode.Create))
+                {
+                    filePart.CopyTo(fileStream);
+                }
+
+                if (IsLastPart(Request.Headers))
+                {
+                    guid ??= Guid.NewGuid().ToString();
+
+                    string finalFileDir = Path.Combine(tempDir, guid);
+
+                    Directory.CreateDirectory(finalFileDir);
+
+                    var finalFilePath = Path.Combine(finalFileDir, fileName);
+
+                    using (var finalFileStream = new FileStream(finalFilePath, FileMode.Create))
+                    {
+                        for (int i = 1; i <= currentPart; i++)
+                        {
+                            var partFilePath = Path.Combine(tempDir, "Partes", $"{fileName}.part{i}");
+                            using (var partFileStream = new FileStream(partFilePath, FileMode.Open))
+                            {
+                                partFileStream.CopyTo(finalFileStream);
+                            }
+                        }
+                    }
+
+                    Directory.Delete(Path.Combine(tempDir, "Partes"), true);
+
+                    return new OperationResult(true, "Se ha subido el archivo al servidor satisfactoriamente", new { GUID = guid });
+                }
+
+                return new OperationResult(true, "Se ha subido una parte");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                Directory.Delete(tempDir, true);
+                throw;
+            }
+        }
+
         /// <summary>
         /// Guarda una nueva solución.
         /// </summary>
@@ -92,7 +157,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Resultado de la operación.</returns>
         [HttpPost(Name = "SaveSolucion")]
         [Authorize]
-        public async Task<OperationResult> Post([FromForm]SolucionesModel solucionesModel)
+        public async Task<OperationResult> Post([FromBody] SolucionesModel solucionesModel)
         {
             try
             {
@@ -111,29 +176,46 @@ namespace CrowdSolve.Server.Controllers
                     return new OperationResult(false, "Ya ha enviado una solución a este desafío");
                 }
 
-                if (solucionesModel.Archivos == null || solucionesModel.Archivos.Length == 0) return new OperationResult(false, "Debe proporcionar al menos un archivo");
+                if (solucionesModel.FileGuids == null || solucionesModel.FileGuids.Length == 0) return new OperationResult(false, "Debe proporcionar al menos un archivo");
 
-                else
+                List<AdjuntosSoluciones> adjuntos = new List<AdjuntosSoluciones>();
+
+                foreach (var guid in solucionesModel.FileGuids)
                 {
-                    List<AdjuntosSoluciones> adjuntos = new List<AdjuntosSoluciones>();
+                    var tempDir = Path.Combine(_filesTempDir, _idUsuarioOnline.ToString(), guid);
+                    if (!Directory.Exists(tempDir)) return new OperationResult(false, $"No se encontró el archivo temporal con GUID: {guid}");
 
-                    foreach (var archivo in solucionesModel.Archivos)
+                    foreach (var filePath in Directory.EnumerateFiles(tempDir))
                     {
-                        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(archivo.FileName);
-                        var logoUrl = await _firebaseStorageService.UploadFileAsync(archivo.OpenReadStream(), $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}/{fileNameWithoutExtension}", archivo.ContentType);
+                        if (_scanner.ScanAndClean(filePath) == ScanResult.VirusFound)
+                        {
+                            Directory.Delete(tempDir, true);
+                            return new OperationResult(false, "Uno o más archivos contienen virus");
+                        }
+
+                        var fileName = Path.GetFileName(filePath);
+                        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                        Stream stream = new FileStream(filePath, FileMode.Open);
+                        var url = await _firebaseStorageService.UploadFileAsync(stream, $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}/{fileNameWithoutExtension}", MimeMapping.MimeUtility.GetMimeMapping(fileName));
 
                         adjuntos.Add(new AdjuntosSoluciones
                         {
-                            Nombre = archivo.FileName,
-                            Tamaño = archivo.Length,
-                            ContentType = archivo.ContentType,
-                            RutaArchivo = logoUrl,
+                            Nombre = fileName,
+                            Tamaño = new FileInfo(filePath).Length,
+                            ContentType = MimeMapping.MimeUtility.GetMimeMapping(fileName),
+                            RutaArchivo = url,
                             FechaSubida = DateTime.Now
                         });
+
+                        stream.Close();
+
+                        System.IO.File.Delete(filePath);
                     }
 
-                    solucionesModel.Adjuntos = adjuntos;
+                    Directory.Delete(tempDir);
                 }
+
+                solucionesModel.Adjuntos = adjuntos;
 
                 var created = _solucionesRepo.Add(solucionesModel);
                 _logger.LogHttpRequest(solucionesModel);
@@ -142,6 +224,18 @@ namespace CrowdSolve.Server.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex);
+
+                if (solucionesModel.FileGuids != null && solucionesModel.FileGuids.Length > 0)
+                {
+                    foreach (var guid in solucionesModel.FileGuids)
+                    {
+                        var tempDir = Path.Combine(_filesTempDir, _idUsuarioOnline.ToString(), guid);
+                        if (Directory.Exists(tempDir))
+                        {
+                            Directory.Delete(tempDir, true);
+                        }
+                    }
+                }
                 throw;
             }
         }
@@ -154,7 +248,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Resultado de la operación.</returns>
         [HttpPut("{idSolucion}", Name = "UpdateSolucion")]
         [Authorize]
-        public async Task<OperationResult> Put(int idSolucion, [FromForm]SolucionesModel solucionesModel)
+        public async Task<OperationResult> Put(int idSolucion, [FromBody] SolucionesModel solucionesModel)
         {
             try
             {
@@ -173,32 +267,52 @@ namespace CrowdSolve.Server.Controllers
 
                 solucionesModel.idUsuario = _idUsuarioOnline;
 
-                if (solucionesModel.Archivos != null && solucionesModel.Archivos.Length > 0)
+                if (solucionesModel.FileGuids != null && solucionesModel.FileGuids.Length > 0)
                 {
                     List<AdjuntosSoluciones> adjuntos = new List<AdjuntosSoluciones>();
 
                     if (solucion.Adjuntos != null && solucion.Adjuntos.Count > 0)
-                    { 
+                    {
                         foreach (var adjunto in solucion.Adjuntos)
                         {
                             await _firebaseStorageService.DeleteFileAsync(adjunto.RutaArchivo);
-                        }                    
+                        }
                     }
 
-                    foreach (var archivo in solucionesModel.Archivos)
+                    foreach (var guid in solucionesModel.FileGuids)
                     {
-                        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(archivo.FileName);
-                        var logoUrl = await _firebaseStorageService.UploadFileAsync(archivo.OpenReadStream(), $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}/{fileNameWithoutExtension}", archivo.ContentType);
+                        var tempDir = Path.Combine(_filesTempDir, _idUsuarioOnline.ToString(), guid);
+                        if (!Directory.Exists(tempDir)) return new OperationResult(false, $"No se encontró el archivo temporal con GUID: {guid}");
 
-                        adjuntos.Add(new AdjuntosSoluciones
+                        foreach (var filePath in Directory.EnumerateFiles(tempDir))
                         {
-                            idSolucion = solucionesModel.idSolucion,
-                            Nombre = archivo.FileName,
-                            Tamaño = archivo.Length,
-                            ContentType = archivo.ContentType,
-                            RutaArchivo = logoUrl,
-                            FechaSubida = DateTime.Now
-                        });
+                            if (_scanner.ScanAndClean(filePath) == ScanResult.VirusFound)
+                            {
+                                Directory.Delete(tempDir, true);
+                                return new OperationResult(false, "Uno o más archivos contienen virus");
+                            }
+
+                            var fileName = Path.GetFileName(filePath);
+                            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                            Stream stream = new FileStream(filePath, FileMode.Open);
+                            var url = await _firebaseStorageService.UploadFileAsync(stream, $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}/{fileNameWithoutExtension}", MimeMapping.MimeUtility.GetMimeMapping(fileName));
+
+                            adjuntos.Add(new AdjuntosSoluciones
+                            {
+                                idSolucion = solucionesModel.idSolucion,
+                                Nombre = fileName,
+                                Tamaño = new FileInfo(filePath).Length,
+                                ContentType = MimeMapping.MimeUtility.GetMimeMapping(fileName),
+                                RutaArchivo = url,
+                                FechaSubida = DateTime.Now
+                            });
+
+                            stream.Close();
+
+                            System.IO.File.Delete(filePath);
+                        }
+
+                        Directory.Delete(tempDir);
                     }
 
                     solucionesModel.Adjuntos = adjuntos;
@@ -211,6 +325,17 @@ namespace CrowdSolve.Server.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex);
+                if (solucionesModel.FileGuids != null && solucionesModel.FileGuids.Length > 0)
+                {
+                    foreach (var guid in solucionesModel.FileGuids)
+                    {
+                        var tempDir = Path.Combine(_filesTempDir, _idUsuarioOnline.ToString(), guid);
+                        if (Directory.Exists(tempDir))
+                        {
+                            Directory.Delete(tempDir, true);
+                        }
+                    }
+                }
                 throw;
             }
         }
@@ -255,6 +380,16 @@ namespace CrowdSolve.Server.Controllers
         {
             List<SolucionesModel> soluciones = _solucionesRepo.Get(x => x.idUsuario == idUsuario && x.Publica == true).ToList();
             return soluciones;
+        }
+
+        private bool IsLastPart(IHeaderDictionary headers)
+        {
+            int isLastPart;
+            if (!int.TryParse(headers["X-Last-Part"].ToString(), out isLastPart))
+            {
+                isLastPart = 1;
+            }
+            return Convert.ToBoolean(isLastPart);
         }
     }
 }

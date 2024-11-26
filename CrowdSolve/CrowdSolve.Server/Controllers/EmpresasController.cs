@@ -227,7 +227,7 @@ namespace CrowdSolve.Server.Controllers
         /// <summary>
         /// Rechaza una empresa pendiente de validar.
         /// </summary>
-        /// <param name="empresasModel"></param>
+        /// <param name="idEmpresa"></param>
         /// <returns> Resultado de la operación.</returns>
         [HttpPut("Rechazar/{idEmpresa}")]
         [Authorize]

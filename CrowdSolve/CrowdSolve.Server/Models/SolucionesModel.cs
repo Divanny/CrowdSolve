@@ -21,7 +21,7 @@ public class SolucionesModel
     [Required(ErrorMessage = "Debe especificar la descripción")]
     public string? Descripcion { get; set; }
 
-    public IFormFile[]? Archivos { get; set; }
+    public string[]? FileGuids { get; set; }
 
     public DateTime FechaRegistro { get; set; }
 

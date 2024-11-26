@@ -17,9 +17,7 @@ export function FileUploader(props) {
     onValueChange,
     onUpload,
     progresses,
-    accept = {
-      "image/*": [],
-    },
+    accept = {},
     maxSize = 1024 * 1024 * 2,
     maxFileCount = 1,
     multiple = false,

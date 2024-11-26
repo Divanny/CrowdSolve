@@ -112,43 +112,71 @@ const Challenge = () => {
     }
 
     const handleSubmitSolution = async (e) => {
-        e.preventDefault()
-        const formData = new FormData()
-        formData.append("Titulo", solutionTitle)
-        formData.append("Descripcion", solutionDescription)
-        solutionFiles.forEach((file) => {
-            formData.append("Archivos", file)
-        })
-        formData.append("idDesafio", desafio.idDesafio)
+        e.preventDefault();
+        const maxFileSize = 5 * 1024 * 1024;
+        let fileGuids = [];
 
         try {
-            const response = await api.post("/api/Soluciones", formData,
-                { requireLoading: true, headers: { 'Content-Type': 'multipart/form-data' } }
-            )
+            for (const file of solutionFiles) {
+                let currentPart = 1;
+                const totalParts = Math.ceil(file.size / maxFileSize);
+                let guid = null;
+
+                while (currentPart <= totalParts) {
+                    const start = (currentPart - 1) * maxFileSize;
+                    const end = Math.min(start + maxFileSize, file.size);
+                    const chunk = file.slice(start, end);
+
+                    const formData = new FormData();
+                    console.log(chunk);
+                    formData.append("filePart", chunk);
+
+                    const response = await api.post(`/api/Soluciones/SubirArchivos/${guid || ''}`, formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            "X-File-Name": encodeURI(file.name),
+                            "X-Part-Number": currentPart,
+                            "X-Last-Part": currentPart === totalParts ? 1 : 0,
+                        }
+                    });
+
+                    if (response.data.success) {
+                        if (response.data.data && currentPart === totalParts) {
+                            guid = response.data.data.guid;
+                            fileGuids.push(guid);
+                        }
+                    } else {
+                        toast.warning("Error al subir el archivo", { description: response.data.message });
+                        return;
+                    }
+
+                    currentPart++;
+                }
+            }
+
+            const solutionData = {
+                Titulo: solutionTitle,
+                Descripcion: solutionDescription,
+                idDesafio: desafio.idDesafio,
+                FileGuids: fileGuids
+            };
+
+            const response = await api.post("/api/Soluciones", solutionData, { requireLoading: true });
 
             if (response.data.success) {
-                toast.success("Operación exitosa",
-                    { description: "La solución se ha enviado correctamente." }
-                )
-
+                toast.success("Operación exitosa", { description: "La solución se ha enviado correctamente." });
                 setIsDrawerOpen(false);
                 setSolutionTitle('');
                 setSolutionDescription('');
                 setSolutionFiles([]);
-
                 setDesafio({ ...desafio, yaParticipo: true });
-            }
-            else {
-                toast.warning("Error al enviar la solución",
-                    { description: response.data.message }
-                )
+            } else {
+                toast.warning("Error al enviar la solución", { description: response.data.message });
             }
         } catch (error) {
-            toast.error("Error al enviar la solución",
-                { description: error.message }
-            )
+            toast.error("Error al enviar la solución", { description: error.message });
         }
-    }
+    };
 
     if (loading) {
         return <LoadingSkeleton />
@@ -220,7 +248,7 @@ const Challenge = () => {
                                                 <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
                                             </Button>
                                         </DialogTrigger>
-                                        <DialogContent className="sm:max-w-[425px]">
+                                        <DialogContent className="sm:max-w-[625px]">
                                             <DialogHeader>
                                                 <DialogTitle>Participar en el Desafío</DialogTitle>
                                                 <DialogDescription>Complete el formulario para participar en el desafío.</DialogDescription>

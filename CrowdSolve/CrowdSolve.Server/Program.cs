@@ -3,7 +3,9 @@ using CrowdSolve.Server.Infraestructure;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -115,6 +117,21 @@ builder.Services.AddScoped<Authentication>();
 builder.Services.AddScoped<Mailing>();
 builder.Services.AddScoped<FirebaseStorageService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+builder.Services.Configure<IISServerOptions>(options => options.MaxRequestBodySize = int.MaxValue);
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = int.MaxValue;
+});
+builder.Services.Configure<FormOptions>(x =>
+{
+    x.ValueLengthLimit = int.MaxValue;
+    x.MultipartBodyLengthLimit = int.MaxValue;
+    x.MultipartBoundaryLengthLimit = int.MaxValue;
+    x.MultipartHeadersCountLimit = int.MaxValue;
+    x.MultipartHeadersLengthLimit = int.MaxValue;
+});
+
 
 var app = builder.Build();
 
