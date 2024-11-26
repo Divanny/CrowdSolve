@@ -233,6 +233,7 @@
     "useCallbackRef": true,
     "useControllableState": true,
     "FileUploader": true,
-    "LayoutAppSidebar": true
+    "LayoutAppSidebar": true,
+    "AdminRequestsValidateCompanyDialog": true
   }
 }

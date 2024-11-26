@@ -11,14 +11,16 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
+  CircleCheckBig,
   ChevronDown,
+  CircleSlash2,
   Edit,
   Eye,
   FileText,
   MoreHorizontal,
   X,
   Search,
-  FilterX
+  FilterX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -41,27 +43,31 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
+import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ParticipantFormDialog } from "../../../components/admin/participants/ParticipantFormDialog";
+import { ValidateCompanyDialog } from "../../../components/admin/Requests/ValidateCompanyDialog";
 
-export default function Participants() {
+export default function CompanyRequests() {
   const { api } = useAxios();
   const [data, setData] = useState([]);
-  const [nivelesEducativos, setNivelesEducativos] = useState([]);
-  const [estatusUsuarios, setEstatusUsuarios] = useState([]);
+  const [sectores, setSectores] = useState([]);
+  const [tamañosEmpresa, setTamañosEmpresa] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
-  const [nivelEducativoFilter, setNivelEducativoFilter] = useState("");
-  const [estatusUsuarioFilter, setEstatusUsuarioFilter] = useState("");
-  const [nivelEducativoSearch, setNivelEducativoSearch] = useState("");
-  const [estatusUsuarioSearch, setEstatusUsuarioSearch] = useState("");
-  const [selectedParticipant, setSelectedParticipant] = useState(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCompanyRequest, setSelectedCompanyRequest] = useState(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [dialogMode, setDialogMode] = useState("view");
+  const [sectorFilter, setSectorFilter] = useState("");
+  const [tamañoEmpresaFilter, setTamañoEmpresaFilter] = useState("");
+  const [sectorSearch, setSectorSearch] = useState("");
+  const [tamañoEmpresaSearch, setTamañoEmpresaSearch] = useState("");
+
+
+  
 
   const columns = [
     {
@@ -84,49 +90,44 @@ export default function Participants() {
       enableHiding: false,
     },
     {
-      accessorKey: "nombreUsuario",
-      header: "Nombre de Usuario",
-      cell: ({ row }) => (
-        <div className="flex items-center space-x-2">
-          <Avatar>
-            <AvatarImage
-              src={`/placeholder.svg?height=40&width=40`}
-              alt={row.getValue("nombreUsuario")}
-            />
-            <AvatarFallback>
-              {row.getValue("nombreUsuario").slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span>{row.getValue("nombreUsuario")}</span>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "correoElectronico",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-left font-normal"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Correo Electrónico
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
+        accessorKey: "nombre",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-left font-normal"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              Nombre Empresa
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
       },
-    },
     {
-      accessorKey: "nombreCompleto",
-      header: "Nombre Completo",
-      cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`,
+      accessorKey: "descripcion",
+      header: "Descripcion",
+      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+      cell:({getValue})=>{
+        return(
+        <div className="w-80">
+            {getValue()}
+          </div>
+        );
+    }
     },
     {
       accessorKey: "telefono",
-      header: "Teléfono",
+      header: "Telefono",
+      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
     },
     {
-      accessorKey: "fechaNacimiento",
+      accessorKey: "paginaWeb",
+      header: "Pagina Web",
+      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+    },
+    {
+      accessorKey: "tamañoEmpresa",
       header: ({ column }) => {
         return (
           <Button
@@ -134,45 +135,121 @@ export default function Participants() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Fecha de Nacimiento
+            Tamaño
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      cell: ({ row }) =>
-        new Date(row.getValue("fechaNacimiento")).toLocaleDateString(),
+      cell:({getValue})=>{
+        return(
+        <div className="w-20 text-center">
+            {getValue()}
+          </div>
+        );
+    }
     },
     {
-      accessorKey: "nivelEducativo",
-      header: "Nivel Educativo",
+      accessorKey: "sector",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sector
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell:({getValue})=>{
+        return(
+        <div className="w-20 text-center">
+            {getValue()}
+          </div>
+        );
+    }
     },
     {
-      accessorKey: "soluciones",
-      header: "Soluciones Enviadas",
-      cell: ({ row }) => row.original.soluciones.length,
+      accessorKey: "direccion",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Dirección
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
     },
     {
-      accessorKey: "fechaRegistro",
-      header: "Fecha de Registro",
-      cell: ({ row }) =>
-        new Date(row.getValue("fechaRegistro")).toLocaleDateString(),
+        accessorKey: "avatar",
+        header: "Avatar",
+        cell: ({ row }) => (
+            <div className="flex items-center space-x-2">
+              <Avatar>
+                <AvatarImage
+                  src={`/placeholder.svg?height=40&width=40`}
+                  alt={row.getValue("avatar")}
+                />
+                <AvatarFallback>{row.getValue("avatar")}</AvatarFallback>
+              </Avatar>
+              <span>{row.getValue("avatar")}</span>
+            </div>
+          ),
     },
-    {
-      accessorKey: "estatusUsuario",
-      header: "Estatus",
-      cell: ({ row }) => (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-semibold ${row.getValue("estatusUsuario") === "Activo"
-            ? "bg-green-100 text-green-800"
-            : row.getValue("estatusUsuario") === "Inactivo"
-              ? "bg-red-100 text-red-800"
-              : "bg-yellow-100 text-yellow-800"
-            }`}
-        >
-          {row.getValue("estatusUsuario")}
-        </span>
-      ),
-    },
+      {
+        accessorKey: "cantidadDesafios",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-left font-normal"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              Cant. Desafios
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell:({getValue})=>{
+            return(
+            <div className="text-center">
+                {getValue()}
+              </div>
+            );
+        }
+      },
+      {
+        accessorKey: "cantidadSoluciones",
+        header: ({ column }) => {
+          return (
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-left font-normal"
+              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            >
+              Cant. Soluciones
+              <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+          );
+        },
+        cell:({getValue})=>{
+            return(
+            <div  style={{ width: "80px", textAlign: "center" }}>
+                {getValue()}
+              </div>
+            );
+        }
+      },
+      {
+        accessorKey: "estatusUsuario",
+        header: "Estatus Empresa",
+        /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+      },
     {
       id: "actions",
       cell: ({ row }) => (
@@ -187,31 +264,23 @@ export default function Participants() {
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                setSelectedParticipant(row.original)
-                setDialogMode("edit")
+                setSelectedCompanyRequest(row.original.idEmpresa)
+                setDialogMode("validate")
                 setIsDialogOpen(true)
               }}
             >
-              <Edit className="mr-2 h-4 w-4" />
-              Editar
+              <CircleCheckBig className="mr-2 h-4 w-4" />
+              Validar Empresa
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                setSelectedParticipant(row.original)
-                setDialogMode("view")
+                setSelectedCompanyRequest(row.original.idEmpresa)
+                setDialogMode("decline")
                 setIsDialogOpen(true)
               }}
             >
-              <Eye className="mr-2 h-4 w-4" />
-              Ver detalles
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                console.log("Ver soluciones", row.original.idParticipante)
-              }
-            >
-              <FileText className="mr-2 h-4 w-4" />
-              Ver soluciones
+              <CircleSlash2 className="mr-2 h-4 w-4" />
+              Rechazar Empresa
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -221,17 +290,18 @@ export default function Participants() {
 
   const fetchData = async () => {
     try {
-      const [participantesResponse, relationalObjectsResponse] =
+      const [companyRequestsResponse, relationalObjectsResponse] =
         await Promise.all([
-          api.get("/api/Participantes", { requireLoading: false }),
-          api.get("/api/Participantes/GetRelationalObjects", {
+          api.get("/api/Empresas/GetEmpresasPendientesValidar", { requireLoading: false }),
+          api.get("/api/Empresas/GetRelationalObjects", {
             requireLoading: false,
           }),
         ]);
 
-      setData(participantesResponse.data);
-      setNivelesEducativos(relationalObjectsResponse.data.nivelesEducativos);
-      setEstatusUsuarios(relationalObjectsResponse.data.estatusUsuarios);
+      setData(companyRequestsResponse.data);
+      setSectores(relationalObjectsResponse.data.sectores);
+      setTamañosEmpresa(relationalObjectsResponse.data.tamañosEmpresa);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -244,6 +314,7 @@ export default function Participants() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   const table = useReactTable({
     data,
     columns,
@@ -254,15 +325,16 @@ export default function Participants() {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
     globalFilterFn: (row, columnId, filterValue) => {
-      const value = row.getValue(columnId);
-      return value != null
-        ? String(value)
-            .toLowerCase()
-            .includes(String(filterValue).toLowerCase())
-        : false;
-    },
+        const value = row.getValue(columnId);
+        return value != null
+          ? String(value)
+              .toLowerCase()
+              .includes(String(filterValue).toLowerCase())
+          : false;
+      },
     state: {
       sorting,
       columnFilters,
@@ -275,17 +347,17 @@ export default function Participants() {
   const clearFilters = () => {
     setGlobalFilter("");
     setColumnFilters([]);
-    setNivelEducativoFilter("");
-    setEstatusUsuarioFilter("");
+    setSectorFilter("");
+    setTamañoEmpresaFilter("");
     table.setGlobalFilter("");
   };
 
-  const filteredNivelesEducativos = nivelesEducativos.filter((nivel) =>
-    nivel.nombre.toLowerCase().includes(nivelEducativoSearch.toLowerCase())
+  const filteredSectores = sectores.filter((sector) =>
+    sector.nombre.toLowerCase().includes(sectorSearch.toLowerCase())
   );
 
-  const filteredEstatusUsuarios = estatusUsuarios.filter((estatus) =>
-    estatus.nombre.toLowerCase().includes(estatusUsuarioSearch.toLowerCase())
+  const filteredTamañoEmpresa = tamañosEmpresa.filter((tamaño) =>
+    tamaño.nombre.toLowerCase().includes(tamañoEmpresaSearch.toLowerCase())
   );
 
   if (isLoading) {
@@ -297,6 +369,8 @@ export default function Participants() {
     );
   }
 
+  
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4 gap-4">
@@ -304,21 +378,23 @@ export default function Participants() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por nombre de usuario, correo o nombre completo..."
+            placeholder="Buscar por nombre de Empresa"
             value={globalFilter ?? ""}
             onChange={(event) => {
-              const value = event.target.value;
-              setGlobalFilter(value);
-              table.setGlobalFilter(value);
-          }}
+                const value = event.target.value;
+                setGlobalFilter(value);
+                table.setGlobalFilter(value);
+            }}
             className="pl-8"
           />
         </div>
+
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Nivel Educativo
-              {nivelEducativoFilter ? `: ${nivelEducativoFilter}` : ""}
+              Sector
+              {sectorFilter ? `: ${sectorFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -329,40 +405,42 @@ export default function Participants() {
                 <Input
                   type="text"
                   placeholder="Buscar..."
-                  value={nivelEducativoSearch}
-                  onChange={(e) => setNivelEducativoSearch(e.target.value)}
+                  value={sectorSearch}
+                  onChange={(e) => setSectorSearch(e.target.value)}
                   className="pl-8"
                 />
               </div>
             </div>
-            {nivelEducativoFilter && (
+            {sectorFilter && (
               <DropdownMenuItem
                 onSelect={() => {
-                  setNivelEducativoFilter("");
-                  table.getColumn("nivelEducativo")?.setFilterValue(undefined);
+                  setSectorFilter("");
+                  table.getColumn("sector")?.setFilterValue(undefined);
                 }}
               >
                 <X className="mr-2 h-4 w-4" /> Limpiar filtro
               </DropdownMenuItem>
             )}
-            {filteredNivelesEducativos.map((nivel) => (
+            {filteredSectores.map((sector) => (
               <DropdownMenuItem
-                key={nivel.idNivelEducativo}
+                key={sector.idSector}
                 onSelect={() => {
-                  setNivelEducativoFilter(nivel.nombre);
-                  table.getColumn("nivelEducativo")?.setFilterValue(nivel.nombre);
+                  setSectorFilter(sector.nombre);
+                  table.getColumn("sector")?.setFilterValue(sector.nombre);
                 }}
               >
-                {nivel.nombre}
+                {sector.nombre}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Estatus Usuario
-              {estatusUsuarioFilter ? `: ${estatusUsuarioFilter}` : ""}
+              Tamaño Empresa
+              {tamañoEmpresaFilter ? `: ${tamañoEmpresaFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -372,40 +450,42 @@ export default function Participants() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Buscar estatus..."
-                  value={estatusUsuarioSearch}
-                  onChange={(e) => setEstatusUsuarioSearch(e.target.value)}
+                  placeholder="Buscar tamaño..."
+                  value={tamañoEmpresaSearch}
+                  onChange={(e) => setTamañoEmpresaSearch(e.target.value)}
                   className="pl-8"
                 />
               </div>
             </div>
-            {estatusUsuarioFilter && (
+            {tamañoEmpresaFilter && (
               <DropdownMenuItem
                 onSelect={() => {
-                  setEstatusUsuarioFilter("");
-                  table.getColumn("estatusUsuario")?.setFilterValue(undefined);
+                  setTamañoEmpresaFilter("");
+                  table.getColumn("tamañoEmpresa")?.setFilterValue(undefined);
                 }}
               >
                 <X className="mr-2 h-4 w-4" /> Limpiar filtro
               </DropdownMenuItem>
             )}
-            {filteredEstatusUsuarios.map((estatus) => (
+            {filteredTamañoEmpresa.map((tamaño) => (
               <DropdownMenuItem
-                key={estatus.idEstatusUsuario}
+                key={tamaño.idTamañoEmpresa}
                 onSelect={() => {
-                  setEstatusUsuarioFilter(estatus.nombre);
-                  table.getColumn("estatusUsuario")?.setFilterValue(estatus.nombre);
+                  setTamañoEmpresaFilter(tamaño.nombre);
+                  table.getColumn("tamañoEmpresa")?.setFilterValue(tamaño.nombre);
                 }}
               >
-                {estatus.nombre}
+                {tamaño.nombre}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        
+
         <Button
           variant="outline"
           onClick={clearFilters}
-          disabled={!globalFilter && !nivelEducativoFilter && !estatusUsuarioFilter}
+          disabled={!globalFilter && !sectorFilter && !tamañoEmpresaFilter}
           size="icon"
           tooltip="Limpiar filtros"
         >
@@ -513,17 +593,17 @@ export default function Participants() {
         </div>
       </div>
 
-      {selectedParticipant && (
-        <ParticipantFormDialog
+      {selectedCompanyRequest && (
+        <ValidateCompanyDialog
           isOpen={isDialogOpen}
           onClose={() => setIsDialogOpen(false)}
           onSaved={() => {
             setIsDialogOpen(false);
             fetchData();
           }}
-          participant={selectedParticipant}
+          estatusId={selectedCompanyRequest}
           mode={dialogMode}
-          relationalObjects={{ nivelesEducativos, estatusUsuarios }}
+          /* relationalObjects={{ nivelesEducativos, estatusUsuarios }} */
         />
       )}
     </div>
