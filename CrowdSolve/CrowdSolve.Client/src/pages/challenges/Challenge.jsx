@@ -48,6 +48,10 @@ const Challenge = () => {
     const isDesktop = useMediaQuery("(min-width: 768px)")
     const user = useSelector((state) => state.user.user);
 
+    const isCompany = user?.informacionEmpresa != null;
+    const isChallengeOwner = user?.idUsuario === desafio?.idUsuarioEmpresa;
+    const isChallengeInProgress = new Date(desafio?.fechaInicio) <= new Date() && new Date(desafio?.fechaLimite) >= new Date();
+
     useEffect(() => {
         const getChallenge = async () => {
             try {
@@ -232,67 +236,81 @@ const Challenge = () => {
                                 </div>
                             </div>
 
-                            {desafio.yaParticipo === true ? (
-                                <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/my-solutions')}>
-                                    <Users className="mr-2 h-4 w-4" /> Ver estatus de mi solución
-                                </Button>
+                            {isCompany ? (
+                                isChallengeOwner && (
+                                    <Button className="w-full mt-6" variant="outline" onClick={() => navigate(`/challenge/${challengeId}/solutions`)}>
+                                        <Users className="mr-2 h-4 w-4" /> Ver soluciones
+                                    </Button>
+                                )
                             ) : !user ? (
                                 <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/sign-in')}>
                                     Iniciar sesión para participar
                                 </Button>
                             ) : (
-                                isDesktop ? (
-                                    <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                                        <DialogTrigger asChild>
-                                            <Button className="w-full mt-6">
-                                                <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent className="sm:max-w-[625px]">
-                                            <DialogHeader>
-                                                <DialogTitle>Participar en el Desafío</DialogTitle>
-                                                <DialogDescription>Complete el formulario para participar en el desafío.</DialogDescription>
-                                            </DialogHeader>
-                                            <SolutionForm
-                                                solutionTitle={solutionTitle}
-                                                setSolutionTitle={setSolutionTitle}
-                                                solutionDescription={solutionDescription}
-                                                setSolutionDescription={setSolutionDescription}
-                                                solutionFiles={solutionFiles}
-                                                setSolutionFiles={setSolutionFiles}
-                                                handleSubmitSolution={handleSubmitSolution}
-                                            />
-                                        </DialogContent>
-                                    </Dialog>
+                                desafio.yaParticipo ? (
+                                    <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/my-solutions')}>
+                                        <Users className="mr-2 h-4 w-4" /> Ver estatus de mi solución
+                                    </Button>
                                 ) : (
-                                    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                                        <DrawerTrigger asChild>
-                                            <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
-                                                <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
-                                            </Button>
-                                        </DrawerTrigger>
-                                        <DrawerContent>
-                                            <DrawerHeader className="text-left">
-                                                <DrawerTitle>Participar en el Desafío</DrawerTitle>
-                                                <DrawerDescription>Complete el formulario para participar en el desafío.</DrawerDescription>
-                                            </DrawerHeader>
-                                            <SolutionForm
-                                                className="px-4"
-                                                solutionTitle={solutionTitle}
-                                                setSolutionTitle={setSolutionTitle}
-                                                solutionDescription={solutionDescription}
-                                                setSolutionDescription={setSolutionDescription}
-                                                solutionFiles={solutionFiles}
-                                                setSolutionFiles={setSolutionFiles}
-                                                handleSubmitSolution={handleSubmitSolution}
-                                            />
-                                            <DrawerFooter className="pt-2">
-                                                <DrawerClose asChild>
-                                                    <Button variant="outline">Cancelar</Button>
-                                                </DrawerClose>
-                                            </DrawerFooter>
-                                        </DrawerContent>
-                                    </Drawer>
+                                    isChallengeInProgress ? (
+                                        isDesktop ? (
+                                            <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                                                <DialogTrigger asChild>
+                                                    <Button className="w-full mt-6">
+                                                        <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
+                                                    </Button>
+                                                </DialogTrigger>
+                                                <DialogContent className="sm:max-w-[625px]">
+                                                    <DialogHeader>
+                                                        <DialogTitle>Participar en el Desafío</DialogTitle>
+                                                        <DialogDescription>Complete el formulario para participar en el desafío.</DialogDescription>
+                                                    </DialogHeader>
+                                                    <SolutionForm
+                                                        solutionTitle={solutionTitle}
+                                                        setSolutionTitle={setSolutionTitle}
+                                                        solutionDescription={solutionDescription}
+                                                        setSolutionDescription={setSolutionDescription}
+                                                        solutionFiles={solutionFiles}
+                                                        setSolutionFiles={setSolutionFiles}
+                                                        handleSubmitSolution={handleSubmitSolution}
+                                                    />
+                                                </DialogContent>
+                                            </Dialog>
+                                        ) : (
+                                            <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                                                <DrawerTrigger asChild>
+                                                    <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
+                                                        <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
+                                                    </Button>
+                                                </DrawerTrigger>
+                                                <DrawerContent>
+                                                    <DrawerHeader className="text-left">
+                                                        <DrawerTitle>Participar en el Desafío</DrawerTitle>
+                                                        <DrawerDescription>Complete el formulario para participar en el desafío.</DrawerDescription>
+                                                    </DrawerHeader>
+                                                    <SolutionForm
+                                                        className="px-4"
+                                                        solutionTitle={solutionTitle}
+                                                        setSolutionTitle={setSolutionTitle}
+                                                        solutionDescription={solutionDescription}
+                                                        setSolutionDescription={setSolutionDescription}
+                                                        solutionFiles={solutionFiles}
+                                                        setSolutionFiles={setSolutionFiles}
+                                                        handleSubmitSolution={handleSubmitSolution}
+                                                    />
+                                                    <DrawerFooter className="pt-2">
+                                                        <DrawerClose asChild>
+                                                            <Button variant="outline">Cancelar</Button>
+                                                        </DrawerClose>
+                                                    </DrawerFooter>
+                                                </DrawerContent>
+                                            </Drawer>
+                                        )
+                                    ) : (
+                                        <div className="text-center text-muted-foreground mt-6">
+                                            El desafío no está en progreso.
+                                        </div>
+                                    )
                                 )
                             )}
                         </Card>
