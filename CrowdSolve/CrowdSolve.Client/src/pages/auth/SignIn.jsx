@@ -61,7 +61,7 @@ function SignIn() {
         } else if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
           navigate("/sign-up/complete");
         } else {
-          navigate("/");
+          navigate(-1);
         }
         toast.success("Operación exitosa", {
           description: "Inicio de sesión exitoso",

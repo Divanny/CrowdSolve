@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Calendar, Users, Clock, ArrowLeft, Send } from 'lucide-react'
+import { Calendar, Users, Clock, ArrowLeft, Send, AlertTriangle } from 'lucide-react'
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import ChallengeDetail from '@/components/challenge/ChallengeDetail';
@@ -29,15 +29,19 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import createEditorToConvertToHtml from '@/hooks/createEditorToConvertToHtml'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setLoading } from '@/redux/slices/loadingSlice';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 
 const editor = createEditorToConvertToHtml();
 
 const Challenge = () => {
     const { challengeId } = useParams()
     const { api } = useAxios()
+    const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(true)
+    const [loadingSkeleton, setLoadingSkeleton] = useState(true)
     const [desafio, setDesafio] = useState(null)
     const [htmlContent, setHtmlContent] = useState('')
     const [relationalObjects, setRelationalObjects] = useState({})
@@ -50,7 +54,7 @@ const Challenge = () => {
 
     const isCompany = user?.informacionEmpresa != null;
     const isChallengeOwner = user?.idUsuario === desafio?.idUsuarioEmpresa;
-    const isChallengeInProgress = new Date(desafio?.fechaInicio) <= new Date() && new Date(desafio?.fechaLimite) >= new Date();
+    const isChallengeInProgress = desafio?.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_progreso;
 
     useEffect(() => {
         const getChallenge = async () => {
@@ -76,7 +80,7 @@ const Challenge = () => {
                 toast.error("No se pudo cargar el desafío.")
                 console.error(error)
             }
-            setLoading(false)
+            setLoadingSkeleton(false)
         }
 
         getChallenge()
@@ -120,6 +124,8 @@ const Challenge = () => {
         const maxFileSize = 5 * 1024 * 1024;
         let fileGuids = [];
 
+        dispatch(setLoading(true));
+
         try {
             for (const file of solutionFiles) {
                 let currentPart = 1;
@@ -136,6 +142,7 @@ const Challenge = () => {
                     formData.append("filePart", chunk);
 
                     const response = await api.post(`/api/Soluciones/SubirArchivos/${guid || ''}`, formData, {
+                        requireLoading: false,
                         headers: {
                             "Content-Type": "multipart/form-data",
                             "X-File-Name": encodeURI(file.name),
@@ -165,7 +172,7 @@ const Challenge = () => {
                 FileGuids: fileGuids
             };
 
-            const response = await api.post("/api/Soluciones", solutionData, { requireLoading: true });
+            const response = await api.post("/api/Soluciones", solutionData, { requireLoading: false });
 
             if (response.data.success) {
                 toast.success("Operación exitosa", { description: "La solución se ha enviado correctamente." });
@@ -180,9 +187,11 @@ const Challenge = () => {
         } catch (error) {
             toast.error("Error al enviar la solución", { description: error.message });
         }
+
+        dispatch(setLoading(false));
     };
 
-    if (loading) {
+    if (loadingSkeleton) {
         return <LoadingSkeleton />
     }
 
@@ -200,6 +209,27 @@ const Challenge = () => {
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" /> Volver
                 </Button>
+                {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion && (
+                    <Alert className="bg-primary/20 border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                        <div className="flex items-start gap-4">
+                            <AlertTriangle className="h-5 w-5 text-primary mt-1" />
+                            <div>
+                                <AlertTitle className="font-semibold">
+                                    Desafío en Evaluación
+                                </AlertTitle>
+                                <AlertDescription className="mt-2">
+                                    Este desafío está actualmente en proceso de evaluación. ¡Participa en la evaluación!
+                                </AlertDescription>
+                            </div>
+                        </div>
+                        <Button
+                            variant="outline"
+                            onClick={() => navigate(`/challenge/${challengeId}/evaluate`)}
+                        >
+                            Participar
+                        </Button>
+                    </Alert>
+                )}
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className='flex-1 order-2 lg:order-1'>
                         <Card className="bg-card text-card-foreground p-6 mb-6">

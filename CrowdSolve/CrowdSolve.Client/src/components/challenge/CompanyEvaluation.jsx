@@ -1,14 +1,209 @@
-const CompanyEvaluation = ({ solutions }) => {
+"use client"
+
+import { useState } from 'react'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Eye, FileIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, Calendar, Clock, Star } from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
+import { Label } from "@/components/ui/label"
+import { Separator } from "@/components/ui/separator"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Slider } from "@/components/ui/slider"
+import { VisuallyHidden } from '@radix-ui/themes'
+
+const CompanyEvaluation = ({ solutions, challengeId }) => {
+    const [puntuaciones, setPuntuaciones] = useState({})
+    const [detalleSolucionDialog, setDetalleSolucionDialog] = useState(false)
+    const [solucionSeleccionada, setSolucionSeleccionada] = useState(null)
+
+    const handlePuntuacionChange = (idSolucion, value) => {
+        setPuntuaciones(prev => ({ ...prev, [idSolucion]: value[0] }))
+    }
+
+    const formatearFecha = (fecha) => {
+        return new Date(fecha).toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        })
+    }
+
+    const formatearTamaño = (bytes) => {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+        if (bytes === 0) return '0 Byte'
+        const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)).toString())
+        return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i]
+    }
+
+    const IconoArchivo = ({ tipo }) => {
+        switch (tipo) {
+            case 'image/png':
+            case 'image/jpeg':
+            case 'image/gif':
+            case 'image/webp':
+            case 'image/svg+xml':
+                return <ImageIcon className="w-4 h-4" />
+            case 'application/pdf':
+                return <FileTextIcon className="w-4 h-4" />
+            case 'application/zip':
+                return <FileZipIcon className="w-4 h-4" />
+            default:
+                return <FileIcon className="w-4 h-4" />
+        }
+    }
+
+    const handleGuardarPuntuacion = (idSolucion) => {
+        // Aquí iría la lógica para guardar la puntuación
+        console.log(`Guardando puntuación ${puntuaciones[idSolucion]} para la solución ${idSolucion}`)
+    }
+
     return (
-        <div>
-            <h2>Evaluación de la Empresa</h2>
-            {solutions.map(solution => (
-                <div key={solution.idSolucion}>
-                    <h3>{solution.titulo}</h3>
-                    <p>{solution.descripcion}</p>
-                    <input type="number" min="0" max="100" placeholder="Puntuación (0-100)" />
-                </div>
-            ))}
+        <div className="space-y-4">
+            <h2 className="text-2xl font-bold">Evaluar soluciones</h2>
+            <div className="rounded-md border">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Usuario</TableHead>
+                            <TableHead>Título</TableHead>
+                            <TableHead>Fecha</TableHead>
+                            <TableHead>Estatus</TableHead>
+                            <TableHead>Puntuación</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {solutions.map((solucion) => (
+                            <TableRow key={solucion.idSolucion}>
+                                <TableCell>
+                                    <div className="flex items-center space-x-2">
+                                        <Avatar>
+                                            <AvatarImage src={solucion.avatarUrl || "https://github.com/shadcn.png"} alt={solucion.nombreUsuario} />
+                                            <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span>{solucion.nombreUsuario}</span>
+                                    </div>
+                                </TableCell>
+                                <TableCell>{solucion.titulo}</TableCell>
+                                <TableCell>{formatearFecha(solucion.fechaRegistro)}</TableCell>
+                                <TableCell>
+                                    <Badge variant="outline">{solucion.estatusProceso}</Badge>
+                                </TableCell>
+                                <TableCell>
+                                    {solucion.puntuacion || 'Sin evaluar'}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                    <Dialog open={detalleSolucionDialog} onOpenChange={setDetalleSolucionDialog}>
+                                        <DialogTrigger asChild>
+                                            <Button variant="ghost" size="icon" onClick={() => setSolucionSeleccionada(solucion)}>
+                                                <Eye className="h-4 w-4" />
+                                                <span className="sr-only">Ver detalles</span>
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="max-w-4xl">
+                                            <DialogHeader>
+                                                <DialogTitle className="text-2xl font-bold">{solucionSeleccionada?.titulo}</DialogTitle>
+                                                <VisuallyHidden>
+                                                    <DialogDescription>Detalles de la solución</DialogDescription>
+                                                </VisuallyHidden>
+                                            </DialogHeader>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
+                                                <div className="md:col-span-2 space-y-6">
+                                                    <div className="flex items-center space-x-4">
+                                                        <Avatar className="w-16 h-16">
+                                                            <AvatarImage src={solucionSeleccionada?.avatarUrl || "https://github.com/shadcn.png"} alt={solucionSeleccionada?.nombreUsuario} />
+                                                            <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div>
+                                                            <p className="text-lg font-semibold">{solucionSeleccionada?.nombreUsuario}</p>
+                                                            <p className="text-sm text-muted-foreground">Autor de la solución</p>
+                                                        </div>
+                                                    </div>
+                                                    <Separator />
+                                                    <div>
+                                                        <Label className="text-lg font-semibold">Descripción</Label>
+                                                        <ScrollArea className="h-[200px] w-full rounded-md border p-4 mt-2">
+                                                            <p className="text-sm">{solucionSeleccionada?.descripcion}</p>
+                                                        </ScrollArea>
+                                                    </div>
+                                                    <div>
+                                                        <Label className="text-lg font-semibold">Archivos adjuntos</Label>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                                                            {solucionSeleccionada?.adjuntos.map((adjunto) => (
+                                                                <Button
+                                                                    key={adjunto.idAdjunto}
+                                                                    variant="outline"
+                                                                    size="sm"
+                                                                    className="flex items-center justify-start space-x-2 w-full"
+                                                                    onClick={() => window.open(adjunto.rutaArchivo, '_blank')}
+                                                                >
+                                                                    <IconoArchivo tipo={adjunto.contentType} />
+                                                                    <span className="truncate flex-1">{adjunto.nombre}</span>
+                                                                    <span className="text-xs text-muted-foreground whitespace-nowrap">{formatearTamaño(adjunto.tamaño)}</span>
+                                                                </Button>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-6">
+                                                    <div className="bg-muted p-4 rounded-lg space-y-4">
+                                                        <div className="flex items-center space-x-2">
+                                                            <Calendar className="w-5 h-5 text-muted-foreground" />
+                                                            <div>
+                                                                <Label className="text-sm font-medium">Fecha de envío</Label>
+                                                                <p className="text-sm">{formatearFecha(solucionSeleccionada?.fechaRegistro)}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <Clock className="w-5 h-5 text-muted-foreground" />
+                                                            <div>
+                                                                <Label className="text-sm font-medium">Estatus</Label>
+                                                                <Badge variant="outline" className="mt-1">{solucionSeleccionada?.estatusProceso}</Badge>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <Separator />
+                                                    <div className="space-y-4">
+                                                        <Label htmlFor={`puntuacion-${solucionSeleccionada?.idSolucion}`} className="text-lg font-semibold flex items-center gap-2">
+                                                            <Star className="w-5 h-5 text-yellow-400" />
+                                                            Puntuación
+                                                        </Label>
+                                                        <div className="flex items-center space-x-4">
+                                                            <Slider
+                                                                id={`puntuacion-${solucionSeleccionada?.idSolucion}`}
+                                                                max={100}
+                                                                step={1}
+                                                                value={[puntuaciones[solucionSeleccionada?.idSolucion] || 0]}
+                                                                onValueChange={(value) => handlePuntuacionChange(solucionSeleccionada?.idSolucion, value)}
+                                                                className="flex-1"
+                                                            />
+                                                            <span className="font-bold text-lg w-12 text-center">
+                                                                {puntuaciones[solucionSeleccionada?.idSolucion] || 0}
+                                                            </span>
+                                                        </div>
+                                                        <Button onClick={() => handleGuardarPuntuacion(solucionSeleccionada?.idSolucion)} className="w-full">
+                                                            Guardar puntuación
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <DialogFooter>
+                                                <Button type="button" variant="secondary" onClick={() => setDetalleSolucionDialog(false)}>
+                                                    Cerrar
+                                                </Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
         </div>
     );
 };

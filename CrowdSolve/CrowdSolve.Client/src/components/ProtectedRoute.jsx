@@ -31,9 +31,18 @@ const ProtectedRoute = () => {
             }
         }
         catch (error) {
-            toast.error("Error al obtener la información del usuario", {
-                description: error.message,
-            });
+            if (error.response && error.response.status === 401) {
+                dispatch(setUser({ user: null, token: null, views: [] }));
+
+                toast.warning("Debe iniciar sesión", {
+                    description: "Sesión expirada. Por favor, inicia sesión nuevamente.",
+                });
+            }
+            else {
+                toast.error("Error al obtener la información del usuario", {
+                    description: error.message,
+                });
+            }
         }
     }
 
@@ -82,7 +91,7 @@ const ProtectedRoute = () => {
         checkUser();
         // eslint-disable-next-line
     }, []);
-    
+
     if (!token) {
         return <Navigate to="/sign-in" replace state={{ from: location }} />;
     }
@@ -92,7 +101,7 @@ const ProtectedRoute = () => {
     }
 
     if (user.idEstatusUsuario === EstatusUsuarioEnum.Incompleto && !location.pathname.includes('/sign-up/complete')) {
-        return <Navigate to="/sign-up/complete" replace state={{ from: location }}/>;
+        return <Navigate to="/sign-up/complete" replace state={{ from: location }} />;
     }
 
     if (!canAcess()) {

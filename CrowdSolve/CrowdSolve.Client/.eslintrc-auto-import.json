@@ -234,6 +234,8 @@
     "useControllableState": true,
     "FileUploader": true,
     "LayoutAppSidebar": true,
-    "AdminRequestsValidateCompanyDialog": true
+    "AdminRequestsValidateCompanyDialog": true,
+    "ChallengeCompanyEvaluation": true,
+    "ChallengeUserVoting": true
   }
 }
