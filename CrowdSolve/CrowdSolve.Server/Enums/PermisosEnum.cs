@@ -19,7 +19,6 @@
         Administrar_Participantes = 22,
         Administrar_Roles_y_Permisos = 23,
         Administrar_Categorias = 1016,
-        Solicitudes_Empresas = 1017,
-        Solicitudes_Soporte = 1018
+        Evaluar_Desafío = 1018
     }
 }
