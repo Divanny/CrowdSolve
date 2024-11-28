@@ -10,6 +10,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
     {
         public ProcesosRepo procesosRepo;
         public ProcesosRepo procesosRepoProcesoEvaluacion;
+        public UsuariosRepo usuariosRepo;
         public int _idUsuarioEnLinea;
         public DesafiosRepo(DbContext dbContext, int idUsuarioEnLinea) : base
         (
@@ -52,6 +53,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         {
             procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Desafío, dbContext, idUsuarioEnLinea);
             procesosRepoProcesoEvaluacion = new ProcesosRepo(ClasesProcesoEnum.Proceso_de_Evaluación, dbContext, idUsuarioEnLinea);
+            usuariosRepo = new UsuariosRepo(dbContext);
             _idUsuarioEnLinea = idUsuarioEnLinea;
         }
         public override Desafios Add(DesafiosModel model)
@@ -206,6 +208,29 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         public void DescartarDesafio(int idDesafio, string motivo)
         {
             procesosRepo.CambiarEstatusProceso(idDesafio, new ProcesosModel(EstatusProcesoEnum.Desafío_Descartado, motivo));
+        }
+
+        public OperationResult ValidarUsuarioPuedeEvaluar(int idDesafio, int idUsuario)
+        {
+            var desafio = this.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+            if (desafio == null) return new OperationResult(false, "Este desafío no se ha encontrado");
+
+            if (desafio.idEstatusDesafio != (int)EstatusProcesoEnum.Desafío_En_evaluación) return new OperationResult(false, "Este desafío no está en proceso de evaluación");
+
+            var procesoEvaluacion = this.GetProcesoEvaluacionDesafio(idDesafio);
+            if (procesoEvaluacion == null || procesoEvaluacion.Count == 0) return new OperationResult(false, "No se ha encontrado información del proceso de evaluación del desafío");
+
+            var procesoEvaluacionActual = procesoEvaluacion.OrderBy(x => x.FechaFinalizacion).FirstOrDefault(x => x.FechaFinalizacion >= DateTime.Now);
+            if (procesoEvaluacionActual == null) return new OperationResult(false, "No se ha encontrado información del proceso de evaluación actual");
+
+            var usuario = usuariosRepo.Get(idUsuario);
+            if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+            if (procesoEvaluacionActual.idTipoEvaluacion == (int)TiposEvaluacionEnum.Evaluación_de_la_Empresa && desafio.idUsuarioEmpresa != idUsuario) return new OperationResult(false, "Este usuario no tiene permiso para evaluar este desafío");
+
+            if (procesoEvaluacionActual.idTipoEvaluacion == (int)TiposEvaluacionEnum.Voto_de_Participantes_del_Desafío && !dbContext.Set<Soluciones>().Any(x => x.idUsuario == idUsuario && x.idDesafio == idDesafio)) return new OperationResult(false, "Este usuario no ha participado en este desafío para evaluar");
+
+            return new OperationResult(true, "Puede evaluar el desafío");
         }
 
         public IEnumerable<Categorias> GetCategorias()

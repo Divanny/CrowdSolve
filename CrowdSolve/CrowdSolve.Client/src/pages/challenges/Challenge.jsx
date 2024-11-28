@@ -29,18 +29,18 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import createEditorToConvertToHtml from '@/hooks/createEditorToConvertToHtml'
-import { useSelector, useDispatch } from 'react-redux'
-import { setLoading } from '@/redux/slices/loadingSlice';
+import { useSelector } from 'react-redux'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
+import PageLoader from '@/components/PageLoader';
 
 const editor = createEditorToConvertToHtml();
 
 const Challenge = () => {
     const { challengeId } = useParams()
     const { api } = useAxios()
-    const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [canEvaluate, setCanEvaluate] = useState(false)
     const [loadingSkeleton, setLoadingSkeleton] = useState(true)
     const [desafio, setDesafio] = useState(null)
     const [htmlContent, setHtmlContent] = useState('')
@@ -51,6 +51,8 @@ const Challenge = () => {
     const [solutionFiles, setSolutionFiles] = useState([])
     const isDesktop = useMediaQuery("(min-width: 768px)")
     const user = useSelector((state) => state.user.user);
+    const [loading, setLoading] = useState(false);
+    const [loadingProgress, setLoadingProgress] = useState(0);
 
     const isCompany = user?.informacionEmpresa != null;
     const isChallengeOwner = user?.idUsuario === desafio?.idUsuarioEmpresa;
@@ -70,7 +72,7 @@ const Challenge = () => {
                 editor.tf.setValue(slateContent)
                 convertToHtml();
 
-                const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${desafioResponse.data.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false })
+                const responseAvatarURL = await api.get(`//GetAvatar/${desafioResponse.data.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false })
                 const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
                 const url = URL.createObjectURL(avatarBlob)
 
@@ -83,7 +85,17 @@ const Challenge = () => {
             setLoadingSkeleton(false)
         }
 
+        const canEvaluate = async () => {
+            try {
+                const response = await api.get(`/api/Desafios/PuedoEvaluar/${challengeId}`, { requireLoading: false });
+                setCanEvaluate(response.data.success);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
         getChallenge()
+        canEvaluate()
 
         // eslint-disable-next-line
     }, [challengeId])
@@ -123,8 +135,10 @@ const Challenge = () => {
         e.preventDefault();
         const maxFileSize = 5 * 1024 * 1024;
         let fileGuids = [];
+        let totalSize = solutionFiles.reduce((acc, file) => acc + file.size, 0);
+        let uploadedSize = 0;
 
-        dispatch(setLoading(true));
+        setLoading(true);
 
         try {
             for (const file of solutionFiles) {
@@ -138,7 +152,6 @@ const Challenge = () => {
                     const chunk = file.slice(start, end);
 
                     const formData = new FormData();
-                    console.log(chunk);
                     formData.append("filePart", chunk);
 
                     const response = await api.post(`/api/Soluciones/SubirArchivos/${guid || ''}`, formData, {
@@ -161,6 +174,9 @@ const Challenge = () => {
                         return;
                     }
 
+                    uploadedSize += chunk.size;
+                    setLoadingProgress(Math.min(80, Math.floor((uploadedSize / totalSize) * 100)));
+
                     currentPart++;
                 }
             }
@@ -175,6 +191,7 @@ const Challenge = () => {
             const response = await api.post("/api/Soluciones", solutionData, { requireLoading: false });
 
             if (response.data.success) {
+                setLoadingProgress(100);
                 toast.success("Operación exitosa", { description: "La solución se ha enviado correctamente." });
                 setIsDrawerOpen(false);
                 setSolutionTitle('');
@@ -188,7 +205,7 @@ const Challenge = () => {
             toast.error("Error al enviar la solución", { description: error.message });
         }
 
-        dispatch(setLoading(false));
+        setLoading(false);
     };
 
     if (loadingSkeleton) {
@@ -209,7 +226,7 @@ const Challenge = () => {
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" /> Volver
                 </Button>
-                {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion && (
+                {canEvaluate && (
                     <Alert className="bg-primary/20 border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
                         <div className="flex items-start gap-4">
                             <AlertTriangle className="h-5 w-5 text-primary mt-1" />
@@ -345,6 +362,7 @@ const Challenge = () => {
                             )}
                         </Card>
                     </div>
+                    {loading && <PageLoader progress={loadingProgress} />}
                 </div>
             </div>
         </div>

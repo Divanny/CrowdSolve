@@ -322,6 +322,21 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        [HttpGet("PuedoEvaluar/{idDesafio}", Name = "PuedoEvaluarDesafio")]
+        [Authorize]
+        public OperationResult PuedoEvaluarDesafio(int idDesafio)
+        {
+            try
+            {
+                return _desafiosRepo.ValidarUsuarioPuedeEvaluar(idDesafio, _idUsuarioOnline);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
         [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
         public object GetRelationalObjects(bool allEstatuses = false)
         {

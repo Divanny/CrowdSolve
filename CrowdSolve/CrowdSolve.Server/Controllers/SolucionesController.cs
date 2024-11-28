@@ -6,6 +6,7 @@ using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.Json;
 
 namespace CrowdSolve.Server.Controllers
 {
@@ -90,6 +91,12 @@ namespace CrowdSolve.Server.Controllers
             return Ok(solucion);
         }
 
+        /// <summary>
+        /// Sube los archivos de una solución por medio de streaming
+        /// </summary>
+        /// <param name="filePart"></param>
+        /// <param name="guid"></param>
+        /// <returns></returns>
         [HttpPost("SubirArchivos/{guid?}", Name = "SubirArchivos")]
         [AuthorizeByPermission(PermisosEnum.Ver_Desafio)]
         public OperationResult Subir([FromForm] IFormFile filePart, string? guid = null)
@@ -341,6 +348,44 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
+        /// Le agrega una puntuación del 1 al 100 a una solución. Proceso de Evaluación por puntuación de Empresa.
+        /// </summary>
+        /// <param name="idSolucion"></param>
+        /// <param name="solucionModel"></param>
+        /// <returns></returns>
+        [HttpPut("Puntuar/{idSolucion}", Name = "PuntuarSolucion")]
+        [Authorize]
+        public OperationResult Puntuar(int idSolucion, SolucionesModel solucionModel)
+        {
+            try
+            {
+                var solucion = _solucionesRepo.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+                if (solucion == null) return new OperationResult(false, "Esta solución no se ha encontrado");
+
+                var desafio = _desafiosRepo.Get(x => x.idDesafio == solucionModel.idDesafio).FirstOrDefault();
+                if (desafio == null) return new OperationResult(false, "Este desafío no se ha encontrado");
+
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
+                if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+                var puedeEvaluar = _desafiosRepo.ValidarUsuarioPuedeEvaluar(desafio.idDesafio, _idUsuarioOnline);
+
+                if (!puedeEvaluar.Success) return puedeEvaluar;
+
+                if (solucionModel.Puntuacion < 0 || solucionModel.Puntuacion > 100) return new OperationResult(false, "La puntuación debe ser entre 0 y 100");
+
+                _solucionesRepo.PuntuarSolucion(idSolucion, solucionModel.Puntuacion);
+                _logger.LogHttpRequest(solucionModel);
+                return new OperationResult(true, "Se ha agregado la puntuación a la solución exitosamente", solucionModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Convertir solución en pública.
         /// </summary>
         [HttpPut("Publicar/{idSolucion}", Name = "PublicarSolucion")]
@@ -366,6 +411,25 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        [HttpGet("DescargarAdjunto/{idAdjunto}")]
+        [Authorize]
+        public IActionResult DescargarAdjunto(int idAdjunto)
+        {
+            try
+            {
+                return Ok("Aún no implementado");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las soluciones enviadas por el usuario que está en línea
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetMisSoluciones", Name = "GetMisSoluciones")]
         [Authorize]
         public List<SolucionesModel> GetMisSoluciones()
@@ -374,6 +438,11 @@ namespace CrowdSolve.Server.Controllers
             return soluciones;
         }
 
+        /// <summary>
+        /// Obtiene todas las soluciones enviadas por el usuario que se está consultando. (Solo las públicas)
+        /// </summary>
+        /// <param name="idUsuario"></param>
+        /// <returns></returns>
         [HttpGet("GetSolucionesUsuario", Name = "GetSolucionesUsuario")]
         [AllowAnonymous]
         public List<SolucionesModel> GetSolucionesUsuario(int idUsuario)

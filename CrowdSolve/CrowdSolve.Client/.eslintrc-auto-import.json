@@ -236,6 +236,7 @@
     "LayoutAppSidebar": true,
     "AdminRequestsValidateCompanyDialog": true,
     "ChallengeCompanyEvaluation": true,
-    "ChallengeUserVoting": true
+    "ChallengeUserVoting": true,
+    "ChallengeChallengeHeader": true
   }
 }

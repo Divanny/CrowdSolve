@@ -50,6 +50,10 @@ body {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --success: 120 57% 44%;
+    --success-foreground: 0 0% 100%;
+    --warning: 39 100% 50%;
+    --warning-foreground: 0 0% 100%;
   }
 
   .dark {
@@ -85,6 +89,10 @@ body {
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --success: 120 57% 44%;
+    --success-foreground: 0 0% 100%;
+    --warning: 39 100% 50%;
+    --warning-foreground: 0 0% 100%;
   }
   [data-registry="plate"] {
     --background: 0 0% 100%;
@@ -114,6 +122,10 @@ body {
     --radius: 0.5rem;
     --brand: 217.2 91.2% 59.8%;
     --highlight: 47.9 95.8% 53.1%;
+    --success: 120 57% 44%;
+    --success-foreground: 0 0% 100%;
+    --warning: 39 100% 50%;
+    --warning-foreground: 0 0% 100%;
   }
   [data-registry="plate"].dark {
     --background: 0 0% 3.9%;
@@ -142,6 +154,10 @@ body {
     --chart-5: 340 75% 55%;
     --brand: 213.3 93.9% 67.8%;
     --highlight: 48 96% 53%;
+    --success: 120 57% 44%;
+    --success-foreground: 0 0% 100%;
+    --warning: 39 100% 50%;
+    --warning-foreground: 0 0% 100%;
   }
 }
 

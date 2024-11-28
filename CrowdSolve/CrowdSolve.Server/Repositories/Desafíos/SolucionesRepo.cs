@@ -100,11 +100,11 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             {
                 try
                 {
-                    var desafio = this.Get(x => x.idDesafio == model.idDesafio).FirstOrDefault();
+                    var solucion = this.Get(x => x.idSolucion == model.idSolucion).FirstOrDefault();
 
-                    if (desafio == null)
+                    if (solucion == null)
                     {
-                        throw new Exception("No se encontró el desafío");
+                        throw new Exception("No se encontró la solución");
                     }
 
                     if (model.Adjuntos != null && model.Adjuntos.Count > 0)
@@ -120,12 +120,12 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                         dbContext.Set<AdjuntosSoluciones>().AddRange(model.Adjuntos);
                     }
 
-                    desafio.Titulo = model.Titulo;
-                    desafio.Descripcion = model.Descripcion;
-                    desafio.ArchivoRuta = model.ArchivoRuta;
-                    desafio.Publica = model.Publica;
+                    solucion.Titulo = model.Titulo;
+                    solucion.Descripcion = model.Descripcion;
+                    solucion.ArchivoRuta = model.ArchivoRuta;
+                    solucion.Publica = model.Publica;
 
-                    base.Edit(desafio);
+                    base.Edit(solucion);
 
                     trx.Commit();
                 }
@@ -135,6 +135,13 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                     throw;
                 }
             }
+        }
+
+        public void PuntuarSolucion(int idSolucion, int? Puntuacion)
+        {
+            var solucion = this.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+            solucion.Puntuacion = Puntuacion;
+            base.Edit(solucion);
         }
 
         public void CambiarEstatus(int idSolucion, EstatusProcesoEnum estatus, string? motivo)
