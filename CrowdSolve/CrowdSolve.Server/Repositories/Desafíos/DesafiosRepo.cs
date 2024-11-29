@@ -292,5 +292,17 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             var estatusesProceso = procesosRepo.GetEstatusProceso().ToList();
             return estatusesProceso;
         }
+
+        public void CambiarEstatus(int idDesafio, EstatusProcesoEnum estatus, string? motivo)
+        {
+            if (motivo == null)
+            {
+                procesosRepo.CambiarEstatusProceso(idDesafio, new ProcesosModel(estatus));
+            }
+            else
+            {
+                procesosRepo.CambiarEstatusProceso(idDesafio, new ProcesosModel(estatus, motivo));
+            }
+        }
     }
 }

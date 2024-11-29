@@ -1,22 +1,29 @@
 "use client"
 
+import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import useAxios from '@/hooks/use-axios'
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { FileIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, ThumbsUp, MoreVertical } from 'lucide-react'
+import { FileIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, ThumbsUp, MoreVertical, Loader2 } from 'lucide-react'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useState } from 'react'
 
-const UserVoting = ({ solutions }) => {
+const UserVoting = ({ initialSolutions }) => {
     const { api } = useAxios()
-    const [likedSolutions, setLikedSolutions] = useState({})
+    const [solutions, setSolutions] = useState([])
+    const [loadingSaveMeGusta, setLoadingSaveMeGusta] = useState(false)
+
+    useEffect(() => {
+        // Sort solutions only once when the component mounts or when initialSolutions changes
+        const sortedSolutions = [...initialSolutions].sort((a, b) => b.cantidadVotos - a.cantidadVotos)
+        setSolutions(sortedSolutions)
+    }, [initialSolutions])
 
     const downloadAdjunto = async (idAdjunto) => {
         try {
@@ -70,16 +77,44 @@ const UserVoting = ({ solutions }) => {
         }
     }
 
-    const handleLike = (solutionId) => {
-        setLikedSolutions(prev => ({
-            ...prev,
-            [solutionId]: !prev[solutionId]
-        }))
-        // Aquí puedes agregar la lógica para enviar el like al servidor
+    const handleLike = async (solution) => {
+        if (loadingSaveMeGusta) {
+            toast.warning("Operación en curso", {
+                description: "Por favor, espera a que la operación actual termine antes de continuar."
+            })
+        }
+
+        setLoadingSaveMeGusta(true)
+        try {
+            const updatedSolution = { ...solution, meGusta: !solution.meGusta }
+            updatedSolution.cantidadVotos += updatedSolution.meGusta ? 1 : -1
+
+            await api.post(`/api/Soluciones/MeGusta/${solution.idSolucion}`, { requireLoading: false })
+
+            setSolutions(prevSolutions => {
+                return prevSolutions.map(s =>
+                    s.idSolucion === solution.idSolucion ? updatedSolution : s
+                )
+            })
+        }
+        catch (error) {
+            toast.error("Operación fallida al guardar voto", {
+                description: error.message
+            })
+        }
+        finally {
+            setLoadingSaveMeGusta(false)
+        }
     }
 
     return (
         <div className="flex flex-col gap-4 w-full mx-auto">
+            {solutions.length === 0 && (
+                <div className="flex flex-col items-center gap-2 my-4">
+                    <span className="text-lg font-semibold">No hay soluciones para evaluar</span>
+                    <span className="text-muted-foreground">Por favor, vuelve más tarde</span>
+                </div>
+            )}
             {solutions.map(solution => (
                 <Card key={solution.idSolucion} className="p-4 sm:p-6">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
@@ -134,16 +169,25 @@ const UserVoting = ({ solutions }) => {
                         </div>
                     )}
 
-                    <div className="mt-6 flex items-center gap-2 border-t pt-4">
+                    <div className="mt-6 flex items-center justify-between gap-2 border-t pt-4">
                         <Button
                             variant="ghost"
                             size="sm"
-                            className={`flex items-center gap-2 ${likedSolutions[solution.idSolucion] ? 'text-primary' : ''}`}
-                            onClick={() => handleLike(solution.idSolucion)}
+                            disabled={loadingSaveMeGusta}
+                            className={`flex items-center gap-2 ${solution.meGusta ? 'text-primary' : ''}`}
+                            onClick={() => handleLike(solution)}
                         >
-                            <ThumbsUp className="w-4 h-4" fill={likedSolutions[solution.idSolucion] ? 'currentColor' : 'none'} />
+                            {loadingSaveMeGusta ? (
+                                <Loader2 className="h-4 w-4 animate-spin text-muted" />
+                            ) : (
+                                <ThumbsUp className="w-4 h-4" fill={solution.meGusta ? 'currentColor' : 'none'} />
+                            )}
                             <span className="hidden sm:inline">Me gusta</span>
+                            <span className="text-sm font-medium">({solution.cantidadVotos})</span>
                         </Button>
+                        <span className="text-sm text-muted-foreground">
+                            {solution.cantidadVotos} {solution.cantidadVotos === 1 ? 'voto' : 'votos'}
+                        </span>
                     </div>
                 </Card>
             ))}

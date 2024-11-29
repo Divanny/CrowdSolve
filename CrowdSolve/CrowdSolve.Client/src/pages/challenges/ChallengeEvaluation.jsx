@@ -166,7 +166,7 @@ const ChallengeEvaluation = () => {
                                             Finaliza: {new Date(currentEvaluationProcess.fechaFinalizacion).toLocaleDateString()}
                                         </span>
                                     </div>
-                                    <UserVoting solutions={challenge.soluciones} />
+                                    <UserVoting initialSolutions={challenge.soluciones} />
                                 </div>
                             )}
                         </>

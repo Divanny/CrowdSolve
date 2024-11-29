@@ -411,6 +411,28 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        [HttpPost("MeGusta/{idSolucion}", Name = "MeGusta")]
+        [AuthorizeByPermission(PermisosEnum.Evaluar_Desafío)]
+        public OperationResult MeGusta(int idSolucion)
+        {
+            try
+            {
+                var solucion = _solucionesRepo.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+                if (solucion == null) return new OperationResult(false, "Esta solución no se ha encontrado");
+
+                if (solucion.idUsuario != _idUsuarioOnline) return new OperationResult(false, "No tiene permiso para editar esta solución");
+
+                _solucionesRepo.MeGusta(idSolucion, _idUsuarioOnline);
+                _logger.LogHttpRequest(idSolucion);
+                return new OperationResult(true, "Se ha guardado el voto a la solución exitosamente", solucion);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
         [HttpGet("DescargarAdjunto/{idAdjunto}")]
         [Authorize]
         public IActionResult DescargarAdjunto(int idAdjunto)

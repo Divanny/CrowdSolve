@@ -128,6 +128,12 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
+                    {solutions.length === 0 && (
+                        <div className="flex flex-col items-center gap-2 my-4">
+                            <span className="text-lg font-semibold">No hay soluciones para evaluar</span>
+                            <span className="text-muted-foreground">Por favor, vuelve más tarde</span>
+                        </div>
+                    )}
                     {solutions.map((solucion) => (
                         <TableRow key={solucion.idSolucion}>
                             <TableCell>

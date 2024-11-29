@@ -121,7 +121,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="desafioModel">Datos del desafio a crear.</param>
         /// <returns>Resultado de la operación.</returns>
         [HttpPost(Name = "SaveDesafio")]
-        [Authorize]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Crear_Desafio)]
         public OperationResult Post(DesafiosModel desafioModel)
         {
             try
@@ -175,7 +175,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="desafioModel">Datos del desafío a actualizar.</param>
         /// <returns>Resultado de la operación.</returns>
         [HttpPut(Name = "UpdateDesafio")]
-        [Authorize]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Editar_Desafio)]
         public OperationResult Put(DesafiosModel desafioModel)
         {
             try
@@ -322,13 +322,48 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Indica si el usuario puede participar en el proceso de evaluación de un desafío.
+        /// </summary>
+        /// <param name="idDesafio"></param>
+        /// <returns></returns>
         [HttpGet("PuedoEvaluar/{idDesafio}", Name = "PuedoEvaluarDesafio")]
-        [Authorize]
         public OperationResult PuedoEvaluarDesafio(int idDesafio)
         {
             try
             {
+                if (_idUsuarioOnline == 0) return new OperationResult(false, "Debe iniciar sesión para validar el desafío");
                 return _desafiosRepo.ValidarUsuarioPuedeEvaluar(idDesafio, _idUsuarioOnline);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Cambia el estatus de un desafío
+        /// </summary>
+        /// <param name="idDesafio"></param>
+        /// <param name="cambioEstatusModel"></param>
+        /// <returns></returns>
+        [HttpPut("CambiarEstatus/{idDesafio}", Name = "CambiarEstatusDesafio")]
+        [Authorize]
+        public OperationResult CambiarEstatus(int idDesafio, CambioEstatusModel cambioEstatusModel)
+        {
+            try
+            {
+                var desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+
+                if (desafio == null) return new OperationResult(false, "Este desafío no se ha encontrado");
+
+                if (cambioEstatusModel == null)
+                    return new OperationResult(false, "No se ha especificado la información del nuevo estatus");
+
+                _desafiosRepo.CambiarEstatus(idDesafio, (EstatusProcesoEnum)cambioEstatusModel.idEstatusProceso, cambioEstatusModel.MotivoCambioEstatus);
+
+                return new OperationResult(true, "Se ha cambiado el estatus al desafío exitosamente");
             }
             catch (Exception ex)
             {
