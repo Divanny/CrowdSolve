@@ -25,10 +25,10 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
   }
 
   return (
-    <Card className="w-full bg-gradient-to-b from-muted/50 to-background border-none shadow-lg">
+    <Card className="w-full bg-gradient-to-b from-primary/10 to-background">
       <CardHeader className="pb-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="relative">
               <img
                 src={challenge.logoEmpresa}
@@ -40,7 +40,7 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
               </div>
             </div>
             <div className="space-y-1">
-              <CardTitle className="text-2xl font-bold">{challenge.titulo}</CardTitle>
+              <CardTitle className="text-xl sm:text-2xl font-bold">{challenge.titulo}</CardTitle>
               <CardDescription className="text-primary font-medium">
                 {challenge.empresa}
               </CardDescription>
@@ -51,7 +51,7 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
               <Badge
                 key={categoria.idDesafioCategoria}
                 variant="secondary"
-                className="px-3 py-1"
+                className="px-2 py-0.5 text-xs sm:px-3 sm:py-1 sm:text-sm"
               >
                 {getCategoryName(categoria.idCategoria)}
               </Badge>
@@ -60,12 +60,12 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className="flex items-center gap-3">
             <CalendarDays className="h-5 w-5 text-muted-foreground" />
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Fecha inicio</p>
-              <p className="font-medium">
+              <p className="text-xs sm:text-sm text-muted-foreground">Fecha inicio</p>
+              <p className="text-sm sm:text-base font-medium">
                 {new Date(challenge.fechaInicio).toLocaleDateString('es-ES', {
                   year: 'numeric',
                   month: 'long',
@@ -77,8 +77,8 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
           <div className="flex items-center gap-3">
             <Clock className="h-5 w-5 text-muted-foreground" />
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Fecha límite</p>
-              <p className="font-medium">
+              <p className="text-xs sm:text-sm text-muted-foreground">Fecha límite</p>
+              <p className="text-sm sm:text-base font-medium">
                 {new Date(challenge.fechaLimite).toLocaleDateString('es-ES', {
                   year: 'numeric',
                   month: 'long',
@@ -90,20 +90,20 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
           <div className="flex items-center gap-3">
             <Trophy className="h-5 w-5 text-muted-foreground" />
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Días restantes</p>
-              <p className="font-medium">{getDaysRemaining()} días</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">Días restantes</p>
+              <p className="text-sm sm:text-base font-medium">{getDaysRemaining()} días</p>
             </div>
           </div>
         </div>
-        <Separator className="my-6" />
+        <Separator className="my-4 sm:my-6" />
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" className="w-full sm:w-auto">
+            <Button variant="outline" className="w-full sm:w-auto text-sm sm:text-base">
               <Eye className="mr-2 h-4 w-4" />
               Ver contenido del desafío
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogContent className="max-w-[90vw] sm:max-w-3xl max-h-[80vh] overflow-y-auto">
             <div className="mt-4">
               <ChallengeDetail
                 desafio={challenge}

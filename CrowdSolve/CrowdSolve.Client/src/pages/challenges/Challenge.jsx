@@ -72,7 +72,7 @@ const Challenge = () => {
                 editor.tf.setValue(slateContent)
                 convertToHtml();
 
-                const responseAvatarURL = await api.get(`//GetAvatar/${desafioResponse.data.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false })
+                const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${desafioResponse.data.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false })
                 const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
                 const url = URL.createObjectURL(avatarBlob)
 
