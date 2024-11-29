@@ -46,7 +46,9 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             EstatusProceso = estatusProceso.Nombre,
                             Publica = s.Publica,
                             Puntuacion = s.Puntuacion,
-                            Adjuntos = DB.Set<AdjuntosSoluciones>().Where(a => a.idSolucion == s.idSolucion).ToList()
+                            Adjuntos = DB.Set<AdjuntosSoluciones>().Where(a => a.idSolucion == s.idSolucion).ToList(),
+                            MeGusta = DB.Set<VotosUsuarios>().Any(v => v.idSolucion == s.idSolucion && v.idUsuario == idUsuarioEnLinea),
+                            CantidadVotos = DB.Set<VotosUsuarios>().Where(v => v.idSolucion == s.idSolucion).Count()
                         });
             }
         )
@@ -100,11 +102,11 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             {
                 try
                 {
-                    var desafio = this.Get(x => x.idDesafio == model.idDesafio).FirstOrDefault();
+                    var solucion = this.Get(x => x.idSolucion == model.idSolucion).FirstOrDefault();
 
-                    if (desafio == null)
+                    if (solucion == null)
                     {
-                        throw new Exception("No se encontró el desafío");
+                        throw new Exception("No se encontró la solución");
                     }
 
                     if (model.Adjuntos != null && model.Adjuntos.Count > 0)
@@ -120,12 +122,12 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                         dbContext.Set<AdjuntosSoluciones>().AddRange(model.Adjuntos);
                     }
 
-                    desafio.Titulo = model.Titulo;
-                    desafio.Descripcion = model.Descripcion;
-                    desafio.ArchivoRuta = model.ArchivoRuta;
-                    desafio.Publica = model.Publica;
+                    solucion.Titulo = model.Titulo;
+                    solucion.Descripcion = model.Descripcion;
+                    solucion.ArchivoRuta = model.ArchivoRuta;
+                    solucion.Publica = model.Publica;
 
-                    base.Edit(desafio);
+                    base.Edit(solucion);
 
                     trx.Commit();
                 }
@@ -135,6 +137,13 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                     throw;
                 }
             }
+        }
+
+        public void PuntuarSolucion(int idSolucion, int? Puntuacion)
+        {
+            var solucion = this.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+            solucion.Puntuacion = Puntuacion;
+            base.Edit(solucion);
         }
 
         public void CambiarEstatus(int idSolucion, EstatusProcesoEnum estatus, string? motivo)
@@ -147,6 +156,24 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             {
                 procesosRepo.CambiarEstatusProceso(idSolucion, new ProcesosModel(estatus, motivo));
             }
+        }
+
+        public void MeGusta(int idSolucion, int idUsuario)
+        {
+            var voto = dbContext.Set<VotosUsuarios>().FirstOrDefault(v => v.idSolucion == idSolucion && v.idUsuario == idUsuario);
+            if (voto == null)
+            {
+                dbContext.Set<VotosUsuarios>().Add(new VotosUsuarios
+                {
+                    idSolucion = idSolucion,
+                    idUsuario = idUsuario
+                });
+            }
+            else
+            {
+                dbContext.Set<VotosUsuarios>().Remove(voto);
+            }
+            dbContext.SaveChanges();
         }
     }
 }

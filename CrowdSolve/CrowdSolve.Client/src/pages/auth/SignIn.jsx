@@ -50,8 +50,12 @@ function SignIn() {
       if (response.data.success) {
         const { token, data } = response.data;
 
+        const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${data.usuario.idUsuario}`, { responseType: 'blob', requireLoading: false })
+        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+        const url = URL.createObjectURL(avatarBlob)
+
         dispatch(setUser({
-          user: data.usuario,
+          user: { ...data.usuario, avatarUrl: url },
           token: token,
           views: Array.isArray(data.vistas) ? data.vistas : []
         }));
@@ -61,7 +65,7 @@ function SignIn() {
         } else if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
           navigate("/sign-up/complete");
         } else {
-          navigate("/");
+          navigate(-1);
         }
         toast.success("Operación exitosa", {
           description: "Inicio de sesión exitoso",

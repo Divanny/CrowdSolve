@@ -34,5 +34,10 @@ public class SolucionesModel
     public bool? Publica { get; set; }
 
     public int? Puntuacion { get; set; }
+
+    public bool? MeGusta { get; set; }
+
+    public int? CantidadVotos { get; set; }
+
     public List<AdjuntosSoluciones>? Adjuntos { get; set; }
 }

@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Calendar, Users, Clock, ArrowLeft, Send } from 'lucide-react'
+import { Calendar, Users, Clock, ArrowLeft, Send, AlertTriangle } from 'lucide-react'
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import ChallengeDetail from '@/components/challenge/ChallengeDetail';
@@ -30,6 +30,9 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Label } from '@/components/ui/label'
 import createEditorToConvertToHtml from '@/hooks/createEditorToConvertToHtml'
 import { useSelector } from 'react-redux'
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
+import PageLoader from '@/components/PageLoader';
 
 const editor = createEditorToConvertToHtml();
 
@@ -37,7 +40,8 @@ const Challenge = () => {
     const { challengeId } = useParams()
     const { api } = useAxios()
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(true)
+    const [canEvaluate, setCanEvaluate] = useState(false)
+    const [loadingSkeleton, setLoadingSkeleton] = useState(true)
     const [desafio, setDesafio] = useState(null)
     const [htmlContent, setHtmlContent] = useState('')
     const [relationalObjects, setRelationalObjects] = useState({})
@@ -47,10 +51,12 @@ const Challenge = () => {
     const [solutionFiles, setSolutionFiles] = useState([])
     const isDesktop = useMediaQuery("(min-width: 768px)")
     const user = useSelector((state) => state.user.user);
+    const [loading, setLoading] = useState(false);
+    const [loadingProgress, setLoadingProgress] = useState(0);
 
     const isCompany = user?.informacionEmpresa != null;
     const isChallengeOwner = user?.idUsuario === desafio?.idUsuarioEmpresa;
-    const isChallengeInProgress = new Date(desafio?.fechaInicio) <= new Date() && new Date(desafio?.fechaLimite) >= new Date();
+    const isChallengeInProgress = desafio?.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_progreso;
 
     useEffect(() => {
         const getChallenge = async () => {
@@ -76,10 +82,20 @@ const Challenge = () => {
                 toast.error("No se pudo cargar el desafío.")
                 console.error(error)
             }
-            setLoading(false)
+            setLoadingSkeleton(false)
+        }
+
+        const canEvaluate = async () => {
+            try {
+                const response = await api.get(`/api/Desafios/PuedoEvaluar/${challengeId}`, { requireLoading: false });
+                setCanEvaluate(response.data.success);
+            } catch (error) {
+                console.error(error);
+            }
         }
 
         getChallenge()
+        canEvaluate()
 
         // eslint-disable-next-line
     }, [challengeId])
@@ -119,6 +135,10 @@ const Challenge = () => {
         e.preventDefault();
         const maxFileSize = 5 * 1024 * 1024;
         let fileGuids = [];
+        let totalSize = solutionFiles.reduce((acc, file) => acc + file.size, 0);
+        let uploadedSize = 0;
+
+        setLoading(true);
 
         try {
             for (const file of solutionFiles) {
@@ -132,10 +152,10 @@ const Challenge = () => {
                     const chunk = file.slice(start, end);
 
                     const formData = new FormData();
-                    console.log(chunk);
                     formData.append("filePart", chunk);
 
                     const response = await api.post(`/api/Soluciones/SubirArchivos/${guid || ''}`, formData, {
+                        requireLoading: false,
                         headers: {
                             "Content-Type": "multipart/form-data",
                             "X-File-Name": encodeURI(file.name),
@@ -154,6 +174,9 @@ const Challenge = () => {
                         return;
                     }
 
+                    uploadedSize += chunk.size;
+                    setLoadingProgress(Math.min(80, Math.floor((uploadedSize / totalSize) * 100)));
+
                     currentPart++;
                 }
             }
@@ -165,9 +188,10 @@ const Challenge = () => {
                 FileGuids: fileGuids
             };
 
-            const response = await api.post("/api/Soluciones", solutionData, { requireLoading: true });
+            const response = await api.post("/api/Soluciones", solutionData, { requireLoading: false });
 
             if (response.data.success) {
+                setLoadingProgress(100);
                 toast.success("Operación exitosa", { description: "La solución se ha enviado correctamente." });
                 setIsDrawerOpen(false);
                 setSolutionTitle('');
@@ -180,9 +204,11 @@ const Challenge = () => {
         } catch (error) {
             toast.error("Error al enviar la solución", { description: error.message });
         }
+
+        setLoading(false);
     };
 
-    if (loading) {
+    if (loadingSkeleton) {
         return <LoadingSkeleton />
     }
 
@@ -200,6 +226,27 @@ const Challenge = () => {
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" /> Volver
                 </Button>
+                {canEvaluate && (
+                    <Alert className="bg-primary/20 border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                        <div className="flex items-start gap-4">
+                            <AlertTriangle className="h-5 w-5 text-primary mt-1" />
+                            <div>
+                                <AlertTitle className="font-semibold">
+                                    Desafío en Evaluación
+                                </AlertTitle>
+                                <AlertDescription className="mt-2">
+                                    Este desafío está actualmente en proceso de evaluación. ¡Participa en la evaluación!
+                                </AlertDescription>
+                            </div>
+                        </div>
+                        <Button
+                            variant="outline"
+                            onClick={() => navigate(`/challenge/${challengeId}/evaluate`)}
+                        >
+                            Participar
+                        </Button>
+                    </Alert>
+                )}
                 <div className="flex flex-col lg:flex-row gap-8">
                     <div className='flex-1 order-2 lg:order-1'>
                         <Card className="bg-card text-card-foreground p-6 mb-6">
@@ -315,6 +362,7 @@ const Challenge = () => {
                             )}
                         </Card>
                     </div>
+                    {loading && <PageLoader progress={loadingProgress} />}
                 </div>
             </div>
         </div>
