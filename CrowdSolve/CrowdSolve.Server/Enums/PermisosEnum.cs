@@ -19,7 +19,11 @@
         Administrar_Participantes = 22,
         Administrar_Roles_y_Permisos = 23,
         Administrar_Categorias = 1016,
-        Solicitudes_Empresas = 1017,
-        Solicitudes_Soporte = 1018
+        Evaluar_Desafío = 1018,
+        Administrar_Empresas = 2017,
+        Administrar_Administradores = 2018,
+        Solicitudes_Soportes = 2019,
+        Solicitudes_Empresas = 2020
     }
+
 }

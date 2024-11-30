@@ -2,6 +2,7 @@
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Repositories;
 using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly SoportesRepo _soportesRepo;
+        private readonly ProcesosRepo _procesosRepo;
+
         private readonly UsuariosRepo _usuariosRepo;
         private readonly Mailing _mailingService;
 
@@ -31,6 +34,7 @@ namespace CrowdSolve.Server.Controllers
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
             _soportesRepo = new SoportesRepo(crowdSolveContext, _idUsuarioOnline);
+            _procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Soporte, crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _mailingService = mailing;
         }
@@ -44,8 +48,13 @@ namespace CrowdSolve.Server.Controllers
         public List<SoportesModel> Get()
         {
             List<SoportesModel> soportes = _soportesRepo.Get().ToList();
+
+
+
             return soportes;
         }
+
+
 
         /// <summary>
         /// Obtiene un soporte por su ID.
@@ -63,6 +72,8 @@ namespace CrowdSolve.Server.Controllers
             return soporte;
         }
 
+       
+
         /// <summary>
         /// Crea una nueva solicitud de soporte (solo para usuarios en línea).
         /// </summary>
@@ -77,7 +88,9 @@ namespace CrowdSolve.Server.Controllers
                 var usuario = _usuariosRepo.Get(_idUsuarioOnline);
                 if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
-                soporteModel.Fecha = DateTime.Now;
+                //var fechaFormateada = DateTime.Now;
+
+                soporteModel.Fecha = DateTime.Now; /*fechaFormateada.ToString("f")*/;
 
                 var created = _soportesRepo.Add(soporteModel);
                 _logger.LogHttpRequest(soporteModel);
@@ -178,7 +191,7 @@ namespace CrowdSolve.Server.Controllers
         }
 
         [HttpGet("GetCantidadRegistros")]
-        [Authorize]
+        //[Authorize]
         public IActionResult GetCantidadRegistros()
         {
             try
@@ -186,11 +199,11 @@ namespace CrowdSolve.Server.Controllers
                 // Obtener la cantidad de empresas con idEstatusUsuario igual a 1
                 var cantidadEmpresas = _usuariosRepo
                     .Get()
-                    .Where(x => x.idEstatusUsuario == 1003 && x.idPerfil==3)
+                    .Where(x => x.idEstatusUsuario == 1003 && x.idPerfil == 3)
                     .Count();
 
                 // Obtener la cantidad total de soportes
-                var cantidadSoportes = _soportesRepo.Get().Count();
+                var cantidadSoportes = _soportesRepo.Get().Where(x => x.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_Enviada || x.idEstatusProceso==(int)EstatusProcesoEnum.Soporte_En_progreso).Count();
 
                 // Devolver el resultado
                 return Ok(new
@@ -206,5 +219,189 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        [HttpPut("AsignarMe/{idSoporte}")]
+        //[Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Aprobar_Empresa)]
+        public OperationResult AsignarUsuario(int idSoporte)
+        {
+            try
+            {
+                var Proceso = _procesosRepo.Get(x => x.idRelacionado == idSoporte).FirstOrDefault();
+
+                if (Proceso == null) return new OperationResult(false, "Esta solicitud de soporte no se ha encontrado");
+
+                if (Proceso.idEstatusProceso != (int)EstatusProcesoEnum.Soporte_Enviada)
+                {
+                    return new OperationResult(false, "Esta solicitud no está en estado Enviado");
+                }
+
+                if (Proceso.idUsuarioAsignado != null)
+                {
+                    return new OperationResult(false, "Esta solicitud ya esta asignada");
+                }
+
+
+                Proceso.idUsuarioAsignado = _idUsuarioOnline;
+                Proceso.idEstatusProceso = (int)EstatusProcesoEnum.Soporte_En_progreso;
+                _procesosRepo.Edit(Proceso);
+
+                var soporte = _soportesRepo.Get(x => x.idSoporte == Proceso.idRelacionado).FirstOrDefault();
+
+                string mailBodyEnProceso = $@"
+                    <h1>Solicitud de Soporte en Proceso</h1>
+                    <p>Tu solicitud está siendo procesada y estamos trabajando en ella con dedicación.</p>
+                    <p>Uno de nuestros representantes está a cargo de tu caso y se asegurará de mantenerte informado sobre cualquier actualización.</p>
+                    <p>A continuación, un resumen de tu solicitud:</p>
+                    <ul>
+                        <li><b>Nombre:</b> {soporte.Nombres} {soporte.Apellidos}</li>
+                        <li><b>Correo electrónico:</b> {soporte.CorreoElectronico}</li>
+                        <li><b>Mensaje:</b> {soporte.Mensaje}</li>
+                        <li><b>Fecha Solicitud:</b> {soporte.Fecha}</li>
+
+                    </ul>
+                    <p>Si tienes alguna consulta adicional o deseas proporcionar más detalles, no dudes en responder a este correo.</p>
+                    <p>¡Gracias por confiar en nosotros!</p>";
+
+                _mailingService.SendMail([soporte.CorreoElectronico], "Gracias por contactarnos - Hemos recibido tu mensaje", mailBodyEnProceso, MailingUsers.noreply);
+
+                _logger.LogHttpRequest(idSoporte);
+                return new OperationResult(true, "Se ha asignado la solicitud exitosamente", Proceso);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        [HttpPut("Finalizar/{idSoporte}")]
+        //[Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Aprobar_Empresa)]
+        public OperationResult FinalizarSoporte(int idSoporte)
+        {
+            try
+            {
+                var Proceso = _procesosRepo.Get(x => x.idRelacionado == idSoporte).FirstOrDefault();
+
+                if (Proceso == null) return new OperationResult(false, "Esta solicitud de soporte no se ha encontrado");
+
+
+                if (Proceso.idUsuarioAsignado == null)
+                {
+                    return new OperationResult(false, "Esta solicitud no esta asignada");
+                }
+
+                //var usuarioAsignado = _usuariosRepo.Get(x => x.idUsuario == idUsuarioAsignado).FirstOrDefault();
+                if (Proceso.idUsuarioAsignado != _idUsuarioOnline) return new OperationResult(false, "Este usuario no posee este soporte asignado asi que no puede finalizarlo");
+
+
+                if (Proceso.idEstatusProceso != (int)EstatusProcesoEnum.Soporte_En_progreso)
+                {
+                    return new OperationResult(false, "Esta solicitud no está en estado En Progreso");
+                }
+
+                Proceso.idEstatusProceso = (int)EstatusProcesoEnum.Soporte_Finalizada;
+                _procesosRepo.Edit(Proceso);
+
+                var soporte = _soportesRepo.Get(x => x.idSoporte == Proceso.idRelacionado).FirstOrDefault();
+
+                string mailBodySolucionada = $@"
+                    <h1>Solicitud de Soporte Solucionada</h1>
+                    <p>Nos complace informarte que hemos finalizado el procesamiento de tu solicitud.</p>
+                    <p>El representante asignado a tu caso ha confirmado que la situación ha sido resuelta satisfactoriamente y ha sido finalizado en la fecha de {DateTime.Now}.</p>
+                    <p>A continuación, un resumen de tu solicitud:</p>
+                    <ul>
+                        <li><b>Nombre:</b> {soporte.Nombres} {soporte.Apellidos}</li>
+                        <li><b>Correo electrónico:</b> {soporte.CorreoElectronico}</li>
+                        <li><b>Mensaje:</b> {soporte.Mensaje}</li>
+                        <li><b>Fecha Solicitud:</b> {soporte.Fecha}</li>
+                    </ul>
+                    <p>Si tienes alguna otra consulta o necesitas asistencia adicional, estamos a tu disposición.</p>
+                    <p>¡Gracias por permitirnos ayudarte!</p>";
+
+
+                _mailingService.SendMail([soporte.CorreoElectronico], "Gracias por contactarnos - Hemos recibido tu mensaje", mailBodySolucionada, MailingUsers.noreply);
+
+                _logger.LogHttpRequest(idSoporte);
+                return new OperationResult(true, "Se ha asignado la solicitud exitosamente", Proceso);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        [HttpPut("Descartar/{idSoporte}")]
+        //[Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Aprobar_Empresa)]
+        public OperationResult DescartarSoporte(int idSoporte)
+        {
+            try
+            {
+                var Proceso = _procesosRepo.Get(x => x.idRelacionado == idSoporte).FirstOrDefault();
+
+                if (Proceso == null) return new OperationResult(false, "Esta solicitud de soporte no se ha encontrado");
+
+                if (Proceso.idUsuarioAsignado == null)
+                {
+                    return new OperationResult(false, "Esta solicitud no esta asignada");
+                }
+
+                //var usuarioAsignado = _usuariosRepo.Get(x => x.idUsuario == idUsuarioAsignado).FirstOrDefault();
+                if (Proceso.idUsuarioAsignado != _idUsuarioOnline) return new OperationResult(false, "Este usuario no posee este soporte asignado asi que no puede descartarse");
+
+
+                if (Proceso.idEstatusProceso != (int)EstatusProcesoEnum.Soporte_En_progreso)
+                {
+                    return new OperationResult(false, "Esta solicitud no está en estado En Progreso");
+                }
+
+                Proceso.idEstatusProceso = (int)EstatusProcesoEnum.Soporte_Descartada;
+                _procesosRepo.Edit(Proceso);
+
+                var soporte = _soportesRepo.Get(x => x.idSoporte == Proceso.idRelacionado).FirstOrDefault();
+
+                string mailBodyDescartada = $@"
+                    <h1>Solicitud de Soporte Descartada</h1>
+                    <p>Después de analizar tu solicitud detenidamente, lamentamos informarte que no será posible realizarla.</p>
+                    <p>Estamos disponible para aclarar cualquier duda que tengas sobre esta decisión.</p>
+                    <p>A continuación, un resumen de tu solicitud:</p>
+                    <ul>
+                        <li><b>Nombre:</b> {soporte.Nombres} {soporte.Apellidos}</li>
+                        <li><b>Correo electrónico:</b> {soporte.CorreoElectronico}</li>
+                        <li><b>Mensaje:</b> {soporte.Mensaje}</li>
+                    </ul>
+                    <p>Agradecemos tu comprensión y estamos a tu disposición para ayudarte con cualquier otra consulta que puedas tener.</p>
+                    <p>Gracias por contactarnos.</p>";
+
+
+                _mailingService.SendMail([soporte.CorreoElectronico], "Gracias por contactarnos - Hemos recibido tu mensaje", mailBodyDescartada, MailingUsers.noreply);
+
+                _logger.LogHttpRequest(idSoporte);
+                return new OperationResult(true, "Se ha asignado la solicitud exitosamente", Proceso);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        [HttpGet("GetRelationalObjects")]
+        public object GetRelationalObjects()
+        {
+            var estatus = _crowdSolveContext.Set<EstatusProceso>().Where(u=>u.idClaseProceso==(int)ClasesProcesoEnum.Soporte);
+            var usuarios = _crowdSolveContext.Set<Usuarios>().Where(u=>u.idPerfil==(int)PerfilesEnum.Administrador);
+
+            return new
+            {
+                estatusProcesos = estatus,
+                usuariosAdmin =  usuarios
+            };
+        }
+
     }
+
+
 }

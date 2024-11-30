@@ -191,7 +191,7 @@ export default function AdminLayout() {
                                                 <Link variant="secondary" className="w-full flex justify-start items-center gap-2" to={item.url}>
                                                     {(item.icon != "" && item.icon != null) && <Icon name={item.icon} />}
                                                     {item.title}
-                                                    {item.pending >0 && <Badge variant="outline" className="ml-auto">{item.pending}</Badge>}
+                                                    {item.pending >0 && <Badge variant="outline secondary" className="ml-auto">{item.pending}</Badge>}
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>

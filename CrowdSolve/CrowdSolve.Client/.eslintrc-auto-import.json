@@ -227,6 +227,7 @@
     "createEditorToConvertToHtml": true,
     "AdminAdministratorsAdministratorFormDialog": true,
     "AdminCompaniesCompanyFormDialog": true,
-    "AdminRequestsValidateCompanyDialog": true
+    "AdminRequestsValidateCompanyDialog": true,
+    "AdminRequestsSupportRequestDialog": true
   }
 }
