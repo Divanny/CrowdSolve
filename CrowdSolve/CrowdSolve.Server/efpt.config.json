@@ -15,6 +15,10 @@
    "T4TemplatePath": null,
    "Tables": [
       {
+         "Name": "[dbo].[AdjuntosSoluciones]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Categorias]",
          "ObjectType": 0
       },

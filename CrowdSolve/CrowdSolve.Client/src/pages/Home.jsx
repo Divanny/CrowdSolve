@@ -8,7 +8,7 @@ import ScrollAnimationWrapper from "@/components/ScrollAnimationWrapper";
 
 function Home() {
     return (
-        <div className="">
+        <div className="overflow-x-hidden">
             <ScrollAnimationWrapper>
                 <HeroSection />
             </ScrollAnimationWrapper>
@@ -17,7 +17,7 @@ function Home() {
                 <TrustedBySection />
             </ScrollAnimationWrapper>
             <ScrollAnimationWrapper>
-                <WhyClientsLoveUs />
+                {/* <WhyClientsLoveUs /> */}
             </ScrollAnimationWrapper>
             <ScrollAnimationWrapper>
                 <ChallengesPost />

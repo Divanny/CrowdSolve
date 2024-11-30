@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react";
 import { ChevronsUpDown, Home } from "lucide-react"
 import { useSelector } from 'react-redux';
 import {
@@ -35,6 +36,7 @@ import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import GetLogo from "@/helpers/get-logo";
 import Icon from "@/components/ui/icon";
 import { Badge } from "@/components/ui/badge"
+import useAxios from "@/hooks/use-axios";
 
 const sidebarItems = [
     {
@@ -128,9 +130,7 @@ const sidebarItems = [
 export default function AdminLayout() {
     const location = useLocation();
     const navigate = useNavigate();
-    const [data, setData] = useState([]);
     const { api } = useAxios();
-    const [isLoading, setIsLoading] = useState(true);
 
     const user = useSelector((state) => state.user.user);
 
@@ -138,21 +138,13 @@ export default function AdminLayout() {
 
     const fetchData = async () => {
         try {
-          const [countRequestsResponse, relationalObjectsResponse] =
-            await Promise.all([
-              api.get("/api/Soportes/GetCantidadRegistros", { requireLoading: false }),,
-            ]);
+          const countRequestsResponse = await api.get("/api/Soportes/GetCantidadRegistros", { requireLoading: false })
     
-          setData(countRequestsResponse.data);
           sidebarItems[3].items[0].pending=countRequestsResponse.data.cantidadEmpresas;
           sidebarItems[3].items[1].pending=countRequestsResponse.data.cantidadSoportes;
-          
-    
         } catch (error) {
           console.error("Error fetching data:", error);
-        } finally {
-          setIsLoading(false);
-        }
+        } 
       };
     
       useEffect(() => {

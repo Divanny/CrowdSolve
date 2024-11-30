@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '@/redux/slices/userSlice';
 import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 import GoogleLoginButton from '@/components/GoogleLoginButton';
+import Lottie from 'lottie-react';
+import animationData from '@/assets/sign-in.json';
 
 function SignIn() {
   const navigate = useNavigate();
@@ -48,8 +50,12 @@ function SignIn() {
       if (response.data.success) {
         const { token, data } = response.data;
 
+        const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${data.usuario.idUsuario}`, { responseType: 'blob', requireLoading: false })
+        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+        const url = URL.createObjectURL(avatarBlob)
+
         dispatch(setUser({
-          user: data.usuario,
+          user: { ...data.usuario, avatarUrl: url },
           token: token,
           views: Array.isArray(data.vistas) ? data.vistas : []
         }));
@@ -59,7 +65,7 @@ function SignIn() {
         } else if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
           navigate("/sign-up/complete");
         } else {
-          navigate("/");
+          navigate(-1);
         }
         toast.success("Operación exitosa", {
           description: "Inicio de sesión exitoso",
@@ -191,7 +197,9 @@ function SignIn() {
           </div>
         </div>
         <div className="hidden min-[500px]:flex justify-center p-0 sm:p-4 ">
-          <div className="w-full rounded-xl bg-card"></div>
+          <div className="w-full rounded-xl bg-card flex flex-col justify-center">
+            <Lottie animationData={animationData} loop={true} className="w-3/4 h-3/4 mx-auto" />
+          </div>
         </div>
       </main>
     </div>

@@ -26,6 +26,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
+        /// <param name="firebaseStorageService"></param>
         public EmpresasController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseStorageService firebaseStorageService)
         {
             _logger = logger;
@@ -226,7 +227,7 @@ namespace CrowdSolve.Server.Controllers
         /// <summary>
         /// Rechaza una empresa pendiente de validar.
         /// </summary>
-        /// <param name="empresasModel"></param>
+        /// <param name="idEmpresa"></param>
         /// <returns> Resultado de la operación.</returns>
         [HttpPut("Rechazar/{idEmpresa}")]
         [Authorize]

@@ -228,6 +228,16 @@
     "AdminAdministratorsAdministratorFormDialog": true,
     "AdminCompaniesCompanyFormDialog": true,
     "AdminRequestsValidateCompanyDialog": true,
-    "AdminRequestsSupportRequestDialog": true
+    "AdminRequestsSupportRequestDialog": true,
+    "useMediaQuery": true,
+    "ChallengeChallengeDetail": true,
+    "UiImage-upload": true,
+    "useCallbackRef": true,
+    "useControllableState": true,
+    "FileUploader": true,
+    "LayoutAppSidebar": true,
+    "ChallengeCompanyEvaluation": true,
+    "ChallengeUserVoting": true,
+    "ChallengeChallengeHeader": true
   }
 }

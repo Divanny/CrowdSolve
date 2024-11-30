@@ -21,17 +21,18 @@ const RoleSelection = lazy(() => import('@/pages/auth/RoleSelection'));
 const VerificationPending = lazy(() => import('@/pages/company/VerificationPending'));
 const AccessDenied = lazy(() => import('@/pages/AccessDenied'));
 const CompanyListing = lazy(() => import('@/pages/CompanyListing'));
-const ChallengeCatalog = lazy(() => import('@/pages/ChallengeCatalog'));
-const Challenge = lazy(() => import('@/pages/Challenge'));
+const ChallengeCatalog = lazy(() => import('@/pages/challenges/ChallengeCatalog'));
+const Challenge = lazy(() => import('@/pages/challenges/Challenge'));
 const Participants = lazy(() => import('@/pages/admin/participants/Participants'));
 const Categories = lazy(() => import('@/pages/admin/categories/Categories'));
 const Companies = lazy(() => import('@/pages/admin/companies/Companies'));
 const Administrators = lazy(() => import('@/pages/admin/administrators/Administrators'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
-const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
+const ChallengeForm = lazy(() => import('@/pages/challenges/ChallengeForm'));
 const RolesAndPermissions = lazy(() => import('@/pages/admin/RolesAndPermissions'));
 const CompanyRequest = lazy(() => import('@/pages/admin/Requests/CompanyRequests'));
 const SupportRequest = lazy(() => import('@/pages/admin/Requests/SupportRequests'));
+const ChallengeEvaluation = lazy(() => import('@/pages/challenges/ChallengeEvaluation'));
 
 const LazyComponent = ({ component: Component, ...props }) => (
   <Suspense fallback={<PageLoader />}>
@@ -88,6 +89,7 @@ const AppRoutes = () => (
       <Route element={<Layout />}>
         <Route path="/my-profile" element={<div>My profile</div>} handle={{ permission: () => PermisosEnum.Mi_perfil }} />
         <Route path="/my-solutions" element={<div>My solutions</div>} handle={{ permission: () => PermisosEnum.Mis_Soluciones }} />
+        <Route path="/challenge/:challengeId/evaluate" element={<LazyComponent component={ChallengeEvaluation} />} handle={{ permission: () => PermisosEnum.Evaluar_Desafío }} />
       </Route>
     </Route>
   </Routes>

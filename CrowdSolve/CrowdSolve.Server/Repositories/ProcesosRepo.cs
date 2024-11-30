@@ -143,8 +143,6 @@ namespace CrowdSolve.Server.Repositories
 
             // enviar correo
             throw new NotImplementedException();
-            
-            return result;
         }
 
         public int BuscarAsignadoA(int idProceso)

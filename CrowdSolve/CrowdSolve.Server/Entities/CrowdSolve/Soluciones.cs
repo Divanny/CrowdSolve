@@ -13,9 +13,11 @@ public partial class Soluciones
 
     public int idUsuario { get; set; }
 
-    public DateTime FechaRegistro { get; set; }
+    public string Titulo { get; set; }
 
-    public string ArchivoRuta { get; set; }
+    public string Descripcion { get; set; }
+
+    public DateTime FechaRegistro { get; set; }
 
     public bool? Publica { get; set; }
 

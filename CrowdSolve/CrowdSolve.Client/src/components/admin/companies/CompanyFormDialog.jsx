@@ -21,16 +21,6 @@ import {
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
 import AvatarPicker from "@/components/ui/avatar-picker";
-// import { CalendarIcon } from "@radix-ui/react-icons";
-// import { format } from "date-fns";
-
-// import { cn } from "@/lib/utils";
-// import { Calendar } from "@/components/ui/calendar";
-// import {
-//   Popover,
-//   PopoverContent,
-//   PopoverTrigger,
-// } from "@/components/ui/popover";
 
 export function CompanyFormDialog({
   isOpen,

@@ -23,17 +23,30 @@ const ProtectedRoute = () => {
             if (response.data) {
                 const { data } = response;
 
+                const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${data.usuario.idUsuario}`, { responseType: 'blob', requireLoading: false })
+                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+                const url = URL.createObjectURL(avatarBlob)
+
                 dispatch(setUser({
-                    user: data.usuario,
+                    user: { ...data.usuario, avatarUrl : url },
                     token: token,
                     views: Array.isArray(data.vistas) ? data.vistas : []
                 }));
             }
         }
         catch (error) {
-            toast.error("Error al obtener la información del usuario", {
-                description: error.message,
-            });
+            if (error.response && error.response.status === 401) {
+                dispatch(setUser({ user: null, token: null, views: [] }));
+
+                toast.warning("Debe iniciar sesión", {
+                    description: "Sesión expirada. Por favor, inicia sesión nuevamente.",
+                });
+            }
+            else {
+                toast.error("Error al obtener la información del usuario", {
+                    description: error.message,
+                });
+            }
         }
     }
 
@@ -82,7 +95,7 @@ const ProtectedRoute = () => {
         checkUser();
         // eslint-disable-next-line
     }, []);
-    
+
     if (!token) {
         return <Navigate to="/sign-in" replace state={{ from: location }} />;
     }
@@ -92,7 +105,7 @@ const ProtectedRoute = () => {
     }
 
     if (user.idEstatusUsuario === EstatusUsuarioEnum.Incompleto && !location.pathname.includes('/sign-up/complete')) {
-        return <Navigate to="/sign-up/complete" replace state={{ from: location }}/>;
+        return <Navigate to="/sign-up/complete" replace state={{ from: location }} />;
     }
 
     if (!canAcess()) {
