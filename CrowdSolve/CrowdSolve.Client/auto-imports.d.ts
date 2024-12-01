@@ -13,6 +13,7 @@ declare global {
   const AdminCategoriesCategoryFormDialog: typeof import('@/components/admin/categories/CategoryFormDialog.jsx')['CategoryFormDialog']
   const AdminCompaniesCompanyFormDialog: typeof import('@/components/admin/companies/CompanyFormDialog.jsx')['CompanyFormDialog']
   const AdminParticipantsParticipantFormDialog: typeof import('@/components/admin/participants/ParticipantFormDialog.jsx')['ParticipantFormDialog']
+  const AdminRequestsSupportRequestDialog: typeof import('@/components/admin/Requests/SupportRequestDialog.jsx')['SupportRequestDialog']
   const AdminRequestsValidateCompanyDialog: typeof import('@/components/admin/Requests/ValidateCompanyDialog.jsx')['ValidateCompanyDialog']
   const ChallengeChallengeDetail: typeof import('@/components/challenge/ChallengeDetail.jsx')['ChallengeDetail']
   const ChallengeChallengeHeader: typeof import('@/components/challenge/ChallengeHeader.jsx')['ChallengeHeader']
