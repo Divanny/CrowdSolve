@@ -3,6 +3,7 @@ using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
 {
@@ -28,6 +29,10 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 return (from s in DB.Set<Soportes>().Where(filter)
                         join usuariosSet in DB.Set<Usuarios>() on s.idUsuario equals usuariosSet.idUsuario into uLF
                         from u in uLF.DefaultIfEmpty()
+                        join procesosSet in DB.Set<Procesos>().Where(p => p.idClaseProceso == (int)ClasesProcesoEnum.Soporte) on s.idSoporte equals procesosSet.idRelacionado into pLF
+                        from p in pLF.DefaultIfEmpty()
+                        join estatusProcesosSet in DB.Set<EstatusProceso>() on p.idEstatusProceso equals estatusProcesosSet.idEstatusProceso into epLF
+                        from ep in epLF.DefaultIfEmpty()
                         select new SoportesModel()
                         {
                             idSoporte = s.idSoporte,
@@ -38,8 +43,19 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             Fecha = s.Fecha,
                             Nombres = s.Nombres,
                             Apellidos = s.Apellidos,
-                            CorreoElectronico = (u == null) ? s.CorreoElectronico : u.CorreoElectronico
-                        });
+                            CorreoElectronico = (u == null) ? s.CorreoElectronico : u.CorreoElectronico,
+                            idUsuarioAsignado = p != null ? p.idUsuarioAsignado : null,
+                            NombreAsignado = p != null ? DB.Set<Usuarios>().Where(x => x.idUsuario == p.idUsuarioAsignado).Select(x => x.NombreUsuario).FirstOrDefault() : null,
+                            AsignadoAMi = idUsuarioEnLinea == (p != null ? p.idUsuarioAsignado : null),
+                            idEstatusProceso = p != null ? p.idEstatusProceso : null,
+                            EstatusProcesoNombre=p!=null? ep.Descripcion:null,
+
+                        })
+                        .OrderBy(p => p.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_Enviada ? 0 
+                        : p.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_En_progreso ? 1
+                        : p.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_Finalizada ? 2 : 3)
+                        .ThenByDescending(p => p.Fecha);
+
             }
         )
         {
