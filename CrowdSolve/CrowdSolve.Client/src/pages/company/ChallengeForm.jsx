@@ -89,7 +89,7 @@ export default function ChallengeForm() {
     useEffect(() => {
         const fetchDesafio = async () => {
             try {
-                const response = await api.get(`/api/Desafios/${challengeId}`)
+                const response = await api.get(`/api/Desafios/GetMiDesafio/${challengeId}`)
                 const desafio = response.data
                 form.reset({
                     ...desafio,
@@ -101,6 +101,9 @@ export default function ChallengeForm() {
                     })),
                 })
             } catch (error) {
+                toast.error("Operación errónea", {
+                    description: "Ocurrió un error al cargar el desafío",
+                });
                 console.error('Error fetching desafio:', error)
             }
         }
@@ -112,7 +115,9 @@ export default function ChallengeForm() {
                 setCategoriasDisponibles(categorias)
                 setTiposEvaluacionDisponibles(tiposEvaluacion)
             } catch (error) {
-
+                toast.error("Operación errónea", {
+                    description: "Ocurrió un error al cargar los objetos relacionales",
+                });
                 console.error('Error fetching relational objects:', error)
             }
         }
@@ -138,7 +143,7 @@ export default function ChallengeForm() {
                 toast.success("Operación exitosa", {
                     description: response.data.message,
                 });
-                navigate('/company/challenges')
+                navigate('/company')
             } else {
                 // Handle validation errors
                 if (response.data.errors) {

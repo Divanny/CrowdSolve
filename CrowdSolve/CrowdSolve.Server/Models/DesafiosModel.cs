@@ -25,6 +25,9 @@ namespace CrowdSolve.Server.Models
         public List<ProcesoEvaluacion>? ProcesoEvaluacion { get; set; }
         public int? idEstatusDesafio { get; set; }
         public string? EstatusDesafio { get; set; }
+        public string? SeveridadEstatusDesafio { get; set; }
+        public string? IconoEstatusDesafio { get; set; }
         public bool? YaParticipo { get; set; }
+        public int Participaciones { get; set; }
     }
 }

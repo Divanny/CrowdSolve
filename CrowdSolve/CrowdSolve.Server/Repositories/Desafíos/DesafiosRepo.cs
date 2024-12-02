@@ -46,7 +46,10 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             FechaLimite = d.FechaLimite,
                             FechaRegistro = d.FechaRegistro,
                             idEstatusDesafio = estatusProceso.idEstatusProceso,
-                            EstatusDesafio = estatusProceso.Nombre
+                            EstatusDesafio = estatusProceso.Nombre,
+                            SeveridadEstatusDesafio = estatusProceso.Severidad,
+                            IconoEstatusDesafio = estatusProceso.ClaseIcono,
+                            Participaciones = DB.Set<Soluciones>().Count(x => x.idDesafio == d.idDesafio),
                         });
             }
         )

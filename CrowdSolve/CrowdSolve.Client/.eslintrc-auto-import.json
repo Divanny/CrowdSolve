@@ -237,6 +237,7 @@
     "AdminRequestsValidateCompanyDialog": true,
     "ChallengeCompanyEvaluation": true,
     "ChallengeUserVoting": true,
-    "ChallengeChallengeHeader": true
+    "ChallengeChallengeHeader": true,
+    "AdminCompaniesSolutionsValidation": true
   }
 }

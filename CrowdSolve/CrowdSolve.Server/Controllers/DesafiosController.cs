@@ -323,6 +323,44 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
+        /// Obtiene la información de un desafío de la empresa actual.
+        /// </summary>
+        /// <param name="idDesafio"></param>
+        /// <returns></returns>
+        [HttpGet("GetMiDesafio/{idDesafio}", Name = "GetMiDesafio")]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Editar_Desafio, PermisosEnum.Empresa_Ver_Desafio, PermisosEnum.Empresa_Ver_Solucion_Desafio, PermisosEnum.Empresa_Ver_Soluciones_Desafio, PermisosEnum.Empresa_Dashboard)]
+        public IActionResult GetMiDesafio(int idDesafio)
+        {
+            DesafiosModel? desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).Where(x => x.idUsuarioEmpresa == _idUsuarioOnline).FirstOrDefault();
+
+            if (desafio == null)
+            {
+                return NotFound("Desafío no encontrado");
+            }
+
+            if (_idUsuarioOnline != 0)
+            {
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
+
+                if (usuario == null)
+                {
+                    return NotFound("Usuario no encontrado");
+                }
+
+                var solucion = _solucionesRepo.Get(x => x.idDesafio == idDesafio && x.idUsuario == _idUsuarioOnline).FirstOrDefault();
+
+                desafio.YaParticipo = solucion != null;
+            }
+
+            desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
+
+            return Ok(desafio);
+        }
+
+
+        /// <summary>
         /// Indica si el usuario puede participar en el proceso de evaluación de un desafío.
         /// </summary>
         /// <param name="idDesafio"></param>
