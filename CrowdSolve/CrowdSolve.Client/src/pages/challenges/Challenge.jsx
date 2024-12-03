@@ -76,7 +76,7 @@ const Challenge = () => {
                 const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
                 const url = URL.createObjectURL(avatarBlob)
 
-                setDesafio({ ...desafioResponse.data, logoEmpresa: url })
+                setDesafio(prevDesafio => ({ ...prevDesafio, ...desafioResponse.data, logoEmpresa: url }))
                 setRelationalObjects(relationalObjectsResponse.data)
             } catch (error) {
                 toast.error("No se pudo cargar el desafío.")
@@ -285,7 +285,7 @@ const Challenge = () => {
 
                             {isCompany ? (
                                 isChallengeOwner && (
-                                    <Button className="w-full mt-6" variant="outline" onClick={() => navigate(`/challenge/${challengeId}/solutions`)}>
+                                    <Button className="w-full mt-6" variant="outline" onClick={() => navigate(`/company/challenge/${challengeId}`)}>
                                         <Users className="mr-2 h-4 w-4" /> Ver soluciones
                                     </Button>
                                 )

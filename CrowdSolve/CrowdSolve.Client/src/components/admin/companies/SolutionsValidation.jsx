@@ -17,7 +17,7 @@ import { toast } from 'sonner'
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 
-const SolutionsValidation = ({ solutions, reloadChallengeData }) => {
+const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = true }) => {
     const { api } = useAxios()
     const [detalleSolucionDialog, setDetalleSolucionDialog] = useState(false)
     const [solucionSeleccionada, setSolucionSeleccionada] = useState(null)
@@ -250,67 +250,69 @@ const SolutionsValidation = ({ solutions, reloadChallengeData }) => {
                                                     </div>
                                                 </div>
                                                 <Separator />
-                                                <div className="space-y-4">
-                                                    <Label className="text-lg font-semibold">Validación</Label>
-                                                    <Select onValueChange={setSelectedEstatus}>
-                                                        <SelectTrigger className="w-full">
-                                                            <SelectValue placeholder="Seleccione un estatus" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value={EstatusProcesoEnum.Solucion_Evaluada}>
-                                                                <Badge variant="success">
-                                                                    <div className="flex items-center gap-1">
-                                                                        <CheckCircle className="w-4 h-4" />
-                                                                        Validar
-                                                                    </div>
-                                                                </Badge>
-                                                            </SelectItem>
-                                                            <SelectItem value={EstatusProcesoEnum.Solucion_Incompleta}>
-                                                                <Badge variant="warning">
-                                                                    <div className="flex items-center gap-1">
-                                                                        <TriangleAlert className="w-4 h-4" />
-                                                                        Incompleta
-                                                                    </div>
-                                                                </Badge>
-                                                            </SelectItem>
-                                                            <SelectItem value={EstatusProcesoEnum.Solucion_Descartada}>
-                                                                <Badge variant="destructive">
-                                                                    <div className="flex items-center gap-1">
-                                                                        <XCircle className="w-4 h-4" />
-                                                                        Descartar
-                                                                    </div>
-                                                                </Badge>
-                                                            </SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                    {(selectedEstatus === EstatusProcesoEnum.Solucion_Incompleta || selectedEstatus === EstatusProcesoEnum.Solucion_Descartada) && (
-                                                        <div>
-                                                            <Label htmlFor="razon-rechazo">Motivo</Label>
-                                                            <Textarea
-                                                                id="razon-rechazo"
-                                                                placeholder="Explique el motivo del cambio de estatus..."
-                                                                value={razonRechazo}
-                                                                onChange={(e) => setRazonRechazo(e.target.value)}
-                                                                className="mt-2"
-                                                            />
-                                                            {validationError && <p className="text-red-500 text-sm">{validationError}</p>}
-                                                        </div>
-                                                    )}
-                                                    <Button onClick={handleSaveEstatus} className="mt-4">
-                                                        Guardar
-                                                    </Button>
-                                                    {solucionSeleccionada?.idEstatusProceso !== EstatusProcesoEnum.Solucion_Enviada && (
-                                                        <p className="text-sm">
-                                                            Esta solución ya ha sido {solucionSeleccionada?.estatusProceso.toLowerCase()}.
-                                                            {solucionSeleccionada?.razonRechazo && (
-                                                                <>
-                                                                    <br />
-                                                                    <strong>Motivo:</strong> {solucionSeleccionada.razonRechazo}
-                                                                </>
-                                                            )}
-                                                        </p>
-                                                    )}
-                                                </div>
+                                                {canValidate && (
+                                                    <div className="space-y-4">
+                                                        <Label className="text-lg font-semibold">Validación</Label>
+                                                        <Select onValueChange={setSelectedEstatus}>
+                                                            <SelectTrigger className="w-full">
+                                                                <SelectValue placeholder="Seleccione un estatus" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value={EstatusProcesoEnum.Solucion_Evaluada}>
+                                                                    <Badge variant="success">
+                                                                        <div className="flex items-center gap-1">
+                                                                            <CheckCircle className="w-4 h-4" />
+                                                                            Validar
+                                                                        </div>
+                                                                    </Badge>
+                                                                </SelectItem>
+                                                                <SelectItem value={EstatusProcesoEnum.Solucion_Incompleta}>
+                                                                    <Badge variant="warning">
+                                                                        <div className="flex items-center gap-1">
+                                                                            <TriangleAlert className="w-4 h-4" />
+                                                                            Incompleta
+                                                                        </div>
+                                                                    </Badge>
+                                                                </SelectItem>
+                                                                <SelectItem value={EstatusProcesoEnum.Solucion_Descartada}>
+                                                                    <Badge variant="destructive">
+                                                                        <div className="flex items-center gap-1">
+                                                                            <XCircle className="w-4 h-4" />
+                                                                            Descartar
+                                                                        </div>
+                                                                    </Badge>
+                                                                </SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                        {(selectedEstatus === EstatusProcesoEnum.Solucion_Incompleta || selectedEstatus === EstatusProcesoEnum.Solucion_Descartada) && (
+                                                            <div>
+                                                                <Label htmlFor="razon-rechazo">Motivo</Label>
+                                                                <Textarea
+                                                                    id="razon-rechazo"
+                                                                    placeholder="Explique el motivo del cambio de estatus..."
+                                                                    value={razonRechazo}
+                                                                    onChange={(e) => setRazonRechazo(e.target.value)}
+                                                                    className="mt-2"
+                                                                />
+                                                                {validationError && <p className="text-red-500 text-sm">{validationError}</p>}
+                                                            </div>
+                                                        )}
+                                                        <Button onClick={handleSaveEstatus} className="mt-4">
+                                                            Guardar
+                                                        </Button>
+                                                        {solucionSeleccionada?.idEstatusProceso !== EstatusProcesoEnum.Solucion_Enviada && (
+                                                            <p className="text-sm">
+                                                                Esta solución ya ha sido {solucionSeleccionada?.estatusProceso.toLowerCase()}.
+                                                                {solucionSeleccionada?.razonRechazo && (
+                                                                    <>
+                                                                        <br />
+                                                                        <strong>Motivo:</strong> {solucionSeleccionada.razonRechazo}
+                                                                    </>
+                                                                )}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                         <DialogFooter>

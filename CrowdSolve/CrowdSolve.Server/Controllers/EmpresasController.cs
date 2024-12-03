@@ -275,6 +275,11 @@ namespace CrowdSolve.Server.Controllers
             var desafios = _desafiosRepo.Get(x => x.idEmpresa == empresaInfo.idEmpresa).ToList();
             var idsDesafios = desafios.Select(x => x.idDesafio).ToList();
 
+            foreach (var desafio in desafios)
+            {
+                desafio.SolucionesPendientes = _desafiosRepo.GetCantidadSolucionesPendientesDesafio(desafio.idDesafio);
+            }
+
             return new
             {
                 empresaInfo,

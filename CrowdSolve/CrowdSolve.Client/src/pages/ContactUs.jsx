@@ -39,7 +39,6 @@ export default function ContactPage() {
       return
     }
     
-    console.log(nombres,apellidos,correoElectronico,mensaje,titulo,idUsuario,nombreUsuario, isLoading);
     try {
       
       const response = await api.post("/api/Soportes/Contactanos", {

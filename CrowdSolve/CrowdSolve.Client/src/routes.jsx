@@ -83,8 +83,6 @@ const AppRoutes = () => (
         <Route path="challenge/new" element={<LazyComponent component={ChallengeForm} />} handle={{ permission: () => PermisosEnum.Empresa_Crear_Desafio }} />
         <Route path="challenge/:challengeId" element={<LazyComponent component={CompanyChallenge} />} handle={{ permission: () => PermisosEnum.Empresa_Ver_Desafio }} />
         <Route path="challenge/:challengeId/edit" element={<LazyComponent component={ChallengeForm} />} handle={{ permission: () => PermisosEnum.Empresa_Editar_Desafio }} />
-        <Route path="challenge/:challengeId/solutions" element={<div>Company Solutions</div>} handle={{ permission: () => PermisosEnum.Empresa_Ver_Soluciones_Desafio }} />
-        <Route path="challenge/:challengeId/solution/:solutionId" element={<div>Company Solution</div>} handle={{ permission: () => PermisosEnum.Empresa_Ver_Solucion_Desafio }} />
       </Route>
       {/* Participant */}
       <Route element={<Layout />}>

@@ -155,9 +155,11 @@ export default function AdminLayout() {
     useEffect(() => {
         const fetchAvatar = async () => {
             const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
-            const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-            const avatarUrl = URL.createObjectURL(avatarBlob)
-            user.avatarURL = avatarUrl;
+            if (responseAvatarURL.status == 200) {
+                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+                user.avatarURL = URL.createObjectURL(avatarBlob)
+            }
+
         }
 
         if (user) {

@@ -13,6 +13,7 @@ import { ArrowLeft, Edit } from 'lucide-react';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 import SolutionsValidation from '@/components/admin/companies/SolutionsValidation';
 import ChallengeTimeline from '@/components/challenge/ChallengeTimeline';
+import SolutionRanking from '@/components/challenge/SolutionRanking';
 
 const editor = createEditorToConvertToHtml();
 
@@ -57,8 +58,10 @@ const CompanyChallenge = () => {
             for (const solucion of challengeResponse.data.soluciones) {
                 try {
                     const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${solucion.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                    const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                    solucion.avatarUrl = URL.createObjectURL(avatarBlob)
+                    if (responseAvatarURL.status == 200) {
+                        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+                        solucion.avatarUrl = URL.createObjectURL(avatarBlob)
+                    }
                 }
                 catch {
                     solucion.avatarUrl = null
@@ -121,7 +124,13 @@ const CompanyChallenge = () => {
                                 <div className="flex justify-between items-center">
                                     <h2 className="text-2xl font-bold">Soluciones</h2>
                                 </div>
-                                <SolutionsValidation solutions={challenge.soluciones} reloadChallengeData={fetchChallenge}/>
+                                {
+                                    (challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion ||
+                                        challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Finalizado ||
+                                        challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios) ? (
+                                        <SolutionRanking idDesafio={challenge.idDesafio} />
+                                    ) : <SolutionsValidation solutions={challenge.soluciones} reloadChallengeData={fetchChallenge} canValidate={challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_progreso} />
+                                }
                             </div>
                         </>
                     )

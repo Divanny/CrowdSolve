@@ -239,6 +239,8 @@
     "ChallengeCompanyEvaluation": true,
     "ChallengeUserVoting": true,
     "ChallengeChallengeHeader": true,
-    "AdminCompaniesSolutionsValidation": true
+    "AdminCompaniesSolutionsValidation": true,
+    "ChallengeChallengeTimeline": true,
+    "ChallengeSolutionRanking": true
   }
 }

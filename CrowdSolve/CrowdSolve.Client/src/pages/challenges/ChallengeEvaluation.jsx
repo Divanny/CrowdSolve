@@ -76,8 +76,10 @@ const ChallengeEvaluation = () => {
             for (const solucion of challengeResponse.data.soluciones) {
                 try {
                     const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${solucion.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                    const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                    solucion.avatarUrl = URL.createObjectURL(avatarBlob)
+                    if (responseAvatarURL.status == 200) {
+                        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+                        solucion.avatarUrl = URL.createObjectURL(avatarBlob)
+                    }
                 }
                 catch {
                     solucion.avatarUrl = null

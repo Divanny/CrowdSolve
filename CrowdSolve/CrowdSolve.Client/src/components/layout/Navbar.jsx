@@ -22,9 +22,11 @@ const Navbar = () => {
     useEffect(() => {
         const fetchAvatar = async () => {
             const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
-            const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-            const avatarUrl = URL.createObjectURL(avatarBlob)
-            setAvatarUrl(avatarUrl);
+            if (responseAvatarURL.status == 200) {
+                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+                const avatarUrl = URL.createObjectURL(avatarBlob)
+                setAvatarUrl(avatarUrl);
+            }
         }
 
         if (user) {

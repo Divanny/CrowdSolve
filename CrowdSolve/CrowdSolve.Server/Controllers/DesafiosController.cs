@@ -426,7 +426,18 @@ namespace CrowdSolve.Server.Controllers
             if (desafio == null) return new List<HistorialCambioEstatusModel>();
             
             return _historialCambioEstatusRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
-        } 
+        }
+
+        [HttpGet("GetRanking/{idDesafio}", Name = "GetRankingDesafio")]
+        [Authorize]
+        public List<SolucionesModel> GetRanking(int idDesafio)
+        {
+            var desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+
+            if (desafio == null) return new List<SolucionesModel>();
+
+            return _desafiosRepo.GetRanking(idDesafio).ToList();
+        }
 
         [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
         public object GetRelationalObjects(bool allEstatuses = false)
@@ -452,5 +463,6 @@ namespace CrowdSolve.Server.Controllers
                 EstatusDesafios = (allEstatuses) ? _desafiosRepo.GetEstatusDesafios() : _desafiosRepo.GetEstatusDesafios().Where(x => estatusProcesoEnums.Contains(x.idEstatusProceso)),
             };
         }
+
     }
 }

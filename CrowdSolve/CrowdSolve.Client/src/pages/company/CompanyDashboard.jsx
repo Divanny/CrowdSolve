@@ -59,7 +59,6 @@ const CompanyDashboard = () => {
             const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${empresaInfo.idUsuario}`, { responseType: 'blob', requireLoading: false });
             const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] });
             const url = URL.createObjectURL(avatarBlob);
-
             setData({ ...response.data, empresaInfo: { ...empresaInfo, avatarURL: url } });
         } catch (error) {
             toast.error('Error al cargar los desafíos, intente nuevamente', {
@@ -80,9 +79,10 @@ const CompanyDashboard = () => {
         if (!challengeToCancel || !cancelReason.trim()) return;
 
         try {
-            const response = await api.put(`/api/Desafios/CambiarEstatus/${challengeToCancel.idDesafio}`, {
-                idEstatusDesafio: EstatusProcesoEnum.Desafio_Cancelado,
-                motivoCambioEstatus: cancelReason,
+            const response = await api.put(`/api/Desafios/Descartar/${challengeToCancel.idDesafio}`, null, {
+                params: {
+                    motivo: cancelReason,
+                },
             });
 
             if (response.data.success) {
@@ -135,7 +135,7 @@ const CompanyDashboard = () => {
                 <>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
-                            <Avatar className="h-20 w-20">
+                            <Avatar className="h-16 w-16">
                                 <AvatarImage src={data.empresaInfo.avatarURL} alt={data.empresaInfo.nombre} />
                                 <AvatarFallback>{data.empresaInfo.nombre.substring(0, 2).toUpperCase()}</AvatarFallback>
                             </Avatar>
@@ -186,11 +186,12 @@ const CompanyDashboard = () => {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead className="w-[40%]">Título</TableHead>
+                                        <TableHead className="w-[35%]">Título</TableHead>
                                         <TableHead>Fecha Inicio</TableHead>
                                         <TableHead>Fecha Límite</TableHead>
                                         <TableHead>Estatus</TableHead>
                                         <TableHead>Participaciones</TableHead>
+                                        <TableHead>Pendientes</TableHead>
                                         <TableHead className="text-right">Acciones</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -221,6 +222,14 @@ const CompanyDashboard = () => {
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>{desafio.participaciones}</TableCell>
+                                            <TableCell>
+                                                <div className="flex items-center gap-1 w-auto">
+                                                    {desafio.solucionesPendientes > 0 &&
+                                                        <AlertCircle className="h-4 w-4 text-yellow-500" />
+                                                    }
+                                                    {desafio.solucionesPendientes ?? 0}
+                                                </div>
+                                            </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end space-x-2">
                                                     {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar && (

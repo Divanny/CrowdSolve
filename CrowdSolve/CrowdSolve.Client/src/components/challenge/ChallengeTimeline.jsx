@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { CheckCircle, Clock, AlertCircle, XCircle, Award } from 'lucide-react';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 import useAxios from '@/hooks/use-axios';
-import toast from 'sonner';
+import { toast } from 'sonner';
 
 const timelineSteps = [
     { status: EstatusProcesoEnum.Desafio_Sin_validar, label: 'Sin validar', icon: Clock, color: 'text-warning' },
@@ -30,7 +30,7 @@ const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
         };
 
         fetchStatusHistory();
-        
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [idDesafio]);
 
@@ -45,14 +45,11 @@ const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
         const currentIndex = getCurrentStepIndex();
         if (currentIndex === -1) return '0%';
 
-        // Para el primer paso, mostramos un pequeño progreso
         if (currentIndex === 0) return '3%';
 
-        // Para los demás pasos, calculamos el progreso proporcionalmente
         const totalSteps = timelineSteps.length - 1;
         const progress = (currentIndex / totalSteps) * 100;
 
-        // Ajustamos el progreso para que se alinee perfectamente con los puntos
         return `${progress * 0.96}%`;
     };
 
@@ -99,7 +96,7 @@ const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
                                 </div>
                                 <span
                                     className={`
-                    mt-2 text-xs font-medium transition-all duration-300
+                    mt-2 text-xs font-medium transition-all duration-300 -mb-4
                     ${isCurrent
                                             ? 'text-primary font-semibold scale-105'
                                             : isActive
