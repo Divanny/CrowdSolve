@@ -45,6 +45,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             FechaInicio = d.FechaInicio,
                             FechaLimite = d.FechaLimite,
                             FechaRegistro = d.FechaRegistro,
+                            idProceso = proceso.idProceso,
                             idEstatusDesafio = estatusProceso.idEstatusProceso,
                             EstatusDesafio = estatusProceso.Nombre,
                             SeveridadEstatusDesafio = estatusProceso.Severidad,

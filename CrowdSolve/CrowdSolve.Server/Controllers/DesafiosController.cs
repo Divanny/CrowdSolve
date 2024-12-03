@@ -18,6 +18,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly DesafiosRepo _desafiosRepo;
         private readonly SolucionesRepo _solucionesRepo;
         private readonly CategoriasRepo _categoriasRepo;
+        private readonly HistorialCambioEstatusRepo _historialCambioEstatusRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly EmpresasRepo _empresasRepo;
         private readonly Mailing _mailingService;
@@ -39,6 +40,7 @@ namespace CrowdSolve.Server.Controllers
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
             _categoriasRepo = new CategoriasRepo(crowdSolveContext);
+            _historialCambioEstatusRepo = new HistorialCambioEstatusRepo(crowdSolveContext);
             _mailingService = mailing;
         }
 
@@ -409,6 +411,22 @@ namespace CrowdSolve.Server.Controllers
                 throw;
             }
         }
+
+        /// <summary>
+        /// Obtiene el historial de cambios de estatus de un desafío
+        /// </summary>
+        /// <param name="idDesafio"></param>
+        /// <returns></returns>
+        [HttpGet("HistorialCambioEstatus/{idDesafio}", Name = "HistorialCambioEstatus")]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Ver_Desafio)]
+        public List<HistorialCambioEstatusModel> HistorialCambioEstatus(int idDesafio)
+        {
+            var desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+
+            if (desafio == null) return new List<HistorialCambioEstatusModel>();
+            
+            return _historialCambioEstatusRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
+        } 
 
         [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
         public object GetRelationalObjects(bool allEstatuses = false)

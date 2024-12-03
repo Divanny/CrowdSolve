@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import useAxios from '@/hooks/use-axios';
-import { BarChart3, Users, ClipboardCheck, Calendar, AlertCircle, Plus, Eye, Edit } from 'lucide-react';
+import { BarChart3, Users, ClipboardCheck, Calendar, AlertCircle, Plus, Eye, Edit, Trash2 } from 'lucide-react';
 import Icon from '@/components/ui/icon';
 import {
     Pagination,
@@ -18,6 +18,17 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Textarea } from '@/components/ui/textarea';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum'
 
 const CompanyDashboard = () => {
@@ -32,33 +43,72 @@ const CompanyDashboard = () => {
         totalDesafiosSinValidar: 0,
         desafios: [],
     });
+
+    const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+    const [cancelReason, setCancelReason] = useState('');
+    const [challengeToCancel, setChallengeToCancel] = useState(null);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 5
 
-    useEffect(() => {
-        const fetchChallenges = async () => {
-            try {
-                const response = await api.get('/api/Empresas/GetDashboardData');
+    const fetchChallenges = async () => {
+        try {
+            const response = await api.get('/api/Empresas/GetDashboardData');
 
-                const { empresaInfo } = response.data;
-                const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${empresaInfo.idUsuario}`, { responseType: 'blob', requireLoading: false });
-                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] });
-                const url = URL.createObjectURL(avatarBlob);
+            const { empresaInfo } = response.data;
+            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${empresaInfo.idUsuario}`, { responseType: 'blob', requireLoading: false });
+            const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] });
+            const url = URL.createObjectURL(avatarBlob);
 
-                setData({ ...response.data, empresaInfo: { ...empresaInfo, avatarURL: url } });
-            } catch (error) {
-                toast.error('Error al cargar los desafíos, intente nuevamente', {
-                    description: error.message,
+            setData({ ...response.data, empresaInfo: { ...empresaInfo, avatarURL: url } });
+        } catch (error) {
+            toast.error('Error al cargar los desafíos, intente nuevamente', {
+                description: error.message,
+            });
+            navigate(-1);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCancelClick = (desafio) => {
+        setChallengeToCancel(desafio);
+        setCancelDialogOpen(true);
+    };
+
+    const cancelChallenge = async () => {
+        if (!challengeToCancel || !cancelReason.trim()) return;
+
+        try {
+            const response = await api.put(`/api/Desafios/CambiarEstatus/${challengeToCancel.idDesafio}`, {
+                idEstatusDesafio: EstatusProcesoEnum.Desafio_Cancelado,
+                motivoCambioEstatus: cancelReason,
+            });
+
+            if (response.data.success) {
+                toast.success("Operación exitosa", {
+                    description: "El desafío ha sido cancelado exitosamente",
                 });
-                navigate(-1);
-            } finally {
-                setLoading(false);
+
+                await fetchChallenges();
+            } else {
+                toast.error("Operación fallida", {
+                    description: response.data.message,
+                });
             }
-        };
+        } catch (error) {
+            toast.error("Operación fallida", {
+                description: error.response?.data?.message ?? error.message,
+            });
+        } finally {
+            setCancelDialogOpen(false);
+            setCancelReason('');
+            setChallengeToCancel(null);
+        }
+    };
 
+    useEffect(() => {
         fetchChallenges();
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -174,13 +224,20 @@ const CompanyDashboard = () => {
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end space-x-2">
                                                     {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar && (
+                                                        <Button variant="ghost" size="sm" severity="destructive" className="flex items-center" onClick={() => handleCancelClick(desafio)}>
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </Button>
+                                                    )}
+                                                    {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar && (
                                                         <Button variant="ghost" size="sm" className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}/edit`)}>
                                                             <Edit className="h-4 w-4" />
                                                         </Button>
                                                     )}
-                                                    <Button variant="ghost" size="sm" className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}`)}>
-                                                        <Eye className="h-4 w-4" />
-                                                    </Button>
+                                                    {desafio.idEstatusDesafio !== EstatusProcesoEnum.Desafio_Sin_validar && (
+                                                        <Button variant="ghost" size="sm" className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}`)}>
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                    )}
                                                 </div>
                                             </TableCell>
                                         </TableRow>
@@ -217,6 +274,29 @@ const CompanyDashboard = () => {
                             </div>
                         </CardContent>
                     </Card>
+                    <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    ¿Estás seguro de que quieres cancelar este desafío?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Esta acción no se puede deshacer. Por favor, proporciona un motivo para la cancelación.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <Textarea
+                                placeholder="Motivo de cancelación"
+                                value={cancelReason}
+                                onChange={(e) => setCancelReason(e.target.value)}
+                            />
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction onClick={cancelChallenge} disabled={!cancelReason.trim()}>
+                                    Confirmar
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </>
             )}
         </div>

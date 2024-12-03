@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Edit } from 'lucide-react';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 import SolutionsValidation from '@/components/admin/companies/SolutionsValidation';
+import ChallengeTimeline from '@/components/challenge/ChallengeTimeline';
 
 const editor = createEditorToConvertToHtml();
 
@@ -33,50 +34,49 @@ const CompanyChallenge = () => {
         setHtmlContent(html);
     };
 
+    const fetchChallenge = async () => {
+        setLoading(true);
+
+        try {
+            const [challengeResponse, relationalObjectsResponse] = await Promise.all([
+                api.get(`/api/Desafios/GetMiDesafio/${challengeId}`, { requireLoading: false }),
+                api.get("/api/Desafios/GetRelationalObjects", {
+                    requireLoading: false,
+                })
+            ])
+
+            const slateContent = JSON.parse(challengeResponse.data.contenido)
+
+            editor.tf.setValue(slateContent)
+            convertToHtml();
+
+            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${challengeResponse.data.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false })
+            const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+            const url = URL.createObjectURL(avatarBlob)
+
+            for (const solucion of challengeResponse.data.soluciones) {
+                try {
+                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${solucion.idUsuario}`, { responseType: 'blob', requireLoading: false })
+                    const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+                    solucion.avatarUrl = URL.createObjectURL(avatarBlob)
+                }
+                catch {
+                    solucion.avatarUrl = null
+                }
+            }
+            setChallenge({ ...challengeResponse.data, logoEmpresa: url })
+            setRelationalObjects(relationalObjectsResponse.data)
+        } catch (error) {
+            toast.error("Operación fallida", {
+                description: error.response?.data?.message ?? error.message,
+            });
+            navigate(-1);
+        }
+
+        setLoading(false);
+    };
 
     useEffect(() => {
-        const fetchChallenge = async () => {
-            setLoading(true);
-
-            try {
-                const [challengeResponse, relationalObjectsResponse] = await Promise.all([
-                    api.get(`/api/Desafios/GetMiDesafio/${challengeId}`, { requireLoading: false }),
-                    api.get("/api/Desafios/GetRelationalObjects", {
-                        requireLoading: false,
-                    })
-                ])
-
-                const slateContent = JSON.parse(challengeResponse.data.contenido)
-
-                editor.tf.setValue(slateContent)
-                convertToHtml();
-
-                const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${challengeResponse.data.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false })
-                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                const url = URL.createObjectURL(avatarBlob)
-
-                for (const solucion of challengeResponse.data.soluciones) {
-                    try {
-                        const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${solucion.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                        solucion.avatarUrl = URL.createObjectURL(avatarBlob)
-                    }
-                    catch {
-                        solucion.avatarUrl = null
-                    }
-                }
-                setChallenge({ ...challengeResponse.data, logoEmpresa: url })
-                setRelationalObjects(relationalObjectsResponse.data)
-            } catch (error) {
-                toast.error("Operación fallida", {
-                    description: error.response?.data?.message ?? error.message,
-                });
-                navigate(-1);
-            }
-
-            setLoading(false);
-        };
-
         fetchChallenge();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,6 +110,7 @@ const CompanyChallenge = () => {
                                     </Button>
                                 )}
                             </div>
+                            <ChallengeTimeline idDesafio={challenge.idDesafio} currentStatus={challenge.idEstatusDesafio} />
                             <ChallengeHeader
                                 challenge={challenge}
                                 htmlContent={htmlContent}
@@ -120,7 +121,7 @@ const CompanyChallenge = () => {
                                 <div className="flex justify-between items-center">
                                     <h2 className="text-2xl font-bold">Soluciones</h2>
                                 </div>
-                                <SolutionsValidation solutions={challenge.soluciones} />
+                                <SolutionsValidation solutions={challenge.soluciones} reloadChallengeData={fetchChallenge}/>
                             </div>
                         </>
                     )

@@ -72,36 +72,6 @@ const SolutionsValidation = ({ solutions, reloadChallengeData }) => {
         }
     };
 
-    const handleValidarSolucion = async (solucion, esValida) => {
-        try {
-            const payload = {
-                idSolucion: solucion.idSolucion,
-                esValida,
-                razonRechazo: esValida ? null : razonRechazo
-            };
-            const response = await api.put(`/api/Soluciones/Validar/${solucion.idSolucion}`, payload)
-
-            if (response.data.success) {
-                toast.success("Operación exitosa", {
-                    description: response.data.message
-                });
-                setDetalleSolucionDialog(false);
-                setRazonRechazo('');
-                await reloadChallengeData();
-            }
-            else {
-                toast.warning("Operación fallida", {
-                    description: response.data.message
-                });
-            }
-        }
-        catch (error) {
-            toast.error("Operación fallida", {
-                description: error.message
-            });
-        }
-    };
-
     const handleCambiarEstatus = async (solucion, idEstatusProceso) => {
         try {
             const payload = {
