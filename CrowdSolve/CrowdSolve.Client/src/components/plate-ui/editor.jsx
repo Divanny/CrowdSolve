@@ -5,7 +5,7 @@ import { cn } from '@udecode/cn';
 import { PlateContent } from '@udecode/plate-common/react';
 import { cva } from 'class-variance-authority';
 
-const editorcontainerVariants = cva(
+const editorContainerVariants = cva(
   'relative flex cursor-text [&_.slate-selection-area]:border [&_.slate-selection-area]:border-brand/25 [&_.slate-selection-area]:bg-brand/15',
   {
     defaultVariants: {
@@ -20,13 +20,13 @@ const editorcontainerVariants = cva(
   }
 );
 
-export const Editorcontainer = React.forwardRef(({ className, variant, ...props }, ref) => {
+export const EditorContainer = React.forwardRef(({ className, variant, ...props }, ref) => {
   return (
     (<div
       ref={ref}
       className={cn(
         'ignore-click-outside/toolbar',
-        editorcontainerVariants({ variant }),
+        editorContainerVariants({ variant }),
         className
       )}
       role="button"
@@ -34,7 +34,7 @@ export const Editorcontainer = React.forwardRef(({ className, variant, ...props 
   );
 });
 
-Editorcontainer.displayName = 'Editorcontainer';
+EditorContainer.displayName = 'EditorContainer';
 
 const editorVariants = cva(cn(
   'group/editor',
