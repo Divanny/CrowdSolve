@@ -238,6 +238,9 @@
     "LayoutAppSidebar": true,
     "ChallengeCompanyEvaluation": true,
     "ChallengeUserVoting": true,
-    "ChallengeChallengeHeader": true
+    "ChallengeChallengeHeader": true,
+    "AdminCompaniesSolutionsValidation": true,
+    "ChallengeChallengeTimeline": true,
+    "ChallengeSolutionRanking": true
   }
 }

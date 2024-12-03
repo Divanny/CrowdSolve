@@ -39,5 +39,12 @@ public class SolucionesModel
 
     public int? CantidadVotos { get; set; }
 
+    public int? CantidadVotosComunidad { get; set; }
+    
+    public int? CantidadVotosParticipantes { get; set; }
+
+    public int? PuntuacionFinal { get; set; }
+    public int? PuntuacionMaxima { get; set; }
+
     public List<AdjuntosSoluciones>? Adjuntos { get; set; }
 }

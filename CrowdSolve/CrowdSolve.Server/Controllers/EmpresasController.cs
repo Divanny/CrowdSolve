@@ -16,6 +16,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly EmpresasRepo _empresasRepo;
+        private readonly DesafiosRepo _desafiosRepo;
+        private readonly SolucionesRepo _solucionesRepo;
         private readonly ParticipantesRepo _participantesRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly FirebaseStorageService _firebaseStorageService;
@@ -33,6 +35,8 @@ namespace CrowdSolve.Server.Controllers
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
+            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
+            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
             _participantesRepo = new ParticipantesRepo(crowdSolveContext);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _firebaseStorageService = firebaseStorageService;
@@ -261,6 +265,35 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        [HttpGet("GetDashboardData", Name = "GetDashboardData")]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Dashboard)]
+        public object GetDashboardData()
+        {
+            var empresaInfo = _empresasRepo.Get(x => x.idUsuario == _idUsuarioOnline).FirstOrDefault();
+            if (empresaInfo == null) throw new Exception("Esta empresa no se ha encontrado");
+
+            var desafios = _desafiosRepo.Get(x => x.idEmpresa == empresaInfo.idEmpresa).ToList();
+            var idsDesafios = desafios.Select(x => x.idDesafio).ToList();
+
+            foreach (var desafio in desafios)
+            {
+                desafio.SolucionesPendientes = _desafiosRepo.GetCantidadSolucionesPendientesDesafio(desafio.idDesafio);
+            }
+
+            return new
+            {
+                empresaInfo,
+                desafios,
+                totalDesafios = desafios.Count,
+                totalParticipaciones = _solucionesRepo.Get(x => idsDesafios.Contains(x.idDesafio)).Count(),
+                totalDesafiosSinValidar = _desafiosRepo.Get(x => x.idEmpresa == empresaInfo.idEmpresa).Where(x => x.idEstatusDesafio == (int)EstatusProcesoEnum.Desafío_Sin_validar).Count(),
+                totalSolucionesSinEvaluar = _solucionesRepo.Get(x => idsDesafios.Contains(x.idDesafio)).Where(x => x.idEstatusProceso == (int)EstatusProcesoEnum.Solución_Enviada).Count(), 
+            };
+        }
+
+        /// <summary>
+        /// Obtiene los objetos relacionales de la empresa.
+        /// </summary>
         [HttpGet("GetRelationalObjects")]
         public object GetRelationalObjects()
         {

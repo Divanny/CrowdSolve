@@ -93,12 +93,8 @@ const RegistroParticipante = () => {
                 const { data } = await api.get("/api/Account");
 
                 if (data) {
-                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${data.usuario.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                    const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                    const url = URL.createObjectURL(avatarBlob)
-
                     dispatch(setUser({
-                        user: { ...data.usuario, avatarUrl : url },
+                        user: { ...data.usuario},
                         token: token,
                         views: Array.isArray(data.vistas) ? data.vistas : []
                     }));

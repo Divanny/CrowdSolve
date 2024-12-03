@@ -2,26 +2,27 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import useAxios from '@/hooks/use-axios';
-import CompanyEvaluation from '@/components/challenge/CompanyEvaluation';
-import UserVoting from '@/components/challenge/UserVoting';
 import createEditorToConvertToHtml from '@/hooks/createEditorToConvertToHtml'
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import TiposEvaluacionEnum from '@/enums/TiposEvaluacionEnum';
-import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 import ChallengeDetail from '@/components/challenge/ChallengeDetail';
 import ChallengeHeader from '@/components/challenge/ChallengeHeader';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Edit } from 'lucide-react';
+import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
+import SolutionsValidation from '@/components/admin/companies/SolutionsValidation';
+import ChallengeTimeline from '@/components/challenge/ChallengeTimeline';
+import SolutionRanking from '@/components/challenge/SolutionRanking';
 
 const editor = createEditorToConvertToHtml();
 
-const ChallengeEvaluation = () => {
+const CompanyChallenge = () => {
     const { challengeId } = useParams();
     const { api } = useAxios();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [challenge, setChallenge] = useState(null);
-    const [currentEvaluationProcess, setCurrentEvaluationProcess] = useState(null);
     const [htmlContent, setHtmlContent] = useState('');
     const [relationalObjects, setRelationalObjects] = useState({})
 
@@ -39,30 +40,11 @@ const ChallengeEvaluation = () => {
 
         try {
             const [challengeResponse, relationalObjectsResponse] = await Promise.all([
-                api.get(`/api/Desafios/${challengeId}`, { requireLoading: false }),
+                api.get(`/api/Desafios/GetMiDesafio/${challengeId}`, { requireLoading: false }),
                 api.get("/api/Desafios/GetRelationalObjects", {
                     requireLoading: false,
                 })
             ])
-
-            if (challengeResponse.data.idEstatusDesafio !== EstatusProcesoEnum.Desafio_En_evaluacion) {
-                toast.warning("Operación fallida", {
-                    description: "El desafío no se encuentra en proceso de evaluación.",
-                });
-
-                navigate(-1);
-            }
-
-            const actualProcesoEvaluacion = challengeResponse.data.procesoEvaluacion
-                .filter((pe) => new Date(pe.fechaFinalizacion) > new Date())
-                .sort((a, b) => new Date(a.fechaFinalizacion) - new Date(b.fechaFinalizacion))[0];
-
-            if (!actualProcesoEvaluacion) {
-                toast.warning("Operación fallida", {
-                    description: "No hay un proceso de evaluación actual.",
-                });
-                navigate(-1);
-            }
 
             const slateContent = JSON.parse(challengeResponse.data.contenido)
 
@@ -87,7 +69,6 @@ const ChallengeEvaluation = () => {
             }
             setChallenge({ ...challengeResponse.data, logoEmpresa: url })
             setRelationalObjects(relationalObjectsResponse.data)
-            setCurrentEvaluationProcess(actualProcesoEvaluacion);
         } catch (error) {
             toast.error("Operación fallida", {
                 description: error.response?.data?.message ?? error.message,
@@ -98,32 +79,9 @@ const ChallengeEvaluation = () => {
         setLoading(false);
     };
 
-    const reloadChallengeData = async () => {
-        await fetchChallenge();
-    };
-
     useEffect(() => {
-        const canEvaluate = async () => {
-            try {
-                const response = await api.get(`/api/Desafios/PuedoEvaluar/${challengeId}`, { requireLoading: false });
-                if (!response.data.success) {
-                    toast.warning("Operación fallida", {
-                        description: response.data.message,
-                    });
-                    navigate(-1);
-                }
-                else {
-                    await fetchChallenge();
-                }
-            } catch (error) {
-                toast.error("Operación fallida", {
-                    description: error.response?.data?.message ?? error.message,
-                });
-                navigate(-1);
-            }
-        }
+        fetchChallenge();
 
-        canEvaluate();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [challengeId]);
 
@@ -136,41 +94,44 @@ const ChallengeEvaluation = () => {
         <div className="container mx-auto py-8">
             <div className="space-y-6">
                 {
-                    (!challenge || !currentEvaluationProcess || loading) ? (
+                    (!challenge || loading) ? (
                         <div className="flex flex-col items-center gap-4">
                             <Skeleton className="h-64 w-full mb-4" />
                             <Skeleton className="h-52 w-full" />
                         </div>
                     ) : (
                         <>
+                            <div className="flex justify-between items-center">
+                                <Button onClick={() => navigate(-1)} variant="ghost">
+                                    <ArrowLeft className='me-1' size={16} />
+                                    Volver
+                                </Button>
+                                {challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar && (
+                                    <Button onClick={() => navigate(`/company/challenge/${challenge.idDesafio}/edit`)}>
+                                        <Edit className='me-1' size={16} />
+                                        Editar
+                                    </Button>
+                                )}
+                            </div>
+                            <ChallengeTimeline idDesafio={challenge.idDesafio} currentStatus={challenge.idEstatusDesafio} />
                             <ChallengeHeader
                                 challenge={challenge}
                                 htmlContent={htmlContent}
                                 getCategoryName={getCategoryName}
                                 ChallengeDetail={ChallengeDetail}
                             />
-                            {currentEvaluationProcess.idTipoEvaluacion === TiposEvaluacionEnum.Evaluacion_Empresa && (
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <h2 className="text-2xl font-bold">Evaluar soluciones</h2>
-                                        <span className="text-sm font-medium">
-                                            Finaliza: {new Date(currentEvaluationProcess.fechaFinalizacion).toLocaleDateString()}
-                                        </span>
-                                    </div>
-                                    <CompanyEvaluation solutions={challenge.soluciones} reloadChallengeData={reloadChallengeData} />
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-2xl font-bold">Soluciones</h2>
                                 </div>
-                            )}
-                            {(currentEvaluationProcess.idTipoEvaluacion === TiposEvaluacionEnum.Voto_Comunidad || currentEvaluationProcess.tipo === TiposEvaluacionEnum.Voto_Comunidad) && (
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <h2 className="text-2xl font-bold">Evaluar soluciones</h2>
-                                        <span className="text-sm font-medium">
-                                            Finaliza: {new Date(currentEvaluationProcess.fechaFinalizacion).toLocaleDateString()}
-                                        </span>
-                                    </div>
-                                    <UserVoting initialSolutions={challenge.soluciones} />
-                                </div>
-                            )}
+                                {
+                                    (challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion ||
+                                        challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Finalizado ||
+                                        challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios) ? (
+                                        <SolutionRanking idDesafio={challenge.idDesafio} />
+                                    ) : <SolutionsValidation solutions={challenge.soluciones} reloadChallengeData={fetchChallenge} canValidate={challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_progreso} />
+                                }
+                            </div>
                         </>
                     )
                 }
@@ -179,4 +140,4 @@ const ChallengeEvaluation = () => {
     );
 };
 
-export default ChallengeEvaluation;
+export default CompanyChallenge;

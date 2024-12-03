@@ -1,8 +1,11 @@
-﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using CrowdSolve.Server.Controllers;
+using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Numerics;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
 {
@@ -45,8 +48,12 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             FechaInicio = d.FechaInicio,
                             FechaLimite = d.FechaLimite,
                             FechaRegistro = d.FechaRegistro,
+                            idProceso = proceso.idProceso,
                             idEstatusDesafio = estatusProceso.idEstatusProceso,
-                            EstatusDesafio = estatusProceso.Nombre
+                            EstatusDesafio = estatusProceso.Nombre,
+                            SeveridadEstatusDesafio = estatusProceso.Severidad,
+                            IconoEstatusDesafio = estatusProceso.ClaseIcono,
+                            Participaciones = DB.Set<Soluciones>().Count(x => x.idDesafio == d.idDesafio),
                         });
             }
         )
@@ -230,7 +237,63 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
             if (procesoEvaluacionActual.idTipoEvaluacion == (int)TiposEvaluacionEnum.Voto_de_Participantes_del_Desafío && !dbContext.Set<Soluciones>().Any(x => x.idUsuario == idUsuario && x.idDesafio == idDesafio)) return new OperationResult(false, "Este usuario no ha participado en este desafío para evaluar");
 
+            if (procesoEvaluacionActual.idTipoEvaluacion == (int)TiposEvaluacionEnum.Voto_de_Comunidad && dbContext.Set<Soluciones>().Any(x => x.idUsuario == idUsuario && x.idDesafio == idDesafio)) return new OperationResult(false, "Este usuario ha participado en este desafío, solo usuarios de la comunidad externos a participantes");
+
             return new OperationResult(true, "Puede evaluar el desafío");
+        }
+
+        public List<SolucionesModel> GetRanking(int idDesafio)
+        {
+            var desafio = this.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+            if (desafio == null) return new List<SolucionesModel>();
+
+            var procesoEvaluacion = this.GetProcesoEvaluacionDesafio(idDesafio);
+            if (procesoEvaluacion == null || procesoEvaluacion.Count == 0) return new List<SolucionesModel>();
+
+            SolucionesRepo solucionesRepo = new SolucionesRepo(dbContext, _idUsuarioEnLinea);
+            var solucionesDesafio = solucionesRepo.Get(x => x.idDesafio == idDesafio).ToList();
+            List<int> idsUsuariosParticipantesDesafio = solucionesDesafio.Select(x => x.idUsuario).ToList();
+
+            foreach (var solucion in solucionesDesafio)
+            {
+                if (procesoEvaluacion.Any(x => x.idTipoEvaluacion == (int)TiposEvaluacionEnum.Voto_de_Comunidad))
+                {
+                    solucion.CantidadVotosComunidad = dbContext.Set<VotosUsuarios>().Count(x => x.idSolucion == solucion.idSolucion && !idsUsuariosParticipantesDesafio.Contains(x.idUsuario));
+                }
+
+                if (procesoEvaluacion.Any(x => x.idTipoEvaluacion == (int)TiposEvaluacionEnum.Voto_de_Participantes_del_Desafío))
+                {
+                    solucion.CantidadVotosParticipantes = dbContext.Set<VotosUsuarios>().Count(x => x.idSolucion == solucion.idSolucion && idsUsuariosParticipantesDesafio.Contains(x.idUsuario));
+                }
+
+                int puntuacionEmpresa = solucion.Puntuacion ?? 0;
+                int puntuacionComunidad = solucion.CantidadVotosComunidad ?? 0;
+                int puntuacionParticipantes = solucion.CantidadVotosParticipantes ?? 0;
+
+                int ponderacionEmpresa = 70, ponderacionComunidad = 20, ponderacionParticipantes = 10;
+
+                int ponderacionPuntuacionFinal = (int)(
+                    (puntuacionEmpresa * (ponderacionEmpresa / 100.0)) +
+                    (puntuacionComunidad * (ponderacionComunidad / 100.0)) +
+                    (puntuacionParticipantes * (ponderacionParticipantes / 100.0))
+                );
+
+                int puntuacionMaxima = 0;
+
+                if (procesoEvaluacion.Any(x => x.idTipoEvaluacion == (int)TiposEvaluacionEnum.Voto_de_Comunidad)) puntuacionMaxima += ponderacionComunidad;
+                else solucion.CantidadVotosComunidad = null;
+
+                if (procesoEvaluacion.Any(x => x.idTipoEvaluacion == (int)TiposEvaluacionEnum.Voto_de_Participantes_del_Desafío)) puntuacionMaxima += ponderacionParticipantes;
+                else solucion.CantidadVotosParticipantes = null;
+
+                if (procesoEvaluacion.Any(x => x.idTipoEvaluacion == (int)TiposEvaluacionEnum.Evaluación_de_la_Empresa)) puntuacionMaxima += ponderacionEmpresa;
+                else solucion.Puntuacion = null;
+
+                solucion.PuntuacionFinal = ponderacionPuntuacionFinal;
+                solucion.PuntuacionMaxima = puntuacionMaxima;
+            }
+
+            return solucionesDesafio.OrderByDescending(x => x.PuntuacionFinal).ToList();
         }
 
         public IEnumerable<Categorias> GetCategorias()
@@ -272,7 +335,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             var desafios = filter != null ? this.Get(x => idRelacionados.Contains(x.idDesafio) && filter(x)).ToList() : this.Get(x => idRelacionados.Contains(x.idDesafio)).ToList();
             return desafios;
         }
-        
+
         public List<DesafiosModel> GetDesafiosEnProgreso()
         {
             var idRelacionados = procesosRepo.Get(x => x.idEstatusProceso == (int)EstatusProcesoEnum.Desafío_En_progreso).Select(x => x.idRelacionado).ToList();
@@ -291,6 +354,18 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         {
             var estatusesProceso = procesosRepo.GetEstatusProceso().ToList();
             return estatusesProceso;
+        }
+
+        public int GetCantidadSolucionesPendientesDesafio(int idDesafio)
+        {
+            int solucionesPendientes = (
+                from s in dbContext.Set<Soluciones>()
+                join p in dbContext.Set<Procesos>() on s.idSolucion equals p.idRelacionado
+                where p.idClaseProceso == (int)ClasesProcesoEnum.Solución && p.idEstatusProceso == (int)EstatusProcesoEnum.Solución_Enviada && s.idDesafio == idDesafio
+                select s
+            ).Count();
+
+            return solucionesPendientes;
         }
 
         public void CambiarEstatus(int idDesafio, EstatusProcesoEnum estatus, string? motivo)

@@ -473,6 +473,36 @@ namespace CrowdSolve.Server.Controllers
             return soluciones;
         }
 
+        /// <summary>
+        /// Cambia el estatus de una solución
+        /// </summary>
+        /// <param name="idSolucion"></param>
+        /// <param name="cambioEstatusModel"></param>
+        /// <returns></returns>
+        [HttpPut("CambiarEstatus/{idSolucion}", Name = "CambiarEstatusSolucion")]
+        [Authorize]
+        public OperationResult CambiarEstatus(int idSolucion, CambioEstatusModel cambioEstatusModel)
+        {
+            try
+            {
+                var solucion = _solucionesRepo.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+
+                if (solucion == null) return new OperationResult(false, "Esta solución no se ha encontrado");
+
+                if (cambioEstatusModel == null)
+                    return new OperationResult(false, "No se ha especificado la información del nuevo estatus");
+
+                _solucionesRepo.CambiarEstatus(idSolucion, (EstatusProcesoEnum)cambioEstatusModel.idEstatusProceso, cambioEstatusModel.MotivoCambioEstatus);
+
+                return new OperationResult(true, "Se ha cambiado el estatus al desafío exitosamente");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
         private bool IsLastPart(IHeaderDictionary headers)
         {
             int isLastPart;
