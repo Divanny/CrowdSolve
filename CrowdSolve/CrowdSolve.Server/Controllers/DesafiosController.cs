@@ -348,10 +348,6 @@ namespace CrowdSolve.Server.Controllers
                 {
                     return NotFound("Usuario no encontrado");
                 }
-
-                var solucion = _solucionesRepo.Get(x => x.idDesafio == idDesafio && x.idUsuario == _idUsuarioOnline).FirstOrDefault();
-
-                desafio.YaParticipo = solucion != null;
             }
 
             desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();

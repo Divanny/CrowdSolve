@@ -11,7 +11,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { FileIcon, ThumbsUpIcon, UsersIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, SearchIcon } from 'lucide-react'
+import { FileIcon, ThumbsUpIcon, UsersIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, SearchIcon, Send } from 'lucide-react'
+import { toast } from 'sonner'
+import Icon from '@/components/ui/icon'
+import { Link } from 'react-router-dom'
 
 const IconoArchivo = ({ tipo }) => {
     switch (tipo) {
@@ -62,37 +65,40 @@ export default function MySolutions() {
 
     const togglePublicStatus = async (solutionId, currentStatus) => {
         try {
-            console.log(solutionId, currentStatus)
             await api.put(`/api/Soluciones/Publicar/${solutionId}`)
             setSolutions(solutions.map(solution =>
-                solution.idSolucion === solutionId ? { ...solution, publica: (currentStatus == null ? false : !currentStatus)} : solution
+                solution.idSolucion === solutionId ? { ...solution, publica: (currentStatus == null ? false : !currentStatus) } : solution
             ))
         } catch (error) {
-            console.error('Error updating solution status:', error)
+            toast.error('Ocurrió un error al cambiar la visibilidad de la solución')
         }
     }
 
-    const downloadAdjunto = async (idAdjunto) => {
+    const downloadAdjunto = async (adjunto) => {
         try {
-            const response = await api.get(`/api/Adjuntos/${idAdjunto}`, { responseType: 'blob' })
-            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
             const link = document.createElement('a')
             link.href = url
-            link.setAttribute('download', 'adjunto')
+            link.setAttribute('download', adjunto.nombre)
             document.body.appendChild(link)
             link.click()
             link.parentNode.removeChild(link)
         } catch (error) {
-            console.error('Error downloading attachment:', error)
+            toast.error('Operación fallida',
+                {
+                    description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
+                }
+            )
         }
     }
 
     const filteredSolutions = solutions.filter(solution => {
         const matchesSearch = solution.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                              solution.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
-        const matchesStatus = filterStatus === 'all' || 
-                              (filterStatus === 'public' && solution.publica) ||
-                              (filterStatus === 'private' && !solution.publica)
+            solution.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+        const matchesStatus = filterStatus === 'all' ||
+            (filterStatus === 'public' && solution.publica) ||
+            (filterStatus === 'private' && !solution.publica)
         return matchesSearch && matchesStatus
     })
 
@@ -114,7 +120,10 @@ export default function MySolutions() {
 
     return (
         <div className="container mx-auto py-6">
-            <h1 className="text-3xl font-bold mb-6">Mis Soluciones</h1>
+            <h1 className="text-3xl font-bold mb-6 flex items-center">
+                <Send className="w-6 h-6 mr-2" />
+                Mis Soluciones
+            </h1>
             <div className="flex justify-between items-center mb-6">
                 <div className="relative w-64">
                     <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4" />
@@ -143,20 +152,26 @@ export default function MySolutions() {
                         <CardContent className="p-6">
                             <div className="flex justify-between items-start mb-4">
                                 <div>
-                                    <h2 className="text-xl font-semibold mb-2">{solution.titulo}</h2>
-                                    <p className="text-sm text-muted-foreground mb-2">{solution.descripcion}</p>
+                                    <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                                        <Avatar>
+                                            <AvatarImage src={`/api/Account/GetAvatar/${solution.desafio.idUsuarioEmpresa}`} />
+                                            <AvatarFallback>{solution.desafio.empresa.substring(0, 2).toUpperCase()}</AvatarFallback>
+                                        </Avatar>
+                                        {solution.desafio.titulo}
+                                    </h2>
+                                    <p className="text-sm text-muted-foreground mb-2">{solution.titulo}</p>
                                     <div className="flex items-center space-x-2 mb-2">
                                         <Badge variant={solution.desafio.severidadEstatusDesafio === 'success' ? 'default' : 'secondary'}>
                                             {solution.desafio.estatusDesafio}
                                         </Badge>
-                                        <span className="text-sm">Puntuación: {solution.puntuacion} / {solution.puntuacionMaxima}</span>
-                                        <span className="text-sm">Estado: {solution.estatusProceso}</span>
                                     </div>
                                 </div>
-                                <Avatar>
-                                    <AvatarImage src={`/api/Account/GetAvatar/${solution.desafio.idUsuarioEmpresa}`} />
-                                    <AvatarFallback>{solution.desafio.empresa.substring(0, 2).toUpperCase()}</AvatarFallback>
-                                </Avatar>
+                                <div>
+                                    <Badge variant={solution.severidadEstatusProceso} className="flex gap-1">
+                                        <Icon name={solution.iconoEstatusProceso} size={16} />
+                                        {solution.estatusProceso}
+                                    </Badge>
+                                </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4 mb-4">
                                 <div>
@@ -164,8 +179,8 @@ export default function MySolutions() {
                                     <p className="text-sm font-medium">{solution.desafio.empresa}</p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Fecha Límite</p>
-                                    <p className="text-sm">{new Date(solution.desafio.fechaLimite).toLocaleDateString()}</p>
+                                    <p className="text-xs text-muted-foreground">Fecha de envío</p>
+                                    <p className="text-sm">{new Date(solution.fechaRegistro).toLocaleDateString()}</p>
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-2 mb-4">
@@ -177,59 +192,62 @@ export default function MySolutions() {
                                     <ThumbsUpIcon className="w-4 h-4 mr-1" />
                                     {solution.cantidadVotos} votos
                                 </Badge>
-                                <Badge variant="outline">
-                                    <UsersIcon className="w-4 h-4 mr-1" />
-                                    {solution.cantidadVotosParticipantes} votos de participantes
-                                </Badge>
                             </div>
                             <div className="flex justify-between items-center">
                                 <div className="flex items-center space-x-2">
                                     <Switch
                                         id={`public-${solution.idSolucion}`}
-                                        checked={solution.publica}
+                                        checked={solution.publica ?? false}
                                         onCheckedChange={() => togglePublicStatus(solution.idSolucion, solution.publica)}
                                     />
                                     <label
                                         htmlFor={`public-${solution.idSolucion}`}
                                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                     >
-                                        {solution.publica ? 'Pública' : 'Privada'}
+                                        {(solution.publica ?? false) ? 'Pública' : 'Privada'}
                                     </label>
                                 </div>
-                                <Dialog>
-                                    <DialogTrigger asChild>
-                                        <Button variant="outline">Ver detalles</Button>
-                                    </DialogTrigger>
-                                    <DialogContent className="sm:max-w-[425px]">
-                                        <DialogHeader>
-                                            <DialogTitle>{solution.titulo}</DialogTitle>
-                                        </DialogHeader>
-                                        <div className="grid gap-4 py-4">
-                                            <div className="grid grid-cols-4 items-center gap-4">
-                                                <p className="text-sm font-medium col-span-4">Descripción:</p>
-                                                <p className="text-sm text-muted-foreground col-span-4">{solution.descripcion}</p>
-                                            </div>
-                                            <div className="grid grid-cols-4 items-center gap-4">
-                                                <p className="text-sm font-medium col-span-4">Adjuntos:</p>
-                                                <div className="col-span-4 space-y-2">
-                                                    {solution.adjuntos.map((adjunto) => (
-                                                        <Button
-                                                            key={adjunto.idAdjunto}
-                                                            variant="outline"
-                                                            size="sm"
-                                                            className="flex items-center justify-start space-x-2 w-full"
-                                                            onClick={() => downloadAdjunto(adjunto.idAdjunto)}
-                                                        >
-                                                            <IconoArchivo tipo={adjunto.contentType} />
-                                                            <span className="truncate flex-1">{adjunto.nombre}</span>
-                                                            <span className="text-xs text-muted-foreground whitespace-nowrap">{formatearTamaño(adjunto.tamaño)}</span>
-                                                        </Button>
-                                                    ))}
+                                <div className="flex items-center space-x-2">
+                                    <Button variant="ghost">
+                                        <Link to={`/challenge/${solution.desafio.idDesafio}`} className="flex items-center space-x-1">
+                                            Ver desafío
+                                        </Link>
+                                    </Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button variant="outline">Ver detalles</Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[425px]">
+                                            <DialogHeader>
+                                                <DialogTitle>{solution.titulo}</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="grid gap-4 py-4">
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <p className="text-sm font-medium col-span-4">Descripción:</p>
+                                                    <p className="text-sm text-muted-foreground col-span-4">{solution.descripcion}</p>
+                                                </div>
+                                                <div className="grid grid-cols-4 items-center gap-4">
+                                                    <p className="text-sm font-medium col-span-4">Adjuntos:</p>
+                                                    <div className="col-span-4 space-y-2">
+                                                        {solution.adjuntos.map((adjunto) => (
+                                                            <Button
+                                                                key={adjunto.idAdjunto}
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="flex items-center justify-start space-x-2 w-full"
+                                                                onClick={() => downloadAdjunto(adjunto)}
+                                                            >
+                                                                <IconoArchivo tipo={adjunto.contentType} />
+                                                                <span className="truncate flex-1">{adjunto.nombre}</span>
+                                                                <span className="text-xs text-muted-foreground whitespace-nowrap">{formatearTamaño(adjunto.tamaño)}</span>
+                                                            </Button>
+                                                        ))}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </DialogContent>
-                                </Dialog>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>

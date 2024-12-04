@@ -30,6 +30,8 @@ public class SolucionesModel
     public int idEstatusProceso { get; set; }
 
     public string? EstatusProceso { get; set; }
+    public string? SeveridadEstatusProceso { get; set; }
+    public string? IconoEstatusProceso { get; set; }
 
     public bool? Publica { get; set; }
 
