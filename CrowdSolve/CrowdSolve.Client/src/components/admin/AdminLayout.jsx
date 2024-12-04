@@ -35,101 +35,107 @@ import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import GetLogo from "@/helpers/get-logo";
 import Icon from "@/components/ui/icon";
 import { Badge } from "@/components/ui/badge"
+import { useTranslation } from 'react-i18next';
 
-const sidebarItems = [
-    {
-        title: null,
-        url: "#",
-        items: [
-            {
-                title: "Dashboard",
-                url: "/admin",
-                icon: "Gauge",
-            },
-        ],
-    },
-    {
-        title: "Administración de usuarios",
-        url: "#",
-        items: [
-            {
-                title: "Participantes",
-                url: "/admin/participants",
-                icon: "Users",
-            },
-            {
-                title: "Empresas",
-                url: "/admin/companies",
-                icon: "Building2",
-            },
-            {
-                title: "Administradores",
-                url: "/admin/administrators",
-                icon: "ShieldCheck",
-            },
-            {
-                title: "Roles y permisos",
-                url: "/admin/permissions",
-                icon: "Key",
-            },
-        ],
-    },
-    {
-        title: "Administración de desafíos",
-        url: "#",
-        items: [
-            {
-                title: "Desafíos",
-                url: "/admin/challenges",
-                icon: "Flag",
-            },
-            {
-                title: "Soluciones",
-                url: "/admin/solutions",
-                icon: "Send",
-            },
-            {
-                title: "Categorías",
-                url: "/admin/categories",
-                icon: "TableProperties",
-            },
-        ],
-    },
-    {
-        title: "Solicitudes",
-        url: "#",
-        items: [
-            {
-                title: "Solicitudes de empresa",
-                url: "/admin/company-requests",
-                icon: "Building2",
-                pending: 3,
-            },
-            {
-                title: "Solicitudes de soporte",
-                url: "/admin/support-requests",
-                icon: "Headset",
-                pending: 1,
-            },
-        ],
-    },
-    {
-        title: "Configuración",
-        url: "#",
-        items: [
-            {
-                title: "Manual de usuario",
-                url: "/admin/user-manual",
-                icon: "Book",
-            },
-        ],
-    },
-]
+
+
 export default function Component() {
     const location = useLocation();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const user = useSelector((state) => state.user.user);
+
+    const sidebarItems = [
+    
+        {
+            title: null,
+            url: "#",
+            items: [
+                {
+                    title: "Dashboard",
+                    url: "/admin",
+                    icon: "Gauge",
+                },
+            ],
+        },
+        {
+            title: t('AdminLayout.sideBarAdm.AdmUser'),
+            url: "#",
+            items: [
+                {
+                    title: t('AdminLayout.sideBarAdm.Participants'),
+                    url: "/admin/participants",
+                    icon: "Users",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.Companies'),
+                    url: "/admin/companies",
+                    icon: "Building2",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.Admins'),
+                    url: "/admin/administrators",
+                    icon: "ShieldCheck",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.RolesPermissions'),
+                    url: "/admin/permissions",
+                    icon: "Key",
+                },
+            ],
+        },
+        {
+            title: t('AdminLayout.sideBarAdm.AdmChallenges'),
+            url: "#",
+            items: [
+                {
+                    title: t('AdminLayout.sideBarAdm.Challenges'),
+                    url: "/admin/challenges",
+                    icon: "Flag",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.Solutions'),
+                    url: "/admin/solutions",
+                    icon: "Send",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.Categories'),
+                    url: "/admin/categories",
+                    icon: "TableProperties",
+                },
+            ],
+        },
+        {
+            title: t('AdminLayout.sideBarAdm.Solutions'),
+            url: "#",
+            items: [
+                {
+                    title: t('AdminLayout.sideBarAdm.CompanyRequests'),
+                    url: "/admin/company-requests",
+                    icon: "Building2",
+                    pending: 3,
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.SupportRequests'),
+                    url: "/admin/support-requests",
+                    icon: "Headset",
+                    pending: 1,
+                },
+            ],
+        },
+        {
+            title: t('AdminLayout.sideBarAdm.Settings'),
+            url: "#",
+            items: [
+                {
+                    title: t('AdminLayout.sideBarAdm.UserManual'),
+                    url: "/admin/user-manual",
+                    icon: "Book",
+                },
+            ],
+        },
+    ]
 
     const CrowdSolveLogo = GetLogo();
 
@@ -199,8 +205,8 @@ export default function Component() {
                         </DropdownMenu>
                     ) : (
                         <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-                            <Button variant="outline" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
-                            <Button onClick={() => navigate('/sign-up')}>Registrarse</Button>
+                            <Button variant="outline" onClick={() => navigate('/sign-in')}>{t('AdminLayout.authAdminLayout.signIn')}</Button>
+                            <Button onClick={() => navigate('/sign-up')}>{t('AdminLayout.authAdminLayout.signUp')}</Button>
                         </div>
                     )}
                 </SidebarFooter>

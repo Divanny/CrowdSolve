@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button"
+import { useTranslation } from 'react-i18next';
 
 // Mock data for challenges s
 const challengesData = [
@@ -21,6 +22,7 @@ const challengesData = [
 ];
 
 export default function Component() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('')
   const [currentFilter, setCurrentFilter] = useState('Todos')
   const [currentPage, setCurrentPage] = useState(1)
@@ -28,7 +30,7 @@ export default function Component() {
   const filterScrollRef = useRef(null)
   
   const navigate = useNavigate();
-  const filters = ['Todos', 'Diseño', 'Software', 'Datos', 'IA', 'CiberSeguridad']
+  const filters = [t('ChallengeCatalog.filters.all'), t('ChallengeCatalog.filters.design'), t('ChallengeCatalog.filters.software'), t('ChallengeCatalog.filters.data'), t('ChallengeCatalog.filters.ai'),  t('ChallengeCatalog.filters.cybersecurity')]
 
   const filteredChallenges = challengesData.filter(challenge => 
     challenge.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -58,12 +60,12 @@ export default function Component() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">Explora en nuestra sección de Desafíos</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center">{t('ChallengeCatalog.pageTitle')}</h1>
       
       <div className="mb-6 relative">
         <input
           type="text"
-          placeholder="Buscar"
+          placeholder={t('ChallengeCatalog.searchPlaceholder')}
           className="w-full p-2 pl-10 rounded-md border border-input bg-background"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -106,12 +108,12 @@ export default function Component() {
               </div>
               <div className="px-4 pb-4">
                 <h3 className="font-semibold text-lg mb-2 mt-3">{challenge.name}</h3>
-                <p className="text-muted-foreground text-sm"><strong>Categoría:</strong> {challenge.category}</p>
-                <p className="text-muted-foreground text-sm"><strong>Empresa:</strong> {challenge.company}</p>
-                <p className="text-muted-foreground text-sm"><strong>Fecha de finalización:</strong> {challenge.endDate}</p>
+                <p className="text-muted-foreground text-sm"><strong>{t('ChallengeCatalog.categories.label')}:</strong> {challenge.category}</p>
+                <p className="text-muted-foreground text-sm"><strong>{t('ChallengeCatalog.categories.company')}:</strong> {challenge.company}</p>
+                <p className="text-muted-foreground text-sm"><strong>{t('ChallengeCatalog.categories.endDate')}:</strong> {challenge.endDate}</p>
                 <div className="flex justify-end mt-4">
                   <Button onClick={()=>navigate(`/challengesDetails/`)} className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
-                    Ver más
+                  {t('ChallengeCatalog.buttons.viewMore')}
                   </Button>
                 </div>
               </div>
@@ -122,10 +124,10 @@ export default function Component() {
         <div className="flex flex-col items-center justify-center h-64 bg-accent bg-opacity-50 rounded-lg">
           <img
             src="/placeholder.svg?height=100&width=100"
-            alt="No encontrado"
+            alt={t('ChallengeCatalog.noResults.imageAlt')}
             className="w-24 h-24 mb-4 opacity-50"
           />
-          <h2 className="text-3xl font-bold text-muted-foreground">No encontrado</h2>
+          <h2 className="text-3xl font-bold text-muted-foreground">{t('ChallengeCatalog.noResults.title')}</h2>
         </div>
       )}
 
@@ -139,7 +141,7 @@ export default function Component() {
             <ChevronLeft className="h-5 w-5" />
           </button>
           <span className="text-muted-foreground">
-            Página {currentPage} de {Math.ceil(filteredChallenges.length / challengesPerPage)}
+          {t('ChallengeCatalog.pagination.page')} {currentPage} {t('ChallengeCatalog.pagination.of')} {Math.ceil(filteredChallenges.length / challengesPerPage)}
           </span>
           <button
             onClick={() => paginate(currentPage + 1)}

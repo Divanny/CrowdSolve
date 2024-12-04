@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next';
 const PageLoader = () => {
+  const { t } = useTranslation();
 
   return (
     <div>

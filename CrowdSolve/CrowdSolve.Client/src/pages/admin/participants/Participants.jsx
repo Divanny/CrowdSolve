@@ -43,8 +43,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ParticipantFormDialog } from "../../../components/admin/participants/ParticipantFormDialog";
+import { useTranslation } from 'react-i18next';
 
 export default function Participants() {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [data, setData] = useState([]);
   const [nivelesEducativos, setNivelesEducativos] = useState([]);
@@ -70,14 +72,14 @@ export default function Participants() {
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Seleccionar todo"
+          aria-label={t('Participants.select_all')}
         />
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Seleccionar fila"
+          aria-label={t('Participants.select_row')}
         />
       ),
       enableSorting: false,
@@ -110,7 +112,7 @@ export default function Participants() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Correo Electrónico
+            {t('Participants.correo_electronico')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -134,7 +136,7 @@ export default function Participants() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Fecha de Nacimiento
+            {t('Participants.fecha_nacimiento')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -184,7 +186,7 @@ export default function Participants() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('Participants.acciones')}</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
                 setSelectedParticipant(row.original)
@@ -193,7 +195,7 @@ export default function Participants() {
               }}
             >
               <Edit className="mr-2 h-4 w-4" />
-              Editar
+              {t('Participants.editar')}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -203,7 +205,7 @@ export default function Participants() {
               }}
             >
               <Eye className="mr-2 h-4 w-4" />
-              Ver detalles
+              {t('Participants.ver_detalles')}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
@@ -211,7 +213,7 @@ export default function Participants() {
               }
             >
               <FileText className="mr-2 h-4 w-4" />
-              Ver soluciones
+              {t('Participants.ver_soluciones')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -306,7 +308,7 @@ export default function Participants() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por nombre de usuario, correo o nombre completo..."
+            placeholder={t('Participants.buscar')}
             value={globalFilter ?? ""}
             onChange={(event) => setGlobalFilter(event.target.value)}
             className="pl-8"
@@ -315,7 +317,7 @@ export default function Participants() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Nivel Educativo
+            {t('Participants.nivel_educativo')}
               {nivelEducativoFilter ? `: ${nivelEducativoFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -326,7 +328,7 @@ export default function Participants() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Buscar..."
+                  placeholder={t('Participants.buscarPH')}
                   value={nivelEducativoSearch}
                   onChange={(e) => setNivelEducativoSearch(e.target.value)}
                   className="pl-8"
@@ -340,7 +342,7 @@ export default function Participants() {
                   table.getColumn("nivelEducativo")?.setFilterValue(undefined);
                 }}
               >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                <X className="mr-2 h-4 w-4" /> {t('Participants.limpiar_filtro')}
               </DropdownMenuItem>
             )}
             {filteredNivelesEducativos.map((nivel) => (
@@ -359,7 +361,7 @@ export default function Participants() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Estatus Usuario
+            {t('Participants.filtro_estatus_usuario')}
               {estatusUsuarioFilter ? `: ${estatusUsuarioFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -384,7 +386,7 @@ export default function Participants() {
                   table.getColumn("estatusUsuario")?.setFilterValue(undefined);
                 }}
               >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                <X className="mr-2 h-4 w-4" /> {t('Participants.limpiar_filtro')}
               </DropdownMenuItem>
             )}
             {filteredEstatusUsuarios.map((estatus) => (
@@ -412,7 +414,7 @@ export default function Participants() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columnas <ChevronDown className="ml-2 h-4 w-4" />
+            {t('Participants.columna')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -479,7 +481,7 @@ export default function Participants() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No se encontraron resultados.
+                  {t('Participants.no_resultados')}
                 </TableCell>
               </TableRow>
             )}
@@ -498,7 +500,7 @@ export default function Participants() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Anterior
+            {t('Participants.PrevButton')}
           </Button>
           <Button
             variant="outline"
@@ -506,7 +508,7 @@ export default function Participants() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Siguiente
+            {t('Participants.NextButton')}
           </Button>
         </div>
       </div>

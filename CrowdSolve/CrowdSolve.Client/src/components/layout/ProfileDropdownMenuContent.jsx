@@ -18,8 +18,10 @@ import {
 import { User, Send, Settings, BellRing, SunMoon, Globe, LogOut, Check, Moon, Sun, MonitorSmartphone, ShieldEllipsis } from 'lucide-react';
 import flags from "react-phone-number-input/flags";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
+    const { t } = useTranslation();
     const theme = useSelector((state) => state.theme.theme);
     const language = useSelector((state) => state.language.language);
     const navigate = useNavigate();
@@ -28,8 +30,8 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
 
     const handleLogout = () => {
         dispatch(clearUser());
-        toast.success("Operación exitosa", {
-            description: "Has cerrado sesión exitosamente"
+        toast.success(t('ProfileDropdownMenuContent.toastMessageTitle'), {
+            description: t('ProfileDropdownMenuContent.toastMessageDescription')
         });
     }
 
@@ -60,23 +62,23 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
             <DropdownMenuGroup>
                 <DropdownMenuItem>
                     <User className="mr-2" size={16} />
-                    Perfil
+                    {t('ProfileDropdownMenuContent.profile')}
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                     <Send className="mr-2" size={16} />
-                    Soluciones
+                    {t('ProfileDropdownMenuContent.solutions')}
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                     <Settings className="mr-2" size={16} />
-                    Configuración
+                    {t('ProfileDropdownMenuContent.settings')}
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                     <BellRing className="mr-2" size={16} />
-                    Notificaciones
+                    {t('ProfileDropdownMenuContent.notifications')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => navigate('/admin')}>
                     <ShieldEllipsis className="mr-2" size={16} />
-                    Administración
+                    {t('ProfileDropdownMenuContent.admin')}
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -84,23 +86,23 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
                 <DropdownMenuSub>
                     <DropdownMenuSubTrigger>
                         <SunMoon className="mr-2" size={16} />
-                        <span>Apariencia</span>
+                        <span>{t('ProfileDropdownMenuContent.appearance')}</span>
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                         <DropdownMenuSubContent className="w-36 mr-2">
                             <DropdownMenuItem onSelect={() => handleTheme('system')}>
                                 <MonitorSmartphone className="mr-2" size={16} />
-                                <span>Sistema</span>
+                                <span>{t('ProfileDropdownMenuContent.theme.system')}</span>
                                 {theme == 'system' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => handleTheme('light')}>
                                 <Sun className="mr-2" size={16} />
-                                <span>Claro</span>
+                                <span>{t('ProfileDropdownMenuContent.theme.light')}</span>
                                 {theme == 'light' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => handleTheme('dark')}>
                                 <Moon className="mr-2" size={16} />
-                                <span>Oscuro</span>
+                                <span>{t('ProfileDropdownMenuContent.theme.dark')}</span>
                                 {theme == 'dark' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                         </DropdownMenuSubContent>
@@ -109,18 +111,18 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
                 <DropdownMenuSub>
                     <DropdownMenuSubTrigger>
                         <Globe className="mr-2" size={16} />
-                        <span>Idioma</span>
+                        <span>{t('ProfileDropdownMenuContent.language')}</span>
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                         <DropdownMenuSubContent className="w-36 mr-2">
                             <DropdownMenuItem onSelect={() => handleLanguage('es')}>
                                 <FlagComponent country={'ES'} countryName={'Spain'} />
-                                <span>Español</span>
+                                <span>{t('ProfileDropdownMenuContent.language_options.es')}</span>
                                 {language == 'es' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => handleLanguage('en')}>
                                 <FlagComponent country={'US'} countryName={'English'} />
-                                <span>English</span>
+                                <span>{t('ProfileDropdownMenuContent.language_options.en')}</span>
                                 {language == 'en' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                         </DropdownMenuSubContent>
@@ -130,7 +132,7 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={handleLogout}>
                 <LogOut className="mr-2" size={16} />
-                Cerrar sesión
+                {t('ProfileDropdownMenuContent.logout')}
             </DropdownMenuItem>
         </DropdownMenuContent>
     );

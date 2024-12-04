@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from "sonner";
 import EstatusUsuarioEnum from '@/enums/EstatusUsuarioEnum';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 function GoogleLoginButton() {
+    const { t } = useTranslation();
     const { api } = useAxios();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -91,7 +93,7 @@ function GoogleLoginButton() {
                     fill="#EA4335"
                 />
             </svg>
-            Continuar con Google
+            {t('ContinueGoogle.continueWithGoogle')}
         </Button>
     );
 }

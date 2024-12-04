@@ -7,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { useTranslation } from 'react-i18next';
 
 const testimonials = [
   {
@@ -54,6 +55,7 @@ const testimonials = [
 ];
 
 const WhyClientsLoveUs = () => {
+  const { t } = useTranslation();
   return (
     <motion.section 
       className="py-32"
@@ -72,7 +74,7 @@ const WhyClientsLoveUs = () => {
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-pretty text-2xl font-semibold lg:text-4xl">
-              ¿Por qué nuestros usuarios nos aman?
+            {t('WhyClientsLoveUs.title')}
             </h2>
             <div className="flex items-center space-x-2">
               <CarouselPrevious className="static translate-y-0" />

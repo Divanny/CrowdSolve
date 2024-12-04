@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 const challenges = [
     {
@@ -39,6 +40,8 @@ const challenges = [
 ];
 
 const ChallengesPost = () => {
+    const { t } = useTranslation();
+
     return (
         <motion.section
             className="py-32"
@@ -56,16 +59,16 @@ const ChallengesPost = () => {
                     transition={{ duration: 0.5 }}
                 >
                     <p className="mb-6 text-xs font-medium uppercase tracking-wider">
-                        Desafíos
+                    {t('challengesPost.sectionLabel')}
                     </p>
                     <h2 className="mb-3 text-pretty text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6 lg:max-w-3xl lg:text-5xl">
-                        Desafíos publicados por empresas
+                    {t('challengesPost.sectionTitle')}
                     </h2>
                     <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
-                        Participa en los desafíos publicados por diversas empresas y demuestra tus habilidades. ¡Grandes oportunidades te esperan!
+                    {t('challengesPost.sectionDescription')}
                     </p>
                     <Button variant="link" className="w-full sm:w-auto">
-                        Explorar todos los desafíos
+                    {t('challengesPost.exploreChallengesButton')}
                         <ArrowRight className="ml-2 size-4" />
                     </Button>
                 </motion.div>
@@ -97,7 +100,7 @@ const ChallengesPost = () => {
                                     {challenge.summary}
                                 </p>
                                 <p className="flex items-center hover:underline">
-                                    Leer más
+                                {t('challengesPost.readMore')}
                                     <ArrowRight className="ml-2 size-4" />
                                 </p>
                             </div>

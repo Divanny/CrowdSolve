@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { AlertCircle } from "lucide-react"
+import { useTranslation } from 'react-i18next';
 
 export default function NotFound() {
+    const { t } = useTranslation();
     const navigate = useNavigate()
 
     return (
@@ -16,15 +18,15 @@ export default function NotFound() {
                 <div className="flex items-center justify-center space-x-4">
                     <h1 className="text-7xl font-extrabold text-primary">404</h1>
                 </div>
-                <h2 className="text-2xl font-bold text-foreground">Página no encontrada</h2>
+                <h2 className="text-2xl font-bold text-foreground">{t('notFoundPage.subtitle')}</h2>
                 <p className="text-muted-foreground">
-                    Es posible que la página que está buscando se haya eliminado, se haya cambiado de nombre o no esté disponible temporalmente.
+                {t('notFoundPage.description')}
                 </p>
                 <div className="flex justify-center space-x-4">
                     <Button onClick={() => navigate(-1)} variant="outline">
-                        Volver
+                    {t('notFoundPage.buttons.goBack')}
                     </Button>
-                    <Button onClick={() => navigate("/")}>Ir al inicio</Button>
+                    <Button onClick={() => navigate("/")}>{t('notFoundPage.buttons.goHome')}</Button>
                 </div>
             </div>
         </div>

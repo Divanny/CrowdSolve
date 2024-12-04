@@ -21,8 +21,10 @@ import {
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
 import { ChevronsUpDown, Info, Flag, Building, Mail } from 'lucide-react';
 import { VisuallyHidden } from '@radix-ui/themes';
+import { useTranslation } from 'react-i18next';
 
 const Sidebar = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user.user);
 
@@ -54,7 +56,7 @@ const Sidebar = () => {
             <SheetContent className="w-full max-w-[290px] sm:max-w-[290px] flex flex-col">
                 <SheetTitle>
                     <VisuallyHidden>
-                        <h2>Menú</h2>
+                        <h2>{t('Sidebar.hamburgerIconAlt')}</h2>
                     </VisuallyHidden>
                 </SheetTitle>
                 <SheetHeader>
@@ -64,16 +66,16 @@ const Sidebar = () => {
                 </SheetHeader>
                 <div className="grid gap-4 py-4">
                     <Button variant="ghost" className="w-full justify-start" onClick={() => navigate('/about-us')}>
-                        <Info className="mr-2 h-4 w-4" /> Sobre nosotros
+                        <Info className="mr-2 h-4 w-4" /> {t('Sidebar.aboutUs')}
                     </Button>
                     <Button variant="ghost" className="w-full justify-start" onClick={() => navigate('/challenges')}>
-                        <Flag className="mr-2 h-4 w-4" /> Desafíos
+                        <Flag className="mr-2 h-4 w-4" /> {t('Sidebar.challenges')}
                     </Button>
                     <Button variant="ghost" className="w-full justify-start" onClick={() => navigate('/companies')}>
-                        <Building className="mr-2 h-4 w-4" /> Empresas
+                        <Building className="mr-2 h-4 w-4" /> {t('Sidebar.companies')}
                     </Button>
                     <Button variant="ghost" className="w-full justify-start" onClick={() => navigate('/contact')}>
-                        <Mail className="mr-2 h-4 w-4" /> Contacto
+                        <Mail className="mr-2 h-4 w-4" /> {t('Sidebar.contact')}
                     </Button>
                 </div>
                 <SheetFooter className="mt-auto">
@@ -101,8 +103,8 @@ const Sidebar = () => {
                         </DropdownMenu>
                     ) : (
                         <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-                            <Button variant="outline" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
-                            <Button  onClick={() => navigate('/sign-up')}>Registrarse</Button>
+                            <Button variant="outline" onClick={() => navigate('/sign-in')}>{t('Sidebar.buttons.signIn')}</Button>
+                            <Button  onClick={() => navigate('/sign-up')}>{t('Sidebar.buttons.signUp')}</Button>
                         </div>
                     )}
                 </SheetFooter>

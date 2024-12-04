@@ -606,33 +606,33 @@
       "informationCollected": {
         "title": "1. Información que Recopilamos",
         "description": "Recopilamos la siguiente información:",
-        "list": [
-          "Información de registro: nombre, dirección de correo electrónico, contraseña.",
-          "Información de perfil: experiencia profesional, habilidades, foto de perfil (opcional).",
-          "Contenido generado por el usuario: propuestas, comentarios, votaciones.",
-          "Información de uso: interacciones con la plataforma, participación en desafíos.",
-          "Información de pago: para procesar recompensas (solo para participantes ganadores)."
-        ]
+        "list": {
+          "infoCollect1":"Información de registro: nombre, dirección de correo electrónico, contraseña.",
+          "infoCollect2":"Información de perfil: experiencia profesional, habilidades, foto de perfil (opcional).",
+          "infoCollect3":"Contenido generado por el usuario: propuestas, comentarios, votaciones.",
+          "infoCollect4":"Información de uso: interacciones con la plataforma, participación en desafíos.",
+          "infoCollect5":"Información de pago: para procesar recompensas (solo para participantes ganadores)."
+        }
       },
       "informationUsage": {
         "title": "2. Cómo Utilizamos tu Información",
         "description": "Utilizamos tu información para:",
-        "list": [
-          "Proporcionar y mejorar nuestros servicios.",
-          "Facilitar la participación en desafíos y la colaboración entre usuarios.",
-          "Procesar pagos y recompensas.",
-          "Enviar notificaciones relacionadas con el servicio y actualizaciones.",
-          "Prevenir fraudes y garantizar la seguridad de la plataforma."
-        ]
+        "list": {
+          "infoUsage1":"Proporcionar y mejorar nuestros servicios.",
+          "infoUsage2":"Facilitar la participación en desafíos y la colaboración entre usuarios.",
+          "infoUsage3":"Procesar pagos y recompensas.",
+          "infoUsage4":"Enviar notificaciones relacionadas con el servicio y actualizaciones.",
+          "infoUsage5":"Prevenir fraudes y garantizar la seguridad de la plataforma."
+        }
       },
       "informationSharing": {
         "title": "3. Compartir Información",
         "description": "Compartimos tu información en las siguientes circunstancias:",
-        "list": [
-          "Con empresas que publican desafíos, limitado a la información necesaria para evaluar propuestas.",
-          "Con proveedores de servicios que nos ayudan a operar la plataforma.",
-          "Cuando sea requerido por ley o para proteger nuestros derechos legales."
-        ]
+        "list": {
+          "infoSharing1":"Con empresas que publican desafíos, limitado a la información necesaria para evaluar propuestas.",
+          "infoSharing2":"Con proveedores de servicios que nos ayudan a operar la plataforma.",
+          "infoSharing3":"Cuando sea requerido por ley o para proteger nuestros derechos legales."
+        }
       },
       "dataSecurity": {
         "title": "4. Seguridad de Datos",
@@ -641,13 +641,13 @@
       "userRights": {
         "title": "5. Tus Derechos",
         "description": "Tienes derecho a:",
-        "list": [
-          "Acceder a tu información personal.",
-          "Corregir datos inexactos.",
-          "Solicitar la eliminación de tus datos.",
-          "Oponerte al procesamiento de tus datos.",
-          "Solicitar la portabilidad de tus datos."
-        ]
+        "list": {
+          "uRights1":"Acceder a tu información personal.",
+          "uRights2":"Corregir datos inexactos.",
+          "uRights3":"Solicitar la eliminación de tus datos.",
+          "uRights4":"Oponerte al procesamiento de tus datos.",
+          "uRights5":"Solicitar la portabilidad de tus datos."
+        }
       },
       "cookies": {
         "title": "6. Cookies y Tecnologías Similares",

@@ -9,8 +9,10 @@ import { useSelector } from 'react-redux';
 import useAxios from "@/hooks/use-axios";
 import { Loading02Icon } from "hugeicons-react";
 import ReCAPTCHA from "react-google-recaptcha"
+import { useTranslation } from 'react-i18next';
 
 export default function ContactPage() {
+  const { t } = useTranslation();
   const [nombres, setFirstName] = useState("")
   const [apellidos, setLastName] = useState("")
   const [correoElectronico, setEmail] = useState("")
@@ -29,13 +31,13 @@ export default function ContactPage() {
 
     if (!nombres || !apellidos || !correoElectronico || !mensaje ||!titulo) {
       toast.warning(
-        {description:"Por favor, complete todos los campos",
+        {description:t('ContactUs.contact.form.toasts.incompleteFields'),
         });
       return;
     }
 
     if (!captchaValue) {
-      toast.warning("Por favor, complete el captcha")
+      toast.warning(t('ContactUs.contact.form.captchaWarning'))
       return
     }
     
@@ -68,7 +70,7 @@ export default function ContactPage() {
 
     } catch (error) {
       console.error(error)
-      toast.error("Error al enviar el mensaje")
+      toast.error(t('ContactUs.contact.form.toasts.error'))
     }
   }
 
@@ -81,9 +83,9 @@ export default function ContactPage() {
       <main className="container mx-auto mt-12">
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div>
-            <h1 className="text-3xl font-bold mb-4">Puedes encontrarnos en nuestras redes y contactarnos</h1>
+            <h1 className="text-3xl font-bold mb-4">{t('ContactUs.contact.title')}</h1>
             <p className="mb-8 text-muted-foreground">
-              Si tienes preguntas, comentarios o necesitas más información sobre nuestros desafíos, no dudes en ponerte en contacto con nosotros. Tu opinión es importante y estamos comprometidos en brindarte el apoyo que necesites. Completa el formulario a continuación o utiliza cualquiera de nuestros canales de contacto para comunicarse con nosotros. ¡Esperamos saber de ti pronto!
+            {t('ContactUs.contact.description')}
             </p>
             <div className="flex flex-col space-y-4">
               <a href="https://www.instagram.com/crowdsolve" target="_blank" rel="noopener noreferrer" className="flex items-center text-foreground hover:text-primary transition-colors w-fit">
@@ -96,25 +98,25 @@ export default function ContactPage() {
               </a>
               <a href="mailto:tu-correo@ejemplo.com" target="_blank" rel="noopener noreferrer" className="flex items-center text-foreground hover:text-primary transition-colors w-fit">
                 <Mail className="text-primary mr-2" />
-                <span>Correo</span>
+                <span>{t('ContactUs.contact.socials.email')}</span>
               </a>
               <a href="https://www.google.com/maps/search/intec/@18.4877513,-69.964905,17z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI0MTAyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="flex items-center text-foreground hover:text-primary transition-colors w-fit">
                 <MapPin className="text-primary mr-2" />
-                <span>Ubicación</span>
+                <span>{t('ContactUs.contact.socials.location')}</span>
               </a>
               <a href="tel:+1234567890" target="_blank" rel="noopener noreferrer" className="flex items-center text-foreground hover:text-primary transition-colors w-fit">
                 <Phone className="text-primary mr-2" />
-                <span>Teléfono</span>
+                <span>{t('ContactUs.contact.socials.phone')}</span>
               </a>
             </div>
           </div>
           <div>
             <Card className="bg-card rounded-3xl shadow-lg">
               <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-6">¡Contáctanos!</h2>
+                <h2 className="text-2xl font-bold mb-6">{t('ContactUs.contact.form.title')}</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <Input  
-                      placeholder="Asunto del mensaje" 
+                      placeholder={t('ContactUs.contact.form.fields.subject')} 
                       className="bg-background text-foreground border-input"
                       value={titulo}
                       onChange={(e) => setTittle(e.target.value)}
@@ -123,14 +125,14 @@ export default function ContactPage() {
                   <div className="grid grid-cols-2 gap-4">
                     
                     <Input 
-                      placeholder="Nombre" 
+                      placeholder={t('ContactUs.contact.form.fields.firstName')}
                       className="bg-background text-foreground border-input"
                       value={nombres}
                       onChange={(e) => setFirstName(e.target.value)}
                       required
                     />
                     <Input 
-                      placeholder="Apellido" 
+                      placeholder={t('ContactUs.contact.form.fields.lastName')}
                       className="bg-background text-foreground border-input"
                       value={apellidos}
                       onChange={(e) => setLastName(e.target.value)}
@@ -139,14 +141,14 @@ export default function ContactPage() {
                   </div>
                   <Input 
                     type="email" 
-                    placeholder="Correo electrónico" 
+                    placeholder={t('ContactUs.contact.form.fields.email')}
                     className="bg-background text-foreground border-input"
                     value={correoElectronico}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                   <Textarea 
-                    placeholder="¿En qué te podemos ayudar?" 
+                    placeholder={t('ContactUs.contact.form.fields.message')} 
                     rows={4} 
                     className="bg-background text-foreground border-input"
                     value={mensaje}
@@ -164,11 +166,11 @@ export default function ContactPage() {
                   {isLoading ? (
                   <Button disabled className="w-full" tabIndex={5}>
                     <Loading02Icon className="mr-2 h-4 w-4 animate-spin" />
-                    Por favor, espere
+                    {t('ContactUs.contact.form.submit.loading')}
                   </Button>
                 ) : (
                   <Button type="submit" className="w-full" tabIndex={5}>
-                    Enviar Formulario
+                    {t('ContactUs.contact.form.submit.default')}
                   </Button>
                 )}
                 </form>

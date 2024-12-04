@@ -6,10 +6,11 @@ import { setUser } from '@/redux/slices/userSlice';
 import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 import { toast } from "sonner";
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ProtectedRoute = () => {
     const { api } = useAxios();
-
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const token = useSelector(selectToken);
     const user = useSelector(selectUser);
@@ -31,7 +32,7 @@ const ProtectedRoute = () => {
             }
         }
         catch (error) {
-            toast.error("Error al obtener la información del usuario", {
+            toast.error("Error al obtener la información del usuario.", {
                 description: error.message,
             });
         }

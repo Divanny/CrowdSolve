@@ -10,10 +10,12 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
+import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const user = useSelector((state) => state.user.user);
+    const { t } = useTranslation();
 
     const theme = useSelector((state) => state.theme.theme);
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
@@ -29,10 +31,10 @@ const Navbar = () => {
                 <Sidebar />
                 <div className="hidden lg:flex flex-grow items-center justify-end gap-8">
                     <div className="flex items-center gap-2">
-                        <Button onClick={() => navigate('/about-us')} variant="ghost">Sobre nosotros</Button>
-                        <Button onClick={() => navigate('/callenges')} variant="ghost">Desafíos</Button>
-                        <Button onClick={() => navigate('/companies')} variant="ghost">Empresas</Button>
-                        <Button onClick={() => navigate('/contact-us')} variant="ghost">Contáctanos</Button>
+                        <Button onClick={() => navigate('/about-us')} variant="ghost">{t('navbar.links.aboutUs')}</Button>
+                        <Button onClick={() => navigate('/callenges')} variant="ghost">{t('navbar.links.challenges')}</Button>
+                        <Button onClick={() => navigate('/companies')} variant="ghost">{t('navbar.links.companies')}</Button>
+                        <Button onClick={() => navigate('/contact-us')} variant="ghost">{t('navbar.links.contactUs')}</Button>
                     </div>
 
                     {user ? (
@@ -48,8 +50,8 @@ const Navbar = () => {
                             </DropdownMenu>
                         </div>
                     ) : (<div className='flex items-center gap-2'>
-                        <Button className="my-1 text-sm" variant="outline" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
-                        <Button className="my-1 text-sm" onClick={() => navigate('/sign-up')}>Registrarse</Button>
+                        <Button className="my-1 text-sm" variant="outline" onClick={() => navigate('/sign-in')}>{t('navbar.auth.signIn')}</Button>
+                        <Button className="my-1 text-sm" onClick={() => navigate('/sign-up')}>{t('navbar.auth.signUp')}</Button>
                     </div>)}
                 </div>
             </div>

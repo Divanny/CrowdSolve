@@ -5,6 +5,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
+import { useTranslation } from 'react-i18next';
 
 const logos = [
   {
@@ -70,8 +71,10 @@ const TrustedBySection = () => {
       },
     },
   };
+  const { t } = useTranslation();
 
   return (
+    
     <motion.section
       className='bg-accent pb-20'
       initial="hidden"
@@ -81,7 +84,7 @@ const TrustedBySection = () => {
     >
       <motion.div className="container flex flex-col items-center text-center" variants={itemVariants}>
         <motion.h1 className="my-6 text-pretty text-2xl font-bold lg:text-4xl" variants={itemVariants}>
-          Confiado por estas empresas
+        {t('TrustedBysection.title')}
         </motion.h1>
       </motion.div>
       <motion.div className="pt-10 md:pt-16 lg:pt-20" variants={itemVariants}>

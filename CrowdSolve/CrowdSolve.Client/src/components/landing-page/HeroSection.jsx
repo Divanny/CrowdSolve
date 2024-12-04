@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 import GirlImage from '@/assets/landing-page/girl-image.jpg'
 import KidImage from '@/assets/landing-page/kid-image.jpg'
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const HeroSection = () => {
     const [currentDesign, setCurrentDesign] = useState(0)
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -52,7 +54,7 @@ const HeroSection = () => {
                             transition={{ delay: 0.2, duration: 0.5 }}
                             className="my-6 text-pretty text-3xl font-bold lg:text-5xl"
                         >
-                            Desbloquea soluciones creativas con CrowdSolve
+                            {t('Herosection.title')}
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0 }}
@@ -60,7 +62,7 @@ const HeroSection = () => {
                             transition={{ delay: 0.4, duration: 0.5 }}
                             className="mb-8 max-w-xl text-muted-foreground lg:text-lg"
                         >
-                            CrowdSolve es una poderosa plataforma de crowdsourcing que conecta empresas con una comunidad global para resolver desafíos complejos. Publique su desafío, involucre a la multitud y colabore en soluciones innovadoras.
+                            {t('Herosection.description')}
                         </motion.p>
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -70,10 +72,10 @@ const HeroSection = () => {
                         >
                             <Button className="w-full sm:w-auto" onClick={() => navigate('/company/challenge/new')}>
                                 <ArrowRight className="mr-2 size-4" />
-                                Publicar un desafío
+                                {t('Herosection.buttons.post_challenge')}
                             </Button>
                             <Button variant="outline" className="w-full sm:w-auto" onClick={() => navigate('/sign-up')}>
-                                Unirse a la comunidad
+                            {t('Herosection.buttons.join_community')}
                             </Button>
                         </motion.div>
                     </motion.div>
@@ -122,8 +124,8 @@ const HeroSection = () => {
                                 boxShadow: 'inset 0 0 0 2000px rgba(0, 0, 0, 0.5)'
                             }}
                         >
-                            <div className="text-sm sm:text-2xl font-bold">Innovación sin límites</div>
-                            <div className="text-xs sm:text-sm">Desata el potencial creativo de la multitud</div>
+                            <div className="text-sm sm:text-2xl font-bold">{t('Herosection.card_texts.innovation.title')}</div>
+                            <div className="text-xs sm:text-sm">{t('Herosection.card_texts.innovation.subtitle')}</div>
                         </motion.div>
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -148,7 +150,7 @@ const HeroSection = () => {
                                 boxShadow: 'inset 0 0 0 2000px rgba(0, 0, 0, 0.5)'
                             }}
                         >
-                            <div className="text-sm sm:text-xl font-semibold">Soluciones para desafíos complejos</div>
+                            <div className="text-sm sm:text-xl font-semibold">{t('Herosection.card_texts.solutions.title')}</div>
                         </motion.div>
                     </motion.div>
                 </div>

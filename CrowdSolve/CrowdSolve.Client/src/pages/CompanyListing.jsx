@@ -28,8 +28,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import useAxios from '@/hooks/use-axios'
+import { useTranslation } from 'react-i18next';
 
 export default function CompanyListing() {
+    const { t } = useTranslation();
     const { api } = useAxios();
     const [searchTerm, setSearchTerm] = useState("")
     const [sectorFilter, setSectorFilter] = useState("")
@@ -86,19 +88,19 @@ export default function CompanyListing() {
                 <div className="container px-4 md:px-6">
                     <Badge variant="outline" className="mb-4 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
                         <Bell className="mr-1 h-3 w-3" />
-                        Descubre las últimas empresas que se han unido a CrowdSolve
+                        {t('CompanyListing.header.badge.message')}
                     </Badge>
                     <h1 className="mb-6 text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-                        Potencia tu innovación con CrowdSolve.
+                    {t('CompanyListing.header.title')}
                     </h1>
                     <p className="max-w-[42rem] text-muted-foreground sm:text-xl sm:leading-8">
-                        Conecta con empresas líderes, resuelve desafíos emocionantes y forma parte de la revolución del crowdsourcing.
+                    {t('CompanyListing.header.description')}
                     </p>
                 </div>
             </section>
 
             <div className="container mx-auto px-4 py-12">
-                <h2 className="text-3xl font-bold mb-8">Empresas asociadas</h2>
+                <h2 className="text-3xl font-bold mb-8">{t('CompanyListing.companies.title')}</h2>
 
                 <div className="flex flex-col md:flex-row gap-4 mb-8">
                     <div className="flex-grow">
@@ -106,7 +108,7 @@ export default function CompanyListing() {
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                             <Input
                                 type="text"
-                                placeholder="Buscar empresas..."
+                                placeholder={t('CompanyListing.general.searchPlaceholder')}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="pl-8"
@@ -116,7 +118,7 @@ export default function CompanyListing() {
                     <div className="flex flex-col sm:flex-row gap-2">
                         <Select value={sectorFilter} onValueChange={setSectorFilter}>
                             <SelectTrigger className="sm:w-[180px]">
-                                <SelectValue placeholder="Sector" />
+                                <SelectValue placeholder={t('CompanyListing.general.sectorPlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {relationalObjects.sectores?.map((sector) => (
@@ -128,7 +130,7 @@ export default function CompanyListing() {
                         </Select>
                         <Select value={tamañoFilter} onValueChange={setTamañoFilter}>
                             <SelectTrigger className="sm:w-[180px]">
-                                <SelectValue placeholder="Tamaño de empresa" />
+                                <SelectValue placeholder={t('CompanyListing.general.companySizePlaceholder')} />
                             </SelectTrigger>
                             <SelectContent>
                                 {relationalObjects.tamañosEmpresa?.map((tamaño) => (
@@ -166,35 +168,35 @@ export default function CompanyListing() {
                                 <div className="flex justify-between text-sm text-muted-foreground">
                                     <span className="flex items-center">
                                         <Trophy className="mr-1 h-4 w-4" />
-                                        {company.challenges ?? 0} desafíos
+                                        {company.challenges ?? 0} {t('CompanyListing.companies.challenges')}
                                     </span>
                                     <span className="flex items-center">
                                         <Users className="mr-1 h-4 w-4" />
-                                        {company.activeSolutions ?? 0} soluciones
+                                        {company.activeSolutions ?? 0} {t('CompanyListing.companies.solutions')}
                                     </span>
                                 </div>
                             </CardContent>
                             <CardFooter className="flex flex-col sm:flex-row justify-between gap-2 mt-auto">
                                 <Button variant="outline" className="w-full sm:w-auto" asChild>
                                     <a href={company.paginaWeb} target="_blank" rel="noopener noreferrer">
-                                        <Globe className="mr-2 h-4 w-4" /> Sitio web
+                                        <Globe className="mr-2 h-4 w-4" /> {t('CompanyListing.general.website')}
                                     </a>
                                 </Button>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="outline" className="w-full sm:w-auto">
-                                            <ChevronDown className="mr-2 h-4 w-4" /> Más opciones
+                                            <ChevronDown className="mr-2 h-4 w-4" /> {t('CompanyListing.general.moreOptions')}
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                        <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                                        <DropdownMenuLabel>{t('CompanyListing.general.actions')}</DropdownMenuLabel>
                                         <DropdownMenuItem onSelect={() => window.location.href = `mailto:${company.correo}`}>
                                             <Mail className="mr-2 h-4 w-4" />
-                                            <span>Contactar</span>
+                                            <span>{t('CompanyListing.general.contact')}</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
                                             <Building className="mr-2 h-4 w-4" />
-                                            <span>Ver desafíos</span>
+                                            <span>{t('CompanyListing.general.viewChallenges')}</span>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
@@ -202,7 +204,7 @@ export default function CompanyListing() {
                         </Card>
                     ))}
                 </div> 
-                : <p className='text-center text-muted-foreground'>No se encontraron empresas que coincidan con los filtros seleccionados.</p>}
+                : <p className='text-center text-muted-foreground'>{t('CompanyListing.general.notFoundMessage')}</p>}
             </div>
         </div>
     )

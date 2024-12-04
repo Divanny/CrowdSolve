@@ -43,6 +43,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CategoryFormDialog } from "../../../components/admin/categories/CategoryFormDialog";
+import { useTranslation } from 'react-i18next';
 
 export default function Categories() {
   const { api } = useAxios();
@@ -56,6 +57,7 @@ export default function Categories() {
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [dialogMode, setDialogMode] = useState("view")
+  const { t } = useTranslation();
 
 
   const columns = [
@@ -65,14 +67,14 @@ export default function Categories() {
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Seleccionar todo"
+          aria-label={t('Categories.table.selectAll')}
         />
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Seleccionar fila"
+          aria-label={t('Categories.table.selectRow')}
         />
       ),
       enableSorting: false,
@@ -87,7 +89,7 @@ export default function Categories() {
               className="w-full justify-start text-left font-normal"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              Nombre Categoria
+              {t('Categories.table.columns.nombre')}
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
@@ -95,12 +97,12 @@ export default function Categories() {
       },
     {
       accessorKey: "descripcion",
-      header: "Descripcion",
+      header: t('Categories.table.columns.descripcion'),
       /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
     },
     {
         accessorKey: "icono",
-        header: "Icono",
+        header: t('Categories.table.columns.icono'),
         cell: ({ row }) => (
             <div className="flex items-center space-x-2">
               <Avatar>
@@ -122,7 +124,7 @@ export default function Categories() {
               className="w-full justify-start text-left font-normal"
               onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             >
-              Cantidad Desafios
+              {t('Categories.table.columns.cantidadDesafios')}
               <ArrowUpDown className="ml-2 h-4 w-4" />
             </Button>
           );
@@ -141,12 +143,12 @@ export default function Categories() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menú</span>
+              <span className="sr-only">{t('Categories.abrirMenu')}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('Categories.table.columns.actions')}</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
                 setSelectedCategory(row.original)
@@ -155,7 +157,7 @@ export default function Categories() {
               }}
             >
               <Edit className="mr-2 h-4 w-4" />
-              Editar
+              {t('Categories.table.actionsMenu.edit')}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -165,7 +167,7 @@ export default function Categories() {
               }}
             >
               <Eye className="mr-2 h-4 w-4" />
-              Ver detalles
+              {t('Categories.table.actionsMenu.viewDetails')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -252,7 +254,7 @@ export default function Categories() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por nombre de Categoria"
+            placeholder={t('Categories.table.searchPlaceholder')}
             value={globalFilter ?? ""}
             onChange={(event) => {
                 setGlobalFilter(event.target.value)
@@ -274,7 +276,7 @@ export default function Categories() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columnas <ChevronDown className="ml-2 h-4 w-4" />
+            {t('Categories.table.buttons.columns')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -341,7 +343,7 @@ export default function Categories() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No se encontraron resultados.
+                  {t('Categories.table.noResults')}
                 </TableCell>
               </TableRow>
             )}
@@ -350,8 +352,8 @@ export default function Categories() {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} de{" "}
-          {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
+          {table.getFilteredSelectedRowModel().rows.length} {t('Categories.table.de')}{" "}
+          {table.getFilteredRowModel().rows.length} {t('Categories.table.rowsSelected')}.
         </div>
         <div className="space-x-2">
           <Button
@@ -360,7 +362,7 @@ export default function Categories() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Anterior
+            {t('Categories.table.buttons.previous')}
           </Button>
           <Button
             variant="outline"
@@ -368,7 +370,7 @@ export default function Categories() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Siguiente
+            {t('Categories.table.buttons.next')}
           </Button>
         </div>
       </div>
