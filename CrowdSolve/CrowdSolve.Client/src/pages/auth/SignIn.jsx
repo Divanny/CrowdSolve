@@ -15,10 +15,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '@/redux/slices/userSlice';
 import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 import GoogleLoginButton from '@/components/GoogleLoginButton';
+import { useTranslation } from 'react-i18next';
 import Lottie from 'lottie-react';
 import animationData from '@/assets/sign-in.json';
 
 function SignIn() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const theme = useSelector((state) => state.theme.theme);
@@ -35,8 +37,8 @@ function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     if (!username || !password) {
-      toast.warning("Operación fallida", {
-        description: "Por favor, complete todos los campos",
+      toast.warning(t('SignIn.errorMessage'), {
+        description: t('SignIn.errorMessageDescription'),
       });
       return;
     }
@@ -63,11 +65,11 @@ function SignIn() {
         } else {
           navigate(-1);
         }
-        toast.success("Operación exitosa", {
-          description: "Inicio de sesión exitoso",
+        toast.success(t('SignIn.successMessage'), {
+          description: t('SignIn.successMessageDescription'),
         });
       } else {
-        toast.warning("Operación fallida", {
+        toast.warning(t('SignIn.errorMessage'), {
           description: response.data.message,
         });
       }
@@ -94,9 +96,9 @@ function SignIn() {
             <h2 className="mb-6 sm:mb-8 text-center text-base sm:text-lg">
               <ReactTyped
                 strings={[
-                  "Despierta tu creatividad",
-                  "Demuestra tu talento",
-                  "Resuelve problemas",
+                  t('SignIn.creativeMessage'),
+                  t('SignIn.showTalentMessage'),
+                  t('SignIn.solveProblemsMessage'),
                 ]}
                 typeSpeed={80}
                 loop
@@ -110,7 +112,7 @@ function SignIn() {
 
             <Card className="p-4 sm:p-6 max-w-md shadow-sm">
               <p className="text-sm text-center mb-4">
-                Empieza usando CrowdSolve para ti o tu empresa
+              {t('SignIn.signInSubtitle')}
               </p>
 
               <GoogleLoginButton />
@@ -126,11 +128,11 @@ function SignIn() {
 
               <form onSubmit={handleSignIn} className="grid gap-4 mb-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="username">Usuario o correo electrónico</Label>
+                  <Label htmlFor="username">{t('SignIn.usernamePlaceholder')}</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="Ingrese su de usuario o su correo electrónico"
+                    placeholder={t('SignIn.usernamePlaceholder')}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -140,18 +142,18 @@ function SignIn() {
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
-                    <Label htmlFor="password">Contraseña</Label>
+                    <Label htmlFor="password">{t('SignIn.passwordPlaceholder')}</Label>
                     <Link
                       to="/forgot-password"
                       className="text-primary font-medium ml-auto text-xs hidden sm:inline-block"
                       tabIndex={4}
                     >
-                      ¿Has olvidado tu contraseña?
+                      {t('SignIn.forgotPassword')}
                     </Link>
                   </div>
                   <PasswordInput
                     id="password"
-                    placeholder="Ingrese su contraseña"
+                    placeholder={t('SignIn.passwordPlaceholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -163,30 +165,30 @@ function SignIn() {
                       className="text-primary font-medium ml-auto text-xs inline-block sm:hidden"
                       tabIndex={4}
                     >
-                      ¿Has olvidado tu contraseña?
+                      {t('SignIn.forgotPassword')}
                     </Link>
                 </div>
 
                 {isLoading ? (
                   <Button disabled className="w-full" tabIndex={5}>
                     <Loading02Icon className="mr-2 h-4 w-4 animate-spin" />
-                    Por favor, espere
+                    {t('SignIn.loadingText')}
                   </Button>
                 ) : (
                   <Button type="submit" className="w-full" tabIndex={5}>
-                    Iniciar sesión
+                    {t('SignIn.signInButton')}
                   </Button>
                 )}
               </form>
 
               <div className="mt-4 text-center text-xs">
-                ¿No tienes una cuenta?{" "}
+              {t('SignIn.noAccount')}{" "}
                 <Link
                   to="/sign-up"
                   className="text-primary font-medium"
                   tabIndex={6}
                 >
-                  Registrarse
+                  {t('SignIn.signUpLink')}
                 </Link>
               </div>
             </Card>

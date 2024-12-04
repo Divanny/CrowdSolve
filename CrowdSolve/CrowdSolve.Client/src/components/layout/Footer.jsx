@@ -3,9 +3,11 @@ import { useSelector } from 'react-redux';
 import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { Instagram, Facebook, Twitter, Linkedin } from "lucide-react"
+import { useTranslation } from 'react-i18next';
 
 export default function Footer() {
     const theme = useSelector((state) => state.theme.theme);
+    const { t } = useTranslation();
 
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
 
@@ -21,7 +23,7 @@ export default function Footer() {
                         className="mb-4"
                     />
                     <p className="text-muted-foreground mb-4 text-sm">
-                        Conectamos mentes brillantes con desafíos empresariales innovadores.
+                    {t('footer.description')}
                     </p>
                     <div className="flex space-x-4">
                         <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
@@ -44,30 +46,30 @@ export default function Footer() {
                 </div>
                 <div className="flex flex-col sm:flex-row justify-end lg:w-2/3 space-y-8 sm:space-y-0 sm:space-x-12 lg:space-x-24">
                     <div>
-                        <h3 className="font-semibold mb-4">Producto</h3>
+                        <h3 className="font-semibold mb-4">{t('footer.sections.product.title')}</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/como-funciona" className="text-sm text-muted-foreground hover:text-primary transition-colors">Cómo funciona</Link></li>
-                            <li><Link href="/desafios" className="text-sm text-muted-foreground hover:text-primary transition-colors">Desafíos</Link></li>
-                            <li><Link href="/empresas-registradas" className="text-sm text-muted-foreground hover:text-primary transition-colors">Empresas Registradas</Link></li>
+                            <li><Link href="/como-funciona" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.howItWorks')}</Link></li>
+                            <li><Link href="/desafios" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.challenges')}</Link></li>
+                            <li><Link href="/empresas-registradas" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.registeredCompanies')}</Link></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="font-semibold mb-4">Empresa</h3>
+                        <h3 className="font-semibold mb-4">{t('footer.sections.company.title')}</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/about-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">Sobre Nosotros</Link></li>
-                            <li><Link href="/equipo" className="text-sm text-muted-foreground hover:text-primary transition-colors">Equipo</Link></li>
-                            <li><Link href="/contact-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">Contacto</Link></li>
+                            <li><Link href="/about-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.aboutUs')}</Link></li>
+                            <li><Link href="/equipo" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.team')}</Link></li>
+                            <li><Link href="/contact-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.contact')}</Link></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div className="border-t border-muted-foreground/20 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
                 <p className="text-xs text-muted-foreground mb-4 sm:mb-0">
-                    &copy; {new Date().getFullYear()} CrowdSolve. Todos los derechos reservados.
+                    &copy; {new Date().getFullYear()} {t('footer.copyright')}
                 </p>
                 <nav className="flex flex-wrap justify-center sm:justify-end gap-4">
-                    <Link href="/terminos" className="text-xs text-muted-foreground hover:text-primary transition-colors">Términos y Condiciones</Link>
-                    <Link href="/privacidad" className="text-xs text-muted-foreground hover:text-primary transition-colors">Política de Privacidad</Link>
+                    <Link href="/terminos" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.terms')}</Link>
+                    <Link href="/privacidad" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.privacy')}</Link>
                 </nav>
             </div>
         </footer>

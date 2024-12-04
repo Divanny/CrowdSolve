@@ -1,0 +1,787 @@
+{
+  "about": {
+    "title": "Connecting People",
+    "description": "CrowdSolve is a platform designed to connect people who seek to solve problems collaboratively. Its aim is to bring together different types of users, such as experts, companies, and participants interested in finding innovative solutions to specific challenges.",
+    "mission": "OUR MISSION",
+    "mission_description": "CrowdSolve aims to foster open collaboration, where ideas and solutions are shared and evaluated, allowing problems to be solved efficiently. Additionally, it focuses on creating a space where users can showcase their skills, work together, and contribute value at both an individual and organizational level.",
+    "section_title": "Facilitating the Creation of Innovative Solutions",
+    "section_description": "Our goal is to empower teams and individuals to collaborate and find innovative solutions to specific challenges. Here’s how we plan to achieve it.",
+    "features": [
+      {
+        "title": "Fostering Open Collaboration",
+        "description": "We believe there's no room for big egos, and there's always time to help each other. We strive to give and receive feedback, ideas, and perspectives."
+      },
+      {
+        "title": "Moving Forward with Clarity",
+        "description": "Boldly, bravely, and with clear goals. We look for big opportunities and focus on the most important things to work on."
+      },
+      {
+        "title": "Optimizing for Empowerment",
+        "description": "We believe everyone should be empowered to do what they think is best for the company's interests."
+      }
+    ]
+  },
+  "MeetOurteam": {
+    "title": "Meet Our Team"
+  },
+
+  "AdminLayout":{
+    "sideBarAdm":{
+      "AdmUser": "User administration",
+      "Participants": "Participants",
+      "Companies": "Companies",
+      "Admins": "Administrators",
+      "RolesPermissions": "Roles and permissions",
+      "AdmChallenges": "Challenge management",
+      "Challenges": "Challenges",
+      "Solutions": "Solutions",
+      "Categories": "Categories",
+      "CompanyRequests": "Company requests",
+      "SupportRequests": "Support requests",
+      "Requests": "Requests",
+      "Settings": "Settings",
+      "UserManual": "User manual"
+    },
+    "authAdminLayout": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  }
+},
+  
+  "CategoryFormdialog": {
+    "editTitle": "Edit Category",
+    "viewTitle": "View Category",
+    "nameLabel": "Category Name",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Enter a description",
+    "saveChanges": "Save changes",
+    "close": "Close"
+  },
+  "challengesPost": {
+    "sectionLabel": "Challenges",
+    "sectionTitle": "Challenges posted by companies",
+    "sectionDescription": "Participate in challenges posted by various companies and showcase your skills. Great opportunities await you!",
+    "exploreChallengesButton": "Explore all challenges",
+    "readMore": "Read more"
+  },
+  "CrowdSourcingEasy": {
+    "sectionLabel": "How it Works",
+    "sectionTitle": "Crowdsourcing Made Easy",
+    "sectionDescription": "CrowdSolve streamlines the crowdsourcing process into three key phases: challenge posting, community participation, and collaborative evaluation.",
+    "publishChallenges": {
+      "title": "Post Challenges",
+      "description": "Describe your problem and invite the CrowdSolve community to offer innovative solutions."
+    },
+    "engageCommunity": {
+      "title": "Engage the Community",
+      "description": "Access a global network of problem solvers and collaborate on the best solutions."
+    },
+    "evaluateCollaboratively": {
+      "title": "Evaluate Collaboratively",
+      "description": "Review proposed solutions and select the most promising ones through a collaborative process."
+    }
+  },
+  "ParticipantFormDialog": {
+    "title_edit": "Edit Participant",
+    "title_view": "View Participant",
+    "username_label": "Username",
+    "email_label": "Email",
+    "first_name_label": "First Name",
+    "last_name_label": "Last Name",
+    "birthdate_label": "Birth Date",
+    "birthdate_placeholder": "Select a date",
+    "phone_label": "Phone",
+    "education_level_label": "Education Level",
+    "education_level_placeholder": "Select an education level",
+    "user_status_label": "User Status",
+    "user_status_placeholder": "Select a status",
+    "description_label": "Personal Description",
+    "description_placeholder": "Enter a personal description",
+    "button_save_changes": "Save Changes",
+    "button_close": "Close"
+  },
+  "faq_section": {
+    "title": "Frequently Asked Questions about CrowdSolve",
+    "faqs": [
+      {
+        "question": "What is CrowdSolve?",
+        "answer": "CrowdSolve is a collaborative platform where users can work together to solve complex problems."
+      },
+      {
+        "question": "How does CrowdSolve work?",
+        "answer": "CrowdSolve allows users to post problems and collaborate with others to find solutions through collective intelligence."
+      },
+      {
+        "question": "Who can use CrowdSolve?",
+        "answer": "Anyone interested in solving problems can join CrowdSolve. No specific skills are required, just a desire to collaborate and contribute."
+      },
+      {
+        "question": "What are the benefits?",
+        "answer": "The benefits of using CrowdSolve include access to a diverse community of problem solvers, the opportunity to find innovative solutions, and the chance to learn from others."
+      }
+    ]
+  },
+  "Herosection": {
+    "title": "Unlock Creative Solutions with CrowdSolve",
+    "description": "CrowdSolve is a powerful crowdsourcing platform that connects businesses with a global community to solve complex challenges. Post your challenge, engage the crowd, and collaborate on innovative solutions.",
+    "buttons": {
+      "post_challenge": "Post a Challenge",
+      "join_community": "Join the Community"
+    },
+    "card_texts": {
+      "innovation": {
+        "title": "Innovation Without Limits",
+        "subtitle": "Unleash the Creative Power of the Crowd"
+      },
+      "solutions": {
+        "title": "Solutions for Complex Challenges"
+      }
+    }
+  },
+  "TrustedBysection": {
+    "title": "Trusted by These Companies"
+  },
+  "WhyClientsLoveUs": {
+    "title": "Why Our Users Love Us"
+  },
+  "footer": {
+    "description": "Connecting brilliant minds with innovative business challenges.",
+    "sections": {
+      "product": {
+        "title": "Product",
+        "links": {
+          "howItWorks": "How It Works",
+          "challenges": "Challenges",
+          "registeredCompanies": "Registered Companies"
+        }
+      },
+      "company": {
+        "title": "Company",
+        "links": {
+          "aboutUs": "About Us",
+          "team": "Team",
+          "contact": "Contact"
+        }
+      }
+    },
+    "copyright": "&copy; {year} CrowdSolve. All rights reserved.",
+    "terms": "Terms and Conditions",
+    "privacy": "Privacy Policy"
+  },
+  "navbar": {
+    "links": {
+      "aboutUs": "About Us",
+      "challenges": "Challenges",
+      "companies": "Companies",
+      "contactUs": "Contact Us"
+    },
+    "auth": {
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
+    }
+  },
+  "ProfileDropdownMenuContent": {
+    "profile": "Profile",
+    "solutions": "Solutions",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "admin": "Admin",
+    "toastMessageTitle":"Operation successful",
+    "toastMessageDescription":"You have successfully logged out",
+    "appearance": "Appearance",
+    "language": "Language",
+    "logout": "Log out",
+    "theme": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "language_options": {
+      "es": "Spanish",
+      "en": "English"
+    },
+    "user": {
+      "name": "Username",
+      "profile": "Profile Name",
+      "participant_info": "Participant Information",
+      "first_name": "First Name",
+      "last_name": "Last Name"
+    }
+  },
+  "Sidebar": {
+    "hamburgerIconAlt": "Menu",
+    "aboutUs": "About Us",
+    "challenges": "Challenges",
+    "companies": "Companies",
+    "contact": "Contact",
+    "userProfile": {
+      "defaultAvatar": "User Avatar",
+      "userName": "Username",
+      "userProfileName": "Profile Name"
+    },
+    "buttons": {
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
+    },
+    "footer": {
+      "menuTrigger": "Expand Menu",
+      "logOut": "Log Out"
+    }
+  },
+  "GoogleLoginbutton": {
+    "continueWithGoogle": "Continue with Google"
+  },
+  "RegistroEmpresa": {
+    "companyName": "Company Name",
+    "companyDescription": "Description",
+    "phone": "Phone",
+    "sector": "Sector",
+    "website": "Website",
+    "companySize": "Company Size",
+    "address": "Address",
+    "register": "Register"
+  },
+  "RegistroEmpresaEntry": {
+    "welcomeTitle": "Welcome to CrowdSolve",
+    "welcomeDescription": "A few key things you should know before creating your company account:",
+    "moderationTitle": "We moderate all challenges before publishing.",
+    "moderationDescription": "Our editorial team manually reviews each challenge and may make changes in your challenge inbox before approving publication.",
+    "verificationTitle": "Your company will be verified before account activation.",
+    "verificationDescription": "After creating the account, we will verify the authenticity of the information provided about your company. This process is necessary to ensure the validity of the data.",
+    "continueButton": "Great! Continue"
+  },
+  "RegistroParticipante": {
+    "nombres": "First Name",
+    "apellidos": "Last Name",
+    "fechaNacimiento": "Date of Birth",
+    "telefono": "Phone",
+    "nivelEducativo": "Education Level",
+    "descripcionPersonal": "Personal Description",
+    "registrarse": "Register",
+    "selectDate": "Select a date",
+    "selectLevel": "Select an education level",
+    "enterFirstName": "Enter your first name",
+    "enterLastName": "Enter your last name",
+    "enterPhoneNumber": "Enter your phone number",
+    "enterPersonalDescription": "Enter a personal description"
+  },
+  "ContinueGoogle": {
+    "continueWithGoogle": "Continue with Google"
+  },
+  "LoadingPage": {
+    "loading": "Loading..."
+  },
+  "ProtectedRoute": {
+    "errorFetchingUserInfo": "Error fetching user information"
+  },
+  "use-axios": {
+    "sessionExpired": "Session expired. Please log in again.",
+    "accessDenied": "Access denied",
+    "signInRequired": "You must log in to access this page.",
+    "operationFailed": "Operation failed"
+  },
+  "Categories": {
+    "table": {
+      "selectAll": "Select all",
+      "selectRow": "Select row",
+      "columns": {
+        "nombre": "Category Name",
+        "descripcion": "Description",
+        "icono": "Icon",
+        "cantidadDesafios": "Number of Challenges",
+        "actions": "Actions"
+      },
+      "actionsMenu": {
+        "edit": "Edit",
+        "viewDetails": "View details"
+      },
+      "searchPlaceholder": "Search by category name",
+      "noResults": "No results found.",
+      "rowsSelected": "row(s) selected",
+      "de":"of",
+      "buttons": {
+        "previous": "Previous",
+        "next": "Next",
+        "clearFilters": "Clear filters",
+        "columns": "Columns"
+      },
+      "pagination": {
+        "selected": "Selected",
+        "rows": "rows"
+      }
+    },
+    "notifications": {
+      "sessionExpired": "Session expired. Please log in again.",
+      "accessDenied": {
+        "title": "Access Denied",
+        "description": "You must log in to access this page."
+      },
+      "operationFailed": {
+        "title": "Operation Failed",
+        "description": "An error occurred. Please try again."
+      }
+    },
+    "abrirMenu":"OpenMenu"
+  },
+  "Participants": {
+    "select_all": "Select all",
+    "select_row": "Select row",
+    "nombre_usuario": "Username",
+    "correo_electronico": "Email",
+    "nombre_completo": "Full Name",
+    "telefono": "Phone",
+    "fecha_nacimiento": "Date of Birth",
+    "nivel_educativo": "Education Level",
+    "buscarPH": "Search...",
+    "soluciones_enviadas": "Solutions Submitted",
+    "fecha_registro": "Registration Date",
+    "estatus_usuario": "Status",
+    "acciones": "Actions",
+    "ver_detalles": "View details",
+    "editar": "Edit",
+    "ver_soluciones": "View solutions",
+    "buscar": "Search by username, email or full name...",
+    "filtro_nivel_educativo": "Education Level",
+    "filtro_estatus_usuario": "User Status",
+    "limpiar_filtro": "Clear filter",
+    "limpiarFiltros": "Clear filters",
+    "columna": "Columns",
+    "no_resultados": "No results found",
+    "PrevButton": "Previous",
+    "NextButton": "Next"
+  },
+  "RoleAndPermissions": {
+    "saveChanges": {
+      "success": {
+        "title": "Operation successful",
+        "description": "Changes were saved successfully."
+      },
+      "failure": {
+        "title": "Operation failed",
+        "description": "Changes could not be saved."
+      },
+      "error": {
+        "title": "Error saving changes",
+        "description": "An error occurred while saving changes, please try again."
+      }
+    },
+    "title": "Roles and Permissions",
+    "description": "Manage permissions and access for each role in the system",
+    "saveChanges2": "Save changes",
+    "permission": "Permission"
+  },
+  "CompleteSignUp": {
+    "companyForm": "Company form",
+    "participantForm": "Participant form",
+    "backToRoleSelection": "← Back to role selection"
+  },
+  "ForgotPassword": {
+    "passwordRecovery": {
+      "forgotPasswordTitle": "Forgot your password?",
+      "forgotPasswordDescription": "Don't worry, we will send you instructions to reset it via email.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "resetPasswordButton": "Reset password",
+      "checkEmailTitle": "Check your email",
+      "checkEmailDescription": "We sent a reset link to",
+      "validateLinkButton": "Validate reset link",
+      "resendCodeLink": "Didn't receive the code?",
+      "resendCodeBt":"Resend code",
+      "setNewPasswordTitle": "Set new password",
+      "setNewPasswordDescription": "Enter your new password below.",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm new password",
+      "setNewPasswordButton": "Set new password",
+      "backToSignInButton": "Back to sign in"
+    },
+    "toastMessages": {
+      "operationFailed": "Operation failed",
+      "pleaseCompleteFields": "Please complete all fields",
+      "passwordMismatch": "Passwords do not match",
+      "operationSuccessful": "Operation successful",
+      "resetPasswordLinkSent": "A reset link has been sent to your email",
+      "verificationCodeCorrect": "Verification code correct",
+      "passwordResetSuccessful": "Password successfully reset"
+    }
+  },
+  "RoleSelection": {
+    "selectRoleTitle": "Select your role in CrowdSolve",
+    "selectRoleSubtitle": "How do you want to participate on our platform?",
+    "companyRoleTitle": "Company",
+    "companyRoleDescription": "Connect with talent and innovative solutions.",
+    "participantRoleTitle": "Participant",
+    "participantRoleDescription": "Join projects and develop your skills.",
+    "nextButton": "Next",
+    "errorMessage": "Operation failed",
+    "errorMessageDescription": "Please select a role"
+  },
+  "SignIn": {
+    "signInTitle": "Sign In",
+    "signInSubtitle": "Start using CrowdSolve for you or your company",
+    "usernamePlaceholder": "Enter your username or email",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPassword": "Forgot your password?",
+    "loadingText": "Please wait",
+    "signInButton": "Sign In",
+    "signUpLink": "Sign Up",
+    "errorMessage": "Operation failed",
+    "errorMessageDescription": "Please complete all fields",
+    "successMessage": "Operation successful",
+    "successMessageDescription": "Login successful",
+    "creativeMessage": "Awaken your creativity",
+    "showTalentMessage": "Show your talent",
+    "solveProblemsMessage": "Solve problems",
+    "noAccount":"Dont have an account?"
+  },
+  "SignUp": {
+    "signUpTitle": "Create account",
+    "signUpSubtitle": "Start using CrowdSolve for you or your company",
+    "usernamePlaceholder": "Enter your username",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "loadingText": "Please wait",
+    "signUpButton": "Create account",
+    "signInLink": "Sign In",
+    "errorMessage": "Operation failed",
+    "errorMessageDescription": "Please complete all fields",
+    "passwordMismatch": "Passwords do not match",
+    "successMessage": "Operation successful",
+    "successMessageDescription": "Account created successfully",
+    "termsOfServiceLink": "Terms",
+    "usagePolicyLink": "Usage Policy",
+    "privacyPolicyLink": "Privacy Policy",
+    "creativeMessage": "Awaken your creativity",
+    "showTalentMessage": "Show your talent",
+    "solveProblemsMessage": "Solve problems",
+    "haveaccount":"Already have an account?",
+    "userName":"Username",
+    "Email":"Email",
+    "password":"Password"
+  },
+  "AccessDenied": {
+    "accessDeniedTitle": "Access Denied",
+    "accessDeniedMessage": "Sorry, you do not have permission to access this page. If you believe this is a mistake, please contact the administrator.",
+    "goBackButton": "Go Back",
+    "goHomeButton": "Go Home"
+  },
+  "ChallengeCatalog": {
+    "pageTitle": "Explore our Challenges section",
+    "searchPlaceholder": "Search",
+    "filters": {
+      "all": "All",
+      "design": "Design",
+      "software": "Software",
+      "data": "Data",
+      "ai": "AI",
+      "cybersecurity": "Cybersecurity"
+    },
+    "categories": {
+      "label": "Category:",
+      "company": "Company:",
+      "endDate": "End date:"
+    },
+    "noResults": {
+      "title": "Not found",
+      "imageAlt": "Not found"
+    },
+    "pagination": {
+      "page": "Page",
+      "of": "of"
+    },
+    "buttons": {
+      "viewMore": "View more",
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
+  "CompanyListing": {
+    "general": {
+      "searchPlaceholder": "Search for companies...",
+      "sectorPlaceholder": "Sector",
+      "companySizePlaceholder": "Company size",
+      "clearFilters": "Clear filters",
+      "notFoundMessage": "No companies found that match the selected filters.",
+      "website": "Website",
+      "moreOptions": "More options",
+      "actions": "Actions",
+      "contact": "Contact",
+      "viewChallenges": "View challenges"
+    },
+    "header": {
+      "badge": {
+        "message": "Discover the latest companies that have joined CrowdSolve"
+      },
+      "title": "Boost your innovation with CrowdSolve.",
+      "description": "Connect with leading companies, solve exciting challenges, and be part of the crowdsourcing revolution."
+    },
+    "companies": {
+      "title": "Partner companies",
+      "challenges": "challenges",
+      "solutions": "solutions",
+      "actions": {
+        "contact": "Contact",
+        "viewChallenges": "View challenges"
+      }
+    }
+  },
+  "ContactUs": {
+    "contact": {
+      "title": "You can find us on our social networks and contact us",
+      "description": "If you have any questions, comments, or need more information about our challenges, feel free to contact us. Your opinion is important, and we are committed to providing the support you need. Complete the form below or use any of our contact channels to reach out to us. We look forward to hearing from you soon!",
+      "socials": {
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "email": "Email",
+        "location": "Location",
+        "phone": "Phone"
+      },
+      "form": {
+        "title": "Contact Us!",
+        "fields": {
+          "subject": "Message subject",
+          "firstName": "First name",
+          "lastName": "Last name",
+          "email": "Email",
+          "message": "How can we help you?"
+        },
+        "captchaWarning": "Please complete the captcha",
+        "submit": {
+          "default": "Submit Form",
+          "loading": "Please wait"
+        },
+        "toasts": {
+          "incompleteFields": "Please complete all fields",
+          "success": "Message sent successfully",
+          "error": "Error sending message"
+        }
+      }
+    }
+  },
+  "errorPage": {
+    "title": "Error",
+    "subtitle": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again later or contact support if the problem persists.",
+    "buttons": {
+      "goBack": "Go Back",
+      "goHome": "Go to Home"
+    }
+  },
+  "notFoundPage": {
+    "title": "404",
+    "subtitle": "Page not found",
+    "description": "The page you are looking for may have been deleted, renamed, or is temporarily unavailable.",
+    "buttons": {
+      "goBack": "Go Back",
+      "goHome": "Go to Home"
+    }
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "effectiveDate": "Effective since August 8, 2024",
+    "intro": "At CrowdSolve, we value and respect your privacy. This Privacy Policy explains how we collect, use, and protect your personal information when you use our platform and services.",
+    "sections": {
+      "informationCollected": {
+        "title": "1. Information We Collect",
+        "description": "We collect the following information:",
+        "list": {
+          "infoCollect1":"Registration information: name, email address, password.",
+          "infoCollect2":"Profile information: professional experience, skills, profile picture (optional).",
+          "infoCollect3":"User-generated content: proposals, comments, votes.",
+          "infoCollect4":"Usage information: interactions with the platform, participation in challenges.",
+          "infoCollect5":"Payment information: to process rewards (only for winning participants)."
+        }
+      },
+      "informationUsage": {
+        "title": "2. How We Use Your Information",
+        "description": "We use your information to:",
+        "list": {
+          "infoUsage1":"Provide and improve our services.",
+          "infoUsage2":"Facilitate participation in challenges and collaboration between users.",
+          "infoUsage3":"Process payments and rewards.",
+          "infoUsage4":"Send notifications related to the service and updates.",
+          "infoUsage5":"Prevent fraud and ensure platform security."
+        }
+      },
+      "informationSharing": {
+        "title": "3. Sharing Information",
+        "description": "We share your information in the following circumstances:",
+        "list": {
+          "infoSharing1":"With companies posting challenges, limited to the information necessary to evaluate proposals.",
+          "infoSharing2":"With service providers that help us operate the platform.",
+          "infoSharing3":"When required by law or to protect our legal rights."
+        }
+      },
+      "dataSecurity": {
+        "title": "4. Data Security",
+        "description": "We implement technical and organizational security measures to protect your personal information against unauthorized access, loss, or alteration. However, no data transmission over the Internet is 100% secure."
+      },
+      "userRights": {
+        "title": "5. Your Rights",
+        "description": "You have the right to:",
+        "list": {
+          "uRights1":"Access your personal information.",
+          "uRights2":"Correct inaccurate data.",
+          "uRights3":"Request the deletion of your data.",
+          "uRights4":"Object to the processing of your data.",
+          "uRights5":"Request data portability."
+        }
+      },
+      "cookies": {
+        "title": "6. Cookies and Similar Technologies",
+        "description": "We use cookies and similar technologies to enhance user experience, analyze traffic, and personalize content. You can control the use of cookies through your browser settings."
+      },
+      "policyChanges": {
+        "title": "7. Changes to the Privacy Policy",
+        "description": "We may update this Privacy Policy occasionally. We will notify you of significant changes via a notice on our platform or by email."
+      },
+      "contact": {
+        "description": "If you have questions about this Privacy Policy, please contact us at",
+        "email": "support@crowdsolve.site"
+      }
+    },
+    "buttons": {
+      "termsOfService": "View Terms of Service",
+      "usagePolicy": "View Acceptable Use Policy"
+    }
+  },
+  "Termsofservice": {
+    "title": "Terms of Service",
+    "effectiveDate": "August 8, 2024",
+    "intro": "Welcome to CrowdSolve! Before accessing our services, please read these Terms of Service.",
+    "overview": "These Terms of Service ('Terms') govern your use of CrowdSolve, including our web platform, collaboration tools, and all associated services (together, our 'Services'). These Terms are a contract between you and CrowdSolve. By accessing our Services, you agree to these Terms.",
+    "readPls":"Please, read our",
+    "readPlsDesc":", which describes how we collect and use personal information.",
+    "privacyPolicyLink": {
+      "text": "Privacy Policy",
+      "url": "/privacy-policy"
+    },
+    "sections": [
+      {
+        "title": "1. Use of Our Services",
+        "content": "Our Services are designed to connect companies with a global community of solvers. You must follow all policies made available within the Services. You can only use our Services as permitted by law. We may suspend or stop providing you with our Services if you do not comply with our terms or policies or if we are investigating suspected misconduct."
+      },
+      {
+        "title": "2. Your Account",
+        "content": "You need an account to use CrowdSolve. You are responsible for maintaining the security of your account and for any activity that occurs through it. Keep your password secure and contact us immediately if you detect any unauthorized use of your account. Your account may be for a company posting challenges or for a participant submitting solutions."
+      },
+      {
+        "title": "3. Posting Challenges and Participation",
+        "content": "Companies can post challenges on our platform. By doing so, you agree to provide accurate information about the requirements, deadlines, and rewards. Participants can submit proposals for these challenges. By participating, you guarantee that your proposal is original and does not infringe on third-party rights."
+      },
+      {
+        "title": "4. Intellectual Property",
+        "content": "The intellectual property rights of winning proposals will be transferred to the company that posted the challenge, according to the specific terms of each challenge. CrowdSolve does not claim ownership of non-winning proposals. We respect intellectual property rights and expect all users to do the same."
+      },
+      {
+        "title": "5. Payments and Rewards",
+        "content": "Companies are responsible for providing the promised rewards to the winners of the challenges. CrowdSolve facilitates the payment process but is not responsible for defaults by the companies. Participants are responsible for any applicable taxes on the rewards received."
+      },
+      {
+        "title": "6. Privacy and Data Protection",
+        "content": "Our privacy policy explains how we handle your personal data and protect your privacy when using our Services. By using CrowdSolve, you agree that we may use your data in accordance with our privacy policy. We are committed to protecting the confidentiality of sensitive information shared in the challenges."
+      },
+      {
+        "title": "7. Modifications to the Terms",
+        "content": "We may modify these Terms from time to time. We will notify you of any significant changes to the Terms. Your continued use of our Services after such changes constitutes your acceptance of the new Terms."
+      }
+    ],
+    "byUsing":"By using CrowdSolve, you agree to these Terms of Service. If you do not agree to these Terms, please do not use our Services. If you have any questions about these Terms, contact us at",
+    "contact": {
+      "text": "If you have any questions about these Terms, contact us at",
+      "email": "support@crowdsolve.site",
+      "emailLink": "mailto:support@crowdsolve.site"
+    },
+    "buttons": [
+      {
+        "text": "View Acceptable Use Policy",
+        "link": "/usage-policy"
+      },
+      {
+        "text": "View Privacy Policy",
+        "link": "/privacy-policy"
+      }
+    ]
+  },
+  "UsagePolicy": {
+    "title": "Acceptable Use Policy",
+    "effectiveDate": "Effective since August 8, 2024",
+    "accpUP":"This Acceptable Use Policy (AUP) describes prohibited practices when using CrowdSolve. By using our platform, you agree to comply with this AUP. CrowdSolve reserves the right to modify this policy at any time.",
+    "generalConduct": {
+      "header": "1. General Conduct",
+      "header2": "CrowdSolve users must:",
+      "content": {
+        "gC1":"Comply with all applicable laws.",
+        "gC2":"Respect intellectual property rights.",
+        "gC3":"Be honest and transparent in all interactions.",
+        "gC4":"Maintain confidentiality of sensitive information shared in challenges.",
+        "gC5":"Treat other users with respect and professionalism."
+        }
+    },
+    "prohibitedActivities": {
+      "header": "2. Prohibited Activities",
+      "header2":"Users must not:",
+      "content": {
+        "pAc1":"Post illegal, defamatory, harassing, obscene, or fraudulent content.",
+        "pAc2":"Infringe on the intellectual property rights of others.",
+        "pAc3":"Use the platform to distribute spam or malware.",
+        "pAc4":"Attempt to access other users' accounts or systems without authorization.",
+        "pAc5":"Manipulate the platform's voting or evaluation systems.",
+        "pAc6":"Create multiple accounts to bypass rules or gain an unfair advantage.",
+        "pAc7":"Disclose confidential information of other users or companies without authorization."
+      }
+    },
+    "challengeContent": {
+      "header": "3. Challenge Content",
+      "header2":"Companies that post challenges must:",
+      "content": {
+        "chC1":"Provide accurate and clear information about the challenge requirements.",
+        "chC2":"Set fair terms for the transfer of intellectual property.",
+        "chC3":"Fulfill promises regarding rewards and deadlines.",
+        "chC4":"Do not request solutions for illegal or unethical activities."
+    }
+    },
+    "proposalsAndSolutions": {
+      "header": "4. Proposals and Solutions",
+      "header2":"Participants submitting proposals must:",
+      "content": {
+        "pASol":"Submit only original work or have the necessary rights for the content submitted.",
+        "pASo2":"Respect the confidentiality of information provided in challenges.",
+        "pASo3":"Do not copy or plagiarize other participants' work.",
+        "pASo4":"Provide accurate information about your skills and experience."
+      }
+    },
+    "platformUsage": {
+      "header": "5. Platform Usage",
+      "header2":"Users must not:",
+      "content": {
+        "pU1":"Do not attempt to interfere with the proper functioning of the platform.",
+        "pU2":"Do not use bots, scrapers, or other automated means to access CrowdSolve.",
+        "pU3":"Do not collect information from other users without their consent.",
+        "pU4":"Do not sell or transfer your account to third parties."
+      }
+    },
+    "nonComplianceConsequences": {
+      "header": "6. Consequences of Non-Compliance",
+      "header2": "Violation of this AUP may result in:",
+      "content": {
+        "nonCC1":"Removal of infringing content.",
+        "nonCC2":"Suspension or termination of the user's account.",
+        "nonCC3":"Disqualification from current or future challenges.",
+        "nonCC4":"Legal actions in cases of serious violations."
+      }
+    },
+    "reportingViolations": {
+      "header": "7. Reporting Violations",
+      "content": "If you notice content or behavior that violates this AUP, please report it immediately to our moderation team. We appreciate your help in keeping CrowdSolve a safe and productive space for everyone."
+    },
+    "contact": {
+      "header": "If you have questions about this Acceptable Use Policy, please contact us at",
+      "email": "soporte@crowdsolve.site"
+    },
+    "buttons": {
+      "termsOfService": "View Terms of Service",
+      "privacyPolicy": "View Privacy Policy"
+    }
+  }
+}

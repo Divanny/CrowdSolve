@@ -5,28 +5,30 @@ import {
     AccordionItem,
     AccordionTrigger,
   } from '@/components/ui/accordion';
-  
+  import { useTranslation } from 'react-i18next';
+
   const FAQSection = () => {
+    const { t } = useTranslation();
     const faqs = [
       {
-        question: '¿Qué es CrowdSolve?',
+        question: t('faq_section.faqs.0.question'),
         answer:
-          'CrowdSolve es una plataforma colaborativa donde los usuarios pueden trabajar juntos para resolver problemas complejos.',
+        t('faq_section.faqs.0.answer'),
       },
       {
-        question: '¿Cómo funciona CrowdSolve?',
+        question: t('faq_section.faqs.1.question'),
         answer:
-          'CrowdSolve permite a los usuarios publicar problemas y colaborar con otros para encontrar soluciones a través de la inteligencia colectiva.',
+        t('faq_section.faqs.1.answer'),
       },
       {
-        question: '¿Quién puede usar CrowdSolve?',
+        question: t('faq_section.faqs.2.question'),
         answer:
-          'Cualquier persona interesada en resolver problemas puede unirse a CrowdSolve. No se requieren habilidades específicas, solo un deseo de colaborar y contribuir.',
+        t('faq_section.faqs.2.answer'),
       },
       {
-        question: '¿Cuáles son los beneficios?',
+        question: t('faq_section.faqs.3.question'),
         answer:
-          'Los beneficios de usar CrowdSolve incluyen acceso a una comunidad diversa de solucionadores de problemas, la posibilidad de encontrar soluciones innovadoras y la oportunidad de aprender de otros.',
+        t('faq_section.faqs.3.answer'),
       },
     ];
   
@@ -46,7 +48,7 @@ import {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Preguntas frecuentes sobre CrowdSolve
+            {t('faq_section.title')}
           </motion.h1>
           {faqs.map((faq, index) => (
             <motion.div

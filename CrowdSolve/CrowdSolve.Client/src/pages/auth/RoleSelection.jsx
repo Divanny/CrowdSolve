@@ -10,8 +10,10 @@ import { ArrowRight02Icon } from "hugeicons-react";
 
 import Empresas from "@/assets/roles/Empresas.svg";
 import Participantes from "@/assets/roles/Participantes.svg";
+import { useTranslation } from 'react-i18next';
 
 function RoleSelection() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState(null);
 
@@ -30,8 +32,8 @@ function RoleSelection() {
     if (selectedRole) {
       navigate(`/sign-up/complete/${selectedRole}`);
     } else {
-      toast.error("Operación fallida", {
-        description: "Por favor selecciona un rol",
+      toast.error(t('RoleSelection.errorMessage'), {
+        description: t('RoleSelection.errorMessageDescription'),
       });
     }
   };
@@ -52,10 +54,10 @@ function RoleSelection() {
             <div>
               <div className="my-4">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-2">
-                  Selecciona tu rol en CrowdSolve
+                {t('RoleSelection.selectRoleTitle')}
                 </h1>
                 <h2 className="text-base sm:text-lg font-semibold text-center text-muted-foreground mb-6">
-                  ¿Cómo quieres participar en nuestra plataforma?
+                {t('RoleSelection.selectRoleSubtitle')}
                 </h2>
               </div>
               <div className="justify-center my-4 sm:my-8 grid grid-cols-1 gap-4 min-[1000px]:grid-cols-2">
@@ -75,10 +77,10 @@ function RoleSelection() {
                     }`}
                   />
                   <h3 className="text-center mt-4 text-base sm:text-lg font-semibold">
-                    Empresa
+                  {t('RoleSelection.companyRoleTitle')}
                   </h3>
                   <p className="text-center text-muted-foreground mt-2 text-sm">
-                    Conecta con talento y soluciones innovadoras.
+                  {t('RoleSelection.companyRoleDescription')}
                   </p>
                 </Card>
                 <Card
@@ -99,10 +101,10 @@ function RoleSelection() {
                     }`}
                   />
                   <h3 className="text-center mt-4 text-base sm:text-lg font-semibold">
-                    Participante
+                  {t('RoleSelection.participantRoleTitle')}
                   </h3>
                   <p className="text-center text-muted-foreground mt-2 text-sm">
-                    Únete a proyectos y desarrolla tus habilidades.
+                  {t('RoleSelection.participantRoleDescription')}
                   </p>
                 </Card>
               </div>
@@ -112,7 +114,7 @@ function RoleSelection() {
                   className="px-4 py-2 sm:px-6 sm:py-3 text-white rounded-lg shadow-md group w-full"
                   disabled={!selectedRole}
                 >
-                  Siguiente
+                  {t('RoleSelection.nextButton')}
                   <ArrowRight02Icon className="ml-2 w-4 h-4 sm:w-6 sm:h-6 transition-all duration-300 hidden opacity-0 group-hover:block group-hover:opacity-100" />
                 </Button>
               </div>

@@ -10,6 +10,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
+import { useTranslation } from 'react-i18next';
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import useAxios from '@/hooks/use-axios';
 
@@ -17,6 +18,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const { api } = useAxios();
     const user = useSelector((state) => state.user.user);
+    const { t } = useTranslation();
     const [avatarUrl, setAvatarUrl] = useState(null);
 
     useEffect(() => {
