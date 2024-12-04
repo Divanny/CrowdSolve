@@ -457,6 +457,12 @@ namespace CrowdSolve.Server.Controllers
         public List<SolucionesModel> GetMisSoluciones()
         {
             List<SolucionesModel> soluciones = _solucionesRepo.Get(x => x.idUsuario == _idUsuarioOnline).ToList();
+
+            foreach (var solucion in soluciones)
+            {
+                solucion.Desafio = _desafiosRepo.Get(x => x.idDesafio == solucion.idDesafio).FirstOrDefault();
+            }
+
             return soluciones;
         }
 

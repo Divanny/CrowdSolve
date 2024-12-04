@@ -44,7 +44,10 @@ public class SolucionesModel
     public int? CantidadVotosParticipantes { get; set; }
 
     public int? PuntuacionFinal { get; set; }
+
     public int? PuntuacionMaxima { get; set; }
 
+    public DesafiosModel? Desafio { get; set; }
+    
     public List<AdjuntosSoluciones>? Adjuntos { get; set; }
 }
