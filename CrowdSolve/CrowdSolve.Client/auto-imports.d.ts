@@ -22,6 +22,7 @@ declare global {
   const ChallengeCompanyEvaluation: typeof import('@/components/challenge/CompanyEvaluation.jsx')['CompanyEvaluation']
   const ChallengeSolutionRanking: typeof import('@/components/challenge/SolutionRanking.jsx')['SolutionRanking']
   const ChallengeUserVoting: typeof import('@/components/challenge/UserVoting.jsx')['UserVoting']
+  const ChallengeChallengeDetail: typeof import('@/components/challenge/ChallengeDetail.jsx')['ChallengeDetail']
   const ErrorBoundary: typeof import('@/components/ErrorBoundary.jsx')['ErrorBoundary']
   const FileUploader: typeof import('@/components/FileUploader.jsx')['FileUploader']
   const GoogleLoginButton: typeof import('@/components/GoogleLoginButton.jsx')['GoogleLoginButton']

@@ -241,6 +241,8 @@
     "ChallengeChallengeHeader": true,
     "AdminCompaniesSolutionsValidation": true,
     "ChallengeChallengeTimeline": true,
-    "ChallengeSolutionRanking": true
+    "ChallengeSolutionRanking": true,
+    "AdminChallenges-requestsChallengeRequestDetail": true,
+    "AdminChallenges-requestsValidateChallengeDialog": true
   }
 }
