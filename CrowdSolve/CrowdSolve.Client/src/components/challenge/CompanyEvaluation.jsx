@@ -95,22 +95,22 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
         setPuntuaciones(prev => ({ ...prev, [solucion.idSolucion]: solucion.puntuacion || 0 }));
     };
 
-    const downloadAdjunto = async (idAdjunto) => {
+    const downloadAdjunto = async (adjunto) => {
         try {
-            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${idAdjunto}`, { responseType: 'blob' });
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', response.headers['content-disposition'].split('filename=')[1]);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-        }
-        catch (error) {
-            toast.error("Operación fallida", {
-                description: error.message
-            });
+            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', adjunto.nombre)
+            document.body.appendChild(link)
+            link.click()
+            link.parentNode.removeChild(link)
+        } catch (error) {
+            toast.error('Operación fallida', 
+                {
+                    description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
+                }
+            )
         }
     }
 
@@ -198,7 +198,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                                                 variant="outline"
                                                                 size="sm"
                                                                 className="flex items-center justify-start space-x-2 w-full"
-                                                                onClick={() => downloadAdjunto(adjunto.idAdjunto)}
+                                                                onClick={() => downloadAdjunto(adjunto)}
                                                             >
                                                                 <IconoArchivo tipo={adjunto.contentType} />
                                                                 <span className="truncate flex-1">{adjunto.nombre}</span>

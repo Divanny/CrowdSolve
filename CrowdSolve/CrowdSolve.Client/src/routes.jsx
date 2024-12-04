@@ -35,6 +35,7 @@ const SupportRequest = lazy(() => import('@/pages/admin/Requests/SupportRequests
 const ChallengeEvaluation = lazy(() => import('@/pages/challenges/ChallengeEvaluation'));
 const CompanyDashboard = lazy(() => import('@/pages/company/CompanyDashboard'));
 const CompanyChallenge = lazy(() => import('@/pages/company/CompanyChallenge'));
+const MySolutions = lazy(() => import('@/pages/participant/MySolutions'));
 
 const LazyComponent = ({ component: Component, ...props }) => (
   <Suspense fallback={<PageLoader />}>
@@ -87,7 +88,7 @@ const AppRoutes = () => (
       {/* Participant */}
       <Route element={<Layout />}>
         <Route path="/my-profile" element={<div>My profile</div>} handle={{ permission: () => PermisosEnum.Mi_perfil }} />
-        <Route path="/my-solutions" element={<div>My solutions</div>} handle={{ permission: () => PermisosEnum.Mis_Soluciones }} />
+        <Route path="/my-solutions" element={<LazyComponent component={MySolutions} />} handle={{ permission: () => PermisosEnum.Mis_Soluciones }} />
         <Route path="/challenge/:challengeId/evaluate" element={<LazyComponent component={ChallengeEvaluation} />} handle={{ permission: () => PermisosEnum.Evaluar_Desafío }} />
       </Route>
     </Route>

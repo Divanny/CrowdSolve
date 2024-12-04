@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Eye, Trophy } from 'lucide-react'
+import { Eye, Trophy, FileIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon } from 'lucide-react'
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import useAxios from '@/hooks/use-axios'
@@ -46,6 +46,49 @@ const SolutionRanking = ({ idDesafio }) => {
             toast.error("Error al cargar el ranking", {
                 description: error.response?.data?.message ?? error.message,
             })
+        }
+    }
+
+    const downloadAdjunto = async (adjunto) => {
+        try {
+            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', adjunto.nombre)
+            document.body.appendChild(link)
+            link.click()
+            link.parentNode.removeChild(link)
+        } catch (error) {
+            toast.error('Operación fallida',
+                {
+                    description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
+                }
+            )
+        }
+    }
+
+    const formatearTamaño = (bytes) => {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+        if (bytes === 0) return '0 Byte'
+        const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)).toString())
+        return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i]
+    }
+
+    const IconoArchivo = ({ tipo }) => {
+        switch (tipo) {
+            case 'image/png':
+            case 'image/jpeg':
+            case 'image/gif':
+            case 'image/webp':
+            case 'image/svg+xml':
+                return <ImageIcon className="w-4 h-4" />
+            case 'application/pdf':
+                return <FileTextIcon className="w-4 h-4" />
+            case 'application/zip':
+                return <FileZipIcon className="w-4 h-4" />
+            default:
+                return <FileIcon className="w-4 h-4" />
         }
     }
 
@@ -152,6 +195,24 @@ const SolutionRanking = ({ idDesafio }) => {
                                                     <ScrollArea className="h-[200px] w-full rounded-md border p-4 mt-2">
                                                         <p className="text-sm">{solucionSeleccionada?.descripcion}</p>
                                                     </ScrollArea>
+                                                </div>
+                                                <div>
+                                                    <Label className="text-lg font-semibold">Archivos adjuntos</Label>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                                                        {solucionSeleccionada?.adjuntos.map((adjunto) => (
+                                                            <Button
+                                                                key={adjunto.idAdjunto}
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="flex items-center justify-start space-x-2 w-full"
+                                                                onClick={() => downloadAdjunto(adjunto)}
+                                                            >
+                                                                <IconoArchivo tipo={adjunto.contentType} />
+                                                                <span className="truncate flex-1">{adjunto.nombre}</span>
+                                                                <span className="text-xs text-muted-foreground whitespace-nowrap">{formatearTamaño(adjunto.tamaño)}</span>
+                                                            </Button>
+                                                        ))}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="space-y-6">
