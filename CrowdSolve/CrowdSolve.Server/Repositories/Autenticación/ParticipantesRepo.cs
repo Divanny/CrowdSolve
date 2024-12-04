@@ -46,8 +46,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             NivelEducativo = nivelEducativo.Nombre,
                             DescripcionPersonal = p.DescripcionPersonal,
                             idEstatusUsuario = usuario.idEstatusUsuario,
-                            EstatusUsuario = estatusUsuario.Nombre,
-                            Soluciones = soLF.ToList()
+                            EstatusUsuario = estatusUsuario.Nombre
                         });
             }
         )
