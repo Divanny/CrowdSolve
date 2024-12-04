@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -15,18 +16,27 @@ import {
     DropdownMenuSubContent,
     DropdownMenuSubTrigger
 } from "@/components/ui/dropdown-menu"
-import { User, Send, Settings, BellRing, SunMoon, Globe, LogOut, Check, Moon, Sun, MonitorSmartphone, ShieldEllipsis } from 'lucide-react';
+import { User, Building, Send, BellRing, SunMoon, Globe, LogOut, Check, Moon, Sun, MonitorSmartphone, ShieldEllipsis } from 'lucide-react';
 import flags from "react-phone-number-input/flags";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import useAxios from '@/hooks/use-axios';
+import usePermisoAcceso from '@/hooks/use-permiso-acceso';
+import PermisosEnum from '@/enums/PermisosEnum';
 
 const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
     const { t } = useTranslation();
+    const { api } = useAxios();
     const theme = useSelector((state) => state.theme.theme);
     const language = useSelector((state) => state.language.language);
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
+
+    const canAccessCompany = usePermisoAcceso(PermisosEnum.Empresa_Dashboard);
+    const canAccessProfile = usePermisoAcceso(PermisosEnum.Mi_perfil);
+    const canAccessSolutions = usePermisoAcceso(PermisosEnum.Mis_Soluciones);
+    const canAccessAdmin = usePermisoAcceso(PermisosEnum.Administrador_Dashboard);
 
     const handleLogout = () => {
         dispatch(clearUser());
@@ -43,12 +53,28 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
         dispatch(setLanguage(language));
     }
 
+    useEffect(() => {
+        const fetchAvatar = async () => {
+            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
+            if (responseAvatarURL.status == 200) {
+                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+                user.avatarURL = URL.createObjectURL(avatarBlob)
+            }
+        }
+
+        if (user) {
+            fetchAvatar();
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
+
     return (
         <DropdownMenuContent className="w-56 mr-2">
             { showHeader && <DropdownMenuLabel>
                 <div className='flex items-center'>
                     <Avatar className="bg-accent" size="1">
-                        <AvatarImage src={(user.avatarBlobURL) ? user.avatarBlobURL : `https://robohash.org/${user.nombreUsuario}`} />
+                        <AvatarImage src={(user.avatarURL) ? user.avatarURL : `https://robohash.org/${user.nombreUsuario}`} />
                         <AvatarFallback>{user[0]}</AvatarFallback>
                     </Avatar>
                     <div className='flex flex-col ml-2'>
@@ -60,26 +86,34 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
             </DropdownMenuLabel> }
             { showHeader && <DropdownMenuSeparator /> }
             <DropdownMenuGroup>
-                <DropdownMenuItem>
-                    <User className="mr-2" size={16} />
-                    {t('ProfileDropdownMenuContent.profile')}
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <Send className="mr-2" size={16} />
-                    {t('ProfileDropdownMenuContent.solutions')}
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <Settings className="mr-2" size={16} />
-                    {t('ProfileDropdownMenuContent.settings')}
-                </DropdownMenuItem>
+                {canAccessCompany && (
+                    <DropdownMenuItem onSelect={() => navigate('/company')}>
+                        <Building className="mr-2" size={16} />
+                        Mi empresa
+                    </DropdownMenuItem>
+                )}
+                {canAccessProfile && (
+                    <DropdownMenuItem onSelect={() => navigate('/my-profile')}>
+                        <User className="mr-2" size={16} />
+                        {t('ProfileDropdownMenuContent.profile')}
+                    </DropdownMenuItem>
+                )}
+                {canAccessSolutions && (
+                    <DropdownMenuItem onSelect={() => navigate('/my-solutions')}>
+                        <Send className="mr-2" size={16} />
+                        {t('ProfileDropdownMenuContent.solutions')}
+                    </DropdownMenuItem>
+                )}
                 <DropdownMenuItem>
                     <BellRing className="mr-2" size={16} />
                     {t('ProfileDropdownMenuContent.notifications')}
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => navigate('/admin')}>
-                    <ShieldEllipsis className="mr-2" size={16} />
-                    {t('ProfileDropdownMenuContent.admin')}
-                </DropdownMenuItem>
+                {canAccessAdmin && (
+                    <DropdownMenuItem onSelect={() => navigate('/admin')}>
+                        <ShieldEllipsis className="mr-2" size={16} />
+                        {t('ProfileDropdownMenuContent.admin')}
+                    </DropdownMenuItem>
+                )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>

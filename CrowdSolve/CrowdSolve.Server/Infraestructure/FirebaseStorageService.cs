@@ -35,5 +35,13 @@ namespace CrowdSolve.Server.Infraestructure
 
             return memoryStream;
         }
+
+        public async Task DeleteFileAsync(string id)
+        {
+            var parts = id.Substring(_bucketName.Length + 1).Split('/');
+            var filePath = string.Join("/", parts.Take(parts.Length - 1));
+
+            await _storageClient.DeleteObjectAsync(_bucketName, filePath);
+        }
     }
 }

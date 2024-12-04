@@ -79,7 +79,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 var result = base.Add(model);
                 return result;
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 throw;
             }
@@ -108,7 +108,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 usuario.idEstatusUsuario = model.idEstatusUsuario;
                 usuario.AvatarURL = model.AvatarURL;
 
-                SaveChanges();
                 base.Edit(usuario);
             }
             catch (Exception)

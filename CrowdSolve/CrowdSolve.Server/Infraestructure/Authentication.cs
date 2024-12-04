@@ -32,6 +32,8 @@ namespace CrowdSolve.Server.Infraestructure
         /// </summary>
         /// <param name="CrowdSolveContext">Contexto de la base de datos de CrowdSolve.</param>
         /// <param name="configuration">Configuración de la aplicación.</param>
+        /// <param name="passwordHasher"></param>
+        /// <param name="mailingService"></param>
         public Authentication(CrowdSolveContext CrowdSolveContext, IConfiguration configuration, IPasswordHasher passwordHasher, Mailing mailingService)
         {
             _CrowdSolveContext = CrowdSolveContext;
@@ -64,7 +66,7 @@ namespace CrowdSolve.Server.Infraestructure
             {
                 if (_testUsers.ContainsKey(credentials.Username) && _testUsers[credentials.Username] == credentials.Password)
                 {
-                    return new OperationResult(true, "Inicio de sesión exitoso", null, TokenGenerator(credentials.Username, 1, 1));
+                    return new OperationResult(true, "Inicio de sesión exitoso", new object(), TokenGenerator(credentials.Username, 1, 1));
                 }
             }
 

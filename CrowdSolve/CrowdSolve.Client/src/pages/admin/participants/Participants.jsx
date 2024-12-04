@@ -61,9 +61,9 @@ export default function Participants() {
   const [estatusUsuarioFilter, setEstatusUsuarioFilter] = useState("");
   const [nivelEducativoSearch, setNivelEducativoSearch] = useState("");
   const [estatusUsuarioSearch, setEstatusUsuarioSearch] = useState("");
-  const [selectedParticipant, setSelectedParticipant] = useState(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [dialogMode, setDialogMode] = useState("view")
+  const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogMode, setDialogMode] = useState("view");
 
   const columns = [
     {
@@ -246,15 +246,6 @@ export default function Participants() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const globalFilterFn = (row, columnId, filterValue) => {
-    const searchableColumns = ["nombreUsuario", "correoElectronico", "nombreCompleto"];
-    if (searchableColumns.includes(columnId)) {
-      const value = row.getValue(columnId);
-      return value && String(value).toLowerCase().includes(String(filterValue).toLowerCase());
-    }
-    return true;
-  };
-
   const table = useReactTable({
     data,
     columns,
@@ -266,7 +257,14 @@ export default function Participants() {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
-    globalFilterFn,
+    globalFilterFn: (row, columnId, filterValue) => {
+      const value = row.getValue(columnId);
+      return value != null
+        ? String(value)
+            .toLowerCase()
+            .includes(String(filterValue).toLowerCase())
+        : false;
+    },
     state: {
       sorting,
       columnFilters,
@@ -310,7 +308,11 @@ export default function Participants() {
             type="text"
             placeholder={t('Participants.buscar')}
             value={globalFilter ?? ""}
-            onChange={(event) => setGlobalFilter(event.target.value)}
+            onChange={(event) => {
+              const value = event.target.value;
+              setGlobalFilter(value);
+              table.setGlobalFilter(value);
+          }}
             className="pl-8"
           />
         </div>
@@ -350,7 +352,7 @@ export default function Participants() {
                 key={nivel.idNivelEducativo}
                 onSelect={() => {
                   setNivelEducativoFilter(nivel.nombre);
-                  table.getColumn("nivelEducativo")?.setFilterValue(nivel.idNivelEducativo);
+                  table.getColumn("nivelEducativo")?.setFilterValue(nivel.nombre);
                 }}
               >
                 {nivel.nombre}
@@ -394,7 +396,7 @@ export default function Participants() {
                 key={estatus.idEstatusUsuario}
                 onSelect={() => {
                   setEstatusUsuarioFilter(estatus.nombre);
-                  table.getColumn("estatusUsuario")?.setFilterValue(estatus.idEstatusUsuario);
+                  table.getColumn("estatusUsuario")?.setFilterValue(estatus.nombre);
                 }}
               >
                 {estatus.nombre}

@@ -25,16 +25,25 @@ const ProtectedRoute = () => {
                 const { data } = response;
 
                 dispatch(setUser({
-                    user: data.usuario,
+                    user: { ...data.usuario },
                     token: token,
                     views: Array.isArray(data.vistas) ? data.vistas : []
                 }));
             }
         }
         catch (error) {
-            toast.error("Error al obtener la información del usuario.", {
-                description: error.message,
-            });
+            if (error.response && error.response.status === 401) {
+                dispatch(setUser({ user: null, token: null, views: [] }));
+
+                toast.warning("Debe iniciar sesión", {
+                    description: "Sesión expirada. Por favor, inicia sesión nuevamente.",
+                });
+            }
+            else {
+                toast.error("Error al obtener la información del usuario", {
+                    description: error.message,
+                });
+            }
         }
     }
 
@@ -66,6 +75,13 @@ const ProtectedRoute = () => {
         const view = userViews.find(view => compareRoutes(view.url, location.pathname));
 
         if (!view) {
+            // eslint-disable-next-line no-undef
+            if (process.env.NODE_ENV === 'development') {
+                toast.warning('Advertencia - Vista sin acceso', {
+                    description: `La vista "${location.pathname}" no tiene acceso asignado. Por motivos de desarrollo, se permitirá el acceso.`
+                })
+                return true;
+            }
             return false;
         }
 
@@ -76,7 +92,7 @@ const ProtectedRoute = () => {
         checkUser();
         // eslint-disable-next-line
     }, []);
-    
+
     if (!token) {
         return <Navigate to="/sign-in" replace state={{ from: location }} />;
     }
@@ -86,7 +102,7 @@ const ProtectedRoute = () => {
     }
 
     if (user.idEstatusUsuario === EstatusUsuarioEnum.Incompleto && !location.pathname.includes('/sign-up/complete')) {
-        return <Navigate to="/sign-up/complete" replace state={{ from: location }}/>;
+        return <Navigate to="/sign-up/complete" replace state={{ from: location }} />;
     }
 
     if (!canAcess()) {

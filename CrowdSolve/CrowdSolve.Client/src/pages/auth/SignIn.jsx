@@ -16,6 +16,8 @@ import { setUser } from '@/redux/slices/userSlice';
 import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 import GoogleLoginButton from '@/components/GoogleLoginButton';
 import { useTranslation } from 'react-i18next';
+import Lottie from 'lottie-react';
+import animationData from '@/assets/sign-in.json';
 
 function SignIn() {
   const { t } = useTranslation();
@@ -51,7 +53,7 @@ function SignIn() {
         const { token, data } = response.data;
 
         dispatch(setUser({
-          user: data.usuario,
+          user: { ...data.usuario },
           token: token,
           views: Array.isArray(data.vistas) ? data.vistas : []
         }));
@@ -61,7 +63,7 @@ function SignIn() {
         } else if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
           navigate("/sign-up/complete");
         } else {
-          navigate("/");
+          navigate(-1);
         }
         toast.success(t('SignIn.successMessage'), {
           description: t('SignIn.successMessageDescription'),
@@ -193,7 +195,9 @@ function SignIn() {
           </div>
         </div>
         <div className="hidden min-[500px]:flex justify-center p-0 sm:p-4 ">
-          <div className="w-full rounded-xl bg-card"></div>
+          <div className="w-full rounded-xl bg-card flex flex-col justify-center">
+            <Lottie animationData={animationData} loop={true} className="w-3/4 h-3/4 mx-auto" />
+          </div>
         </div>
       </main>
     </div>

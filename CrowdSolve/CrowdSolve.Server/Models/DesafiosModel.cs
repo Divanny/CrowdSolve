@@ -19,11 +19,17 @@ namespace CrowdSolve.Server.Models
         public DateTime FechaLimite { get; set; }
         [Required(ErrorMessage = "Debe especificar las categorías")]
         public List<DesafiosCategoria>? Categorias { get; set; }
-        public List<Soluciones>? Soluciones { get; set; }
+        public List<SolucionesModel>? Soluciones { get; set; }
         public DateTime? FechaRegistro { get; set; }
         [Required(ErrorMessage = "Debe especificar el proceso de evaluación del desafío")]
         public List<ProcesoEvaluacion>? ProcesoEvaluacion { get; set; }
+        public int? idProceso { get; set; }
         public int? idEstatusDesafio { get; set; }
         public string? EstatusDesafio { get; set; }
+        public string? SeveridadEstatusDesafio { get; set; }
+        public string? IconoEstatusDesafio { get; set; }
+        public bool? YaParticipo { get; set; }
+        public int Participaciones { get; set; }
+        public int SolucionesPendientes { get; set; }
     }
 }

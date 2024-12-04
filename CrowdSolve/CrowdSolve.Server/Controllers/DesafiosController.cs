@@ -16,6 +16,9 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly DesafiosRepo _desafiosRepo;
+        private readonly SolucionesRepo _solucionesRepo;
+        private readonly CategoriasRepo _categoriasRepo;
+        private readonly HistorialCambioEstatusRepo _historialCambioEstatusRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly EmpresasRepo _empresasRepo;
         private readonly Mailing _mailingService;
@@ -26,14 +29,18 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
+        /// <param name="mailing"></param>
         public DesafiosController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
+            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
+            _categoriasRepo = new CategoriasRepo(crowdSolveContext);
+            _historialCambioEstatusRepo = new HistorialCambioEstatusRepo(crowdSolveContext);
             _mailingService = mailing;
         }
 
@@ -46,6 +53,31 @@ namespace CrowdSolve.Server.Controllers
         public List<DesafiosModel> Get()
         {
             List<DesafiosModel> desafios = _desafiosRepo.Get().ToList();
+            desafios.ForEach(desafio =>
+            {
+                desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+                desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+                desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
+            });
+
+            return desafios;
+        }
+
+        /// <summary>
+        /// Obtiene todos los desafíos validados.
+        /// </summary>
+        /// <returns>Lista de desafíos validados.</returns>
+        [HttpGet("GetDesafiosValidados", Name = "GetDesafiosValidados")]
+        public List<DesafiosModel> GetDesafiosValidados()
+        {
+            List<DesafiosModel> desafios = _desafiosRepo.GetDesafiosValidados().ToList();
+            desafios.ForEach(desafio =>
+            {
+                desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+                desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+                desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
+            });
+
             return desafios;
         }
 
@@ -55,15 +87,32 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="idDesafio">ID del desafío.</param>
         /// <returns>Desafío encontrado.</returns>
         [HttpGet("{idDesafio}", Name = "GetDesafio")]
-        [Authorize]
         public IActionResult Get(int idDesafio)
         {
-            DesafiosModel? desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+            DesafiosModel? desafio = _desafiosRepo.GetDesafiosValidados(x => x.idDesafio == idDesafio).FirstOrDefault();
 
             if (desafio == null)
             {
                 return NotFound("Desafío no encontrado");
             }
+
+            if (_idUsuarioOnline != 0)
+            {
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
+
+                if (usuario == null)
+                {
+                    return NotFound("Usuario no encontrado");
+                }
+
+                var solucion = _solucionesRepo.Get(x => x.idDesafio == idDesafio && x.idUsuario == _idUsuarioOnline).FirstOrDefault();
+
+                desafio.YaParticipo = solucion != null;
+            }
+
+            desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
 
             return Ok(desafio);
         }
@@ -74,7 +123,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="desafioModel">Datos del desafio a crear.</param>
         /// <returns>Resultado de la operación.</returns>
         [HttpPost(Name = "SaveDesafio")]
-        [Authorize]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Crear_Desafio)]
         public OperationResult Post(DesafiosModel desafioModel)
         {
             try
@@ -128,7 +177,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="desafioModel">Datos del desafío a actualizar.</param>
         /// <returns>Resultado de la operación.</returns>
         [HttpPut(Name = "UpdateDesafio")]
-        [Authorize]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Editar_Desafio)]
         public OperationResult Put(DesafiosModel desafioModel)
         {
             try
@@ -225,7 +274,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Resultado de la operación</returns>
         [HttpPut("Rechazar/{idDesafio}", Name = "RechazarDesafio")]
         [Authorize]
-        public OperationResult RechazarDesafio(int idDesafio, string motivo )
+        public OperationResult RechazarDesafio(int idDesafio, string motivo)
         {
             try
             {
@@ -275,15 +324,145 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
-        [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
-        public object GetRelationalObjects()
+        /// <summary>
+        /// Obtiene la información de un desafío de la empresa actual.
+        /// </summary>
+        /// <param name="idDesafio"></param>
+        /// <returns></returns>
+        [HttpGet("GetMiDesafio/{idDesafio}", Name = "GetMiDesafio")]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Editar_Desafio, PermisosEnum.Empresa_Ver_Desafio, PermisosEnum.Empresa_Ver_Solucion_Desafio, PermisosEnum.Empresa_Ver_Soluciones_Desafio, PermisosEnum.Empresa_Dashboard)]
+        public IActionResult GetMiDesafio(int idDesafio)
         {
+            DesafiosModel? desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).Where(x => x.idUsuarioEmpresa == _idUsuarioOnline).FirstOrDefault();
+
+            if (desafio == null)
+            {
+                return NotFound("Desafío no encontrado");
+            }
+
+            if (_idUsuarioOnline != 0)
+            {
+                var usuario = _usuariosRepo.Get(_idUsuarioOnline);
+
+                if (usuario == null)
+                {
+                    return NotFound("Usuario no encontrado");
+                }
+
+                var solucion = _solucionesRepo.Get(x => x.idDesafio == idDesafio && x.idUsuario == _idUsuarioOnline).FirstOrDefault();
+
+                desafio.YaParticipo = solucion != null;
+            }
+
+            desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
+
+            return Ok(desafio);
+        }
+
+
+        /// <summary>
+        /// Indica si el usuario puede participar en el proceso de evaluación de un desafío.
+        /// </summary>
+        /// <param name="idDesafio"></param>
+        /// <returns></returns>
+        [HttpGet("PuedoEvaluar/{idDesafio}", Name = "PuedoEvaluarDesafio")]
+        public OperationResult PuedoEvaluarDesafio(int idDesafio)
+        {
+            try
+            {
+                if (_idUsuarioOnline == 0) return new OperationResult(false, "Debe iniciar sesión para validar el desafío");
+                return _desafiosRepo.ValidarUsuarioPuedeEvaluar(idDesafio, _idUsuarioOnline);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Cambia el estatus de un desafío
+        /// </summary>
+        /// <param name="idDesafio"></param>
+        /// <param name="cambioEstatusModel"></param>
+        /// <returns></returns>
+        [HttpPut("CambiarEstatus/{idDesafio}", Name = "CambiarEstatusDesafio")]
+        [Authorize]
+        public OperationResult CambiarEstatus(int idDesafio, CambioEstatusModel cambioEstatusModel)
+        {
+            try
+            {
+                var desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+
+                if (desafio == null) return new OperationResult(false, "Este desafío no se ha encontrado");
+
+                if (cambioEstatusModel == null)
+                    return new OperationResult(false, "No se ha especificado la información del nuevo estatus");
+
+                _desafiosRepo.CambiarEstatus(idDesafio, (EstatusProcesoEnum)cambioEstatusModel.idEstatusProceso, cambioEstatusModel.MotivoCambioEstatus);
+
+                return new OperationResult(true, "Se ha cambiado el estatus al desafío exitosamente");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el historial de cambios de estatus de un desafío
+        /// </summary>
+        /// <param name="idDesafio"></param>
+        /// <returns></returns>
+        [HttpGet("HistorialCambioEstatus/{idDesafio}", Name = "HistorialCambioEstatus")]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Ver_Desafio)]
+        public List<HistorialCambioEstatusModel> HistorialCambioEstatus(int idDesafio)
+        {
+            var desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+
+            if (desafio == null) return new List<HistorialCambioEstatusModel>();
+            
+            return _historialCambioEstatusRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
+        }
+
+        [HttpGet("GetRanking/{idDesafio}", Name = "GetRankingDesafio")]
+        [Authorize]
+        public List<SolucionesModel> GetRanking(int idDesafio)
+        {
+            var desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+
+            if (desafio == null) return new List<SolucionesModel>();
+
+            return _desafiosRepo.GetRanking(idDesafio).ToList();
+        }
+
+        [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
+        public object GetRelationalObjects(bool allEstatuses = false)
+        {
+            List<int> estatusProcesoEnums = new List<int>();
+
+            if (!allEstatuses)
+            {
+                estatusProcesoEnums = new List<int>
+                {
+                    (int)EstatusProcesoEnum.Desafío_Sin_iniciar, //// ELIMINAR ESTE ESTATUS
+                    (int)EstatusProcesoEnum.Desafío_En_progreso,
+                    (int)EstatusProcesoEnum.Desafío_En_evaluación,
+                    (int)EstatusProcesoEnum.Desafío_En_espera_de_entrega_de_premios,
+                    (int)EstatusProcesoEnum.Desafío_Finalizado
+                };
+            }
+
             return new
             {
                 Categorias = _desafiosRepo.GetCategorias(),
                 TiposEvaluacion = _desafiosRepo.GetTiposEvaluacion(),
-                EstatusDesafios = _desafiosRepo.GetEstatusDesafios(),
+                EstatusDesafios = (allEstatuses) ? _desafiosRepo.GetEstatusDesafios() : _desafiosRepo.GetEstatusDesafios().Where(x => estatusProcesoEnums.Contains(x.idEstatusProceso)),
             };
         }
+
     }
 }

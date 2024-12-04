@@ -21,5 +21,15 @@ namespace CrowdSolve.Server.Models
 
         [EmailAddress(ErrorMessage = "El campo Correo Electrónico no es una dirección de correo válida")]
         public string? CorreoElectronico { get; set; }
+
+        public int? idUsuarioAsignado { get; set; }
+
+        public string? NombreAsignado { get; set; }
+
+        public bool AsignadoAMi {  get; set; }
+
+        public int ? idEstatusProceso { get; set; }
+
+        public string? EstatusProcesoNombre { get; set; }
     }
 }

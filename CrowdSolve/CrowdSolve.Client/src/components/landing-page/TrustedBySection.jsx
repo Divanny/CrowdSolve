@@ -1,10 +1,11 @@
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import AutoScroll from 'embla-carousel-auto-scroll';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from '@/components/ui/carousel';
+} from "@/components/ui/carousel";
+import AutoScroll from "embla-carousel-auto-scroll";
 import { useTranslation } from 'react-i18next';
 
 const logos = [
@@ -50,7 +51,11 @@ const logos = [
   },
 ];
 
-const TrustedBySection = () => {
+export default function TrustedBySection() {
+  const plugin = useRef(
+    AutoScroll({ playOnInit: true, speed: 2 })
+  );
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -73,6 +78,11 @@ const TrustedBySection = () => {
   };
   const { t } = useTranslation();
 
+  const fadeEdgeStyle = {
+    maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+    WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+  };
+
   return (
     
     <motion.section
@@ -82,49 +92,39 @@ const TrustedBySection = () => {
       viewport={{ once: true, amount: 0.2 }}
       variants={containerVariants}
     >
-      <motion.div className="container flex flex-col items-center text-center" variants={itemVariants}>
-        <motion.h1 className="my-6 text-pretty text-2xl font-bold lg:text-4xl" variants={itemVariants}>
-        {t('TrustedBysection.title')}
-        </motion.h1>
-      </motion.div>
-      <motion.div className="pt-10 md:pt-16 lg:pt-20" variants={itemVariants}>
-        <div className="relative mx-auto flex items-center justify-center lg:max-w-5xl w-full overflow-hidden">
+      <div className="container px-4 md:px-6">
+        <motion.div className="container flex flex-col items-center text-center" variants={itemVariants}>
+          <motion.h1 className="my-6 text-pretty text-2xl font-bold lg:text-4xl" variants={itemVariants}>
+          {t('TrustedBysection.title')}
+          </motion.h1>
+        </motion.div>
+        <motion.div className="pt-10 md:pt-16 lg:pt-20" variants={itemVariants} style={fadeEdgeStyle}>
           <Carousel
-            opts={{ loop: true }}
-            plugins={[AutoScroll({ playOnInit: true })]}
+            opts={{
+              align: "start",
+              loop: true,
+              skipSnaps: false,
+              inViewThreshold: 0.7,
+            }}
+            plugins={[plugin.current]}
+            className="w-full"
           >
-            <CarouselContent className="ml-0">
-              {logos.map((logo) => (
-                <CarouselItem
-                  key={logo.id}
-                  className="basis-1/3 pl-0 sm:basis-1/4 md:basis-1/5 lg:basis-1/6"
-                >
-                  <motion.div 
-                    className="mx-10 flex shrink-0 items-center justify-center"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <div>
-                      <motion.img
-                        src={logo.image}
-                        alt={logo.description}
-                        className="h-7 w-auto"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                      />
-                    </div>
-                  </motion.div>
+            <CarouselContent>
+              {logos.concat(logos).map((logo, index) => (
+                <CarouselItem key={`${logo.id}-${index}`} className="md:basis-1/4 lg:basis-1/5">
+                  <div className="p-1">
+                    <img
+                      src={logo.image}
+                      alt={logo.description}
+                      className="mx-auto h-12 w-32 object-contain"
+                    />
+                  </div>
                 </CarouselItem>
               ))}
             </CarouselContent>
           </Carousel>
-          <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-accent to-transparent"></div>
-          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-accent to-transparent"></div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </motion.section>
   );
-};
-
-export default TrustedBySection;
+}

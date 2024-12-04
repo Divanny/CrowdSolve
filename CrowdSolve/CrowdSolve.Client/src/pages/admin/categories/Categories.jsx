@@ -110,6 +110,7 @@ export default function Categories() {
                   src={`/placeholder.svg?height=40&width=40`}
                   alt={row.getValue("icono")}
                 />
+                <AvatarFallback>{row.getValue("icono")}</AvatarFallback>
               </Avatar>
               <span>{row.getValue("icono")}</span>
             </div>
@@ -200,14 +201,6 @@ export default function Categories() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const globalFilterFn = (row, columnId, filterValue) => {
-    const searchableColumns = ["nombre"];
-    if (searchableColumns.includes(columnId)) {
-      const value = row.getValue(columnId);
-      return value && String(value).toLowerCase().includes(String(filterValue).toLowerCase());
-    }
-    return true;
-  };
 
   const table = useReactTable({
     data,
@@ -219,8 +212,16 @@ export default function Categories() {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
-    globalFilterFn,
+    globalFilterFn: (row, columnId, filterValue) => {
+        const value = row.getValue(columnId);
+        return value != null
+          ? String(value)
+              .toLowerCase()
+              .includes(String(filterValue).toLowerCase())
+          : false;
+      },
     state: {
       sorting,
       columnFilters,
@@ -257,7 +258,9 @@ export default function Categories() {
             placeholder={t('Categories.table.searchPlaceholder')}
             value={globalFilter ?? ""}
             onChange={(event) => {
-                setGlobalFilter(event.target.value)
+                const value = event.target.value;
+                setGlobalFilter(value);
+                table.setGlobalFilter(value);
                 console.log("Filtro global:", globalFilter);
                 console.log("Filas visibles:", table.getRowModel().rows);
             }}

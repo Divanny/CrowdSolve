@@ -34,7 +34,7 @@ function GoogleLoginButton() {
                 } else if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
                     navigate("/sign-up/complete");
                 } else {
-                    navigate("/");
+                    navigate(-1);
                 }
 
                 toast.success("Operación exitosa", {
