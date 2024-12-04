@@ -241,6 +241,10 @@
     "ChallengeChallengeHeader": true,
     "AdminCompaniesSolutionsValidation": true,
     "ChallengeChallengeTimeline": true,
-    "ChallengeSolutionRanking": true
+    "ChallengeSolutionRanking": true,
+    "ParticipantsParticipantFormDialog": true,
+    "ParticipantsProfileInfo": true,
+    "ParticipantsSolutionsOverview": true,
+    "ParticipantsStatsOverview": true
   }
 }
