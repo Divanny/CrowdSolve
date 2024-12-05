@@ -30,6 +30,7 @@ import {
 
 import { PhoneInput } from "@/components/ui/phone-input";
 import { useTranslation } from 'react-i18next';
+import AvatarPicker from "@/components/ui/avatar-picker";
 
 const RegistroParticipante = () => {
     const { t } = useTranslation();
@@ -49,6 +50,7 @@ const RegistroParticipante = () => {
         telefono: "",
         descripcionPersonal: "",
         idNivelEducativo: 0,
+        avatar: null,
     });
 
     useEffect(() => {
@@ -86,8 +88,17 @@ const RegistroParticipante = () => {
 
         formData.fechaNacimiento = format(formData.fechaNacimiento, "yyyy-MM-dd");
 
+        const formDataToSend = new FormData();
+        Object.keys(formData).forEach(key => {
+            formDataToSend.append(key, formData[key]);
+        });
+
         try {
-            const response = await api.post("api/Participantes", formData);
+            const response = await api.post("api/Participantes", formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
 
             if (response.data.success) {
                 navigate("/");
@@ -96,7 +107,7 @@ const RegistroParticipante = () => {
 
                 if (data) {
                     dispatch(setUser({
-                        user: { ...data.usuario},
+                        user: { ...data.usuario },
                         token: token,
                         views: Array.isArray(data.vistas) ? data.vistas : []
                     }));
@@ -117,6 +128,9 @@ const RegistroParticipante = () => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-2">
+            <div className="space-y-2">
+                <AvatarPicker avatar={formData.avatar} onAvatarChange={(value) => setFormData((prevData) => ({ ...prevData, avatar: value }))} />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="nombres">{t('RegistroParticipante.nombres')}</Label>
@@ -176,8 +190,8 @@ const RegistroParticipante = () => {
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="telefono">{t('RegistroParticipante.telefono')}</Label>
-                    <PhoneInput 
-                        placeholder="Ingrese su teléfono" 
+                    <PhoneInput
+                        placeholder="Ingrese su teléfono"
                         id="telefono"
                         name="telefono"
                         type="tel"
@@ -194,7 +208,7 @@ const RegistroParticipante = () => {
                     value={formData.idNivelEducativo}
                 >
                     <SelectTrigger>
-                        <SelectValue placeholder="Seleccione">{formData.idNivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == formData.idNivelEducativo).nombre : "Seleccione un nivel educativo"}</SelectValue>                        
+                        <SelectValue placeholder="Seleccione">{formData.idNivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == formData.idNivelEducativo).nombre : "Seleccione un nivel educativo"}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                         {relationalObjects.nivelesEducativos && relationalObjects.nivelesEducativos.map((ne) => (
