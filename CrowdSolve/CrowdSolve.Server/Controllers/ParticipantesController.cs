@@ -19,6 +19,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly EmpresasRepo _empresasRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly SolucionesRepo _solucionesRepo;
+        private readonly FirebaseStorageService _firebaseStorageService;
 
         /// <summary>
         /// Constructor de la clase ParticipantesController.
@@ -26,7 +27,8 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
-        public ParticipantesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger)
+        /// <param name="firebaseStorageService"></param>
+        public ParticipantesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseStorageService firebaseStorageService)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
@@ -35,6 +37,7 @@ namespace CrowdSolve.Server.Controllers
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
+            _firebaseStorageService = firebaseStorageService;
         }
 
         /// <summary>
@@ -87,6 +90,12 @@ namespace CrowdSolve.Server.Controllers
                 usuario.idPerfil = (int)PerfilesEnum.Participante;
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
 
+                if (ParticipantesModel.Avatar != null)
+                {
+                    var logoUrl = _firebaseStorageService.UploadFileAsync(ParticipantesModel.Avatar.OpenReadStream(), $"profile-pictures/{usuario.NombreUsuario}/avatar.jpeg", ParticipantesModel.Avatar.ContentType).Result;
+                    usuario.AvatarURL = logoUrl;
+                }
+
                 _usuariosRepo.Edit(usuario);
 
                 var created = _participantesRepo.Add(ParticipantesModel);
@@ -122,6 +131,13 @@ namespace CrowdSolve.Server.Controllers
                 if (ParticipantesModel.NombreUsuario != usuario.NombreUsuario && _usuariosRepo.Any(x => x.NombreUsuario == ParticipantesModel.NombreUsuario)) return new OperationResult(false, "Este usuario ya existe en el sistema");
                 if (ParticipantesModel.CorreoElectronico != usuario.CorreoElectronico && _usuariosRepo.Any(x => x.CorreoElectronico == ParticipantesModel.CorreoElectronico)) return new OperationResult(false, "Este correo electrónico ya está registrado");
 
+                if (ParticipantesModel.Avatar != null)
+                {
+                    var logoUrl = _firebaseStorageService.UploadFileAsync(ParticipantesModel.Avatar.OpenReadStream(), $"profile-pictures/{usuario.NombreUsuario}/avatar.jpeg", ParticipantesModel.Avatar.ContentType).Result;
+                    usuario.AvatarURL = logoUrl;
+                    _usuariosRepo.Edit(usuario);
+                }
+
                 _participantesRepo.Edit(ParticipantesModel);
                 _logger.LogHttpRequest(ParticipantesModel);
                 return new OperationResult(true, "Se ha editado la información del participante exitosamente", Participante);
@@ -154,7 +170,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns></returns>
         [HttpPut("MiPerfil", Name = "UpdatePerfilParticipante")]
         [Authorize]
-        public OperationResult MiPerfil(ParticipantesModel participantesModel)
+        public OperationResult MiPerfil([FromBody]ParticipantesModel participantesModel)
         {
             try
             {
@@ -163,6 +179,16 @@ namespace CrowdSolve.Server.Controllers
                 if (Participante == null) return new OperationResult(false, "Este participante no se ha encontrado");
                 if (participantesModel.idParticipante != Participante.idParticipante) return new OperationResult(false, "No tiene permisos para editar este perfil");
 
+                var usuario = _usuariosRepo.Get(participantesModel.idUsuario);
+                if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+
+                if (participantesModel.Avatar != null)
+                {
+                    var logoUrl = _firebaseStorageService.UploadFileAsync(participantesModel.Avatar.OpenReadStream(), $"profile-pictures/{usuario.NombreUsuario}/avatar.jpeg", participantesModel.Avatar.ContentType).Result;
+                    usuario.AvatarURL = logoUrl;
+                }
+
+                _usuariosRepo.Edit(usuario);
                 _participantesRepo.Edit(participantesModel);
 
                 _logger.LogHttpRequest(participantesModel);
@@ -179,7 +205,7 @@ namespace CrowdSolve.Server.Controllers
         [Authorize]
         public object GetRelationalObjects()
         {
-            var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>(); 
+            var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>();
             var estatusUsuarios = _usuariosRepo.GetEstatusUsuarios();
 
             return new

@@ -27,20 +27,6 @@ const SolutionRanking = ({ idDesafio }) => {
     const fetchRanking = async () => {
         try {
             const response = await api.get(`/api/Desafios/GetRanking/${idDesafio}`)
-
-            for (const solucion of response.data) {
-                try {
-                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${solucion.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                    if (responseAvatarURL.status == 200) {
-                        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                        solucion.avatarUrl = URL.createObjectURL(avatarBlob)
-                    }
-                }
-                catch {
-                    solucion.avatarUrl = null
-                }
-            }
-
             setSolutions(response.data)
         } catch (error) {
             toast.error("Error al cargar el ranking", {
@@ -153,7 +139,7 @@ const SolutionRanking = ({ idDesafio }) => {
                             <TableCell className="w-48">
                                 <div className="flex items-center space-x-2">
                                     <Avatar>
-                                        <AvatarImage src={solucion.avatarUrl || `https://robohash.org/${solucion.nombreUsuario}`} alt={solucion.nombreUsuario} />
+                                        <AvatarImage src={`/api/Account/GetAvatar/${solucion.idUsuario}`} alt={solucion.nombreUsuario} />
                                         <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                     <span>{solucion.nombreUsuario}</span>
@@ -182,7 +168,7 @@ const SolutionRanking = ({ idDesafio }) => {
                                             <div className="md:col-span-2 space-y-6">
                                                 <div className="flex items-center space-x-4">
                                                     <Avatar className="w-16 h-16">
-                                                        <AvatarImage src={solucionSeleccionada?.avatarUrl || `https://robohash.org/${solucionSeleccionada?.nombreUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
+                                                        <AvatarImage src={`/api/Account/GetAvatar/${solucionSeleccionada?.idUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
                                                         <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
                                                     </Avatar>
                                                     <div>

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { Button } from "@/components/ui/button"
@@ -12,29 +11,11 @@ import {
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
 import { useTranslation } from 'react-i18next';
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import useAxios from '@/hooks/use-axios';
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const { api } = useAxios();
     const user = useSelector((state) => state.user.user);
     const { t } = useTranslation();
-    const [avatarUrl, setAvatarUrl] = useState(null);
-
-    useEffect(() => {
-        const fetchAvatar = async () => {
-            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
-            if (responseAvatarURL.status == 200) {
-                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                const avatarUrl = URL.createObjectURL(avatarBlob)
-                setAvatarUrl(avatarUrl);
-            }
-        }
-
-        if (user) {
-            fetchAvatar();
-        }
-    }, [user]);
 
     const theme = useSelector((state) => state.theme.theme);
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
@@ -51,10 +32,10 @@ const Navbar = () => {
                     <SidebarTrigger className="lg:hidden" />
                     <div className="hidden lg:flex flex-grow items-center justify-end gap-8">
                         <div className="flex items-center gap-2">
-                            <Button onClick={() => navigate('/about-us')} variant="ghost">Sobre nosotros</Button>
-                            <Button onClick={() => navigate('/challenges')} variant="ghost">Desafíos</Button>
-                            <Button onClick={() => navigate('/companies')} variant="ghost">Empresas</Button>
-                            <Button onClick={() => navigate('/contact-us')} variant="ghost">Contáctanos</Button>
+                            <Button onClick={() => navigate('/about-us')} variant="ghost">{t('navbar.links.aboutUs')}</Button>
+                            <Button onClick={() => navigate('/challenges')} variant="ghost">{t('navbar.links.challenges')}</Button>
+                            <Button onClick={() => navigate('/companies')} variant="ghost">{t('navbar.links.companies')}</Button>
+                            <Button onClick={() => navigate('/contact-us')} variant="ghost">{t('navbar.links.contactUs')}</Button>
                         </div>
 
                         {user ? (
@@ -62,16 +43,16 @@ const Navbar = () => {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Avatar className="cursor-pointer bg-accent" size="1">
-                                            <AvatarImage src={(user) ? avatarUrl : `https://robohash.org/${user.nombreUsuario}`} />
-                                            <AvatarFallback>{user[0]}</AvatarFallback>
+                                            <AvatarImage src={(user) ? `/api/Account/GetAvatar/${user.idUsuario}` : `https://robohash.org/${user.nombreUsuario}`} />
+                                            <AvatarFallback>{user.nombreUsuario[0]}</AvatarFallback>
                                         </Avatar>
                                     </DropdownMenuTrigger>
                                     <ProfileDropdownMenuContent user={user} />
                                 </DropdownMenu>
                             </div>
                         ) : (<div className='flex items-center gap-2'>
-                            <Button className="my-1 text-sm" variant="outline" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
-                            <Button className="my-1 text-sm" onClick={() => navigate('/sign-up')}>Registrarse</Button>
+                            <Button className="my-1 text-sm" variant="outline" onClick={() => navigate('/sign-in')}>{t('navbar.auth.signIn')}</Button>
+                            <Button className="my-1 text-sm" onClick={() => navigate('/sign-up')}>{t('navbar.auth.signUp')}</Button>
                         </div>)}
                     </div>
                 </div>

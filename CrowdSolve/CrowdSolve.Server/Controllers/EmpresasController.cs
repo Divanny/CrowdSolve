@@ -292,7 +292,7 @@ namespace CrowdSolve.Server.Controllers
 
             return new
             {
-                cantidadEmpresa=empresas,
+                cantidadEmpresa = empresas,
                 tamañosEmpresa = tamañosEmpresas,
                 sectores = sectoresEmpresas
             };

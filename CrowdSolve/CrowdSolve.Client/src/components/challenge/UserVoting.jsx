@@ -20,7 +20,6 @@ const UserVoting = ({ initialSolutions }) => {
     const [loadingSaveMeGusta, setLoadingSaveMeGusta] = useState(false)
 
     useEffect(() => {
-        // Sort solutions only once when the component mounts or when initialSolutions changes
         const sortedSolutions = [...initialSolutions].sort((a, b) => b.cantidadVotos - a.cantidadVotos)
         setSolutions(sortedSolutions)
     }, [initialSolutions])
@@ -121,7 +120,7 @@ const UserVoting = ({ initialSolutions }) => {
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
                         <div className="flex items-center gap-3 mb-4 sm:mb-0">
                             <Avatar className="h-10 w-10">
-                                <AvatarImage src={solution.avatarUrl || `https://robohash.org/${solution.nombreUsuario}`} alt={solution.nombreUsuario} />
+                                <AvatarImage src={`/api/Account/GetAvatar/${solution.idUsuario}`} alt={solution.nombreUsuario} />
                                 <AvatarFallback>{solution.nombreUsuario.charAt(0)}</AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col">
