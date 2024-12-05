@@ -33,6 +33,7 @@ const RolesAndPermissions = lazy(() => import('@/pages/admin/RolesAndPermissions
 const CompanyRequest = lazy(() => import('@/pages/admin/Requests/CompanyRequests'));
 const SupportRequest = lazy(() => import('@/pages/admin/Requests/SupportRequests'));
 const ChallengeEvaluation = lazy(() => import('@/pages/challenges/ChallengeEvaluation'));
+const AdminDashboard=lazy(() => import('@/pages/admin/AdminDashboard'));
 const CompanyDashboard = lazy(() => import('@/pages/company/CompanyDashboard'));
 const CompanyChallenge = lazy(() => import('@/pages/company/CompanyChallenge'));
 const MySolutions = lazy(() => import('@/pages/participant/MySolutions'));
@@ -58,6 +59,7 @@ const AppRoutes = () => (
       <Route path="/privacy-policy" element={<LazyComponent component={PrivacyPolicy} />} />
       <Route path="/usage-policy" element={<LazyComponent component={UsagePolicy} />} />
       <Route path="*" element={<LazyComponent component={NotFound} />} />
+
     </Route>
     <Route path="/sign-in" element={<LazyComponent component={SignIn} />} />
     <Route path="/sign-up" element={<LazyComponent component={SignUp} />} />
@@ -70,7 +72,7 @@ const AppRoutes = () => (
       <Route path="/company/pending-verification" element={<LazyComponent component={VerificationPending} />} handle={{ permission: () => PermisosEnum.Empresa_Pendiente_Verificacion }} />
       {/* Administration */}
       <Route path="/admin" element={<AdminLayout />} >
-        <Route index element={<div>Admin Dashboard</div>} handle={{ permission: () => PermisosEnum.Administrador_Dashboard}} />
+        <Route index element={<LazyComponent component={AdminDashboard} />} handle={{ permission: () => PermisosEnum.Administrador_Dashboard}} />
         <Route path="participants" element={<LazyComponent component={Participants} />} handle={{ permission: () => PermisosEnum.Administrar_Participantes}} />
         <Route path="categories" element={<LazyComponent component={Categories} />} handle={{ permission: () => PermisosEnum.Administrar_Categorias}} />
         <Route path="challenges" element={<LazyComponent component={ChallengeRequest} />} handle={{ permission: () => PermisosEnum.Solicitudes_Desafíos}} />

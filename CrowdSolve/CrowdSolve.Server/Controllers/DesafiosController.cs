@@ -409,6 +409,17 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
+        /// Obtiene la cantidad de desafios existentes
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet ("DesafioDashboardData",Name ="DesafioDashboardData")]
+        public object GetDashboardData()
+        {
+            var desafios= _desafiosRepo.Get().Count();
+            return desafios;
+        }
+
+        /// <summary>
         /// Obtiene el historial de cambios de estatus de un desafío
         /// </summary>
         /// <param name="idDesafio"></param>
@@ -444,7 +455,6 @@ namespace CrowdSolve.Server.Controllers
             {
                 estatusProcesoEnums = new List<int>
                 {
-                    (int)EstatusProcesoEnum.Desafío_Sin_iniciar, //// ELIMINAR ESTE ESTATUS
                     (int)EstatusProcesoEnum.Desafío_En_progreso,
                     (int)EstatusProcesoEnum.Desafío_En_evaluación,
                     (int)EstatusProcesoEnum.Desafío_En_espera_de_entrega_de_premios,

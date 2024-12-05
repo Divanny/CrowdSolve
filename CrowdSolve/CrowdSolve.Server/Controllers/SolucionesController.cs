@@ -487,6 +487,18 @@ namespace CrowdSolve.Server.Controllers
             return soluciones;
         }
 
+        [HttpGet("GetCantidadSoluciones", Name = "GetCantidadSoluciones")]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
+        public object GetCantidadSoluciones()
+        {
+            var soluciones = _solucionesRepo.Get().Count();
+
+            return new
+            {
+                soluciones
+            };
+        }
+
         /// <summary>
         /// Cambia el estatus de una solución
         /// </summary>
