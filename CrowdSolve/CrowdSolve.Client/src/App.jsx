@@ -8,6 +8,7 @@ import { useLanguage } from './i18n';
 function App() {
   const theme = useSelector((state) => state.theme.theme);
   const isLoading = useSelector((state) => state.loading.isLoading);
+  
   useLanguage();
 
   useEffect(() => {

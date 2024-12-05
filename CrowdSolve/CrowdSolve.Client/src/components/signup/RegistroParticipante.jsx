@@ -167,7 +167,7 @@ const RegistroParticipante = () => {
                                 name="fechaNacimiento"
                                 variant={"outline"}
                                 className={cn(
-                                    "w-full justify-start text-left font-normal bg-accent",
+                                    "w-full justify-start text-left font-normal",
                                     !formData.fechaNacimiento && "text-muted-foreground"
                                 )}
                             >

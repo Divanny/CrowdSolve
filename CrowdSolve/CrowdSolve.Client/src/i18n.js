@@ -1,7 +1,7 @@
-
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import es from './es.json';
 import en from './en.json';
 
@@ -23,7 +23,10 @@ i18n
 
 export const useLanguage = () => {
   const language = useSelector((state) => state.language.language);
-  i18n.changeLanguage(language);
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
 };
 
 export default i18n;
