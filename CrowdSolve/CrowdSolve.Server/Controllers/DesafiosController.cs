@@ -372,6 +372,15 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        [HttpGet ("DesafioDashboardData",Name ="DesafioDashboardData")]
+        public object GetDashboardData()
+        {
+
+            var desafios= _desafiosRepo.Get().Count();
+
+            return desafios;
+        }
+
         [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
         public object GetRelationalObjects(bool allEstatuses = false)
         {

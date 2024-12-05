@@ -5,6 +5,7 @@ using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CrowdSolve.Server.Controllers
 {
@@ -260,6 +261,50 @@ namespace CrowdSolve.Server.Controllers
                 throw;
             }
         }
+
+        [HttpGet("CantidadEmpresas")]
+        public object GetCantidadEmpresa()
+        {
+            var empresas = _crowdSolveContext.Set<Empresas>().Count();
+            
+
+          var sectoresEmpresas = _crowdSolveContext.Set<Sectores>().Select(s=>new
+          {
+              s.idSector,
+              s.Nombre,
+              CantidadSector= _crowdSolveContext.Set<Empresas>().Count(e=>e.idSector==s.idSector)
+          }).ToList();
+
+            var tamañosEmpresas = _crowdSolveContext.Set<TamañosEmpresa>()
+                .Select(t => new
+                {
+                    t.idTamañoEmpresa,
+                    t.Nombre,
+                    CantidadTamaño = _crowdSolveContext.Set<Empresas>()
+                        .Count(e => e.idTamañoEmpresa == t.idTamañoEmpresa)
+                })
+                .ToList();
+
+            return new
+            {
+                cantidadEmpresa=empresas,
+                tamañosEmpresa = tamañosEmpresas,
+                sectores = sectoresEmpresas
+            };
+        }
+
+        [HttpGet("GetEmpresasOrdenDesafios",Name = "GetEmpresasOrdenDesafios")]
+        //[Authorize]
+        //[AuthorizeByPermission(PermisosEnum.Ver_Empresas)]
+        public List<EmpresasModel> GetInOrder()
+        {
+            // Obtén las empresas y ordénalas por 'cantidadDesafios' en orden descendente
+            List<EmpresasModel> empresas = _empresasRepo.Get()
+                .OrderByDescending(e => e.CantidadDesafios)
+                .ToList();
+            return empresas;
+        }
+
 
         [HttpGet("GetRelationalObjects")]
         public object GetRelationalObjects()

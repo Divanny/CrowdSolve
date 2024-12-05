@@ -238,6 +238,11 @@
     "LayoutAppSidebar": true,
     "ChallengeCompanyEvaluation": true,
     "ChallengeUserVoting": true,
-    "ChallengeChallengeHeader": true
+    "ChallengeChallengeHeader": true,
+    "DashboardCalendarDateRangePicker": true,
+    "DashboardOverview": true,
+    "DashboardPieChartWithNumber": true,
+    "DashboardRecentSales": true,
+    "DashboardPieChartCompany": true
   }
 }

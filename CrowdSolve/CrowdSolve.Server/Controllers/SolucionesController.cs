@@ -473,6 +473,19 @@ namespace CrowdSolve.Server.Controllers
             return soluciones;
         }
 
+        [HttpGet("GetCantidadSoluciones", Name = "GetCantidadSoluciones")]
+        [Authorize]
+        public object GetCantidadSoluciones()
+        {
+            var soluciones = _solucionesRepo.Get().Count();
+
+            return new
+            {
+                soluciones=soluciones,
+            };
+
+        }
+
         private bool IsLastPart(IHeaderDictionary headers)
         {
             int isLastPart;

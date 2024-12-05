@@ -44,7 +44,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             idSector = e.idSector,
                             Sector = Sector.Nombre,
                             idEstatusUsuario = Usuario.idEstatusUsuario,
-                            EstatusUsuario = EstatusUsuario.Nombre
+                            EstatusUsuario = EstatusUsuario.Nombre,
+                            CantidadDesafios = dbContext.Set<Desafios>().Count(x => x.idEmpresa == e.idEmpresa),
                         });
             }
         )

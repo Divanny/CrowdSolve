@@ -17,7 +17,10 @@ namespace CrowdSolve.Server.Controllers
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
-        
+        private readonly ParticipantesRepo _participantesRepo;
+        private readonly EmpresasRepo _empresasRepo;
+
+
         /// <summary>
         /// Constructor de la clase UsuariosController.
         /// </summary>
@@ -31,6 +34,8 @@ namespace CrowdSolve.Server.Controllers
             _crowdSolveContext = crowdSolveContext;
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _perfilesRepo = new PerfilesRepo(crowdSolveContext);
+            _participantesRepo = new ParticipantesRepo(crowdSolveContext);
+            _empresasRepo = new EmpresasRepo(crowdSolveContext);
         }
 
         /// <summary>
@@ -146,6 +151,25 @@ namespace CrowdSolve.Server.Controllers
         public List<EstatusUsuarios> GetEstatusUsuarios()
         {
             return _usuariosRepo.GetEstatusUsuarios();
+        }
+
+        [HttpGet("GetCantidadUsuarios", Name = "GetCantidadUsuarios")]
+        [Authorize]
+        public object GetCantidadUsuarios()
+        {
+            var usuarios = _crowdSolveContext.Set<Usuarios>().Count(x=>x.idUsuario==1);
+            var usuariosPendientes= _crowdSolveContext.Set<Usuarios>().Count(x => x.idUsuario == 1003);
+            var usuariosParticipantes= _participantesRepo.Get().Count();
+            var usuariosEmpresas = _empresasRepo.Get().Count();
+
+            return new
+            {
+                usuarios = usuarios,
+                usuariosPendientesValidar=usuariosPendientes,
+                usuariosEmpresas= usuariosEmpresas,
+                usuariosParticipantes=usuariosParticipantes
+            };
+
         }
     }
 }
