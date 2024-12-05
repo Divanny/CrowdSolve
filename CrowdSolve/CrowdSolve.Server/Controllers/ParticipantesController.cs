@@ -75,7 +75,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Resultado de la operación.</returns>
         [HttpPost(Name = "SaveParticipante")]
         [Authorize]
-        public OperationResult Post(ParticipantesModel ParticipantesModel)
+        public OperationResult Post([FromForm] ParticipantesModel ParticipantesModel)
         {
             try
             {
@@ -86,6 +86,12 @@ namespace CrowdSolve.Server.Controllers
                 if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
                 if (usuario.idPerfil != (int)PerfilesEnum.Sin_perfil) return new OperationResult(false, "Este usuario no tiene permisos para registrarse como participante");
+
+                if (ParticipantesModel.FechaNacimiento > DateOnly.FromDateTime(DateTime.Now)) return new OperationResult(false, "La fecha de nacimiento no puede ser mayor a la fecha actual");
+                
+                var age = DateTime.Now.Year - ParticipantesModel.FechaNacimiento.Year;
+                if (ParticipantesModel.FechaNacimiento.ToDateTime(TimeOnly.MinValue) > DateTime.Now.AddYears(-age)) age--;
+                if (age < 14) return new OperationResult(false, "El participante debe tener al menos 14 años");
 
                 usuario.idPerfil = (int)PerfilesEnum.Participante;
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;

@@ -30,8 +30,8 @@ const Administrators = lazy(() => import('@/pages/admin/administrators/Administr
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
 const RolesAndPermissions = lazy(() => import('@/pages/admin/RolesAndPermissions'));
-const CompanyRequest = lazy(() => import('@/pages/admin/Requests/CompanyRequests'));
-const SupportRequest = lazy(() => import('@/pages/admin/Requests/SupportRequests'));
+const CompanyRequest = lazy(() => import('@/pages/admin/requests/CompanyRequests'));
+const SupportRequest = lazy(() => import('@/pages/admin/requests/SupportRequests'));
 const ChallengeEvaluation = lazy(() => import('@/pages/challenges/ChallengeEvaluation'));
 const AdminDashboard=lazy(() => import('@/pages/admin/AdminDashboard'));
 const CompanyDashboard = lazy(() => import('@/pages/company/CompanyDashboard'));
