@@ -18,6 +18,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly ParticipantesRepo _participantesRepo;
         private readonly EmpresasRepo _empresasRepo;
         private readonly UsuariosRepo _usuariosRepo;
+        private readonly SolucionesRepo _solucionesRepo;
 
         /// <summary>
         /// Constructor de la clase ParticipantesController.
@@ -33,6 +34,7 @@ namespace CrowdSolve.Server.Controllers
             _participantesRepo = new ParticipantesRepo(crowdSolveContext);
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
+            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
         }
 
         /// <summary>
@@ -129,6 +131,21 @@ namespace CrowdSolve.Server.Controllers
                 _logger.LogError(ex);
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Obtiene la información del perfil de un participante.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        [HttpGet("MiPerfil", Name = "GetMiPerfil")]
+        [AuthorizeByPermission(PermisosEnum.Mi_perfil)]
+        public ParticipantesModel MiPerfil()
+        {
+            var Participante = _participantesRepo.Get(x => x.idUsuario == _idUsuarioOnline).FirstOrDefault();
+            if (Participante == null) throw new Exception("Este participante no se ha encontrado");
+            Participante.Soluciones = _solucionesRepo.Get(x => x.idUsuario == _idUsuarioOnline && x.Publica == true).ToList();
+            return Participante;
         }
 
         /// <summary>

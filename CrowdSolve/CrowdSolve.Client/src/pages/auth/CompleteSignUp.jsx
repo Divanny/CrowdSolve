@@ -7,10 +7,12 @@ import { Card } from "@/components/ui/card";
 import RegistroParticipante from "@/components/signup/RegistroParticipante";
 import { Button } from "@/components/ui/button";
 import RegistroEmpresa from "@/components/signup/RegistroEmpresa";
+import { useTranslation } from 'react-i18next';
 
 function CompleteSignUp() {
   const { role } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const theme = useSelector((state) => state.theme.theme);
   const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
@@ -29,12 +31,12 @@ function CompleteSignUp() {
             </div>
             <div className="my-4 sm:my-6">
               <h1 className="text-xl sm:text-2xl font-semibold text-center mb-2">
-                { role == "company" ? 'Formulario de empresa' : "Formulario de participante" }
+                { role == "company" ? t('CompleteSignUp.companyForm') : t('CompleteSignUp.participantForm') }
               </h1>
             </div>
 
             <Button variant="link" className="text-xs" onClick={() => navigate(-1)}>
-              ← Volver a seleccionar rol
+            {t('CompleteSignUp.backToRoleSelection')}
             </Button>
 
             <Card className="p-4 sm:p-6">

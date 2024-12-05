@@ -13,10 +13,12 @@ import { Textarea } from "@/components/ui/textarea"
 import useAxios from "@/hooks/use-axios"
 import { toast } from "sonner";
 import AvatarPicker from "@/components/ui/avatar-picker";
+import { useTranslation } from 'react-i18next'
 
 export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }) {
   const { api } = useAxios();
   const [editedCategory, setEditedCategory] = useState(category)
+  const { t } = useTranslation();
 
   useEffect(() => {
     console.log(category);
@@ -41,9 +43,6 @@ export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }
         'Content-Type': 'application/json'
       }
     });
-
-  
-
 
     if (response.data.success) {
       toast.success("Operación exitosa", {
@@ -72,7 +71,7 @@ export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nombre">Nombre Categoria</Label>
+              <Label htmlFor="nombre">{t('CategoryFormdialog.nameLabel')}</Label>
               <Input
                 id="nombre"
                 name="nombre"
@@ -84,11 +83,11 @@ export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="descripcion">Descripción</Label>
+            <Label htmlFor="descripcion">{t('CategoryFormdialog.descriptionLabel')}</Label>
             <Textarea
               id="descripcion"
               name="descripcion"
-              placeholder="Ingrese una descripción"
+              placeholder={t('CategoryFormdialog.close')}
               value={editedCategory.descripcion}
               onChange={handleInputChange}
               rows={4}
@@ -100,11 +99,11 @@ export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }
         <DialogFooter>
           {mode === "edit" && (
             <Button type="submit" onClick={handleSave}>
-              Guardar cambios
+              {t('CategoryFormdialog.saveChanges')}
             </Button>
           )}
           <Button type="button" variant="secondary" onClick={onClose}>
-            Cerrar
+          {t('CategoryFormdialog.close')}
           </Button>
         </DialogFooter>
       </DialogContent>

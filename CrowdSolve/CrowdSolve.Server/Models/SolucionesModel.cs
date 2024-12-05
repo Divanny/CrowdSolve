@@ -30,6 +30,8 @@ public class SolucionesModel
     public int idEstatusProceso { get; set; }
 
     public string? EstatusProceso { get; set; }
+    public string? SeveridadEstatusProceso { get; set; }
+    public string? IconoEstatusProceso { get; set; }
 
     public bool? Publica { get; set; }
 
@@ -39,5 +41,15 @@ public class SolucionesModel
 
     public int? CantidadVotos { get; set; }
 
+    public int? CantidadVotosComunidad { get; set; }
+    
+    public int? CantidadVotosParticipantes { get; set; }
+
+    public int? PuntuacionFinal { get; set; }
+
+    public int? PuntuacionMaxima { get; set; }
+
+    public DesafiosModel? Desafio { get; set; }
+    
     public List<AdjuntosSoluciones>? Adjuntos { get; set; }
 }

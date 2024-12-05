@@ -7,6 +7,7 @@ using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.Json;
+using System.Reflection.Metadata.Ecma335;
 
 namespace CrowdSolve.Server.Controllers
 {
@@ -399,7 +400,7 @@ namespace CrowdSolve.Server.Controllers
 
                 if (solucion.idUsuario != _idUsuarioOnline) return new OperationResult(false, "No tiene permiso para editar esta solución");
 
-                solucion.Publica = true;
+                solucion.Publica = !(solucion.Publica ?? false);
                 _solucionesRepo.Edit(solucion);
                 _logger.LogHttpRequest(solucion);
                 return new OperationResult(true, "Se ha publicado la solución exitosamente", solucion);
@@ -435,11 +436,17 @@ namespace CrowdSolve.Server.Controllers
 
         [HttpGet("DescargarAdjunto/{idAdjunto}")]
         [Authorize]
-        public IActionResult DescargarAdjunto(int idAdjunto)
+        public async Task<IActionResult> DescargarAdjunto(int idAdjunto)
         {
             try
             {
-                return Ok("Aún no implementado");
+                var adjunto = _crowdSolveContext.Set<AdjuntosSoluciones>().Where(x => x.idAdjunto == idAdjunto).FirstOrDefault();
+
+                if (adjunto == null) return NotFound("No se ha encontrado el adjunto");
+                if (adjunto.RutaArchivo == null) return NotFound("No se ha encontrado el adjunto");
+
+                var stream = await _firebaseStorageService.GetFileAsync(adjunto.RutaArchivo);
+                return File(stream, adjunto.ContentType);
             }
             catch (Exception ex)
             {
@@ -457,6 +464,13 @@ namespace CrowdSolve.Server.Controllers
         public List<SolucionesModel> GetMisSoluciones()
         {
             List<SolucionesModel> soluciones = _solucionesRepo.Get(x => x.idUsuario == _idUsuarioOnline).ToList();
+
+            foreach (var solucion in soluciones)
+            {
+                solucion.Desafio = _desafiosRepo.Get(x => x.idDesafio == solucion.idDesafio).FirstOrDefault();
+                solucion.CantidadVotos = _crowdSolveContext.Set<VotosUsuarios>().Count(x => x.idSolucion == solucion.idSolucion);
+            }
+
             return soluciones;
         }
 
@@ -474,16 +488,45 @@ namespace CrowdSolve.Server.Controllers
         }
 
         [HttpGet("GetCantidadSoluciones", Name = "GetCantidadSoluciones")]
-        [Authorize]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
         public object GetCantidadSoluciones()
         {
             var soluciones = _solucionesRepo.Get().Count();
 
             return new
             {
-                soluciones=soluciones,
+                soluciones
             };
+        }
 
+        /// <summary>
+        /// Cambia el estatus de una solución
+        /// </summary>
+        /// <param name="idSolucion"></param>
+        /// <param name="cambioEstatusModel"></param>
+        /// <returns></returns>
+        [HttpPut("CambiarEstatus/{idSolucion}", Name = "CambiarEstatusSolucion")]
+        [Authorize]
+        public OperationResult CambiarEstatus(int idSolucion, CambioEstatusModel cambioEstatusModel)
+        {
+            try
+            {
+                var solucion = _solucionesRepo.Get(x => x.idSolucion == idSolucion).FirstOrDefault();
+
+                if (solucion == null) return new OperationResult(false, "Esta solución no se ha encontrado");
+
+                if (cambioEstatusModel == null)
+                    return new OperationResult(false, "No se ha especificado la información del nuevo estatus");
+
+                _solucionesRepo.CambiarEstatus(idSolucion, (EstatusProcesoEnum)cambioEstatusModel.idEstatusProceso, cambioEstatusModel.MotivoCambioEstatus);
+
+                return new OperationResult(true, "Se ha cambiado el estatus al desafío exitosamente");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
         }
 
         private bool IsLastPart(IHeaderDictionary headers)

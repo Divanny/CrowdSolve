@@ -6,10 +6,11 @@ import { setUser } from '@/redux/slices/userSlice';
 import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 import { toast } from "sonner";
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ProtectedRoute = () => {
     const { api } = useAxios();
-
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const token = useSelector(selectToken);
     const user = useSelector(selectUser);
@@ -23,12 +24,8 @@ const ProtectedRoute = () => {
             if (response.data) {
                 const { data } = response;
 
-                const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${data.usuario.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                const url = URL.createObjectURL(avatarBlob)
-
                 dispatch(setUser({
-                    user: { ...data.usuario, avatarUrl : url },
+                    user: { ...data.usuario },
                     token: token,
                     views: Array.isArray(data.vistas) ? data.vistas : []
                 }));

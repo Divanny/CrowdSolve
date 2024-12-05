@@ -44,6 +44,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             FechaRegistro = s.FechaRegistro,
                             idEstatusProceso = proceso.idEstatusProceso,
                             EstatusProceso = estatusProceso.Nombre,
+                            SeveridadEstatusProceso = estatusProceso.Severidad,
+                            IconoEstatusProceso = estatusProceso.ClaseIcono,
                             Publica = s.Publica,
                             Puntuacion = s.Puntuacion,
                             Adjuntos = DB.Set<AdjuntosSoluciones>().Where(a => a.idSolucion == s.idSolucion).ToList(),

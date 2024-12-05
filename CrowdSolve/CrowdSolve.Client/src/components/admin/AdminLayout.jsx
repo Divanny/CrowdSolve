@@ -37,120 +37,143 @@ import GetLogo from "@/helpers/get-logo";
 import Icon from "@/components/ui/icon";
 import { Badge } from "@/components/ui/badge"
 import useAxios from "@/hooks/use-axios";
+import { useTranslation } from 'react-i18next';
 
-const sidebarItems = [
-    {
-        title: null,
-        url: "#",
-        items: [
-            {
-                title: "Dashboard",
-                url: "/admin",
-                icon: "Gauge",
-            },
-        ],
-    },
-    {
-        title: "Administración de usuarios",
-        url: "#",
-        items: [
-            {
-                title: "Participantes",
-                url: "/admin/participants",
-                icon: "Users",
-            },
-            {
-                title: "Empresas",
-                url: "/admin/companies",
-                icon: "Building2",
-            },
-            {
-                title: "Administradores",
-                url: "/admin/administrators",
-                icon: "ShieldCheck",
-            },
-            {
-                title: "Roles y permisos",
-                url: "/admin/permissions",
-                icon: "Key",
-            },
-        ],
-    },
-    {
-        title: "Administración de desafíos",
-        url: "#",
-        items: [
-            {
-                title: "Desafíos",
-                url: "/admin/challenges",
-                icon: "Flag",
-            },
-            {
-                title: "Soluciones",
-                url: "/admin/solutions",
-                icon: "Send",
-            },
-            {
-                title: "Categorías",
-                url: "/admin/categories",
-                icon: "TableProperties",
-            },
-        ],
-    },
-    {
-        title: "Solicitudes",
-        url: "#",
-        items: [
-            {
-                title: "Solicitudes de empresa",
-                url: "/admin/company-requests",
-                icon: "Building2",
-                pending: 3,
-            },
-            {
-                title: "Solicitudes de soporte",
-                url: "/admin/support-requests",
-                icon: "Headset",
-                pending: 0,
-            },
-        ],
-    },
-    {
-        title: "Configuración",
-        url: "#",
-        items: [
-            {
-                title: "Manual de usuario",
-                url: "/admin/user-manual",
-                icon: "Book",
-            },
-        ],
-    },
-]
+
 export default function AdminLayout() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { api } = useAxios();
+    const { t } = useTranslation();
 
     const user = useSelector((state) => state.user.user);
+
+    const sidebarItems = [
+    
+        {
+            title: null,
+            url: "#",
+            items: [
+                {
+                    title: "Dashboard",
+                    url: "/admin",
+                    icon: "Gauge",
+                },
+            ],
+        },
+        {
+            title: t('AdminLayout.sideBarAdm.AdmUser'),
+            url: "#",
+            items: [
+                {
+                    title: t('AdminLayout.sideBarAdm.Participants'),
+                    url: "/admin/participants",
+                    icon: "Users",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.Companies'),
+                    url: "/admin/companies",
+                    icon: "Building2",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.Admins'),
+                    url: "/admin/administrators",
+                    icon: "ShieldCheck",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.RolesPermissions'),
+                    url: "/admin/permissions",
+                    icon: "Key",
+                },
+            ],
+        },
+        {
+            title: t('AdminLayout.sideBarAdm.AdmChallenges'),
+            url: "#",
+            items: [
+                {
+                    title: t('AdminLayout.sideBarAdm.Challenges'),
+                    url: "/admin/challenges",
+                    icon: "Flag",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.Solutions'),
+                    url: "/admin/solutions",
+                    icon: "Send",
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.Categories'),
+                    url: "/admin/categories",
+                    icon: "TableProperties",
+                },
+            ],
+        },
+        {
+            title: t('AdminLayout.sideBarAdm.Solutions'),
+            url: "#",
+            items: [
+                {
+                    title: t('AdminLayout.sideBarAdm.CompanyRequests'),
+                    url: "/admin/company-requests",
+                    icon: "Building2",
+                    pending: 3,
+                },
+                {
+                    title: t('AdminLayout.sideBarAdm.SupportRequests'),
+                    url: "/admin/support-requests",
+                    icon: "Headset",
+                    pending: 1,
+                },
+            ],
+        },
+        {
+            title: t('AdminLayout.sideBarAdm.Settings'),
+            url: "#",
+            items: [
+                {
+                    title: t('AdminLayout.sideBarAdm.UserManual'),
+                    url: "/admin/user-manual",
+                    icon: "Book",
+                },
+            ],
+        },
+    ]
+    
+    const { api } = useAxios();
 
     const CrowdSolveLogo = GetLogo();
 
     const fetchData = async () => {
         try {
-          const countRequestsResponse = await api.get("/api/Soportes/GetCantidadRegistros", { requireLoading: false })
-    
-          sidebarItems[3].items[0].pending=countRequestsResponse.data.cantidadEmpresas;
-          sidebarItems[3].items[1].pending=countRequestsResponse.data.cantidadSoportes;
+            const countRequestsResponse = await api.get("/api/Soportes/GetCantidadRegistros", { requireLoading: false })
+
+            sidebarItems[3].items[0].pending = countRequestsResponse.data.cantidadEmpresas;
+            sidebarItems[3].items[1].pending = countRequestsResponse.data.cantidadSoportes;
         } catch (error) {
-          console.error("Error fetching data:", error);
-        } 
-      };
-    
-      useEffect(() => {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    useEffect(() => {
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+    }, []);
+
+    useEffect(() => {
+        const fetchAvatar = async () => {
+            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
+            if (responseAvatarURL.status == 200) {
+                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+                user.avatarURL = URL.createObjectURL(avatarBlob)
+            }
+
+        }
+
+        if (user) {
+            fetchAvatar();
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
 
     return (
         <SidebarProvider
@@ -183,7 +206,7 @@ export default function AdminLayout() {
                                                 <Link variant="secondary" className="w-full flex justify-start items-center gap-2" to={item.url}>
                                                     {(item.icon != "" && item.icon != null) && <Icon name={item.icon} />}
                                                     {item.title}
-                                                    {item.pending >0 && <Badge variant="outline secondary" className="ml-auto">{item.pending}</Badge>}
+                                                    {item.pending > 0 && <Badge variant="outline secondary" className="ml-auto">{item.pending}</Badge>}
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>
@@ -218,8 +241,8 @@ export default function AdminLayout() {
                         </DropdownMenu>
                     ) : (
                         <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-                            <Button variant="outline" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
-                            <Button onClick={() => navigate('/sign-up')}>Registrarse</Button>
+                            <Button variant="outline" onClick={() => navigate('/sign-in')}>{t('AdminLayout.authAdminLayout.signIn')}</Button>
+                            <Button onClick={() => navigate('/sign-up')}>{t('AdminLayout.authAdminLayout.signUp')}</Button>
                         </div>
                     )}
                 </SidebarFooter>

@@ -98,7 +98,7 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
         <Separator className="my-4 sm:my-6" />
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" className="w-full sm:w-auto text-sm sm:text-base">
+            <Button variant="outline" className="w-full sm:w-auto">
               <Eye className="mr-2 h-4 w-4" />
               Ver contenido del desafío
             </Button>

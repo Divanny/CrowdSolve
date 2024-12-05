@@ -29,8 +29,10 @@ import {
 } from "@/components/ui/popover"
 
 import { PhoneInput } from "@/components/ui/phone-input";
+import { useTranslation } from 'react-i18next';
 
 const RegistroParticipante = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { api } = useAxios();
@@ -93,12 +95,8 @@ const RegistroParticipante = () => {
                 const { data } = await api.get("/api/Account");
 
                 if (data) {
-                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${data.usuario.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                    const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                    const url = URL.createObjectURL(avatarBlob)
-
                     dispatch(setUser({
-                        user: { ...data.usuario, avatarUrl : url },
+                        user: { ...data.usuario},
                         token: token,
                         views: Array.isArray(data.vistas) ? data.vistas : []
                     }));
@@ -121,7 +119,7 @@ const RegistroParticipante = () => {
         <form onSubmit={handleSubmit} className="space-y-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="nombres">Nombres</Label>
+                    <Label htmlFor="nombres">{t('RegistroParticipante.nombres')}</Label>
                     <Input
                         id="nombres"
                         name="nombres"
@@ -133,7 +131,7 @@ const RegistroParticipante = () => {
                     />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="apellidos">Apellidos</Label>
+                    <Label htmlFor="apellidos">{t('RegistroParticipante.apellidos')}</Label>
                     <Input
                         id="apellidos"
                         name="apellidos"
@@ -147,7 +145,7 @@ const RegistroParticipante = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="fechaNacimiento">Fecha de nacimiento</Label>
+                    <Label htmlFor="fechaNacimiento">{t('RegistroParticipante.fechaNacimiento')}</Label>
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button
@@ -160,7 +158,7 @@ const RegistroParticipante = () => {
                                 )}
                             >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {formData.fechaNacimiento ? format(formData.fechaNacimiento, "PPP") : <span>Seleccione una fecha</span>}
+                                {formData.fechaNacimiento ? format(formData.fechaNacimiento, "PPP") : <span>{t('RegistroParticipante.selectDate')}</span>}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
@@ -177,7 +175,7 @@ const RegistroParticipante = () => {
                     </Popover>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="telefono">Teléfono</Label>
+                    <Label htmlFor="telefono">{t('RegistroParticipante.telefono')}</Label>
                     <PhoneInput 
                         placeholder="Ingrese su teléfono" 
                         id="telefono"
@@ -190,7 +188,7 @@ const RegistroParticipante = () => {
                 </div>
             </div>
             <div className="space-y-2">
-                <Label htmlFor="nivelEducativo">Nivel educativo</Label>
+                <Label htmlFor="nivelEducativo">{t('RegistroParticipante.nivelEducativo')}</Label>
                 <Select
                     onValueChange={(value) => handleSelectChange("idNivelEducativo", value)}
                     value={formData.idNivelEducativo}
@@ -208,7 +206,7 @@ const RegistroParticipante = () => {
                 </Select>
             </div>
             <div className="space-y-2">
-                <Label htmlFor="descripcionPersonal">Descripción personal</Label>
+                <Label htmlFor="descripcionPersonal">{t('RegistroParticipante.descripcionPersonal')}</Label>
                 <Textarea
                     id="descripcionPersonal"
                     name="descripcionPersonal"
@@ -223,7 +221,7 @@ const RegistroParticipante = () => {
                 type="submit"
                 className="w-full"
             >
-                Registrarse
+                {t('RegistroParticipante.registrarse')}
             </Button>
         </form>
     );

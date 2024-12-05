@@ -18,8 +18,10 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Save } from "lucide-react"
 import { toast } from "sonner"
 import useAxios from "@/hooks/use-axios";
+import { useTranslation } from 'react-i18next';
 
 export default function RolesAndPermissions() {
+    const { t } = useTranslation();
     const { api } = useAxios();
     const [perfiles, setPerfiles] = useState([])
     const [vistasDisponibles, setVistasDisponibles] = useState([])
@@ -30,21 +32,21 @@ export default function RolesAndPermissions() {
             const response = await api.put("/api/Perfiles", perfiles);
 
             if (response.data.success) {
-                toast.success("Operación exitosa", {
+                toast.success(t('RoleAndPermissions.saveChanges.success.title'), {
                     description: response.data.message
                 })
                 await fetchData();
             }
             else {
-                toast.warning("Operación fallida", {
+                toast.warning(t('RoleAndPermissions.saveChanges.failure.title'), {
                     description: response.data.message
                 })
             }
         }
         catch (error) {
             console.error("Error saving changes:", error)
-            toast.error("Error al guardar los cambios", {
-                description: "Ocurrió un error al guardar los cambios, por favor intenta de nuevo",
+            toast.error(t('RoleAndPermissions.saveChanges.error.title'), {
+                description: t('RoleAndPermissions.saveChanges.error.description'),
             })
         }
     }
@@ -148,13 +150,13 @@ export default function RolesAndPermissions() {
         <div className="flex flex-col gap-4 h-full">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-semibold text-primary">Roles y permisos</h1>
+                    <h1 className="text-2xl font-semibold text-primary">{t('RoleAndPermissions.title')}</h1>
                     <p className="text-sm text-muted-foreground">
-                        Administra los permisos y accesos para cada rol del sistema
+                    {t('RoleAndPermissions.description')}
                     </p>
                 </div>
                 <Button onClick={() => saveChanges()}>
-                    <Save className="w-6 h-6 mr-1" /> Guardar cambios
+                    <Save className="w-6 h-6 mr-1" /> {t('RoleAndPermissions.saveChanges2')}
                 </Button>
             </div>
 
@@ -164,7 +166,7 @@ export default function RolesAndPermissions() {
                         <Table>
                             <TableHeader className="sticky top-0 bg-background z-10">
                                 <TableRow className="hover:bg-transparent">
-                                    <TableHead className="w-[250px]">Permiso</TableHead>
+                                    <TableHead className="w-[250px]">{t('RoleAndPermissions.permission')}</TableHead>
                                     {isLoading
                                         ? Array(3)
                                             .fill(0)

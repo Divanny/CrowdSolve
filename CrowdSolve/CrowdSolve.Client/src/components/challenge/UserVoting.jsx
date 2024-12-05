@@ -25,21 +25,22 @@ const UserVoting = ({ initialSolutions }) => {
         setSolutions(sortedSolutions)
     }, [initialSolutions])
 
-    const downloadAdjunto = async (idAdjunto) => {
+    const downloadAdjunto = async (adjunto) => {
         try {
-            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${idAdjunto}`, { responseType: 'blob' })
-            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
             const link = document.createElement('a')
             link.href = url
-            link.setAttribute('download', response.headers['content-disposition'].split('filename=')[1])
+            link.setAttribute('download', adjunto.nombre)
             document.body.appendChild(link)
             link.click()
-            link.remove()
-        }
-        catch (error) {
-            toast.error("Operación fallida", {
-                description: error.message
-            })
+            link.parentNode.removeChild(link)
+        } catch (error) {
+            toast.error('Operación fallida', 
+                {
+                    description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
+                }
+            )
         }
     }
 
@@ -155,7 +156,7 @@ const UserVoting = ({ initialSolutions }) => {
                                     key={adjunto.idAdjunto}
                                     variant="ghost"
                                     className="w-full flex items-center justify-between p-3 h-auto hover:bg-muted"
-                                    onClick={() => downloadAdjunto(adjunto.idAdjunto)}
+                                    onClick={() => downloadAdjunto(adjunto)}
                                 >
                                     <div className="flex items-center gap-2 overflow-hidden">
                                         <IconoArchivo tipo={adjunto.contentType} />

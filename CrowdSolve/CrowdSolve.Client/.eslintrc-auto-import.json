@@ -243,6 +243,15 @@
     "DashboardOverview": true,
     "DashboardPieChartWithNumber": true,
     "DashboardRecentSales": true,
-    "DashboardPieChartCompany": true
+    "DashboardPieChartCompany": true,
+    "AdminCompaniesSolutionsValidation": true,
+    "ChallengeChallengeTimeline": true,
+    "ChallengeSolutionRanking": true,
+    "AdminChallenges-requestsChallengeRequestDetail": true,
+    "AdminChallenges-requestsValidateChallengeDialog": true,
+    "ParticipantsParticipantFormDialog": true,
+    "ParticipantsProfileInfo": true,
+    "ParticipantsSolutionsOverview": true,
+    "ParticipantsStatsOverview": true
   }
 }

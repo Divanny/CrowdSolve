@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { AlertTriangle } from "lucide-react"
+import { useTranslation } from 'react-i18next';
 
 export default function ErrorPage() {
+    const { t } = useTranslation();
     const navigate = useNavigate()
 
     return (
@@ -14,17 +16,17 @@ export default function ErrorPage() {
                     </div>
                 </div>
                 <div className="flex items-center justify-center space-x-4">
-                    <h1 className="text-7xl font-extrabold text-primary">Error</h1>
+                    <h1 className="text-7xl font-extrabold text-primary">{t('errorPage.title')}</h1>
                 </div>
-                <h2 className="text-2xl font-bold text-foreground">Something went wrong</h2>
+                <h2 className="text-2xl font-bold text-foreground">{t('errorPage.subtitle')}</h2>
                 <p className="text-muted-foreground">
-                    An unexpected error has occurred. Please try again later or contact support if the issue persists.
+                {t('errorPage.description')}
                 </p>
                 <div className="flex justify-center space-x-4">
                     <Button onClick={() => navigate(-1)} variant="outline">
-                        Go Back
+                    {t('errorPage.buttons.goBack')}
                     </Button>
-                    <Button onClick={() => navigate("/")}>Go to Home</Button>
+                    <Button onClick={() => navigate("/")}>{t('errorPage.buttons.goHome')}</Button>
                 </div>
             </div>
         </div>

@@ -6,6 +6,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import AutoScroll from "embla-carousel-auto-scroll";
+import { useTranslation } from 'react-i18next';
 
 const logos = [
   {
@@ -75,6 +76,7 @@ export default function TrustedBySection() {
       },
     },
   };
+  const { t } = useTranslation();
 
   const fadeEdgeStyle = {
     maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
@@ -82,6 +84,7 @@ export default function TrustedBySection() {
   };
 
   return (
+    
     <motion.section
       className='bg-accent pb-20'
       initial="hidden"
@@ -92,7 +95,7 @@ export default function TrustedBySection() {
       <div className="container px-4 md:px-6">
         <motion.div className="container flex flex-col items-center text-center" variants={itemVariants}>
           <motion.h1 className="my-6 text-pretty text-2xl font-bold lg:text-4xl" variants={itemVariants}>
-            Confiado por estas empresas
+          {t('TrustedBysection.title')}
           </motion.h1>
         </motion.div>
         <motion.div className="pt-10 md:pt-16 lg:pt-20" variants={itemVariants} style={fadeEdgeStyle}>

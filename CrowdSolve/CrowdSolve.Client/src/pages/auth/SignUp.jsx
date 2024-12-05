@@ -14,8 +14,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
 import { ReactTyped } from "react-typed";
 import { toast } from "sonner";
+import { useTranslation } from 'react-i18next';
 
 function SignUp() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const theme = useSelector((state) => state.theme.theme);
@@ -33,15 +35,15 @@ function SignUp() {
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (!username || !password || !email) {
-      toast.warning("Operación fallida", {
-        description: "Por favor, complete todos los campos",
+      toast.warning(t('SignUp.errorMessage'), {
+        description: t('SignUp.errorMessageDescription'),
       });
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.warning("Operación fallida", {
-        description: "Las contraseñas no coinciden",
+      toast.warning(t('SignUp.errorMessage'), {
+        description: t('SignUp.passwordMismatch'),
       });
       return;
     }
@@ -64,11 +66,11 @@ function SignUp() {
         }));
 
         navigate("/sign-up/complete");
-        toast.success("Operación exitosa", {
+        toast.success(t('SignUp.successMessage'), {
           description: response.data.message,
         });
       } else {
-        toast.warning("Operación fallida", {
+        toast.warning(t('SignUp.errorMessage'), {
           description: response.data.message,
         });
       }
@@ -98,9 +100,9 @@ function SignUp() {
               <h2 className="mb-6 sm:mb-8 text-center text-base sm:text-lg">
                 <ReactTyped
                   strings={[
-                    "Despierta tu creatividad",
-                    "Demuestra tu talento",
-                    "Resuelve problemas",
+                    t('SignUp.creativeMessage'),
+                    t('SignUp.showTalentMessage'),
+                    t('SignUp.solveProblemsMessage'),
                   ]}
                   typeSpeed={80}
                   loop
@@ -115,7 +117,7 @@ function SignUp() {
 
             <Card className="p-4 sm:p-6 max-w-md shadow-sm">
               <p className="text-sm text-center mb-4">
-                Empieza usando CrowdSolve para ti o tu empresa
+              {t('SignUp.signUpSubtitle')}
               </p>
 
               <GoogleLoginButton />
@@ -132,11 +134,11 @@ function SignUp() {
               <form onSubmit={handleSignUp} className="grid gap-4 mb-4">
                 {/* Username */}
                 <div className="grid gap-2">
-                  <Label htmlFor="username">Nombre de usuario</Label>
+                  <Label htmlFor="username">{t('SignUp.userName')}</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="Ingrese su usuario"
+                    placeholder={t('SignUp.usernamePlaceholder')}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -146,11 +148,11 @@ function SignUp() {
                 </div>
                 {/* Email */}
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Correo electrónico</Label>
+                  <Label htmlFor="email">{t('SignUp.Email')}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Ingrese su correo electrónico"
+                    placeholder={t('SignUp.emailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -160,10 +162,10 @@ function SignUp() {
                 </div>
                 {/* Password */}
                 <div className="grid gap-2">
-                  <Label htmlFor="password">Contraseña</Label>
+                  <Label htmlFor="password">{t('SignUp.password')}</Label>
                   <PasswordInput
                     id="password"
-                    placeholder="Ingrese su contraseña"
+                    placeholder={t('SignUp.passwordPlaceholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -174,10 +176,10 @@ function SignUp() {
 
                 {/* Confirm Password */}
                 <div className="grid gap-2">
-                  <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
+                  <Label htmlFor="confirmPassword">{t('SignUp.confirmPasswordPlaceholder')}</Label>
                   <PasswordInput
                     id="confirmPassword"
-                    placeholder="Confirme su contraseña"
+                    placeholder={t('SignUp.confirmPasswordPlaceholder')}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
@@ -189,19 +191,19 @@ function SignUp() {
                 {loading ? (
                   <Button disabled className="w-full" tabIndex={5}>
                     <Loading02Icon className="mr-2 h-4 w-4 animate-spin" />
-                    Por favor, espere
+                    {t('SignUp.loadingText')}
                   </Button>
                 ) : (
                   <Button type="submit" className="w-full" tabIndex={5}>
-                    Crear cuenta
+                    {t('SignUp.signUpButton')}
                   </Button>
                 )}
               </form>
 
               <div className="mt-4 text-center text-xs">
-                ¿Ya tienes una cuenta?{" "}
+              {t('SignUp.haveaccount')}{" "}
                 <Link to="/sign-in" className="text-primary font-medium" tabIndex={6}>
-                  Iniciar Sesión
+                {t('SignUp.signInLink')}
                 </Link>
               </div>
 

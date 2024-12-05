@@ -1,8 +1,10 @@
 import { FileUp, ClipboardCheck, UsersRound } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ScrollAnimationWrapper from '../ScrollAnimationWrapper';
+import { useTranslation } from 'react-i18next';
 
 const CrowdSourcingEasy = () => {
+    const { t } = useTranslation();
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -38,6 +40,7 @@ const CrowdSourcingEasy = () => {
     };
 
     return (
+        
         <section className="bg-accent py-32">
             <ScrollAnimationWrapper>
                 <motion.div
@@ -47,13 +50,13 @@ const CrowdSourcingEasy = () => {
                     <div className="flex flex-col gap-6 md:gap-20">
                         <motion.div className="text-center max-w-3xl mx-auto" variants={itemVariants}>
                             <motion.p className="mb-3 text-xs font-medium uppercase tracking-wider" variants={itemVariants}>
-                                ¿Cómo funciona?
+                            {t('CrowdSourcingEasy.sectionLabel')}
                             </motion.p>
                             <motion.h2 className="mb-2.5 text-3xl font-semibold md:text-5xl" variants={itemVariants}>
-                                El crowdsourcing es fácil
+                            {t('CrowdSourcingEasy.sectionTitle')}
                             </motion.h2>
                             <motion.p className="text-muted-foreground" variants={itemVariants}>
-                                CrowdSolve simplifica el proceso de crowdsourcing en tres fases claves: publicación del desafío, participación de la comunidad y evaluación colaborativa.
+                            {t('CrowdSourcingEasy.sectionDescription')}
                             </motion.p>
                         </motion.div>
                         <motion.div className="grid gap-10 md:grid-cols-3" variants={containerVariants}>
@@ -65,10 +68,10 @@ const CrowdSourcingEasy = () => {
                                     <FileUp className="size-5" />
                                 </motion.div>
                                 <motion.h3 className="mb-3 mt-2 text-lg font-semibold" variants={itemVariants}>
-                                    Publicar desafíos
+                                {t('CrowdSourcingEasy.publishChallenges.title')}
                                 </motion.h3>
                                 <motion.p className="text-muted-foreground" variants={itemVariants}>
-                                    Describe tu problema e invita a la comunidad CrowdSolve a brindar soluciones innovadoras.
+                                {t('CrowdSourcingEasy.publishChallenges.description')}
                                 </motion.p>
                             </motion.div>
                             <motion.div className="flex flex-col" variants={itemVariants}>
@@ -79,10 +82,10 @@ const CrowdSourcingEasy = () => {
                                     <UsersRound className="size-5" />
                                 </motion.div>
                                 <motion.h3 className="mb-3 mt-2 text-lg font-semibold" variants={itemVariants}>
-                                    Involucrar a la comunidad
+                                {t('CrowdSourcingEasy.engageCommunity.title')}
                                 </motion.h3>
                                 <motion.p className="text-muted-foreground" variants={itemVariants}>
-                                    Acceda a una red global de solucionadores de problemas y colabore en las mejores soluciones.
+                                {t('CrowdSourcingEasy.engageCommunity.description')}
                                 </motion.p>
                             </motion.div>
                             <motion.div className="flex flex-col" variants={itemVariants}>
@@ -93,10 +96,10 @@ const CrowdSourcingEasy = () => {
                                     <ClipboardCheck className="size-5" />
                                 </motion.div>
                                 <motion.h3 className="mb-3 mt-2 text-lg font-semibold" variants={itemVariants}>
-                                    Evaluar colaborativamente
+                                {t('CrowdSourcingEasy.evaluateCollaboratively.title')}
                                 </motion.h3>
                                 <motion.p className="text-muted-foreground" variants={itemVariants}>
-                                    Revisar las soluciones propuestas y seleccionar las más prometedoras a través de un proceso colaborativo.
+                                {t('CrowdSourcingEasy.evaluateCollaboratively.description')}
                                 </motion.p>
                             </motion.div>
                         </motion.div>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { Button } from "@/components/ui/button"
@@ -9,11 +10,31 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
+import { useTranslation } from 'react-i18next';
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import useAxios from '@/hooks/use-axios';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const { api } = useAxios();
     const user = useSelector((state) => state.user.user);
+    const { t } = useTranslation();
+    const [avatarUrl, setAvatarUrl] = useState(null);
+
+    useEffect(() => {
+        const fetchAvatar = async () => {
+            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
+            if (responseAvatarURL.status == 200) {
+                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
+                const avatarUrl = URL.createObjectURL(avatarBlob)
+                setAvatarUrl(avatarUrl);
+            }
+        }
+
+        if (user) {
+            fetchAvatar();
+        }
+    }, [user]);
 
     const theme = useSelector((state) => state.theme.theme);
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
@@ -41,7 +62,7 @@ const Navbar = () => {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Avatar className="cursor-pointer bg-accent" size="1">
-                                            <AvatarImage src={(user.avatarURL) ? user.avatarURL : `https://robohash.org/${user.nombreUsuario}`} />
+                                            <AvatarImage src={(user) ? avatarUrl : `https://robohash.org/${user.nombreUsuario}`} />
                                             <AvatarFallback>{user[0]}</AvatarFallback>
                                         </Avatar>
                                     </DropdownMenuTrigger>

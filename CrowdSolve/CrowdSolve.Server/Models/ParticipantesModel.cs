@@ -41,6 +41,6 @@ namespace CrowdSolve.Server.Models
         public string? CorreoElectronico { get; set; }
         public int? idEstatusUsuario { get; set; }
         public string? EstatusUsuario { get; set; }
-        public List<Soluciones>? Soluciones { get; set; }
+        public List<SolucionesModel>? Soluciones { get; set; }
     }
 }
