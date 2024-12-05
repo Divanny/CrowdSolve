@@ -73,14 +73,11 @@ export default function ChallengeCatalog() {
     const loadChallenges = async () => {
       try {
         const response = await api.get("api/Desafios/GetDesafiosValidados", { requireLoading: false });
-        const challengesWithLogoEmpresa = await Promise.all(response.data.map(async (challenge) => {
-          const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${challenge.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false });
-          const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] });
-          const url = URL.createObjectURL(avatarBlob);
-          return { ...challenge, logoEmpresa: url, fechaInicio: new Date(challenge.fechaInicio), fechaLimite: new Date(challenge.fechaLimite) };
+        const challengesResponse = await Promise.all(response.data.map(async (challenge) => {
+          return { ...challenge, fechaInicio: new Date(challenge.fechaInicio), fechaLimite: new Date(challenge.fechaLimite) };
         }));
 
-        setChallenges(challengesWithLogoEmpresa);
+        setChallenges(challengesResponse);
       } catch (error) {
         console.error(error);
       }
@@ -500,7 +497,7 @@ function ChallengeCard({ desafio, categorias, estatus }) {
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center align-items-center gap-2">
               <img
-                src={desafio.logoEmpresa}
+                src={`/api/Account/GetAvatar/${desafio.idUsuarioEmpresa}`}
                 alt={`Logo de ${desafio.empresa}`}
                 className="w-12 h-12 rounded-full object-cover"
               />

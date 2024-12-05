@@ -68,24 +68,8 @@ const ChallengeEvaluation = () => {
 
             editor.tf.setValue(slateContent)
             convertToHtml();
-
-            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${challengeResponse.data.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false })
-            const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-            const url = URL.createObjectURL(avatarBlob)
-
-            for (const solucion of challengeResponse.data.soluciones) {
-                try {
-                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${solucion.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                    if (responseAvatarURL.status == 200) {
-                        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                        solucion.avatarUrl = URL.createObjectURL(avatarBlob)
-                    }
-                }
-                catch {
-                    solucion.avatarUrl = null
-                }
-            }
-            setChallenge({ ...challengeResponse.data, logoEmpresa: url })
+            
+            setChallenge(challengeResponse.data)
             setRelationalObjects(relationalObjectsResponse.data)
             setCurrentEvaluationProcess(actualProcesoEvaluacion);
         } catch (error) {

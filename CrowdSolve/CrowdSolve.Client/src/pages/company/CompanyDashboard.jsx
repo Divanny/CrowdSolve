@@ -54,12 +54,7 @@ const CompanyDashboard = () => {
     const fetchChallenges = async () => {
         try {
             const response = await api.get('/api/Empresas/GetDashboardData');
-
-            const { empresaInfo } = response.data;
-            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${empresaInfo.idUsuario}`, { responseType: 'blob', requireLoading: false });
-            const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] });
-            const url = URL.createObjectURL(avatarBlob);
-            setData({ ...response.data, empresaInfo: { ...empresaInfo, avatarURL: url } });
+            setData(response.data);
         } catch (error) {
             toast.error('Error al cargar los desafíos, intente nuevamente', {
                 description: error.message,
@@ -136,7 +131,7 @@ const CompanyDashboard = () => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-4">
                             <Avatar className="h-16 w-16">
-                                <AvatarImage src={data.empresaInfo.avatarURL} alt={data.empresaInfo.nombre} />
+                                <AvatarImage src={`/api/Account/GetAvatar/${data.empresaInfo.idUsuario}`} alt={data.empresaInfo.nombre} />
                                 <AvatarFallback>{data.empresaInfo.nombre.substring(0, 2).toUpperCase()}</AvatarFallback>
                             </Avatar>
                             <div>

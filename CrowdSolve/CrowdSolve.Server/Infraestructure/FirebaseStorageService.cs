@@ -43,5 +43,11 @@ namespace CrowdSolve.Server.Infraestructure
 
             await _storageClient.DeleteObjectAsync(_bucketName, filePath);
         }
+
+        public async Task<string> UploadImageFromUrlAsync(string url, string objectName)
+        {
+            var id = await this.UploadFileAsync(new MemoryStream(await new HttpClient().GetByteArrayAsync(url)), objectName, "image/jpeg");
+            return id;
+        }
     }
 }

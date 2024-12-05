@@ -158,23 +158,6 @@ export default function AdminLayout() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        const fetchAvatar = async () => {
-            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
-            if (responseAvatarURL.status == 200) {
-                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                user.avatarURL = URL.createObjectURL(avatarBlob)
-            }
-
-        }
-
-        if (user) {
-            fetchAvatar();
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
-
     return (
         <SidebarProvider
             style={
@@ -224,8 +207,8 @@ export default function AdminLayout() {
                                     <div className='flex items-center justify-between w-full'>
                                         <div className='flex items-center '>
                                             <Avatar className="bg-accent" size="1">
-                                                <AvatarImage src={(user.avatarURL) ? user.avatarURL : `https://robohash.org/${user.nombreUsuario}`} />
-                                                <AvatarFallback>{user[0]}</AvatarFallback>
+                                                <AvatarImage src={(user) ? `/api/Account/GetAvatar/${user.idUsuario}` : `https://robohash.org/${user.nombreUsuario}`} />
+                                                <AvatarFallback>{user.nombreUsuario[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className='flex flex-col ml-2 text-left'>
                                                 <span className='text-x font-semibold'>{user.nombreUsuario}</span>

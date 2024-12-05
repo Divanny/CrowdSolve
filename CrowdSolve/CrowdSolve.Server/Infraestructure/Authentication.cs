@@ -27,14 +27,17 @@ namespace CrowdSolve.Server.Infraestructure
         private readonly PerfilesRepo _perfilesRepo;
         private readonly CredencialesAutenticacionRepo _credencialesAutenticacionRepo;
         private readonly Mailing _mailingService;
+        private readonly FirebaseStorageService _firebaseStorage;
+
         /// <summary>
         /// Constructor de la clase Authentication.
         /// </summary>
         /// <param name="CrowdSolveContext">Contexto de la base de datos de CrowdSolve.</param>
         /// <param name="configuration">Configuración de la aplicación.</param>
-        /// <param name="passwordHasher"></param>
-        /// <param name="mailingService"></param>
-        public Authentication(CrowdSolveContext CrowdSolveContext, IConfiguration configuration, IPasswordHasher passwordHasher, Mailing mailingService)
+        /// <param name="passwordHasher">Hasher de contraseña</param>
+        /// <param name="mailingService">Servicio de envío de correos</param>
+        /// <param name="firebaseStorageService">Servicio de almacenamiento de firebase</param>
+        public Authentication(CrowdSolveContext CrowdSolveContext, IConfiguration configuration, IPasswordHasher passwordHasher, Mailing mailingService, FirebaseStorageService firebaseStorageService)
         {
             _CrowdSolveContext = CrowdSolveContext;
             _configuration = configuration;
@@ -49,6 +52,7 @@ namespace CrowdSolve.Server.Infraestructure
             _perfilesRepo = new PerfilesRepo(CrowdSolveContext);
             _credencialesAutenticacionRepo = new CredencialesAutenticacionRepo(CrowdSolveContext);
             _mailingService = mailingService;
+            _firebaseStorage = firebaseStorageService;
         }
 
         /// <summary>
@@ -248,6 +252,13 @@ namespace CrowdSolve.Server.Infraestructure
 
                         if (usuario == null)
                         {
+                            string? logoUrl = null;
+
+                            if (payload.Picture != null)
+                            {
+                                logoUrl = await _firebaseStorage.UploadImageFromUrlAsync(payload.Picture, $"profile-pictures/{name}/avatar.jpeg");
+                            }
+
                             usuario = _usuariosRepo.Add(new UsuariosModel()
                             {
                                 idPerfil = _perfilesRepo.GetPerfilDefault(),
@@ -255,7 +266,7 @@ namespace CrowdSolve.Server.Infraestructure
                                 CorreoElectronico = email,
                                 FechaRegistro = DateTime.UtcNow,
                                 idEstatusUsuario = (int)EstatusUsuariosEnum.Incompleto,
-                                AvatarURL = payload.Picture
+                                AvatarURL = logoUrl
                             });
                         }
 

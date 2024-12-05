@@ -30,38 +30,11 @@ import ProfileDropdownMenuContent from '@/components/layout/ProfileDropdownMenuC
 import Icon from "@/components/ui/icon";
 import { Badge } from "@/components/ui/badge"
 import { ChevronsUpDown, X } from "lucide-react"
-
-const sidebarItems = [
-    {
-        title: null,
-        url: "#",
-        items: [
-            {
-                title: "Sobre nosotros",
-                url: "/about-us",
-                icon: "Users",
-            },
-            {
-                title: "Desafíos",
-                url: "/challenges",
-                icon: "Puzzle",
-            },
-            {
-                title: "Empresas",
-                url: "/companies",
-                icon: "Building2",
-            },
-            {
-                title: "Contáctanos",
-                url: "/contact-us",
-                icon: "Send",
-            },
-        ],
-    }
-]
-
+import { useTranslation } from 'react-i18next';
 
 const Layout = () => {
+    const { t } = useTranslation();
+
     const location = useLocation();
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -69,6 +42,36 @@ const Layout = () => {
     const user = useSelector((state) => state.user.user);
 
     const CrowdSolveLogo = GetLogo();
+
+
+    const sidebarItems = [
+        {
+            title: null,
+            url: "#",
+            items: [
+                {
+                    title: t('navbar.links.aboutUs'),
+                    url: "/about-us",
+                    icon: "Users",
+                },
+                {
+                    title: t('navbar.links.challenges'),
+                    url: "/challenges",
+                    icon: "Puzzle",
+                },
+                {
+                    title: t('navbar.links.companies'),
+                    url: "/companies",
+                    icon: "Building2",
+                },
+                {
+                    title: t('navbar.links.contactUs'),
+                    url: "/contact-us",
+                    icon: "Send",
+                },
+            ],
+        }
+    ]
 
     return (
         <SidebarProvider open={sidebarOpen} onOpenChange={setSidebarOpen} alwaysSheet={true}>
@@ -122,8 +125,8 @@ const Layout = () => {
                                     <div className='flex items-center justify-between w-full'>
                                         <div className='flex items-center '>
                                             <Avatar className="bg-accent" size="1">
-                                                <AvatarImage src={(user.avatarURL) ? user.avatarURL : `https://robohash.org/${user.nombreUsuario}`} />
-                                                <AvatarFallback>{user[0]}</AvatarFallback>
+                                                <AvatarImage src={(user) ? `/api/Account/GetAvatar/${user.idUsuario}` : `https://robohash.org/${user.nombreUsuario}`} />
+                                                <AvatarFallback>{user.nombreUsuario[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className='flex flex-col ml-2 text-left'>
                                                 <span className='text-x font-semibold'>{user.nombreUsuario}</span>
@@ -139,8 +142,8 @@ const Layout = () => {
                         </DropdownMenu>
                     ) : (
                         <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-                            <Button variant="outline" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
-                            <Button onClick={() => navigate('/sign-up')}>Registrarse</Button>
+                            <Button variant="outline" onClick={() => navigate('/sign-in')}>{t('navbar.auth.signIn')}</Button>
+                            <Button onClick={() => navigate('/sign-up')}>{t('navbar.auth.signUp')}</Button>
                         </div>
                     )}
                 </SidebarFooter>

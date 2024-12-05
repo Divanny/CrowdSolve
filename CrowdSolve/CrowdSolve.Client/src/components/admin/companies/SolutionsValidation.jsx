@@ -124,7 +124,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
             link.click()
             link.parentNode.removeChild(link)
         } catch (error) {
-            toast.error('Operación fallida', 
+            toast.error('Operación fallida',
                 {
                     description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
                 }
@@ -160,7 +160,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                             <TableCell>
                                 <div className="flex items-center space-x-2">
                                     <Avatar>
-                                        <AvatarImage src={solucion.avatarUrl || `https://robohash.org/${solucion.nombreUsuario}`} alt={solucion.nombreUsuario} />
+                                        <AvatarImage src={`/api/Account/GetAvatar/${solucion.idUsuario}`} alt={solucion.nombreUsuario} />
                                         <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                     <span>{solucion.nombreUsuario}</span>
@@ -192,7 +192,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                             <div className="md:col-span-2 space-y-6">
                                                 <div className="flex items-center space-x-4">
                                                     <Avatar className="w-16 h-16">
-                                                        <AvatarImage src={solucionSeleccionada?.avatarUrl || `https://robohash.org/${solucionSeleccionada?.nombreUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
+                                                        <AvatarImage src={`/api/Account/GetAvatar/${solucionSeleccionada?.idUsuario}`} alt={solucion.nombreUsuario} />
                                                         <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
                                                     </Avatar>
                                                     <div>
