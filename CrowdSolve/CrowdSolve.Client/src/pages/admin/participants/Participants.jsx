@@ -42,7 +42,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ParticipantFormDialog } from "../../../components/admin/participants/ParticipantFormDialog";
+import { ParticipantFormDialog } from "@/components/participants/ParticipantFormDialog";
 import { useTranslation } from 'react-i18next';
 
 export default function Participants() {
@@ -151,7 +151,7 @@ export default function Participants() {
     {
       accessorKey: "soluciones",
       header: "Soluciones Enviadas",
-      cell: ({ row }) => row.original.soluciones.length,
+      cell: ({ row }) => row.original.soluciones?.length,
     },
     {
       accessorKey: "fechaRegistro",

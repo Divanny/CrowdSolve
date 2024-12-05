@@ -65,11 +65,11 @@ export default function Footer() {
             </div>
             <div className="border-t border-muted-foreground/20 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
                 <p className="text-xs text-muted-foreground mb-4 sm:mb-0">
-                    &copy; {new Date().getFullYear()} {t('footer.copyright')}
+                    {new Date().getFullYear()} {t('footer.copyright')}
                 </p>
                 <nav className="flex flex-wrap justify-center sm:justify-end gap-4">
-                    <Link href="/terminos" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.terms')}</Link>
-                    <Link href="/privacidad" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.privacy')}</Link>
+                    <Link to="/terms-of-service" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.terms')}</Link>
+                    <Link to="/privacy-policy" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.privacy')}</Link>
                 </nav>
             </div>
         </footer>
