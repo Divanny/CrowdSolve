@@ -16,6 +16,8 @@ import useAxios from '@/hooks/use-axios'
 import { toast } from 'sonner'
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
+import ProfileHover from '@/components/participants/ProfileHover';
+import { useNavigate } from 'react-router-dom'
 
 const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = true }) => {
     const { api } = useAxios()
@@ -24,6 +26,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
     const [razonRechazo, setRazonRechazo] = useState('')
     const [selectedEstatus, setSelectedEstatus] = useState(null);
     const [validationError, setValidationError] = useState('');
+    const navigate = useNavigate();
 
     const formatearFecha = (fecha) => {
         return new Date(fecha).toLocaleDateString('es-ES', {
@@ -158,13 +161,15 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                     {solutions.map((solucion) => (
                         <TableRow key={solucion.idSolucion}>
                             <TableCell>
-                                <div className="flex items-center space-x-2">
-                                    <Avatar>
-                                        <AvatarImage src={`/api/Account/GetAvatar/${solucion.idUsuario}`} alt={solucion.nombreUsuario} />
-                                        <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span>{solucion.nombreUsuario}</span>
-                                </div>
+                                <ProfileHover userName={solucion.nombreUsuario}>
+                                    <Button variant="link" className="flex items-center space-x-2 text-normal" onClick={() => navigate(`/profile/${solucion.nombreUsuario}`)}>
+                                        <Avatar>
+                                            <AvatarImage src={`/api/Account/GetAvatar/${solucion.idUsuario}`} alt={solucion.nombreUsuario} />
+                                            <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span>{solucion.nombreUsuario}</span>
+                                    </Button>
+                                </ProfileHover>
                             </TableCell>
                             <TableCell>{solucion.titulo}</TableCell>
                             <TableCell>{formatearFecha(solucion.fechaRegistro)}</TableCell>
@@ -190,16 +195,18 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                         </DialogHeader>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
                                             <div className="md:col-span-2 space-y-6">
-                                                <div className="flex items-center space-x-4">
-                                                    <Avatar className="w-16 h-16">
-                                                        <AvatarImage src={`/api/Account/GetAvatar/${solucionSeleccionada?.idUsuario}`} alt={solucion.nombreUsuario} />
-                                                        <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
-                                                    </Avatar>
-                                                    <div>
-                                                        <p className="text-lg font-semibold">{solucionSeleccionada?.nombreUsuario}</p>
-                                                        <p className="text-sm text-muted-foreground">Autor de la solución</p>
-                                                    </div>
-                                                </div>
+                                                <ProfileHover userName={solucionSeleccionada?.nombreUsuario}>
+                                                    <Button variant="link" className="flex items-center space-x-4 text-normal" onClick={() => navigate(`/profile/${solucionSeleccionada?.nombreUsuario}`)}>
+                                                        <Avatar className="w-16 h-16">
+                                                            <AvatarImage src={`/api/Account/GetAvatar/${solucionSeleccionada?.idUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
+                                                            <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className='flex flex-col justify-start'>
+                                                            <p className="text-lg font-semibold text-left">{solucionSeleccionada?.nombreUsuario}</p>
+                                                            <p className="text-sm text-muted-foreground text-left">Autor de la solución</p>
+                                                        </div>
+                                                    </Button>
+                                                </ProfileHover>
                                                 <Separator />
                                                 <div>
                                                     <Label className="text-lg font-semibold">Descripción</Label>

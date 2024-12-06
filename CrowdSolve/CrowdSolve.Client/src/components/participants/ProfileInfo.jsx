@@ -28,10 +28,12 @@ const ProfileInfo = ({ user, onEdit }) => (
           })} 
         />
       </div>
-      <Button onClick={onEdit} variant="outline" className="mt-4 w-full lg:w-auto">
-        <Edit className="w-4 h-4" />
-        Editar Perfil
-      </Button>
+      {onEdit && (
+        <Button onClick={onEdit} variant="outline" className="mt-4 w-full lg:w-auto">
+          <Edit className="w-4 h-4" />
+          Editar Perfil
+        </Button>
+      )}
     </div>
   </div>
 )
