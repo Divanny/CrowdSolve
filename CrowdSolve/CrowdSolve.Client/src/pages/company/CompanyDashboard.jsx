@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import useAxios from '@/hooks/use-axios';
-import { BarChart3, Users, ClipboardCheck, Calendar, AlertCircle, Plus, Eye, Edit, Trash2 } from 'lucide-react';
+import { BarChart3, Users, ClipboardCheck, Calendar, AlertCircle, Plus, Eye, Edit, Trash2, Upload, Gift } from 'lucide-react';
 import Icon from '@/components/ui/icon';
 import {
     Pagination,
@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Textarea } from '@/components/ui/textarea';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum'
+import { FileUploader } from '@/components/FileUploader';
 
 const CompanyDashboard = () => {
     const { api } = useAxios();
@@ -49,7 +50,11 @@ const CompanyDashboard = () => {
     const [challengeToCancel, setChallengeToCancel] = useState(null);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 5
+    const itemsPerPage = 10
+
+    const [prizeDialogOpen, setPrizeDialogOpen] = useState(false);
+    const [challengeToPrize, setChallengeToPrize] = useState(null);
+    const [prizeEvidences, setPrizeEvidences] = useState([]);
 
     const fetchChallenges = async () => {
         try {
@@ -68,6 +73,11 @@ const CompanyDashboard = () => {
     const handleCancelClick = (desafio) => {
         setChallengeToCancel(desafio);
         setCancelDialogOpen(true);
+    };
+
+    const handlePrizeClick = (desafio) => {
+        setChallengeToPrize(desafio);
+        setPrizeDialogOpen(true);
     };
 
     const cancelChallenge = async () => {
@@ -169,7 +179,7 @@ const CompanyDashboard = () => {
                             <div className="flex items-center justify-between">
                                 <CardTitle className="text-xl font-bold flex items-center text-foreground">
                                     <BarChart3 className="mr-2 h-5 w-5" />
-                                    Desafíos Activos
+                                    Desafíos
                                 </CardTitle>
                                 <Button onClick={() => navigate('/company/challenge/new')} className="flex items-center">
                                     <Plus className="mr-2 h-4 w-4" />
@@ -227,18 +237,28 @@ const CompanyDashboard = () => {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end space-x-2">
+                                                    {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios && (
+                                                        <Button variant="ghost" size="sm" tooltip="Cargar evidencias de entrega" className="flex items-center" onClick={() => handlePrizeClick(desafio)}>
+                                                            <Upload className="h-4 w-4" />
+                                                        </Button>
+                                                    )}
+                                                    {(desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion && desafio.puedoEvaluar) && (
+                                                        <Button variant="ghostWarning" size="sm" tooltip="Evaluar soluciones" className="flex items-center" onClick={() => navigate(`/challenge/${desafio.idDesafio}/evaluate`)}>
+                                                            <ClipboardCheck className="h-4 w-4" />
+                                                        </Button>
+                                                    )}
                                                     {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar && (
-                                                        <Button variant="ghost" size="sm" severity="destructive" className="flex items-center" onClick={() => handleCancelClick(desafio)}>
+                                                        <Button variant="ghostDestructive" size="sm" tooltip="Cancelar desafío" className="flex items-center" onClick={() => handleCancelClick(desafio)}>
                                                             <Trash2 className="h-4 w-4" />
                                                         </Button>
                                                     )}
                                                     {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar && (
-                                                        <Button variant="ghost" size="sm" className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}/edit`)}>
+                                                        <Button variant="ghost" size="sm" tooltip="Editar desafío" className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}/edit`)}>
                                                             <Edit className="h-4 w-4" />
                                                         </Button>
                                                     )}
                                                     {desafio.idEstatusDesafio !== EstatusProcesoEnum.Desafio_Sin_validar && (
-                                                        <Button variant="ghost" size="sm" className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}`)}>
+                                                        <Button variant="ghost" size="sm" tooltip="Ver detalles" className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}`)}>
                                                             <Eye className="h-4 w-4" />
                                                         </Button>
                                                     )}
@@ -296,6 +316,28 @@ const CompanyDashboard = () => {
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
                                 <AlertDialogAction onClick={cancelChallenge} disabled={!cancelReason.trim()}>
+                                    Confirmar
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                    <AlertDialog open={prizeDialogOpen} onOpenChange={setPrizeDialogOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    <div className="flex items-center gap-2">
+                                        <Gift className="h-6 w-6 text-primary" />
+                                        Cargar evidencias de entrega del premio
+                                    </div>
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Por favor, sube las evidencias de la entrega del premio.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <FileUploader value={prizeEvidences} onValueChange={setPrizeEvidences} multiple={true} maxFileCount={Infinity} maxSize={1024 * (1024 * 5)} />
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction disabled={!prizeEvidences.length > 0} onClick={() => setPrizeDialogOpen(false)}>
                                     Confirmar
                                 </AlertDialogAction>
                             </AlertDialogFooter>

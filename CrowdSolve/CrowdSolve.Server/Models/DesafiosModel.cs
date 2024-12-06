@@ -31,5 +31,6 @@ namespace CrowdSolve.Server.Models
         public bool? YaParticipo { get; set; }
         public int Participaciones { get; set; }
         public int SolucionesPendientes { get; set; }
+        public bool? PuedoEvaluar { get; set; }
     }
 }

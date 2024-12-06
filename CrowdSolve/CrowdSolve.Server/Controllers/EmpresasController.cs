@@ -323,6 +323,8 @@ namespace CrowdSolve.Server.Controllers
             foreach (var desafio in desafios)
             {
                 desafio.SolucionesPendientes = _desafiosRepo.GetCantidadSolucionesPendientesDesafio(desafio.idDesafio);
+                var resultado = _desafiosRepo.ValidarUsuarioPuedeEvaluar(desafio.idDesafio, _idUsuarioOnline);
+                desafio.PuedoEvaluar = resultado.Success;
             }
 
             return new
