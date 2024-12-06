@@ -165,7 +165,7 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
-        /// Obtiene la información del perfil de un participante.
+        /// Obtiene la información del perfil del participante en línea.
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
@@ -176,6 +176,24 @@ namespace CrowdSolve.Server.Controllers
             var Participante = _participantesRepo.Get(x => x.idUsuario == _idUsuarioOnline).FirstOrDefault();
             if (Participante == null) throw new Exception("Este participante no se ha encontrado");
             Participante.Soluciones = _solucionesRepo.Get(x => x.idUsuario == _idUsuarioOnline && x.Publica == true).ToList();
+            return Participante;
+        }
+
+        /// <summary>
+        /// Obtiene la información del perfil público de un participante.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        [HttpGet("PerfilPublico/{nombreUsuario}", Name = "GetPerfilPublico")]
+        public ParticipantesModel GetPerfilPublico(string nombreUsuario)
+        {
+            var usuario = _usuariosRepo.Get(x => x.NombreUsuario == nombreUsuario).FirstOrDefault();
+            if (usuario == null) throw new Exception("Este usuario no se ha encontrado");
+
+            var Participante = _participantesRepo.Get(x => x.idUsuario == usuario.idUsuario).FirstOrDefault();
+            if (Participante == null) throw new Exception("Este participante no se ha encontrado");
+
+            Participante.Soluciones = _solucionesRepo.Get(x => x.idUsuario == usuario.idUsuario && x.Publica == true).ToList();
             return Participante;
         }
 

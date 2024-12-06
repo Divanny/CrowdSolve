@@ -39,6 +39,7 @@ const CompanyChallenge = lazy(() => import('@/pages/company/CompanyChallenge'));
 const MySolutions = lazy(() => import('@/pages/participant/MySolutions'));
 const ChallengeRequest = lazy(() => import('@/pages/admin/challenges-requests/ChallengeRequests'));
 const MyProfile = lazy(() => import('@/pages/participant/MyProfile'));
+const PublicProfile = lazy(() => import('@/pages/participant/PublicProfile'));
 
 const LazyComponent = ({ component: Component, ...props }) => (
   <Suspense fallback={<PageLoader />}>
@@ -59,7 +60,7 @@ const AppRoutes = () => (
       <Route path="/privacy-policy" element={<LazyComponent component={PrivacyPolicy} />} />
       <Route path="/usage-policy" element={<LazyComponent component={UsagePolicy} />} />
       <Route path="*" element={<LazyComponent component={NotFound} />} />
-
+      <Route path="/profile/:userName" element={<LazyComponent component={PublicProfile} />} />
     </Route>
     <Route path="/sign-in" element={<LazyComponent component={SignIn} />} />
     <Route path="/sign-up" element={<LazyComponent component={SignUp} />} />
