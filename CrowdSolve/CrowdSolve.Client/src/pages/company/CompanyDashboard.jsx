@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -8,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import useAxios from '@/hooks/use-axios';
-import { BarChart3, Users, ClipboardCheck, Calendar, AlertCircle, Plus, Eye, Edit, Trash2, Upload, Gift } from 'lucide-react';
+import { BarChart3, Users, ClipboardCheck, Calendar, AlertCircle, Plus, Eye, Edit, Trash2, Upload, Gift, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, FileIcon, Download } from 'lucide-react';
 import Icon from '@/components/ui/icon';
 import {
     Pagination,
@@ -31,6 +32,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum'
 import { FileUploader } from '@/components/FileUploader';
+import PageLoader from '@/components/PageLoader';
+import { formatBytes } from "@/lib/utils"
 
 const CompanyDashboard = () => {
     const { api } = useAxios();
@@ -49,6 +52,8 @@ const CompanyDashboard = () => {
     const [cancelReason, setCancelReason] = useState('');
     const [challengeToCancel, setChallengeToCancel] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [loadingProgressBar, setLoadingProgressBar] = useState(false);
+    const [loadingProgress, setLoadingProgress] = useState(0);
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10
 
@@ -76,8 +81,70 @@ const CompanyDashboard = () => {
     };
 
     const handlePrizeClick = (desafio) => {
+        console.log(desafio);
         setChallengeToPrize(desafio);
         setPrizeDialogOpen(true);
+    };
+
+    const handleSubmitEvidence = async () => {
+        if (!challengeToPrize || !prizeEvidences.length) return;
+
+        const maxFileSize = 5 * 1024 * 1024;
+        let totalSize = prizeEvidences.reduce((acc, file) => acc + file.size, 0);
+        let uploadedSize = 0;
+
+        setLoadingProgressBar(true);
+
+        try {
+            for (const file of prizeEvidences) {
+                let currentPart = 1;
+                const totalParts = Math.ceil(file.size / maxFileSize);
+
+                while (currentPart <= totalParts) {
+                    const start = (currentPart - 1) * maxFileSize;
+                    const end = Math.min(start + maxFileSize, file.size);
+                    const chunk = file.slice(start, end);
+
+                    const formData = new FormData();
+                    formData.append("filePart", chunk);
+
+                    const response = await api.post(`/api/Desafios/CargarEvidencia/${challengeToPrize.idDesafio}`, formData, {
+                        requireLoading: false,
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            "X-File-Name": encodeURI(file.name),
+                            "X-Part-Number": currentPart,
+                            "X-Last-Part": currentPart === totalParts ? 1 : 0,
+                        }
+                    });
+
+                    if (!response.data.success) {
+                        toast.error('Error al cargar las evidencias', {
+                            description: response.data.message,
+                        });
+                        return;
+                    }
+
+                    uploadedSize += chunk.size;
+                    setLoadingProgress(Math.min(80, Math.floor((uploadedSize / totalSize) * 100)));
+
+                    currentPart++;
+                }
+            }
+
+            toast.success('Evidencias cargadas exitosamente',
+                { description: 'Las evidencias de entrega del premio han sido cargadas exitosamente' }
+            );
+
+            setPrizeDialogOpen(false);
+        }
+        catch (error) {
+            toast.error('Error al cargar las evidencias', {
+                description: error.message,
+            });
+        }
+
+        setLoadingProgressBar(false);
     };
 
     const cancelChallenge = async () => {
@@ -111,6 +178,23 @@ const CompanyDashboard = () => {
             setChallengeToCancel(null);
         }
     };
+
+    const IconoArchivo = ({ tipo }) => {
+        switch (tipo) {
+            case 'image/png':
+            case 'image/jpeg':
+            case 'image/gif':
+            case 'image/webp':
+            case 'image/svg+xml':
+                return <ImageIcon />
+            case 'application/pdf':
+                return <FileTextIcon />
+            case 'application/zip':
+                return <FileZipIcon />
+            default:
+                return <FileIcon />
+        }
+    }
 
     useEffect(() => {
         fetchChallenges();
@@ -335,9 +419,55 @@ const CompanyDashboard = () => {
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <FileUploader value={prizeEvidences} onValueChange={setPrizeEvidences} multiple={true} maxFileCount={Infinity} maxSize={1024 * (1024 * 5)} />
+                            {(challengeToPrize?.evidenciaRecompensa?.length > 0) && (
+                                <div className="mt-2">
+                                    <Label className="text-sm font-medium text-foreground">Evidencias previas</Label>
+                                    <div className="grid grid-cols-1 gap-2 mt-2">
+                                        {challengeToPrize.evidenciaRecompensa.map((evidencia, index) => (
+                                            <div className="relative flex items-center gap-2.5" key={index}>
+                                                <div className="flex flex-1 gap-2.5 items-center">
+                                                    <IconoArchivo tipo={evidencia.contentType} />
+                                                    <div className="flex w-full flex-col gap-2">
+                                                        <div className="flex flex-col gap-px">
+                                                            <p className="line-clamp-1 text-sm font-medium text-foreground/80">
+                                                                {evidencia.nombre}
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {formatBytes(evidencia.tamaño)}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <Button
+                                                        type="button"
+                                                        variant="outlineDestructive"
+                                                        size="icon"
+                                                        className="size-7"
+                                                        tooltip="Eliminar"
+                                                    >
+                                                        <Trash2 className="size-4" aria-hidden="true" />
+                                                        <span className="sr-only">Eliminar archivo</span>
+                                                    </Button>
+                                                    <Button
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="icon"
+                                                        className="size-7"
+                                                        tooltip="Descargar"
+                                                    >
+                                                        <Download className="size-4" aria-hidden="true" />
+                                                        <span className="sr-only">Descargar archivo</span>
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                <AlertDialogAction disabled={!prizeEvidences.length > 0} onClick={() => setPrizeDialogOpen(false)}>
+                                <AlertDialogAction disabled={!prizeEvidences.length > 0} onClick={() => handleSubmitEvidence()}>
                                     Confirmar
                                 </AlertDialogAction>
                             </AlertDialogFooter>
@@ -345,6 +475,7 @@ const CompanyDashboard = () => {
                     </AlertDialog>
                 </>
             )}
+            {loadingProgressBar && <PageLoader progress={loadingProgress} />}
         </div>
     );
 };

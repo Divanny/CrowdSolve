@@ -21,6 +21,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly SolucionesRepo _solucionesRepo;
         private readonly ParticipantesRepo _participantesRepo;
         private readonly UsuariosRepo _usuariosRepo;
+        private readonly AdjuntosRepo _adjuntosRepo;
         private readonly FirebaseStorageService _firebaseStorageService;
 
         /// <summary>
@@ -39,6 +40,7 @@ namespace CrowdSolve.Server.Controllers
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
             _participantesRepo = new ParticipantesRepo(crowdSolveContext);
+            _adjuntosRepo = new AdjuntosRepo(crowdSolveContext);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _firebaseStorageService = firebaseStorageService;
         }
@@ -325,6 +327,7 @@ namespace CrowdSolve.Server.Controllers
                 desafio.SolucionesPendientes = _desafiosRepo.GetCantidadSolucionesPendientesDesafio(desafio.idDesafio);
                 var resultado = _desafiosRepo.ValidarUsuarioPuedeEvaluar(desafio.idDesafio, _idUsuarioOnline);
                 desafio.PuedoEvaluar = resultado.Success;
+                desafio.EvidenciaRecompensa = _adjuntosRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
             }
 
             return new

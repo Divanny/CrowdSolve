@@ -23,7 +23,7 @@ namespace CrowdSolve.Server.Models
         public DateTime? FechaRegistro { get; set; }
         [Required(ErrorMessage = "Debe especificar el proceso de evaluación del desafío")]
         public List<ProcesoEvaluacion>? ProcesoEvaluacion { get; set; }
-        public int? idProceso { get; set; }
+        public int idProceso { get; set; }
         public int? idEstatusDesafio { get; set; }
         public string? EstatusDesafio { get; set; }
         public string? SeveridadEstatusDesafio { get; set; }
@@ -32,5 +32,6 @@ namespace CrowdSolve.Server.Models
         public int Participaciones { get; set; }
         public int SolucionesPendientes { get; set; }
         public bool? PuedoEvaluar { get; set; }
+        public List<AdjuntosModel>? EvidenciaRecompensa { get; set; }
     }
 }

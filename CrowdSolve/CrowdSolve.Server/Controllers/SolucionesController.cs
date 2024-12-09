@@ -2,8 +2,10 @@
 using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
+using CrowdSolve.Server.Infrastructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
+using Google.Apis.Requests.Parameters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.Json;
@@ -123,7 +125,7 @@ namespace CrowdSolve.Server.Controllers
                     filePart.CopyTo(fileStream);
                 }
 
-                if (IsLastPart(Request.Headers))
+                if (Utils.IsLastPart(Request.Headers))
                 {
                     guid ??= Guid.NewGuid().ToString();
 
@@ -530,16 +532,6 @@ namespace CrowdSolve.Server.Controllers
                 _logger.LogError(ex);
                 throw;
             }
-        }
-
-        private bool IsLastPart(IHeaderDictionary headers)
-        {
-            int isLastPart;
-            if (!int.TryParse(headers["X-Last-Part"].ToString(), out isLastPart))
-            {
-                isLastPart = 1;
-            }
-            return Convert.ToBoolean(isLastPart);
         }
     }
 }

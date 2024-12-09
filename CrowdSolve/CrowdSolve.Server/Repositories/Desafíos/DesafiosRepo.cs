@@ -53,7 +53,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             EstatusDesafio = estatusProceso.Nombre,
                             SeveridadEstatusDesafio = estatusProceso.Severidad,
                             IconoEstatusDesafio = estatusProceso.ClaseIcono,
-                            Participaciones = DB.Set<Soluciones>().Count(x => x.idDesafio == d.idDesafio),
+                            Participaciones = DB.Set<Soluciones>().Count(x => x.idDesafio == d.idDesafio)
                         });
             }
         )

@@ -1,6 +1,8 @@
-﻿using CrowdSolve.Server.Entities.CrowdSolve;
+﻿using AntiVirus;
+using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
+using CrowdSolve.Server.Infrastructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
@@ -16,12 +18,14 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly DesafiosRepo _desafiosRepo;
+        private readonly AdjuntosRepo _adjuntosRepo;
         private readonly SolucionesRepo _solucionesRepo;
-        private readonly CategoriasRepo _categoriasRepo;
         private readonly HistorialCambioEstatusRepo _historialCambioEstatusRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly EmpresasRepo _empresasRepo;
         private readonly Mailing _mailingService;
+        private readonly Scanner _scanner;
+        private readonly FirebaseStorageService _firebaseStorageService;
 
         /// <summary>
         /// Constructor de la clase SoportesController.
@@ -30,7 +34,8 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
         /// <param name="mailing"></param>
-        public DesafiosController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing)
+        /// <param name="firebaseStorageService"></param>
+        public DesafiosController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing, FirebaseStorageService firebaseStorageService)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
@@ -39,9 +44,11 @@ namespace CrowdSolve.Server.Controllers
             _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
-            _categoriasRepo = new CategoriasRepo(crowdSolveContext);
+            _adjuntosRepo = new AdjuntosRepo(crowdSolveContext);
             _historialCambioEstatusRepo = new HistorialCambioEstatusRepo(crowdSolveContext);
             _mailingService = mailing;
+            _scanner = new Scanner();
+            _firebaseStorageService = firebaseStorageService;
         }
 
         /// <summary>
@@ -325,6 +332,132 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
+        /// Cargar la evidencia de la entrega de premios de un desafío
+        /// </summary>
+        /// <param name="filePart"></param>
+        /// <param name="idDesafio"></param>
+        /// <returns></returns>
+        [HttpPost("CargarEvidencia/{idDesafio}", Name = "CargarEvidencia")]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Dashboard)]
+        public async Task<OperationResult> CargarEvidencia([FromForm] IFormFile filePart, string idDesafio)
+        {
+            var tempDir = Path.Combine(Directory.GetCurrentDirectory(), "Temp", "Evidencia Desafios", _idUsuarioOnline.ToString());
+
+            try
+            {
+                var desafio = _desafiosRepo.Get(x => x.idDesafio == int.Parse(idDesafio)).Where(x => x.idUsuarioEmpresa == _idUsuarioOnline).FirstOrDefault();
+
+                if (desafio == null) return new OperationResult(false, "Este desafío no se ha encontrado");
+
+                if (filePart == null) return new OperationResult(false, "No se ha proporcionado un archivo");
+
+                var fileName = Request.Headers["X-File-Name"].ToString();
+
+                Directory.CreateDirectory(tempDir);
+
+                var currentPart = int.Parse(Request.Headers["X-Part-Number"].ToString());
+
+                Directory.CreateDirectory(Path.Combine(tempDir, "Partes"));
+
+                var tempFilePath = Path.Combine(tempDir, "Partes", $"{fileName}.part{currentPart}");
+
+                using (var fileStream = new FileStream(tempFilePath, FileMode.Create))
+                {
+                    filePart.CopyTo(fileStream);
+                }
+
+                if (Utils.IsLastPart(Request.Headers))
+                {
+                    var finalFilePath = Path.Combine(tempDir, fileName);
+
+                    using (var finalFileStream = new FileStream(finalFilePath, FileMode.Create))
+                    {
+                        for (int i = 1; i <= currentPart; i++)
+                        {
+                            var partFilePath = Path.Combine(tempDir, "Partes", $"{fileName}.part{i}");
+                            using (var partFileStream = new FileStream(partFilePath, FileMode.Open))
+                            {
+                                partFileStream.CopyTo(finalFileStream);
+                            }
+                        }
+                    }
+
+                    Directory.Delete(Path.Combine(tempDir, "Partes"), true);
+
+                    if (_scanner.ScanAndClean(finalFilePath) == ScanResult.VirusFound)
+                    {
+                        Directory.Delete(tempDir, true);
+                        return new OperationResult(false, "Uno o más archivos contienen virus");
+                    }
+
+                    var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                    Stream stream = new FileStream(finalFilePath, FileMode.Open);
+                    var url = await _firebaseStorageService.UploadFileAsync(stream, $"challenges/{idDesafio}/prize-evidences/{fileNameWithoutExtension}", MimeMapping.MimeUtility.GetMimeMapping(fileName));
+
+                    AdjuntosModel evidencia = new AdjuntosModel
+                    {
+                        idProceso = desafio.idProceso,
+                        Nombre = fileName,
+                        Tamaño = new FileInfo(finalFilePath).Length,
+                        ContentType = MimeMapping.MimeUtility.GetMimeMapping(fileName),
+                        RutaArchivo = url,
+                        FechaSubida = DateTime.Now,
+                        idUsuario = _idUsuarioOnline
+                    };
+
+                    stream.Close();
+
+                    System.IO.File.Delete(finalFilePath);
+
+                    _adjuntosRepo.Add(evidencia);
+
+                    return new OperationResult(true, "Se han subido el archivo al servidor satisfactoriamente");
+                }
+
+                return new OperationResult(true, "Se ha subido una parte");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                Directory.Delete(tempDir, true);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Elimina la evidencia de la entrega de premios de un desafío
+        /// </summary>
+        /// <param name="idAdjunto"></param>
+        /// <returns></returns>
+        [HttpDelete("EliminarEvidencia/{idAdjunto}", Name = "EliminarEvidencia")]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Dashboard)]
+        public OperationResult EliminarEvidencia(int idAdjunto)
+        {
+            try
+            {
+                var adjunto = _adjuntosRepo.Get(x => x.idAdjunto == idAdjunto).FirstOrDefault();
+
+                if (adjunto == null) return new OperationResult(false, "Este archivo no se ha encontrado");
+
+                var desafio = _desafiosRepo.Get().Where(x => x.idProceso == adjunto.idProceso).FirstOrDefault();
+
+                if (desafio == null) return new OperationResult(false, "Este desafío no se ha encontrado");
+
+                if (desafio.idUsuarioEmpresa != _idUsuarioOnline) return new OperationResult(false, "Este usuario no tiene permisos para eliminar este archivo");
+
+                _adjuntosRepo.Delete(idAdjunto);
+
+                return new OperationResult(true, "Se ha eliminado esta evidencia satisfactoriamente");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+
+        /// <summary>
         /// Obtiene la información de un desafío de la empresa actual.
         /// </summary>
         /// <param name="idDesafio"></param>
@@ -412,10 +545,10 @@ namespace CrowdSolve.Server.Controllers
         /// Obtiene la cantidad de desafios existentes
         /// </summary>
         /// <returns></returns>
-        [HttpGet ("DesafioDashboardData",Name ="DesafioDashboardData")]
+        [HttpGet("DesafioDashboardData", Name = "DesafioDashboardData")]
         public object GetDashboardData()
         {
-            var desafios= _desafiosRepo.Get().Count();
+            var desafios = _desafiosRepo.Get().Count();
             return desafios;
         }
 
@@ -431,7 +564,7 @@ namespace CrowdSolve.Server.Controllers
             var desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
 
             if (desafio == null) return new List<HistorialCambioEstatusModel>();
-            
+
             return _historialCambioEstatusRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
         }
 
