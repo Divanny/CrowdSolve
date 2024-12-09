@@ -11,10 +11,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { FileIcon, ThumbsUpIcon, UsersIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, SearchIcon, Send } from 'lucide-react'
+import { FileIcon, ThumbsUpIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, SearchIcon, Send } from 'lucide-react'
 import { toast } from 'sonner'
 import Icon from '@/components/ui/icon'
 import { Link } from 'react-router-dom'
+import * as FileSaver from 'file-saver'
 
 const IconoArchivo = ({ tipo }) => {
     switch (tipo) {
@@ -70,20 +71,14 @@ export default function MySolutions() {
                 solution.idSolucion === solutionId ? { ...solution, publica: (currentStatus == null ? false : !currentStatus) } : solution
             ))
         } catch (error) {
-            toast.error('Ocurrió un error al cambiar la visibilidad de la solución')
+            toast.error('Ocurrió un error al cambiar la visibilidad de la solución', { description: error.response?.data?.message })
         }
     }
 
     const downloadAdjunto = async (adjunto) => {
         try {
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
-            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute('download', adjunto.nombre)
-            document.body.appendChild(link)
-            link.click()
-            link.parentNode.removeChild(link)
+            FileSaver.saveAs(response.data, adjunto.nombre)
         } catch (error) {
             toast.error('Operación fallida',
                 {

@@ -27,6 +27,7 @@ public class SolucionesModel
 
     public string? ArchivoRuta { get; set; }
 
+    public int idProceso { get; set; }
     public int idEstatusProceso { get; set; }
 
     public string? EstatusProceso { get; set; }
@@ -51,5 +52,5 @@ public class SolucionesModel
 
     public DesafiosModel? Desafio { get; set; }
     
-    public List<AdjuntosSoluciones>? Adjuntos { get; set; }
+    public List<AdjuntosModel>? Adjuntos { get; set; }
 }

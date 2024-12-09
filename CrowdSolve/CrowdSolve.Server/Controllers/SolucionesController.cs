@@ -19,6 +19,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly SolucionesRepo _solucionesRepo;
+        private readonly AdjuntosRepo _adjuntosRepo;
         private readonly DesafiosRepo _desafiosRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly Mailing _mailingService;
@@ -40,6 +41,7 @@ namespace CrowdSolve.Server.Controllers
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
             _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
+            _adjuntosRepo = new AdjuntosRepo(crowdSolveContext);
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _filesTempDir = Path.Combine(Directory.GetCurrentDirectory(), "Temp", "Soluciones");
@@ -186,7 +188,7 @@ namespace CrowdSolve.Server.Controllers
 
                 if (solucionesModel.FileGuids == null || solucionesModel.FileGuids.Length == 0) return new OperationResult(false, "Debe proporcionar al menos un archivo");
 
-                List<AdjuntosSoluciones> adjuntos = new List<AdjuntosSoluciones>();
+                List<AdjuntosModel> adjuntos = new List<AdjuntosModel>();
 
                 foreach (var guid in solucionesModel.FileGuids)
                 {
@@ -206,13 +208,14 @@ namespace CrowdSolve.Server.Controllers
                         Stream stream = new FileStream(filePath, FileMode.Open);
                         var url = await _firebaseStorageService.UploadFileAsync(stream, $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}/{fileNameWithoutExtension}", MimeMapping.MimeUtility.GetMimeMapping(fileName));
 
-                        adjuntos.Add(new AdjuntosSoluciones
+                        adjuntos.Add(new AdjuntosModel
                         {
                             Nombre = fileName,
                             Tamaño = new FileInfo(filePath).Length,
                             ContentType = MimeMapping.MimeUtility.GetMimeMapping(fileName),
                             RutaArchivo = url,
-                            FechaSubida = DateTime.Now
+                            FechaSubida = DateTime.Now,
+                            idUsuario = _idUsuarioOnline
                         });
 
                         stream.Close();
@@ -277,7 +280,7 @@ namespace CrowdSolve.Server.Controllers
 
                 if (solucionesModel.FileGuids != null && solucionesModel.FileGuids.Length > 0)
                 {
-                    List<AdjuntosSoluciones> adjuntos = new List<AdjuntosSoluciones>();
+                    List<AdjuntosModel> adjuntos = new List<AdjuntosModel>();
 
                     if (solucion.Adjuntos != null && solucion.Adjuntos.Count > 0)
                     {
@@ -305,9 +308,9 @@ namespace CrowdSolve.Server.Controllers
                             Stream stream = new FileStream(filePath, FileMode.Open);
                             var url = await _firebaseStorageService.UploadFileAsync(stream, $"challenges/{solucionesModel.idDesafio}/solutions/{usuario.idUsuario}/{fileNameWithoutExtension}", MimeMapping.MimeUtility.GetMimeMapping(fileName));
 
-                            adjuntos.Add(new AdjuntosSoluciones
+                            adjuntos.Add(new AdjuntosModel
                             {
-                                idSolucion = solucionesModel.idSolucion,
+                                idProceso = solucion.idProceso,
                                 Nombre = fileName,
                                 Tamaño = new FileInfo(filePath).Length,
                                 ContentType = MimeMapping.MimeUtility.GetMimeMapping(fileName),
@@ -440,7 +443,7 @@ namespace CrowdSolve.Server.Controllers
         {
             try
             {
-                var adjunto = _crowdSolveContext.Set<AdjuntosSoluciones>().Where(x => x.idAdjunto == idAdjunto).FirstOrDefault();
+                var adjunto = _adjuntosRepo.Get().Where(x => x.idAdjunto == idAdjunto).FirstOrDefault();
 
                 if (adjunto == null) return NotFound("No se ha encontrado el adjunto");
                 if (adjunto.RutaArchivo == null) return NotFound("No se ha encontrado el adjunto");
