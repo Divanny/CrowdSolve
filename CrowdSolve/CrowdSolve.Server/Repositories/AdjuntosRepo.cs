@@ -3,7 +3,7 @@ using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CrowdSolve.Server.Repositories.Autenticación
+namespace CrowdSolve.Server.Repositories
 {
     public class AdjuntosRepo : Repository<Adjuntos, AdjuntosModel>
     {

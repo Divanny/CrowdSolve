@@ -2,8 +2,8 @@
 using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
-using CrowdSolve.Server.Infrastructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Repositories;
 using CrowdSolve.Server.Repositories.Autenticación;
 using Google.Apis.Requests.Parameters;
 using Microsoft.AspNetCore.Authorization;

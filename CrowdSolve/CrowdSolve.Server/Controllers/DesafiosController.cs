@@ -2,8 +2,8 @@
 using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
-using CrowdSolve.Server.Infrastructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Repositories;
 using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -420,6 +420,44 @@ namespace CrowdSolve.Server.Controllers
             {
                 _logger.LogError(ex);
                 Directory.Delete(tempDir, true);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Descarga la evidencia de la entrega de premios de un desafío
+        /// </summary>
+        /// <param name="idAdjunto"></param>
+        /// <returns></returns>
+        [HttpGet("DescargarEvidencia/{idAdjunto}", Name = "DescargarEvidencia")]
+        [AuthorizeByPermission(PermisosEnum.Empresa_Dashboard)]
+        public async Task<IActionResult> DescargarEvidencia(int idAdjunto)
+        {
+            try
+            {
+                var adjunto = _adjuntosRepo.Get(x => x.idAdjunto == idAdjunto).FirstOrDefault();
+
+                if (adjunto == null) return NotFound("Este archivo no se ha encontrado");
+
+                var desafio = _desafiosRepo.Get().Where(x => x.idProceso == adjunto.idProceso).FirstOrDefault();
+
+                if (desafio == null) return NotFound("Este desafío no se ha encontrado");
+
+                if (desafio.idUsuarioEmpresa != _idUsuarioOnline) return Unauthorized("Este usuario no tiene permisos para descargar este archivo");
+
+                if (adjunto.RutaArchivo == null) return NotFound("No se ha encontrado el adjunto");
+
+                if (string.IsNullOrEmpty(adjunto.ContentType))
+                {
+                    return NotFound("El tipo de contenido del adjunto no se ha encontrado");
+                }
+
+                var stream = await _firebaseStorageService.GetFileAsync(adjunto.RutaArchivo);
+                return File(stream, adjunto.ContentType);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
                 throw;
             }
         }

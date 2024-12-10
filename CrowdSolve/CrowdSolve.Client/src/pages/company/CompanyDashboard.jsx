@@ -28,12 +28,14 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
+    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Textarea } from '@/components/ui/textarea';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum'
 import { FileUploader } from '@/components/FileUploader';
 import PageLoader from '@/components/PageLoader';
 import { formatBytes } from "@/lib/utils"
+import * as FileSaver from 'file-saver';
 
 const CompanyDashboard = () => {
     const { api } = useAxios();
@@ -137,6 +139,8 @@ const CompanyDashboard = () => {
             );
 
             setPrizeDialogOpen(false);
+            fetchChallenges();
+            setPrizeEvidences([]);
         }
         catch (error) {
             toast.error('Error al cargar las evidencias', {
@@ -176,6 +180,36 @@ const CompanyDashboard = () => {
             setCancelDialogOpen(false);
             setCancelReason('');
             setChallengeToCancel(null);
+        }
+    };
+
+    const handleDeleteEvidence = async (evidencia) => {
+        try {
+            const response = await api.delete(`/api/Desafios/EliminarEvidencia/${evidencia.idAdjunto}`);
+            if (response.data.success) {
+                toast.success("Evidencia eliminada exitosamente");
+                fetchChallenges();
+                setPrizeDialogOpen(false);
+            } else {
+                toast.error("Error al eliminar la evidencia", {
+                    description: response.data.message,
+                });
+            }
+        } catch (error) {
+            toast.error("Error al eliminar la evidencia", {
+                description: error.response?.data?.message ?? error.message,
+            });
+        }
+    };
+
+    const downloadEvidence = async (evidencia) => {
+        try {
+            const response = await api.get(`/api/Desafios/DescargarEvidencia/${evidencia.idAdjunto}`, { responseType: 'blob' });
+            FileSaver.saveAs(response.data, evidencia.nombre);
+        } catch (error) {
+            toast.error('Operación fallida', {
+                description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo',
+            });
         }
     };
 
@@ -419,10 +453,11 @@ const CompanyDashboard = () => {
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <FileUploader value={prizeEvidences} onValueChange={setPrizeEvidences} multiple={true} maxFileCount={Infinity} maxSize={1024 * (1024 * 5)} />
-                            {(challengeToPrize?.evidenciaRecompensa?.length > 0) && (
+                            {challengeToPrize?.evidenciaRecompensa?.length > 0 && (
                                 <div className="mt-2">
                                     <Label className="text-sm font-medium text-foreground">Evidencias previas</Label>
-                                    <div className="grid grid-cols-1 gap-2 mt-2">
+                                    <p className="text-xs text-muted-foreground">Estas evidencias están pendientes de validación por un administrador.</p>
+                                    <div className="grid grid-cols-1 gap-2 mt-4">
                                         {challengeToPrize.evidenciaRecompensa.map((evidencia, index) => (
                                             <div className="relative flex items-center gap-2.5" key={index}>
                                                 <div className="flex flex-1 gap-2.5 items-center">
@@ -439,22 +474,37 @@ const CompanyDashboard = () => {
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <Button
-                                                        type="button"
-                                                        variant="outlineDestructive"
-                                                        size="icon"
-                                                        className="size-7"
-                                                        tooltip="Eliminar"
-                                                    >
-                                                        <Trash2 className="size-4" aria-hidden="true" />
-                                                        <span className="sr-only">Eliminar archivo</span>
-                                                    </Button>
+                                                    <AlertDialog>
+                                                        <AlertDialogTrigger asChild>
+                                                            <Button
+                                                                type="button"
+                                                                variant="outlineDestructive"
+                                                                size="icon"
+                                                                className="size-7"
+                                                                tooltip="Eliminar"
+                                                            >
+                                                                <Trash2 className="size-4" aria-hidden="true" />
+                                                                <span className="sr-only">Eliminar archivo</span>
+                                                            </Button>
+                                                        </AlertDialogTrigger>
+                                                        <AlertDialogContent>
+                                                            <AlertDialogHeader>
+                                                                <AlertDialogTitle>¿Estás seguro de que quieres eliminar esta evidencia?</AlertDialogTitle>
+                                                                <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+                                                            </AlertDialogHeader>
+                                                            <AlertDialogFooter>
+                                                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                                                <AlertDialogAction onClick={() => handleDeleteEvidence(evidencia)}>Confirmar</AlertDialogAction>
+                                                            </AlertDialogFooter>
+                                                        </AlertDialogContent>
+                                                    </AlertDialog>
                                                     <Button
                                                         type="button"
                                                         variant="outline"
                                                         size="icon"
                                                         className="size-7"
                                                         tooltip="Descargar"
+                                                        onClick={() => downloadEvidence(evidencia)}
                                                     >
                                                         <Download className="size-4" aria-hidden="true" />
                                                         <span className="sr-only">Descargar archivo</span>

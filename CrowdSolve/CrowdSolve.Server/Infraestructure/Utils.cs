@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Http;
 
-namespace CrowdSolve.Server.Infrastructure
+namespace CrowdSolve.Server.Infraestructure
 {
     public static class Utils
     {
