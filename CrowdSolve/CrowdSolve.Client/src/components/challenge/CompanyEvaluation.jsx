@@ -16,6 +16,7 @@ import useAxios from '@/hooks/use-axios';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom'
 import ProfileHover from '../participants/ProfileHover'
+import * as FileSaver from 'file-saver'
 
 const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
     const { api } = useAxios()
@@ -101,13 +102,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
     const downloadAdjunto = async (adjunto) => {
         try {
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
-            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute('download', adjunto.nombre)
-            document.body.appendChild(link)
-            link.click()
-            link.parentNode.removeChild(link)
+            FileSaver.saveAs(response.data, adjunto.nombre);
         } catch (error) {
             toast.error('Operación fallida',
                 {

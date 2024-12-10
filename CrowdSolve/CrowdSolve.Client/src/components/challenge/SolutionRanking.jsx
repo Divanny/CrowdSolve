@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 import { Badge } from "@/components/ui/badge"
 import ProfileHover from '@/components/participants/ProfileHover'
 import { useNavigate } from 'react-router-dom'
+import * as FileSaver from 'file-saver';
 
 const SolutionRanking = ({ idDesafio }) => {
     const { api } = useAxios()
@@ -41,13 +42,7 @@ const SolutionRanking = ({ idDesafio }) => {
     const downloadAdjunto = async (adjunto) => {
         try {
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
-            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute('download', adjunto.nombre)
-            document.body.appendChild(link)
-            link.click()
-            link.parentNode.removeChild(link)
+            FileSaver.saveAs(response.data, adjunto.nombre);
         } catch (error) {
             toast.error('Operación fallida',
                 {

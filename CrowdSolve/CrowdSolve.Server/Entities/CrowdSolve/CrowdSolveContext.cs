@@ -13,7 +13,7 @@ public partial class CrowdSolveContext : DbContext
     {
     }
 
-    public virtual DbSet<AdjuntosSoluciones> AdjuntosSoluciones { get; set; }
+    public virtual DbSet<Adjuntos> Adjuntos { get; set; }
 
     public virtual DbSet<Categorias> Categorias { get; set; }
 
@@ -75,9 +75,9 @@ public partial class CrowdSolveContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AdjuntosSoluciones>(entity =>
+        modelBuilder.Entity<Adjuntos>(entity =>
         {
-            entity.HasKey(e => e.idAdjunto);
+            entity.HasKey(e => e.idAdjunto).HasName("PK_AdjuntosSoluciones");
 
             entity.Property(e => e.ContentType)
                 .IsRequired()

@@ -18,6 +18,7 @@ import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 import ProfileHover from '@/components/participants/ProfileHover';
 import { useNavigate } from 'react-router-dom'
+import * as FileSaver from 'file-saver';
 
 const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = true }) => {
     const { api } = useAxios()
@@ -119,13 +120,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
     const downloadAdjunto = async (adjunto) => {
         try {
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
-            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute('download', adjunto.nombre)
-            document.body.appendChild(link)
-            link.click()
-            link.parentNode.removeChild(link)
+            FileSaver.saveAs(response.data, adjunto.nombre);
         } catch (error) {
             toast.error('Operación fallida',
                 {
