@@ -21,6 +21,9 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import usePermisoAcceso from '@/hooks/use-permiso-acceso';
 import PermisosEnum from '@/enums/PermisosEnum';
+import { Badge } from '@/components/ui/badge';
+import { useEffect, useState } from 'react';
+import useAxios from '@/hooks/use-axios';
 
 const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
     const { t } = useTranslation();
@@ -34,6 +37,24 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
     const canAccessProfile = usePermisoAcceso(PermisosEnum.Mi_perfil);
     const canAccessSolutions = usePermisoAcceso(PermisosEnum.Mis_Soluciones);
     const canAccessAdmin = usePermisoAcceso(PermisosEnum.Administrador_Dashboard);
+
+    const { api } = useAxios();
+    const [notificationCount, setNotificationCount] = useState(0);
+
+    useEffect(() => {
+        const fetchNotificationCount = async () => {
+            try {
+                const response = await api.get('/api/Notificaciones/Count',
+                    { requireLoading: false }
+                );
+                setNotificationCount(response.data.count);
+            } catch (error) {
+                console.error('Error fetching notification count:', error);
+            }
+        };
+
+        fetchNotificationCount();
+    }, [api]);
 
     const handleLogout = () => {
         dispatch(clearUser());
@@ -85,9 +106,10 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
                         {t('ProfileDropdownMenuContent.solutions')}
                     </DropdownMenuItem>
                 )}
-                <DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate('/notifications')}>
                     <BellRing className="mr-2" size={16} />
                     {t('ProfileDropdownMenuContent.notifications')}
+                    { notificationCount > 0 && <Badge className="ml-auto" variant="secondary">{notificationCount}</Badge> }
                 </DropdownMenuItem>
                 {canAccessAdmin && (
                     <DropdownMenuItem onSelect={() => navigate('/admin')}>

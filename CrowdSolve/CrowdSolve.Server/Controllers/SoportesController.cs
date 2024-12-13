@@ -49,13 +49,8 @@ namespace CrowdSolve.Server.Controllers
         public List<SoportesModel> Get()
         {
             List<SoportesModel> soportes = _soportesRepo.Get().ToList();
-
-
-
             return soportes;
         }
-
-
 
         /// <summary>
         /// Obtiene un soporte por su ID.
@@ -73,8 +68,6 @@ namespace CrowdSolve.Server.Controllers
             return soporte;
         }
 
-       
-
         /// <summary>
         /// Crea una nueva solicitud de soporte (solo para usuarios en línea).
         /// </summary>
@@ -89,9 +82,7 @@ namespace CrowdSolve.Server.Controllers
                 var usuario = _usuariosRepo.Get(_idUsuarioOnline);
                 if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
-                //var fechaFormateada = DateTime.Now;
-
-                soporteModel.Fecha = DateTime.Now; /*fechaFormateada.ToString("f")*/;
+                soporteModel.Fecha = DateTime.Now;
 
                 var created = _soportesRepo.Add(soporteModel);
                 _logger.LogHttpRequest(soporteModel);
