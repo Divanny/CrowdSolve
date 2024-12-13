@@ -21,6 +21,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly AdjuntosRepo _adjuntosRepo;
         private readonly SolucionesRepo _solucionesRepo;
         private readonly HistorialCambioEstatusRepo _historialCambioEstatusRepo;
+        private readonly NotificacionesRepo _notificacionesRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly EmpresasRepo _empresasRepo;
         private readonly Mailing _mailingService;
@@ -46,6 +47,7 @@ namespace CrowdSolve.Server.Controllers
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
             _adjuntosRepo = new AdjuntosRepo(crowdSolveContext);
             _historialCambioEstatusRepo = new HistorialCambioEstatusRepo(crowdSolveContext);
+            _notificacionesRepo = new NotificacionesRepo(crowdSolveContext);
             _mailingService = mailing;
             _scanner = new Scanner();
             _firebaseStorageService = firebaseStorageService;
@@ -263,9 +265,18 @@ namespace CrowdSolve.Server.Controllers
                 var proceso = _desafiosRepo.procesosRepo.Get(x => x.idRelacionado == desafio.idDesafio).FirstOrDefault();
                 if (proceso == null) return new OperationResult(false, "No se ha encontrado el proceso relacionado con este desafío");
 
-                if (proceso.idEstatusProceso != (int)(EstatusProcesoEnum.Desafío_Sin_validar)) return new OperationResult(false, "El desafío ya ha sido validado");
+                if (proceso.idEstatusProceso != (int)EstatusProcesoEnum.Desafío_Sin_validar) return new OperationResult(false, "El desafío ya ha sido validado");
 
                 _desafiosRepo.ValidarDesafio(idDesafio);
+
+                _notificacionesRepo.EnviarNotificacion(
+                    desafio.idUsuarioEmpresa ?? 0,
+                    "Se ha validado tu desafío",
+                    $"El desafío <b>{desafio.Titulo}</b> ha sido validado exitosamente",
+                    desafio.idProceso,
+                    _crowdSolveContext.Set<Vistas>().Where(x => x.idVista == (int)PermisosEnum.Empresa_Dashboard).FirstOrDefault()?.URL ?? string.Empty
+                );
+
                 return new OperationResult(true, "Se ha validado el desafío exitosamente");
             }
             catch (Exception ex)
@@ -294,6 +305,15 @@ namespace CrowdSolve.Server.Controllers
                 if (proceso.idEstatusProceso != (int)(EstatusProcesoEnum.Desafío_Sin_validar)) return new OperationResult(false, "El desafío ya ha sido validado");
 
                 _desafiosRepo.RechazarDesafio(idDesafio, motivo);
+
+                _notificacionesRepo.EnviarNotificacion(
+                    desafio.idUsuarioEmpresa ?? 0,
+                    "Se ha rechazado tu desafío",
+                    $"El desafío <b>{desafio.Titulo}</b> ha sido rechazado por el siguiente motivo:<br/>{motivo}",
+                    desafio.idProceso,
+                    _crowdSolveContext.Set<Vistas>().Where(x => x.idVista == (int)PermisosEnum.Empresa_Dashboard).FirstOrDefault()?.URL ?? string.Empty
+                );
+
                 return new OperationResult(true, "Se ha rechazado el desafío exitosamente");
             }
             catch (Exception ex)
@@ -569,6 +589,24 @@ namespace CrowdSolve.Server.Controllers
                     return new OperationResult(false, "No se ha especificado la información del nuevo estatus");
 
                 _desafiosRepo.CambiarEstatus(idDesafio, (EstatusProcesoEnum)cambioEstatusModel.idEstatusProceso, cambioEstatusModel.MotivoCambioEstatus);
+
+                var estatus = _crowdSolveContext.Set<EstatusProceso>().Where(x => x.idEstatusProceso == cambioEstatusModel.idEstatusProceso).FirstOrDefault();
+
+                if (estatus == null) return new OperationResult(false, "El estatus especificado no se ha encontrado");
+
+                string mensajeCambioEstatus = $"El estatus del desafío <b>{desafio.Titulo}</b> ha sido cambiado a <b>{estatus.Nombre}</b>";
+
+                if (estatus.RequiereMotivo) {
+                    mensajeCambioEstatus = $"El estatus del desafío <b>{desafio.Titulo}</b> ha sido cambiado a <b>{estatus.Nombre}</b> por el siguiente motivo:<br/>{cambioEstatusModel.MotivoCambioEstatus}";
+                }
+
+                _notificacionesRepo.EnviarNotificacion(
+                    desafio.idUsuarioEmpresa ?? 0,
+                    "Se ha cambiado el estatus de tu desafío",
+                    mensajeCambioEstatus,
+                    desafio.idProceso,
+                    _crowdSolveContext.Set<Vistas>().Where(x => x.idVista == (int)PermisosEnum.Empresa_Dashboard).FirstOrDefault()?.URL ?? string.Empty
+                );
 
                 return new OperationResult(true, "Se ha cambiado el estatus al desafío exitosamente");
             }

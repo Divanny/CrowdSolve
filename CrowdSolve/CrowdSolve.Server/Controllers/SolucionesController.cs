@@ -22,6 +22,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly SolucionesRepo _solucionesRepo;
         private readonly AdjuntosRepo _adjuntosRepo;
+        private readonly NotificacionesRepo _notificacionesRepo;
         private readonly DesafiosRepo _desafiosRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly Mailing _mailingService;
@@ -46,6 +47,7 @@ namespace CrowdSolve.Server.Controllers
             _adjuntosRepo = new AdjuntosRepo(crowdSolveContext);
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
+            _notificacionesRepo = new NotificacionesRepo(crowdSolveContext);
             _filesTempDir = Path.Combine(Directory.GetCurrentDirectory(), "Temp", "Soluciones");
             _scanner = new Scanner();
             _mailingService = mailing;
@@ -381,6 +383,15 @@ namespace CrowdSolve.Server.Controllers
                 if (solucionModel.Puntuacion < 0 || solucionModel.Puntuacion > 100) return new OperationResult(false, "La puntuación debe ser entre 0 y 100");
 
                 _solucionesRepo.PuntuarSolucion(idSolucion, solucionModel.Puntuacion);
+
+                _notificacionesRepo.EnviarNotificacion(
+                    solucion.idUsuario, 
+                    "Solución evaluada", 
+                    $"Tu solución al desafío {desafio.Titulo} ha sido evaluada con una puntuación de <b>{solucionModel.Puntuacion}</b>.", 
+                    solucion.idProceso,
+                    _crowdSolveContext.Set<Vistas>().Where(x => x.idVista == (int)PermisosEnum.Mis_Soluciones).FirstOrDefault()?.URL ?? string.Empty
+                );
+
                 _logger.LogHttpRequest(solucionModel);
                 return new OperationResult(true, "Se ha agregado la puntuación a la solución exitosamente", solucionModel);
             }
@@ -417,6 +428,11 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Agrega un voto a una solución
+        /// </summary>
+        /// <param name="idSolucion"></param>
+        /// <returns></returns>
         [HttpPost("MeGusta/{idSolucion}", Name = "MeGusta")]
         [AuthorizeByPermission(PermisosEnum.Evaluar_Desafío)]
         public OperationResult MeGusta(int idSolucion)
@@ -439,6 +455,11 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Descarga un archivo adjunto de una solución
+        /// </summary>
+        /// <param name="idAdjunto"></param>
+        /// <returns></returns>
         [HttpGet("DescargarAdjunto/{idAdjunto}")]
         [Authorize]
         public async Task<IActionResult> DescargarAdjunto(int idAdjunto)
@@ -451,6 +472,8 @@ namespace CrowdSolve.Server.Controllers
                 if (adjunto.RutaArchivo == null) return NotFound("No se ha encontrado el adjunto");
 
                 var stream = await _firebaseStorageService.GetFileAsync(adjunto.RutaArchivo);
+
+                _logger.LogHttpRequest(adjunto);
                 return File(stream, adjunto.ContentType);
             }
             catch (Exception ex)
@@ -492,6 +515,9 @@ namespace CrowdSolve.Server.Controllers
             return soluciones;
         }
 
+        /// <summary>
+        /// Obtiene la cantidad de soluciones enviadas
+        /// </summary>
         [HttpGet("GetCantidadSoluciones", Name = "GetCantidadSoluciones")]
         [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
         public object GetCantidadSoluciones()
@@ -525,7 +551,19 @@ namespace CrowdSolve.Server.Controllers
 
                 _solucionesRepo.CambiarEstatus(idSolucion, (EstatusProcesoEnum)cambioEstatusModel.idEstatusProceso, cambioEstatusModel.MotivoCambioEstatus);
 
-                return new OperationResult(true, "Se ha cambiado el estatus al desafío exitosamente");
+                var desafio = _desafiosRepo.Get(x => x.idDesafio == solucion.idDesafio).FirstOrDefault();
+                var estatus = _crowdSolveContext.Set<EstatusProceso>().FirstOrDefault(x => x.idEstatusProceso == cambioEstatusModel.idEstatusProceso);
+
+                _notificacionesRepo.EnviarNotificacion(
+                    solucion.idUsuario, 
+                    "Estatus de solución cambiado", 
+                    $"El estatus de tu solución al desafío {desafio?.Titulo} ha sido cambiado a <b>{estatus?.Nombre}</b>.", 
+                    solucion.idProceso,
+                    _crowdSolveContext.Set<Vistas>().Where(x => x.idVista == (int)PermisosEnum.Mis_Soluciones).FirstOrDefault()?.URL ?? string.Empty
+                );
+
+                _logger.LogHttpRequest(cambioEstatusModel);
+                return new OperationResult(true, "Se ha cambiado el estatus a la solución exitosamente");
             }
             catch (Exception ex)
             {

@@ -15,7 +15,15 @@ public partial class Notificaciones
 
     public string Mensaje { get; set; }
 
-    public int idProceso { get; set; }
+    public int? idProceso { get; set; }
 
     public DateTime Fecha { get; set; }
+
+    public string UrlRedireccion { get; set; }
+
+    public bool Leido { get; set; }
+
+    public string Icono { get; set; }
+
+    public string Severidad { get; set; }
 }

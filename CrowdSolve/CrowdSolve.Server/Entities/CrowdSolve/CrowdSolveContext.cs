@@ -306,13 +306,22 @@ public partial class CrowdSolveContext : DbContext
             entity.HasKey(e => e.idNotificacion);
 
             entity.Property(e => e.Fecha).HasColumnType("datetime");
+            entity.Property(e => e.Icono)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.Mensaje)
                 .IsRequired()
-                .HasMaxLength(100)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.Severidad)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Titulo)
                 .IsRequired()
                 .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.UrlRedireccion)
+                .HasMaxLength(200)
                 .IsUnicode(false);
         });
 
