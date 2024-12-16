@@ -323,8 +323,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         {
             List<int> estatusProcesoEnums = new List<int>
             {
-                #warning Quitar este estatus luego de hacer el crud de validación de desafío
-                (int)EstatusProcesoEnum.Desafío_Sin_iniciar,
                 (int)EstatusProcesoEnum.Desafío_En_progreso,
                 (int)EstatusProcesoEnum.Desafío_En_evaluación,
                 (int)EstatusProcesoEnum.Desafío_En_espera_de_entrega_de_premios,
@@ -333,7 +331,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
             var idRelacionados = procesosRepo.Get(x => estatusProcesoEnums.Contains(x.idEstatusProceso)).Select(x => x.idRelacionado).ToList();
             var desafios = filter != null ? this.Get(x => idRelacionados.Contains(x.idDesafio) && filter(x)).ToList() : this.Get(x => idRelacionados.Contains(x.idDesafio)).ToList();
-            return desafios;
+            return desafios.OrderByDescending(x => x.FechaRegistro).ToList();
         }
 
         public List<DesafiosModel> GetDesafiosEnProgreso()

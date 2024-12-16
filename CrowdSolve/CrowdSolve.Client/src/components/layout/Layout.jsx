@@ -6,7 +6,9 @@ import {
     SidebarInset,
     SidebarProvider
 } from "@/components/ui/sidebar"
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setLanguage } from '@/redux/slices/languageSlice';
+import { setTheme } from '@/redux/slices/themeSlice';
 import GetLogo from "@/helpers/get-logo";
 import {
     Sidebar,
@@ -24,13 +26,17 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
+    DropdownMenuPortal,
+    DropdownMenuContent,
+    DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
 import ProfileDropdownMenuContent from '@/components/layout/ProfileDropdownMenuContent';
 import Icon from "@/components/ui/icon";
 import { Badge } from "@/components/ui/badge"
-import { ChevronsUpDown, X } from "lucide-react"
+import { ChevronsUpDown, X, Check, Moon, Sun, MonitorSmartphone } from "lucide-react"
 import { useTranslation } from 'react-i18next';
+import flags from "react-phone-number-input/flags";
 
 const Layout = () => {
     const { t } = useTranslation();
@@ -40,9 +46,19 @@ const Layout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const user = useSelector((state) => state.user.user);
+    const theme = useSelector((state) => state.theme.theme);
+    const language = useSelector((state) => state.language.language);
+    const dispatch = useDispatch();
 
     const CrowdSolveLogo = GetLogo();
 
+    const handleTheme = (theme) => {
+        dispatch(setTheme(theme));
+    }
+
+    const handleLanguage = (language) => {
+        dispatch(setLanguage(language));
+    }
 
     const sidebarItems = [
         {
@@ -141,7 +157,70 @@ const Layout = () => {
                             <ProfileDropdownMenuContent user={user} showHeader={false} />
                         </DropdownMenu>
                     ) : (
-                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
+                        <div className='flex flex-col gap-2'>
+                            <div className='flex justify-between items-center'>
+                            <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="sm">
+                                            <div className="flex items-center">
+                                                {
+                                                    theme == 'system' ? (
+                                                        <MonitorSmartphone className="mr-2" size={16} />
+                                                    ) : theme == 'light' ? (
+                                                        <Sun className="mr-2" size={16} />
+                                                    ) : (
+                                                        <Moon className="mr-2" size={16} />
+                                                    )
+                                                }
+                                                <span>{t('ProfileDropdownMenuContent.appearance')}</span>
+                                            </div>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuPortal>
+                                        <DropdownMenuContent className="w-36 mr-2">
+                                            <DropdownMenuItem onSelect={() => handleTheme('system')}>
+                                                <MonitorSmartphone className="mr-2" size={16} />
+                                                <span>{t('ProfileDropdownMenuContent.theme.system')}</span>
+                                                {theme == 'system' && <Check className="ml-auto" size={16} />}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={() => handleTheme('light')}>
+                                                <Sun className="mr-2" size={16} />
+                                                <span>{t('ProfileDropdownMenuContent.theme.light')}</span>
+                                                {theme == 'light' && <Check className="ml-auto" size={16} />}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={() => handleTheme('dark')}>
+                                                <Moon className="mr-2" size={16} />
+                                                <span>{t('ProfileDropdownMenuContent.theme.dark')}</span>
+                                                {theme == 'dark' && <Check className="ml-auto" size={16} />}
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenuPortal>
+                                </DropdownMenu>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="sm">
+                                            <div className="flex items-center">
+                                                <FlagComponent country={language == 'es' ? 'ES' : 'US'} countryName={language.toUpperCase()} />
+                                                <span>{t('ProfileDropdownMenuContent.language')}</span>
+                                            </div>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuPortal>
+                                        <DropdownMenuContent className="w-36 mr-2">
+                                            <DropdownMenuItem onSelect={() => handleLanguage('es')}>
+                                                <FlagComponent country={'ES'} countryName={'Spain'} />
+                                                <span>{t('ProfileDropdownMenuContent.language_options.es')}</span>
+                                                {language == 'es' && <Check className="ml-auto" size={16} />}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={() => handleLanguage('en')}>
+                                                <FlagComponent country={'US'} countryName={'English'} />
+                                                <span>{t('ProfileDropdownMenuContent.language_options.en')}</span>
+                                                {language == 'en' && <Check className="ml-auto" size={16} />}
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenuPortal>
+                                </DropdownMenu>
+                            </div>
                             <Button variant="outline" onClick={() => navigate('/sign-in')}>{t('navbar.auth.signIn')}</Button>
                             <Button onClick={() => navigate('/sign-up')}>{t('navbar.auth.signUp')}</Button>
                         </div>
@@ -151,5 +230,16 @@ const Layout = () => {
         </SidebarProvider>
     );
 };
+
+const FlagComponent = ({ country, countryName }) => {
+    const Flag = flags[country];
+
+    return (
+        <div className="bg-foreground/20 flex h-4 w-6 overflow-hidden rounded-sm mr-2">
+            {Flag && <Flag title={countryName} />}
+        </div>
+    );
+};
+FlagComponent.displayName = "FlagComponent";
 
 export default Layout;

@@ -254,6 +254,13 @@
     "ParticipantsSolutionsOverview": true,
     "ParticipantsStatsOverview": true,
     "ParticipantsProfileSkeleton": true,
-    "ParticipantsProfileHover": true
+    "ParticipantsProfileHover": true,
+    "UiMagnetic-button": true,
+    "UiMeteors": true,
+    "UiBackground-beams": true,
+    "UiInfinite-moving-cards": true,
+    "UiMarquee": true,
+    "UiSpotlight": true,
+    "UiTypewriter-effect": true
   }
 }

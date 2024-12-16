@@ -173,3 +173,9 @@ body {
 .rdp-vhidden {
   @apply hidden;
 }
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

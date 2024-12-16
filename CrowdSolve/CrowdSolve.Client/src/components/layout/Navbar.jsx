@@ -2,23 +2,41 @@ import CrowdSolveLogoLight from '@/assets/CrowdSolveLogo_light.svg';
 import CrowdSolveLogoDark from '@/assets/CrowdSolveLogo_dark.svg';
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setLanguage } from '@/redux/slices/languageSlice';
+import { setTheme } from '@/redux/slices/themeSlice';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
+    DropdownMenuPortal,
+    DropdownMenuContent,
+    DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
 import { useTranslation } from 'react-i18next';
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Check, Moon, Sun, MonitorSmartphone } from 'lucide-react';
+import flags from "react-phone-number-input/flags";
 
 const Navbar = () => {
     const navigate = useNavigate();
-    const user = useSelector((state) => state.user.user);
+    const dispatch = useDispatch();
     const { t } = useTranslation();
 
+    const user = useSelector((state) => state.user.user);
+    const language = useSelector((state) => state.language.language);
     const theme = useSelector((state) => state.theme.theme);
+
     const CrowdSolveLogo = theme === 'system' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? CrowdSolveLogoDark : CrowdSolveLogoLight) : (theme === 'dark' ? CrowdSolveLogoDark : CrowdSolveLogoLight);
+
+    const handleTheme = (theme) => {
+        dispatch(setTheme(theme));
+    }
+
+    const handleLanguage = (language) => {
+        dispatch(setLanguage(language));
+    }
 
     return (
         <nav className="relative z-50">
@@ -50,15 +68,87 @@ const Navbar = () => {
                                     <ProfileDropdownMenuContent user={user} />
                                 </DropdownMenu>
                             </div>
-                        ) : (<div className='flex items-center gap-2'>
-                            <Button className="my-1 text-sm" variant="outline" onClick={() => navigate('/sign-in')}>{t('navbar.auth.signIn')}</Button>
-                            <Button className="my-1 text-sm" onClick={() => navigate('/sign-up')}>{t('navbar.auth.signUp')}</Button>
-                        </div>)}
+                        ) : (
+                            <div className='flex items-center gap-4'>
+                                <div className='flex items-center gap-4'>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger>
+                                            <div className="flex items-center cursor-pointer">
+                                                {
+                                                    theme == 'system' ? (
+                                                        <MonitorSmartphone className="mr-2" size={16} />
+                                                    ) : theme == 'light' ? (
+                                                        <Sun className="mr-2" size={16} />
+                                                    ) : (
+                                                        <Moon className="mr-2" size={16} />
+                                                    )
+                                                }
+                                            </div>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuPortal>
+                                            <DropdownMenuContent className="w-36 mr-2">
+                                                <DropdownMenuItem onSelect={() => handleTheme('system')}>
+                                                    <MonitorSmartphone className="mr-2" size={16} />
+                                                    <span>{t('ProfileDropdownMenuContent.theme.system')}</span>
+                                                    {theme == 'system' && <Check className="ml-auto" size={16} />}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => handleTheme('light')}>
+                                                    <Sun className="mr-2" size={16} />
+                                                    <span>{t('ProfileDropdownMenuContent.theme.light')}</span>
+                                                    {theme == 'light' && <Check className="ml-auto" size={16} />}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => handleTheme('dark')}>
+                                                    <Moon className="mr-2" size={16} />
+                                                    <span>{t('ProfileDropdownMenuContent.theme.dark')}</span>
+                                                    {theme == 'dark' && <Check className="ml-auto" size={16} />}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenuPortal>
+                                    </DropdownMenu>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger>
+                                            <div className="flex items-center cursor-pointer">
+                                                <FlagComponent country={language == 'es' ? 'ES' : 'US'} countryName={language.toUpperCase()} />
+                                            </div>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuPortal>
+                                            <DropdownMenuContent className="w-36 mr-2">
+                                                <DropdownMenuItem onSelect={() => handleLanguage('es')}>
+                                                    <FlagComponent country={'ES'} countryName={'Spain'} />
+                                                    <span>{t('ProfileDropdownMenuContent.language_options.es')}</span>
+                                                    {language == 'es' && <Check className="ml-auto" size={16} />}
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => handleLanguage('en')}>
+                                                    <FlagComponent country={'US'} countryName={'English'} />
+                                                    <span>{t('ProfileDropdownMenuContent.language_options.en')}</span>
+                                                    {language == 'en' && <Check className="ml-auto" size={16} />}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenuPortal>
+                                    </DropdownMenu>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <Button className="my-1 text-sm" variant="outline" onClick={() => navigate('/sign-in')}>{t('navbar.auth.signIn')}</Button>
+                                    <Button className="my-1 text-sm" onClick={() => navigate('/sign-up')}>{t('navbar.auth.signUp')}</Button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
         </nav >
     );
 };
+
+const FlagComponent = ({ country, countryName }) => {
+    const Flag = flags[country];
+
+    return (
+        <span className="bg-foreground/20 flex h-4 w-6 overflow-hidden rounded-sm mr-2">
+            {Flag && <Flag title={countryName} />}
+        </span>
+    );
+};
+FlagComponent.displayName = "FlagComponent";
 
 export default Navbar;
