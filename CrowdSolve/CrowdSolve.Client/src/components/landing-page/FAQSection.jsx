@@ -34,7 +34,7 @@ import {
   
     return (
       <motion.section 
-        className="py-32 bg-accent"
+        className="py-20 md:py-32 bg-accent"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}

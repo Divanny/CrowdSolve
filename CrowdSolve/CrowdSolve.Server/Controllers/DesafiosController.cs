@@ -618,6 +618,23 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
+        /// Obtiene los desafíos de la landing page
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetDesafiosLandingPage", Name = "GetDesafiosLandingPage")]
+        public List<DesafiosModel> GetDesafiosLandingPage()
+        {
+            List<DesafiosModel> desafios = _desafiosRepo.GetDesafiosValidados().Take(6).ToList();
+            desafios.ForEach(desafio =>
+            {
+                desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+                desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
+            });
+
+            return desafios;
+        }
+
+        /// <summary>
         /// Obtiene la cantidad de desafios existentes
         /// </summary>
         /// <returns></returns>
