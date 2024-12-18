@@ -186,18 +186,24 @@ export default function NotificationsPage() {
                     key={notification.idNotificacion}
                     className={`group relative flex flex-col sm:flex-row items-start gap-4 p-4 transition-colors hover:bg-muted/50 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-primary before:opacity-0 hover:before:opacity-100 ${!notification.leido ? 'bg-muted/30' : 'bg-background'}`}
                   >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 w-full sm:w-auto">
                       <Checkbox
                         checked={selectedIds.includes(notification.idNotificacion)}
                         onCheckedChange={() => toggleNotification(notification.idNotificacion)}
                         className="mt-1"
                       />
+                      <p className="text-xs text-muted-foreground/70 self-start sm:self-auto sm:hidden items-center flex gap-2 flex-1 justify-between">
+                        {formatDistanceToNow(new Date(notification.fecha), { addSuffix: true, locale: es })}
+                        <Button variant="ghostDestructive" size="icon" onClick={() => deleteNotification(notification.idNotificacion)} className="transition-opacity">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </p>
                     </div>
                     <div className="flex gap-3 min-w-0 flex-1">
                       {notification.icono != null &&
                         (<Icon name={notification.icono} className={`h-4 w-4 mt-1 flex-shrink-0 ${!notification.leido ? `text-${notification.severidad}` : 'text-muted-foreground'}`} />)
                       }
-                      <div className="flex-1 min-w-5/6">
+                      <div className="flex-1">
                         <div className="flex items-center gap-2">
                           {notification.urlRedireccion ? (
                             <a
@@ -218,9 +224,9 @@ export default function NotificationsPage() {
                         </div>
                         <p className={`text-sm mt-1 ${!notification.leido ? 'text-muted-foreground' : 'text-muted-foreground/70'}`} dangerouslySetInnerHTML={{ __html: notification.mensaje }} />
                       </div>
-                      <p className="text-xs text-muted-foreground/70 mt-2 self-start sm:self-auto flex items-center gap-2">
+                      <p className="text-xs text-muted-foreground/70 mt-2 self-start sm:self-auto hidden sm:flex sm:flex-row items-end sm:items-center gap-2">
                         {formatDistanceToNow(new Date(notification.fecha), { addSuffix: true, locale: es })}
-                        <Button variant="ghostDestructive" size="icon" onClick={() => deleteNotification(notification.idNotificacion)} className="opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button variant="ghostDestructive" size="icon" onClick={() => deleteNotification(notification.idNotificacion)} className="hidden group-hover:flex transition-opacity">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </p>

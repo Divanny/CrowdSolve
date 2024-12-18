@@ -15,9 +15,9 @@ public partial class Desafios
 
     public string Contenido { get; set; }
 
-    public DateTime FechaRegistro { get; set; }
+    public DateTime FechaInicio { get; set; }
 
     public DateTime FechaLimite { get; set; }
 
-    public DateTime FechaInicio { get; set; }
+    public DateTime FechaRegistro { get; set; }
 }
