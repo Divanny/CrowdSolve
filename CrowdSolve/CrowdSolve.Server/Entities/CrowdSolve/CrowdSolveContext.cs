@@ -369,6 +369,7 @@ public partial class CrowdSolveContext : DbContext
             entity.HasKey(e => e.idProcesoEvaluacion);
 
             entity.Property(e => e.FechaFinalizacion).HasColumnType("datetime");
+            entity.Property(e => e.FechaInicio).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Procesos>(entity =>

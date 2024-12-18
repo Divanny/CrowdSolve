@@ -113,10 +113,13 @@ FirebaseApp.Create(new AppOptions()
 });
 
 builder.Services.AddAuthorization();
+
 builder.Services.AddScoped<Authentication>();
 builder.Services.AddScoped<Mailing>();
 builder.Services.AddScoped<FirebaseStorageService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+builder.Services.AddHostedService<Worker>();
 
 builder.Services.Configure<IISServerOptions>(options => options.MaxRequestBodySize = int.MaxValue);
 builder.Services.Configure<KestrelServerOptions>(options =>

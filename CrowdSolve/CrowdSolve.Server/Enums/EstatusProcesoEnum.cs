@@ -21,6 +21,7 @@
         Desafío_Sin_iniciar = 21,
         Desafío_Sin_validar = 22,
         Desafío_Rechazado = 23,
-        Desafío_Descartado = 25
+        Desafío_Descartado = 25,
+        Desafío_En_validación_de_soluciones = 1002
     }
 }

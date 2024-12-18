@@ -13,5 +13,7 @@ public partial class ProcesoEvaluacion
 
     public int idTipoEvaluacion { get; set; }
 
+    public DateTime FechaInicio { get; set; }
+
     public DateTime FechaFinalizacion { get; set; }
 }

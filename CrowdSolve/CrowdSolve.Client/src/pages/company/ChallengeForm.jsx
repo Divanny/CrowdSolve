@@ -66,6 +66,7 @@ export default function ChallengeForm() {
 
     const [categoriasDisponibles, setCategoriasDisponibles] = useState([])
     const [tiposEvaluacionDisponibles, setTiposEvaluacionDisponibles] = useState([])
+    const [diasDespuesFechaFinalizacion, setDiasDespuesFechaFinalizacion] = useState(5)
     const [dialogoAbierto, setDialogoAbierto] = useState(false)
 
     const form = useForm({
@@ -111,9 +112,10 @@ export default function ChallengeForm() {
         const fetchRelationalObjects = async () => {
             try {
                 const response = await api.get('/api/Desafios/GetRelationalObjects')
-                const { categorias, tiposEvaluacion } = response.data
+                const { categorias, tiposEvaluacion, diasDespuesFechaFinalizacion } = response.data
                 setCategoriasDisponibles(categorias)
                 setTiposEvaluacionDisponibles(tiposEvaluacion)
+                setDiasDespuesFechaFinalizacion(diasDespuesFechaFinalizacion)
             } catch (error) {
                 toast.error("Operación errónea", {
                     description: "Ocurrió un error al cargar los objetos relacionales",
@@ -344,7 +346,14 @@ export default function ChallengeForm() {
                             render={({ field }) => (
                                 <FormItem>
                                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                                        <FormLabel>Procesos de Evaluación</FormLabel>
+                                        <FormLabel>
+                                            <div className="flex items-center gap-2">
+                                                Procesos de Evaluación
+                                                <span className="text-muted-foreground text-sm"> 
+                                                    Iniciará el día {format(addDays(form.getValues('fechaLimite'), diasDespuesFechaFinalizacion), "PPP", { locale: es })}
+                                                </span>
+                                            </div>
+                                        </FormLabel>
                                         <Dialog open={dialogoAbierto} onOpenChange={setDialogoAbierto}>
                                             <DialogTrigger asChild>
                                                 <Button variant="outline">

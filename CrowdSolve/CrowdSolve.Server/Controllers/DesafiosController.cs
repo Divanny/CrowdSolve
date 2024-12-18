@@ -158,15 +158,20 @@ namespace CrowdSolve.Server.Controllers
                 if (desafioModel.ProcesoEvaluacion.Any(ProcesoEvaluacion => ProcesoEvaluacion.FechaFinalizacion <= DateTime.Now)) return new OperationResult(false, "La fecha de finalización del proceso de evaluación no puede ser menor o igual a la fecha actual");
                 if (desafioModel.ProcesoEvaluacion.Any(ProcesoEvaluacion => ProcesoEvaluacion.idTipoEvaluacion == 0)) return new OperationResult(false, "No se proporcionó información del tipo de evaluación del proceso de evaluación");
 
+                DateTime fechaInicioEvaluacion = desafioModel.FechaLimite.AddDays(_desafiosRepo.diasDespuesFechaFinalizacion);
+
                 for (int i = 0; i < desafioModel.ProcesoEvaluacion.Count; i++)
                 {
                     var procesoEvaluacionActual = desafioModel.ProcesoEvaluacion[i];
+                    procesoEvaluacionActual.FechaInicio = fechaInicioEvaluacion;
 
                     if (i == desafioModel.ProcesoEvaluacion.Count - 1) break;
 
                     var procesoEvaluacionSiguiente = desafioModel.ProcesoEvaluacion[i + 1];
                     if (procesoEvaluacionActual.FechaFinalizacion > procesoEvaluacionSiguiente.FechaFinalizacion) return new OperationResult(false, "La fecha de finalización del proceso de evaluación actual no puede ser mayor a la fecha de finalización del proceso de evaluación siguiente");
                     if (procesoEvaluacionSiguiente.FechaFinalizacion - procesoEvaluacionActual.FechaFinalizacion < TimeSpan.FromDays(5)) return new OperationResult(false, "La fecha de finalización del proceso de evaluación siguiente debe ser al menos 5 días después de la fecha de finalización del proceso de evaluación actual");
+
+                    fechaInicioEvaluacion = procesoEvaluacionActual.FechaFinalizacion.AddDays(1);
                 }
 
                 var created = _desafiosRepo.Add(desafioModel);
@@ -215,15 +220,20 @@ namespace CrowdSolve.Server.Controllers
                 if (desafioModel.ProcesoEvaluacion.Any(ProcesoEvaluacion => ProcesoEvaluacion.FechaFinalizacion <= DateTime.Now)) return new OperationResult(false, "La fecha de finalización del proceso de evaluación no puede ser menor o igual a la fecha actual");
                 if (desafioModel.ProcesoEvaluacion.Any(ProcesoEvaluacion => ProcesoEvaluacion.idTipoEvaluacion == 0)) return new OperationResult(false, "No se proporcionó información del tipo de evaluación del proceso de evaluación");
 
+                DateTime fechaInicioEvaluacion = desafioModel.FechaLimite.AddDays(_desafiosRepo.diasDespuesFechaFinalizacion);
+
                 for (int i = 0; i < desafioModel.ProcesoEvaluacion.Count; i++)
                 {
                     var procesoEvaluacionActual = desafioModel.ProcesoEvaluacion[i];
+                    procesoEvaluacionActual.FechaInicio = fechaInicioEvaluacion;
 
                     if (i == desafioModel.ProcesoEvaluacion.Count - 1) break;
 
                     var procesoEvaluacionSiguiente = desafioModel.ProcesoEvaluacion[i + 1];
                     if (procesoEvaluacionActual.FechaFinalizacion > procesoEvaluacionSiguiente.FechaFinalizacion) return new OperationResult(false, "La fecha de finalización del proceso de evaluación actual no puede ser mayor a la fecha de finalización del proceso de evaluación siguiente");
                     if (procesoEvaluacionSiguiente.FechaFinalizacion - procesoEvaluacionActual.FechaFinalizacion < TimeSpan.FromDays(5)) return new OperationResult(false, "La fecha de finalización del proceso de evaluación siguiente debe ser al menos 5 días después de la fecha de finalización del proceso de evaluación actual");
+
+                    fechaInicioEvaluacion = procesoEvaluacionActual.FechaFinalizacion.AddDays(1);
                 }
 
                 _desafiosRepo.Edit(desafioModel);
@@ -690,6 +700,7 @@ namespace CrowdSolve.Server.Controllers
 
             return new
             {
+                DiasDespuesFechaFinalizacion = _desafiosRepo.diasDespuesFechaFinalizacion,
                 Categorias = _desafiosRepo.GetCategorias(),
                 TiposEvaluacion = _desafiosRepo.GetTiposEvaluacion(),
                 EstatusDesafios = (allEstatuses) ? _desafiosRepo.GetEstatusDesafios() : _desafiosRepo.GetEstatusDesafios().Where(x => estatusProcesoEnums.Contains(x.idEstatusProceso)),

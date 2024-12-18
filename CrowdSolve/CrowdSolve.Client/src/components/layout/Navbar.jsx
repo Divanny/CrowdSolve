@@ -11,13 +11,16 @@ import {
     DropdownMenuTrigger,
     DropdownMenuPortal,
     DropdownMenuContent,
-    DropdownMenuItem
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu"
 import ProfileDropdownMenuContent from './ProfileDropdownMenuContent';
 import { useTranslation } from 'react-i18next';
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Check, Moon, Sun, MonitorSmartphone } from 'lucide-react';
+import { Check, Moon, Sun, SunMoon } from 'lucide-react';
 import flags from "react-phone-number-input/flags";
+import { useEffect, useState } from 'react';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -38,8 +41,21 @@ const Navbar = () => {
         dispatch(setLanguage(language));
     }
 
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     return (
-        <nav className="relative z-50">
+        <nav className={`sticky top-0 z-50 transition-all duration-300 w-full ${isScrolled ? 'bg-background/50 backdrop-blur border-grid border-b' : 'bg-transparent'}`}>
             <div className="container relative flex flex-wrap items-center justify-between py-2 lg:py-2 px-4 md:px-6">
                 <div className="flex w-full flex-wrap items-center justify-between">
                     <div>
@@ -76,7 +92,7 @@ const Navbar = () => {
                                             <div className="flex items-center cursor-pointer">
                                                 {
                                                     theme == 'system' ? (
-                                                        <MonitorSmartphone className="mr-2" size={16} />
+                                                        <SunMoon className="mr-2" size={16} />
                                                     ) : theme == 'light' ? (
                                                         <Sun className="mr-2" size={16} />
                                                     ) : (
@@ -87,8 +103,10 @@ const Navbar = () => {
                                         </DropdownMenuTrigger>
                                         <DropdownMenuPortal>
                                             <DropdownMenuContent className="w-36 mr-2">
+                                                <DropdownMenuLabel>{t('ProfileDropdownMenuContent.appearance')}</DropdownMenuLabel>
+                                                <DropdownMenuSeparator />
                                                 <DropdownMenuItem onSelect={() => handleTheme('system')}>
-                                                    <MonitorSmartphone className="mr-2" size={16} />
+                                                    <SunMoon className="mr-2" size={16} />
                                                     <span>{t('ProfileDropdownMenuContent.theme.system')}</span>
                                                     {theme == 'system' && <Check className="ml-auto" size={16} />}
                                                 </DropdownMenuItem>
@@ -113,6 +131,8 @@ const Navbar = () => {
                                         </DropdownMenuTrigger>
                                         <DropdownMenuPortal>
                                             <DropdownMenuContent className="w-36 mr-2">
+                                                <DropdownMenuLabel>{t('ProfileDropdownMenuContent.language')}</DropdownMenuLabel>
+                                                <DropdownMenuSeparator />
                                                 <DropdownMenuItem onSelect={() => handleLanguage('es')}>
                                                     <FlagComponent country={'ES'} countryName={'Spain'} />
                                                     <span>{t('ProfileDropdownMenuContent.language_options.es')}</span>

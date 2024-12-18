@@ -15,6 +15,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         public ProcesosRepo procesosRepoProcesoEvaluacion;
         public UsuariosRepo usuariosRepo;
         public int _idUsuarioEnLinea;
+        public readonly int diasDespuesFechaFinalizacion = 5;
         public DesafiosRepo(DbContext dbContext, int idUsuarioEnLinea) : base
         (
             dbContext,
@@ -96,10 +97,14 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
                     if (model.ProcesoEvaluacion != null && model.ProcesoEvaluacion.Count > 0)
                     {
-                        foreach (var procesoEvaluacion in model.ProcesoEvaluacion)
+                        DateTime fechaInicioEvaluacion = model.FechaLimite.AddDays(diasDespuesFechaFinalizacion);
+
+                        for (int i = 0; i < model.ProcesoEvaluacion.Count; i++)
                         {
+                            var procesoEvaluacion = model.ProcesoEvaluacion[i];
                             procesoEvaluacion.idDesafio = creado.idDesafio;
                             procesoEvaluacion.idProcesoEvaluacion = 0;
+                            procesoEvaluacion.FechaInicio = fechaInicioEvaluacion;
                             var procesoEvaluacionCreado = dbContext.Set<ProcesoEvaluacion>().Add(procesoEvaluacion);
 
                             dbContext.SaveChanges();
@@ -114,6 +119,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             };
 
                             procesosRepoProcesoEvaluacion.Add(procesoModelEvaluacion);
+
+                            fechaInicioEvaluacion = procesoEvaluacion.FechaFinalizacion.AddDays(1);
                         }
                     }
 
@@ -171,10 +178,14 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             }
                         }
 
-                        foreach (var procesoEvaluacion in model.ProcesoEvaluacion)
+                        DateTime fechaInicioEvaluacion = model.FechaLimite.AddDays(diasDespuesFechaFinalizacion);
+
+                        for (int i = 0; i < model.ProcesoEvaluacion.Count; i++)
                         {
+                            var procesoEvaluacion = model.ProcesoEvaluacion[i];
                             procesoEvaluacion.idDesafio = model.idDesafio;
                             procesoEvaluacion.idProcesoEvaluacion = 0;
+                            procesoEvaluacion.FechaInicio = fechaInicioEvaluacion;
                             var procesoEvaluacionCreado = dbContext.Set<ProcesoEvaluacion>().Add(procesoEvaluacion);
 
                             dbContext.SaveChanges();
@@ -189,6 +200,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             };
 
                             procesosRepoProcesoEvaluacion.Add(procesoModelEvaluacion);
+
+                            fechaInicioEvaluacion = procesoEvaluacion.FechaFinalizacion.AddDays(1);
                         }
                     }
 
@@ -366,7 +379,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             return solucionesPendientes;
         }
 
-        public void CambiarEstatus(int idDesafio, EstatusProcesoEnum estatus, string? motivo)
+        public void CambiarEstatus(int idDesafio, EstatusProcesoEnum estatus, string? motivo = null)
         {
             if (motivo == null)
             {
