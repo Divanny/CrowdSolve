@@ -33,7 +33,6 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
   const [editedParticipant, setEditedParticipant] = useState(participant)
 
   useEffect(() => {
-    console.log(participant);
     setEditedParticipant(participant)
   }, [participant])
 

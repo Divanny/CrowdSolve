@@ -19,6 +19,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly EmpresasRepo _empresasRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly SolucionesRepo _solucionesRepo;
+        private readonly DesafiosRepo _desafiosRepo;
         private readonly FirebaseStorageService _firebaseStorageService;
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace CrowdSolve.Server.Controllers
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
+            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _firebaseStorageService = firebaseStorageService;
         }
 
@@ -237,7 +239,30 @@ namespace CrowdSolve.Server.Controllers
                     throw;
                 }
             }
+        }
 
+        /// <summary>
+        /// Obtiene las soluciones de un participante por su ID desde la vista de administrador.
+        /// </summary>
+        /// <param name="idParticipante">ID del participante.</param>
+        /// <returns></returns>
+        [HttpGet("GetSolucionesParticipante/{idParticipante}", Name = "GetSolucionesParticipante")]
+        [AuthorizeByPermission(PermisosEnum.Administrar_Participantes)]
+        public List<SolucionesModel> GetSolucionesParticipante(int idParticipante)
+        {
+            var participante = _participantesRepo.Get(x => x.idParticipante == idParticipante).FirstOrDefault();
+
+            if (participante == null) throw new Exception("Este participante no se ha encontrado");
+
+            var soluciones = _solucionesRepo.Get(x => x.idUsuario == participante.idUsuario).ToList();
+
+            foreach (var solucion in soluciones)
+            {
+                solucion.Desafio = _desafiosRepo.Get(x => x.idDesafio == solucion.idDesafio).FirstOrDefault();
+                solucion.CantidadVotos = _crowdSolveContext.Set<VotosUsuarios>().Count(x => x.idSolucion == solucion.idSolucion);
+            }
+
+            return soluciones;
         }
 
         [HttpGet("GetRelationalObjects")]

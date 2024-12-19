@@ -108,7 +108,7 @@ export default function AdminLayout() {
             ],
         },
         {
-            title: t('AdminLayout.sideBarAdm.Solutions'),
+            title: t('AdminLayout.sideBarAdm.Requests'),
             url: "#",
             items: [
                 {

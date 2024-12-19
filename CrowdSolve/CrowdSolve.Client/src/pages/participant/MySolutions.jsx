@@ -146,14 +146,14 @@ export default function MySolutions() {
                     <Card key={solution.idSolucion}>
                         <CardContent className="p-6">
                             <div className="flex flex-col sm:flex-row justify-between items-start mb-4">
-                                <div className="flex gap-2 sm:gap-4 items-start sm:items-center">
+                                <div className="flex gap-2 sm:gap-4 items-start sm:items-center w-full sm:w-auto">
                                     <Avatar>
                                         <AvatarImage src={`/api/Account/GetAvatar/${solution.desafio.idUsuarioEmpresa}`} />
                                         <AvatarFallback>{solution.desafio.empresa.substring(0, 2).toUpperCase()}</AvatarFallback>
                                     </Avatar>
-                                    <div>
-                                        <h2 className="text-xl font-semibold">{solution.desafio.titulo}</h2>
-                                        <p className="text-sm text-muted-foreground">{solution.titulo}</p>
+                                    <div className="flex-1 min-w-0">
+                                        <h2 className="text-xl font-semibold truncate">{solution.desafio.titulo}</h2>
+                                        <p className="text-sm text-muted-foreground truncate">{solution.titulo}</p>
                                     </div>
                                 </div>
                                 <Badge variant={solution.severidadEstatusProceso} className="flex gap-1 mt-2 sm:mt-0">
@@ -166,10 +166,10 @@ export default function MySolutions() {
                                     {solution.desafio.estatusDesafio}
                                 </Badge>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 w-full">
                                 <div>
                                     <p className="text-xs text-muted-foreground">Empresa</p>
-                                    <p className="text-sm font-medium">{solution.desafio.empresa}</p>
+                                    <p className="text-sm font-medium truncate">{solution.desafio.empresa}</p>
                                 </div>
                                 <div>
                                     <p className="text-xs text-muted-foreground">Fecha de envío</p>

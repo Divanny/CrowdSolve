@@ -261,6 +261,7 @@
     "UiInfinite-moving-cards": true,
     "UiMarquee": true,
     "UiSpotlight": true,
-    "UiTypewriter-effect": true
+    "UiTypewriter-effect": true,
+    "AdminParticipantsParticipantSolutionsDialog": true
   }
 }

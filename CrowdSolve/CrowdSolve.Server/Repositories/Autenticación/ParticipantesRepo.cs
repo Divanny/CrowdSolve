@@ -28,8 +28,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                         join usuario in DB.Set<Usuarios>() on p.idUsuario equals usuario.idUsuario
                         join estatusUsuario in DB.Set<EstatusUsuarios>() on usuario.idEstatusUsuario equals estatusUsuario.idEstatusUsuario
                         join nivelEducativo in DB.Set<NivelesEducativo>() on p.idNivelEducativo equals nivelEducativo.idNivelEducativo
-                        join solucionesSet in DB.Set<Soluciones>() on p.idUsuario equals solucionesSet.idUsuario into soLF
-                        from so in soLF.DefaultIfEmpty()
 
                         select new ParticipantesModel()
                         {

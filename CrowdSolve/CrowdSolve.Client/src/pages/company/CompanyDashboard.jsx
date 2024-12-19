@@ -83,7 +83,6 @@ const CompanyDashboard = () => {
     };
 
     const handlePrizeClick = (desafio) => {
-        console.log(desafio);
         setChallengeToPrize(desafio);
         setPrizeDialogOpen(true);
     };

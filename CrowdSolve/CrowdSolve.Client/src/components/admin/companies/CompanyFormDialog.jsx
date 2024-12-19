@@ -34,7 +34,6 @@ export function CompanyFormDialog({
   const [editedCompany, setEditedCompany] = useState(company);
 
   useEffect(() => {
-    console.log(company);
     setEditedCompany(company);
   }, [company]);
 

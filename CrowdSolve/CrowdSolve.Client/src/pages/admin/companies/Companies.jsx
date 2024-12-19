@@ -226,8 +226,6 @@ export default function Companies() {
                         requireLoading: false,
                     }),
                 ]);
-            console.log(empresasResponse);
-            console.log(relationalObjectsResponse);
             setData(empresasResponse.data);
             setTamanosEmpresas(relationalObjectsResponse.data.tamañosEmpresa);
             setSectores(relationalObjectsResponse.data.sectores);
