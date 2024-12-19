@@ -48,96 +48,49 @@ export default function AdminLayout() {
     const user = useSelector((state) => state.user.user);
 
     const sidebarItems = [
-    
         {
             title: null,
             url: "#",
             items: [
-                {
-                    title: "Dashboard",
-                    url: "/admin",
-                    icon: "Gauge",
-                },
+                { title: "Dashboard", url: "/admin", icon: "Gauge" },
             ],
         },
         {
             title: t('AdminLayout.sideBarAdm.AdmUser'),
             url: "#",
             items: [
-                {
-                    title: t('AdminLayout.sideBarAdm.Participants'),
-                    url: "/admin/participants",
-                    icon: "Users",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.Companies'),
-                    url: "/admin/companies",
-                    icon: "Building2",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.Admins'),
-                    url: "/admin/administrators",
-                    icon: "ShieldCheck",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.RolesPermissions'),
-                    url: "/admin/permissions",
-                    icon: "Key",
-                },
+                { title: t('AdminLayout.sideBarAdm.Participants'), url: "/admin/participants", icon: "Users" },
+                { title: t('AdminLayout.sideBarAdm.Companies'), url: "/admin/companies", icon: "Building2" },
+                { title: t('AdminLayout.sideBarAdm.Admins'), url: "/admin/administrators", icon: "ShieldCheck" },
+                { title: t('AdminLayout.sideBarAdm.RolesPermissions'), url: "/admin/permissions", icon: "Key" },
             ],
         },
         {
             title: t('AdminLayout.sideBarAdm.AdmChallenges'),
             url: "#",
             items: [
-                {
-                    title: t('AdminLayout.sideBarAdm.Challenges'),
-                    url: "/admin/challenges",
-                    icon: "Flag",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.Solutions'),
-                    url: "/admin/solutions",
-                    icon: "Send",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.Categories'),
-                    url: "/admin/categories",
-                    icon: "TableProperties",
-                },
+                { title: t('AdminLayout.sideBarAdm.Challenges'), url: "/admin/challenges", icon: "Flag" },
+                { title: t('AdminLayout.sideBarAdm.Solutions'), url: "/admin/solutions", icon: "Send" },
+                { title: t('AdminLayout.sideBarAdm.Categories'), url: "/admin/categories", icon: "TableProperties" },
             ],
         },
         {
             title: t('AdminLayout.sideBarAdm.Requests'),
             url: "#",
             items: [
-                {
-                    title: t('AdminLayout.sideBarAdm.CompanyRequests'),
-                    url: "/admin/company-requests",
-                    icon: "Building2",
-                    pending: 3,
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.SupportRequests'),
-                    url: "/admin/support-requests",
-                    icon: "Headset",
-                    pending: 1,
-                },
+                { title: t('AdminLayout.sideBarAdm.CompanyRequests'), url: "/admin/company-requests", icon: "Building2", pending: 0 },
+                { title: t('AdminLayout.sideBarAdm.SupportRequests'), url: "/admin/support-requests", icon: "Headset", pending: 0 },
             ],
         },
         {
             title: t('AdminLayout.sideBarAdm.Settings'),
             url: "#",
             items: [
-                {
-                    title: t('AdminLayout.sideBarAdm.UserManual'),
-                    url: "/admin/user-manual",
-                    icon: "Book",
-                },
+                { title: t('AdminLayout.sideBarAdm.UserManual'), url: "/admin/user-manual", icon: "Book" },
             ],
         },
-    ]
-    
+    ];
+
     const { api } = useAxios();
 
     const CrowdSolveLogo = GetLogo();
@@ -189,7 +142,7 @@ export default function AdminLayout() {
                                                 <Link variant="secondary" className="w-full flex justify-start items-center gap-2" to={item.url}>
                                                     {(item.icon != "" && item.icon != null) && <Icon name={item.icon} />}
                                                     {item.title}
-                                                    {item.pending > 0 && <Badge variant="outline secondary" className="ml-auto">{item.pending}</Badge>}
+                                                    {(item.pending != null) && <Badge variant="outline secondary" className="ml-auto">{item.pending}</Badge>}
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>

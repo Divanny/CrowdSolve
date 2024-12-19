@@ -1,9 +1,11 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CrowdSolve.Server.Controllers
 {
@@ -17,8 +19,9 @@ namespace CrowdSolve.Server.Controllers
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
         private readonly FirebaseStorageService _firebaseStorageService;
-
-        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger, FirebaseStorageService firebaseStorageService)
+        private readonly Mailing _mailingService;
+        
+        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger, FirebaseStorageService firebaseStorageService, Mailing mailing)
         {
             _authentication = authentication;
             _logger = logger;
@@ -26,6 +29,7 @@ namespace CrowdSolve.Server.Controllers
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _perfilesRepo = new PerfilesRepo(crowdSolveContext);
             _firebaseStorageService = firebaseStorageService;
+            _mailingService = mailing;
         }
 
         /// <summary>
@@ -73,6 +77,22 @@ namespace CrowdSolve.Server.Controllers
 
                 OperationResult result = _authentication.SignUp(credentials);
                 _logger.LogHttpRequest(result.Data);
+
+                string mailBody = $@"
+                    <h1>¡Bienvenido a CrowdSolve!</h1>
+                    <p>Estamos encantados de informarte que tu registro en nuestra plataforma ha sido exitoso.</p>
+                    <p>A continuación, los detalles de tu cuenta:</p>
+                    <ul>
+                        <li><b>Nombre:</b> {credentials.Username}</li>
+                        <li><b>Correo electrónico:</b> {credentials.Email}</li>
+                    </ul>
+                    <p>Ahora puedes acceder a nuestra plataforma y comenzar a disfrutar de todas las herramientas y recursos que hemos preparado para ti.</p>
+                    <p>Si tienes alguna pregunta o necesitas ayuda para comenzar, no dudes en contactarnos respondiendo a este correo.</p>
+                    <p>¡Gracias por unirte a CrowdSolve!</p>
+                ";
+
+                _mailingService.SendMail([credentials.Email], "¡Bienvenido a CrowdSolve!", mailBody, MailingUsers.noreply);
+
                 return result;
             }
             catch (Exception ex)

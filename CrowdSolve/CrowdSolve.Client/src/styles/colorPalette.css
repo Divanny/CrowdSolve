@@ -1,0 +1,44 @@
+:root {
+  --chartColor-1: hsl(0, 100%, 70%);  /* Background Light */
+  --chartColor-2: hsl(0, 30%, 20%);   /* Background Dark */
+  --chartColor-3: hsl(15, 30%, 40%);  /* Foreground */
+  --chartColor-4: hsl(30, 60%, 50%);  /* Primary */
+  --chartColor-5: hsl(45, 60%, 70%);  /* Secondary */
+  --chartColor-6: hsl(30, 10%, 60%);  /* Muted */
+  --chartColor-7: hsl(0, 80%, 60%);   /* Destructive */
+  --chartColor-8: hsl(120, 60%, 50%); /* Success */
+  --chartColor-9: hsl(39, 100%, 50%); /* Warning */
+  --chartColor-10: hsl(20, 10%, 40%); /* Earth 1 */
+  --chartColor-11: hsl(20, 10%, 50%); /* Earth 2 */
+  --chartColor-12: hsl(30, 10%, 70%); /* Earth 3 */
+  --chartColor-13: hsl(20, 10%, 80%); /* Earth 4 */
+  --chartColor-14: hsl(40, 10%, 90%); /* Earth 5 */
+  --chartColor-15: hsl(120, 50%, 40%);/* Forest 1 */
+  --chartColor-16: hsl(120, 50%, 45%);/* Forest 2 */
+  --chartColor-17: hsl(120, 50%, 50%);/* Forest 3 */
+  --chartColor-18: hsl(120, 40%, 60%);/* Forest 4 */
+  --chartColor-19: hsl(120, 20%, 80%);/* Forest 5 */
+  --chartColor-20: hsl(210, 80%, 40%);/* Ocean 1 */
+  --chartColor-21: hsl(210, 80%, 45%);/* Ocean 2 */
+  --chartColor-22: hsl(210, 80%, 50%);/* Ocean 3 */
+  --chartColor-23: hsl(200, 70%, 60%);/* Ocean 4 */
+  --chartColor-24: hsl(200, 50%, 85%);/* Ocean 5 */
+  --chartColor-25: hsl(20, 80%, 60%);  /* Sunset 1 */
+  --chartColor-26: hsl(20, 80%, 55%);  /* Sunset 2 */
+  --chartColor-27: hsl(20, 80%, 70%);  /* Sunset 3 */
+  --chartColor-28: hsl(20, 80%, 80%);  /* Sunset 4 */
+  --chartColor-29: hsl(20, 50%, 90%);  /* Sunset 5 */
+  --chartColor-30: hsl(340, 80%, 40%);/* Berry 1 */
+  --chartColor-31: hsl(340, 80%, 45%);/* Berry 2 */
+  --chartColor-32: hsl(340, 80%, 50%);/* Berry 3 */
+  --chartColor-33: hsl(340, 80%, 60%);/* Berry 4 */
+  --chartColor-34: hsl(340, 80%, 80%);/* Berry 5 */
+  --chartColor-35: hsl(40, 20%, 90%);  /* Accent Light */
+  --chartColor-36: hsl(30, 40%, 20%);  /* Accent Dark */
+  --chartColor-37: hsl(10, 60%, 50%);  /* Chart 1 */
+  --chartColor-38: hsl(230, 30%, 30%); /* Chart 2 */
+  --chartColor-39: hsl(120, 20%, 60%); /* Chart 3 */
+  --chartColor-40: hsl(10, 60%, 50%);  /* Duplicate Chart 1 */
+}
+
+

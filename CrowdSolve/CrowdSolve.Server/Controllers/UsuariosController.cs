@@ -157,7 +157,7 @@ namespace CrowdSolve.Server.Controllers
         [Authorize]
         public object GetCantidadUsuarios()
         {
-            var usuarios = _crowdSolveContext.Set<Usuarios>().Count(x=>x.idUsuario==1);
+            var usuarios = _crowdSolveContext.Set<Usuarios>().Count();
             var usuariosPendientes= _crowdSolveContext.Set<Usuarios>().Count(x => x.idUsuario == 1003);
             var usuariosParticipantes= _participantesRepo.Get().Count();
             var usuariosEmpresas = _empresasRepo.Get().Count();

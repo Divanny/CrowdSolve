@@ -253,6 +253,8 @@
     "ParticipantsProfileInfo": true,
     "ParticipantsSolutionsOverview": true,
     "ParticipantsStatsOverview": true,
+    "DashboardPieChartChallenge": true,
+    "DashboardTopChallengeCompany": true,
     "ParticipantsProfileSkeleton": true,
     "ParticipantsProfileHover": true,
     "UiMagnetic-button": true,

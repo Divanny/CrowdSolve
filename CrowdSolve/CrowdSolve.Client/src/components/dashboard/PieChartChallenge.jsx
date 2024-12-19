@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useMemo } from "react"
-import { TrendingUp } from 'lucide-react'
+import { useMemo, useEffect, useState } from "react"
+import useAxios from "@/hooks/use-axios"
 import { Label, Pie, PieChart } from "recharts"
 
 import {
@@ -26,108 +26,51 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-/* const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
-] */
+const colorPalette = Array.from({ length: 40 }, (_, i) => `var(--chartColor-${i + 1})`)
 
-  const colorPalette = [
-    "hsl(var(--chart-1))", "hsl(var(--chart-2))", "hsl(var(--chart-3))", "hsl(var(--chart-4))", 
-    "hsl(var(--chart-5))", "hsl(var(--chart-6))", "hsl(var(--chart-7))", "hsl(var(--chart-8))", 
-    "hsl(var(--chart-9))", "hsl(var(--chart-10))", "hsl(var(--chart-11))", "hsl(var(--chart-12))", 
-    "hsl(var(--chart-13))", "hsl(var(--chart-14))", "hsl(var(--chart-15))", "hsl(var(--chart-16))", 
-    "hsl(var(--chart-17))", "hsl(var(--chart-18))", "hsl(var(--chart-19))", "hsl(var(--chart-20))", 
-    "hsl(var(--chart-21))", "hsl(var(--chart-22))", "hsl(var(--chart-23))", "hsl(var(--chart-24))", 
-    "hsl(var(--chart-25))", "hsl(var(--chart-26))", "hsl(var(--chart-27))", "hsl(var(--chart-28))", 
-    "hsl(var(--chart-29))", "hsl(var(--chart-30))"
-  ];
-
-/* const chartConfig = {
-  visitors: {
-    label: "cantidadDesafios",
-  },
-  chrome: {
-    label: "Investigación",
-    color: "hsl(var(--chart-1))",
-  },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
-} */
-
-
-export function PieChartWithNumber({linkApi}) {
-  
+export function PieChartWithNumber() {
   const [filter, setFilter] = useState("total");
-    const { api } = useAxios();
-    const [dataCategorias, setDataCategoria] = useState([]);
-  
-    const fetchData = async () => {
-      try {
-        console.log(filter)
+  const { api } = useAxios();
+  const [dataCategorias, setDataCategoria] = useState([]);
 
-        if(filter=="total")
-        {
-          const [categoriasResponse, relationalObjectsResponse] =
-          await Promise.all([
-            api.get(`/api/Desafios/DesafioDashboardData`, { requireLoading: false }),
-          ]);
+  const fetchData = async () => {
+    try {
+      console.log(filter)
 
-          const chartData = [
-            { nombre: "Total Desafios ", cantidadDesafios:0 , fill: "var(--color-chrome)" },
-          ] 
-          
-          chartData[0].cantidadDesafios=categoriasResponse.data;
-          setDataCategoria(chartData);
-        
-        }
-        else
-        {
-          const [categoriasResponse, relationalObjectsResponse] =
-          await Promise.all([
-            api.get(`/api/${filter}`, { requireLoading: false }),
-          ]);
-  
-        setDataCategoria(categoriasResponse.data);
-        
-        }
-        
-  
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        /* setIsLoading(false); */
+      if (filter == "total") {
+        const [categoriasResponse] = await Promise.all([api.get(`/api/Desafios/DesafioDashboardData`, { requireLoading: false })]);
+
+        const chartData = [
+          { nombre: "Total Desafios ", cantidadDesafios: 0, fill: "var(--color-chrome)" },
+        ]
+
+        chartData[0].cantidadDesafios = categoriasResponse.data;
+        setDataCategoria(chartData);
       }
-    };
-  
-    useEffect(() => {
-      fetchData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filter]);
-  
+      else {
+        const [categoriasResponse] = await Promise.all([api.get(`/api/${filter}`, { requireLoading: false })]);
+
+        setDataCategoria(categoriasResponse.data);
+
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      /* setIsLoading(false); */
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
+
   const totalCategories = useMemo(() => {
     const categories = dataCategorias;
 
     console.log(categories); // Aquí puedes verificar la estructura de chartData
     return categories.reduce((acc, curr) => acc + curr.cantidadDesafios, 0);
   }, [dataCategorias]);
-
 
   const chartDataWithColors = useMemo(() => {
     const categories = dataCategorias;
@@ -136,7 +79,6 @@ export function PieChartWithNumber({linkApi}) {
       fill: colorPalette[index % colorPalette.length] // Asignar un color de la paleta
     }));
   }, [dataCategorias]);
-
 
   const chartConfig = useMemo(() => {
     const categories = dataCategorias;
@@ -148,23 +90,15 @@ export function PieChartWithNumber({linkApi}) {
     }));
   }, [dataCategorias]);
 
-
-
-
-
-
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Cantidad Desafios</CardTitle>
         <CardDescription>Creados</CardDescription>
       </CardHeader>
-
-
       <CardContent className="flex-1 pb-0">
-
-      <div className="flex justify-end mb-4">
-          <Select value={filter} onValueChange={(value) =>{ setFilter(value);console.log(value);}}>
+        <div className="flex justify-end mb-4">
+          <Select value={filter} onValueChange={(value) => { setFilter(value); console.log(value); }}>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Select a filter" />
             </SelectTrigger>
@@ -175,8 +109,6 @@ export function PieChartWithNumber({linkApi}) {
             </SelectContent>
           </Select>
         </div>
-
-
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
@@ -228,10 +160,9 @@ export function PieChartWithNumber({linkApi}) {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="leading-none text-muted-foreground">
-        Mostrando el total de Desafios en sus diferentes ambitos.
+          Mostrando el total de Desafios en sus diferentes ambitos.
         </div>
       </CardFooter>
     </Card>
   )
 }
-
