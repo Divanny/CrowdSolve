@@ -19,6 +19,7 @@ function GoogleLoginButton() {
 
         try {
             const response = await api.post('api/Account/GoogleLogin', { code: code });
+            console.log(response);
 
             if (response.data.success) {
                 const { token, data } = response.data;

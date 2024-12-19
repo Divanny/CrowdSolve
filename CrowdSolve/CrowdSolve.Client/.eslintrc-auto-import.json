@@ -252,6 +252,8 @@
     "ParticipantsParticipantFormDialog": true,
     "ParticipantsProfileInfo": true,
     "ParticipantsSolutionsOverview": true,
-    "ParticipantsStatsOverview": true
+    "ParticipantsStatsOverview": true,
+    "DashboardPieChartChallenge": true,
+    "DashboardTopChallengeCompany": true
   }
 }

@@ -27,6 +27,7 @@ import PermisosEnum from '@/enums/PermisosEnum';
 const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
     const { t } = useTranslation();
     const { api } = useAxios();
+    const [logo, setLogo] = useState("");
     const theme = useSelector((state) => state.theme.theme);
     const language = useSelector((state) => state.language.language);
     const navigate = useNavigate();
@@ -58,7 +59,8 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
             const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
             if (responseAvatarURL.status == 200) {
                 const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                user.avatarURL = URL.createObjectURL(avatarBlob)
+                /* user.avatarURL = URL.createObjectURL(avatarBlob) */
+                setLogo(URL.createObjectURL(avatarBlob));
             }
         }
 
@@ -74,7 +76,7 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
             { showHeader && <DropdownMenuLabel>
                 <div className='flex items-center'>
                     <Avatar className="bg-accent" size="1">
-                        <AvatarImage src={(user.avatarURL) ? user.avatarURL : `https://robohash.org/${user.nombreUsuario}`} />
+                        <AvatarImage src={/* (user.avatarURL) */ logo? logo: `https://robohash.org/${user.nombreUsuario}`} />
                         <AvatarFallback>{user[0]}</AvatarFallback>
                     </Avatar>
                     <div className='flex flex-col ml-2'>

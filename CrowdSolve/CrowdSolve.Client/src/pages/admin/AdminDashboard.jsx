@@ -23,8 +23,8 @@ import {
 } from "lucide-react";
 
 import { Overview } from "../../components/dashboard/Overview"
-import { RecentSales } from "../../components/dashboard/RecentSales"
-import {PieChartWithNumber} from "../../components/dashboard/PieChartWithNumber"
+import { RecentSales } from "../../components/dashboard/TopChallengeCompany"
+import {PieChartWithNumber} from "../../components/dashboard/PieChartChallenge"
 import {PieChartCompany} from "../../components/dashboard/PieChartCompany"
 import { Title } from '@radix-ui/react-dialog';
 
@@ -147,10 +147,7 @@ const Dashboard = () => {
               </Card>
               <Card className="col-span-3">
                 <CardHeader>
-                  <CardTitle>Top Empresas con más Desafios</CardTitle>
-                  <CardDescription>
-                    You made 265 sales this month.
-                  </CardDescription>
+                  <CardTitle>Top 10 Empresas con más Desafios</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <RecentSales />

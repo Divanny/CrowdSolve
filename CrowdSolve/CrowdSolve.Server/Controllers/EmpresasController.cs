@@ -305,7 +305,9 @@ namespace CrowdSolve.Server.Controllers
             // Obtén las empresas y ordénalas por 'cantidadDesafios' en orden descendente
             List<EmpresasModel> empresas = _empresasRepo.Get()
                 .OrderByDescending(e => e.CantidadDesafios)
-                .ToList();
+                .Take(10)
+                .ToList()
+                ;
             return empresas;
         }
 

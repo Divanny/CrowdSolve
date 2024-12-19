@@ -446,6 +446,36 @@ namespace CrowdSolve.Server.Controllers
             return _desafiosRepo.GetRanking(idDesafio).ToList();
         }
 
+        [HttpGet("GetCountForDate", Name = "GetCountForDate")]
+        //[Authorize]
+        public object GetCount()
+        {
+            var desafio = _desafiosRepo.Get().Where(x=>x.FechaRegistro!=null)
+                .GroupBy(x=>new
+                {
+                    Month= x.FechaRegistro.Value.ToString("MMMM"),
+                    Year= x.FechaRegistro.Value.Year
+                })
+                .OrderByDescending(g=>g.Key.Year)
+                .ThenByDescending(g=>g.Key.Month)
+                .Select(g=>new
+                {
+                    Year=g.Key.Year,
+                    Month=g.Key.Month,
+                    Count=g.Count(),
+                })
+                .ToList();
+
+            if (desafio == null)
+            {
+                return NotFound("No Existen Desafios");
+            }
+
+            return desafio;
+        }
+
+
+
         [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
         public object GetRelationalObjects(bool allEstatuses = false)
         {
