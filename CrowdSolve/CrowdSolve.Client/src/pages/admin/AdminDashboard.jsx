@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from "@/components/ui/button"
+import "../../styles/colorPalette.css"
 import {
   Card,
   CardContent,
@@ -90,17 +91,17 @@ const Dashboard = () => {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Total Usuario Pendientes Validar
+                    Usuarios Participantes
                   </CardTitle>
                   <UserMinus className="ml-2 h-4 w-4" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{data.usuariosPendientesValidar}</div>
+                  <div className="text-2xl font-bold">{data.usuariosParticipantes}</div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">UsuariosEmpresas</CardTitle>
+                  <CardTitle className="text-sm font-medium">Usuarios Empresas</CardTitle>
                   <Building className="ml-2 h-4 w-4" />
                 </CardHeader>
                 <CardContent>
@@ -111,7 +112,7 @@ const Dashboard = () => {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Soluciones
+                    Soluciones Enviadas
                   </CardTitle>
                   <NotebookText className="ml-2 h-4 w-4" />
                 </CardHeader>

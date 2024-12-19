@@ -25,20 +25,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+
 const chartConfig = {
-  enero: { label: "Enero", color: "hsl(200, 70%, 50%)" },      // Azul
-  febrero: { label: "Febrero", color: "hsl(360, 70%, 50%)" },  // Rojo
-  marzo: { label: "Marzo", color: "hsl(120, 70%, 50%)" },      // Verde
-  abril: { label: "Abril", color: "hsl(60, 70%, 50%)" },       // Amarillo
-  mayo: { label: "Mayo", color: "hsl(30, 70%, 50%)" },         // Naranja
-  junio: { label: "Junio", color: "hsl(150, 70%, 50%)" },      // Verde claro
-  julio: { label: "Julio", color: "hsl(180, 70%, 50%)" },      // Cian
-  agosto: { label: "Agosto", color: "hsl(240, 70%, 50%)" },    // Púrpura
-  septiembre: { label: "Septiembre", color: "hsl(90, 70%, 50%)" }, // Azul claro
-  octubre: { label: "Octubre", color: "hsl(270, 70%, 50%)" },  // Rosa
-  noviembre: { label: "Noviembre", color: "hsl(0, 70%, 50%)" }, // Rojo oscuro
-  diciembre: { label: "Diciembre", color: "hsl(60, 70%, 50%)" }, // Ámbar
+  enero: { label: "Enero", color: "hsl(0, 30%, 20%)" },      // Background Dark
+  febrero: { label: "Febrero", color: "hsl(15, 30%, 40%)" },   // Foreground
+  marzo: { label: "Marzo", color: "hsl(30, 60%, 50%)" },      // Primary
+  abril: { label: "Abril", color: "hsl(120, 50%, 40%)" },      // Forest 1
+  mayo: { label: "Mayo", color: "hsl(210, 80%, 40%)" },         // Ocean 1
+  junio: { label: "Junio", color: "hsl(20, 80%, 60%)" },       // Sunset 1
+  julio: { label: "Julio", color: "hsl(340, 80%, 40%)" },      // Berry 1
+  agosto: { label: "Agosto", color: "hsl(230, 30%, 30%)" },    // Chart 2
+  septiembre: { label: "Septiembre", color: "hsl(120, 40%, 60%)" }, // Forest 4
+  octubre: { label: "Octubre", color: "hsl(340, 80%, 80%)" },  // Berry 5
+  noviembre: { label: "Noviembre", color: "hsl(200, 70%, 60%)" }, // Ocean 4
+  diciembre: { label: "Diciembre", color: "hsl(120, 60%, 50%)" }, // Success
 };
+
+
 
 
 export function Overview() {
