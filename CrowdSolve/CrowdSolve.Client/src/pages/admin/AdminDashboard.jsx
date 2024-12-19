@@ -1,34 +1,27 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
-import "../../styles/colorPalette.css"
+import "@/styles/colorPalette.css"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import {
   Tabs,
   TabsContent,
-  TabsList,
-  TabsTrigger,
 } from "@/components/ui/tabs"
-
 import {
   NotebookText,
   Building,
   UserMinus,
   Users,
-
 } from "lucide-react";
-
 import { Overview } from "../../components/dashboard/Overview"
 import { RecentSales } from "../../components/dashboard/TopChallengeCompany"
-import {PieChartWithNumber} from "../../components/dashboard/PieChartChallenge"
-import {PieChartCompany} from "../../components/dashboard/PieChartCompany"
-import { Title } from '@radix-ui/react-dialog';
-
+import { PieChartWithNumber } from "../../components/dashboard/PieChartChallenge"
+import { PieChartCompany } from "../../components/dashboard/PieChartCompany"
+import useAxios from "@/hooks/use-axios";
 
 const Dashboard = () => {
   const { api } = useAxios();
@@ -38,21 +31,16 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [dataResponse] =
-        await Promise.all([
-          api.get("/api/Usuarios/GetCantidadUsuarios", { requireLoading: false }),
-        ]);
+      const [dataResponse] = await Promise.all([api.get("/api/Usuarios/GetCantidadUsuarios", { requireLoading: false })]);
 
-        console.log(dataResponse.data);
       setData(dataResponse.data);
-   
+
       const [dataSolResponse] =
         await Promise.all([
           api.get("/api/Soluciones/GetCantidadSoluciones", { requireLoading: false }),
         ]);
 
-        
-        setDataSoluciones(dataSolResponse.data);
+      setDataSoluciones(dataSolResponse.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -123,21 +111,14 @@ const Dashboard = () => {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-
-            
-            <Card className="col-span-4">
-               
-                  <PieChartWithNumber  />
-                
+              <Card className="col-span-4">
+                <PieChartWithNumber />
               </Card>
 
               <Card className="col-span-3">
-                
-               
-                  <PieChartCompany  />
-                
+                <PieChartCompany />
               </Card>
-              
+
               <Card className="col-span-4">
                 <CardHeader>
                   <CardTitle>Overview</CardTitle>
@@ -146,6 +127,7 @@ const Dashboard = () => {
                   <Overview />
                 </CardContent>
               </Card>
+
               <Card className="col-span-3">
                 <CardHeader>
                   <CardTitle>Top 10 Empresas con más Desafios</CardTitle>
@@ -163,4 +145,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

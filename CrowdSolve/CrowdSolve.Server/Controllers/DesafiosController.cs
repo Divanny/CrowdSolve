@@ -683,7 +683,7 @@ namespace CrowdSolve.Server.Controllers
         }
 
         [HttpGet("GetCountForDate", Name = "GetCountForDate")]
-        //[Authorize]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
         public object GetCount()
         {
             var desafio = _desafiosRepo.Get().Where(x=>x.FechaRegistro!=null)
@@ -709,8 +709,6 @@ namespace CrowdSolve.Server.Controllers
 
             return desafio;
         }
-
-
 
         [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
         public object GetRelationalObjects(bool allEstatuses = false)

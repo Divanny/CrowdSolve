@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useMemo } from "react"
-import { TrendingUp } from 'lucide-react'
+import { useMemo, useEffect, useState } from "react"
+import useAxios from "@/hooks/use-axios"
 import { Label, Pie, PieChart } from "recharts"
 
 import {
@@ -28,64 +28,49 @@ import {
 
 const colorPalette = Array.from({ length: 40 }, (_, i) => `var(--chartColor-${i + 1})`)
 
-
-
-export function PieChartWithNumber({linkApi}) {
-  
+export function PieChartWithNumber() {
   const [filter, setFilter] = useState("total");
-    const { api } = useAxios();
-    const [dataCategorias, setDataCategoria] = useState([]);
-  
-    const fetchData = async () => {
-      try {
-        console.log(filter)
+  const { api } = useAxios();
+  const [dataCategorias, setDataCategoria] = useState([]);
 
-        if(filter=="total")
-        {
-          const [categoriasResponse, relationalObjectsResponse] =
-          await Promise.all([
-            api.get(`/api/Desafios/DesafioDashboardData`, { requireLoading: false }),
-          ]);
+  const fetchData = async () => {
+    try {
+      console.log(filter)
 
-          const chartData = [
-            { nombre: "Total Desafios ", cantidadDesafios:0 , fill: "var(--color-chrome)" },
-          ] 
-          
-          chartData[0].cantidadDesafios=categoriasResponse.data;
-          setDataCategoria(chartData);
-        
-        }
-        else
-        {
-          const [categoriasResponse, relationalObjectsResponse] =
-          await Promise.all([
-            api.get(`/api/${filter}`, { requireLoading: false }),
-          ]);
-  
-        setDataCategoria(categoriasResponse.data);
-        
-        }
-        
-  
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        /* setIsLoading(false); */
+      if (filter == "total") {
+        const [categoriasResponse] = await Promise.all([api.get(`/api/Desafios/DesafioDashboardData`, { requireLoading: false })]);
+
+        const chartData = [
+          { nombre: "Total Desafios ", cantidadDesafios: 0, fill: "var(--color-chrome)" },
+        ]
+
+        chartData[0].cantidadDesafios = categoriasResponse.data;
+        setDataCategoria(chartData);
       }
-    };
-  
-    useEffect(() => {
-      fetchData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filter]);
-  
+      else {
+        const [categoriasResponse] = await Promise.all([api.get(`/api/${filter}`, { requireLoading: false })]);
+
+        setDataCategoria(categoriasResponse.data);
+
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      /* setIsLoading(false); */
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
+
   const totalCategories = useMemo(() => {
     const categories = dataCategorias;
 
     console.log(categories); // Aquí puedes verificar la estructura de chartData
     return categories.reduce((acc, curr) => acc + curr.cantidadDesafios, 0);
   }, [dataCategorias]);
-
 
   const chartDataWithColors = useMemo(() => {
     const categories = dataCategorias;
@@ -94,7 +79,6 @@ export function PieChartWithNumber({linkApi}) {
       fill: colorPalette[index % colorPalette.length] // Asignar un color de la paleta
     }));
   }, [dataCategorias]);
-
 
   const chartConfig = useMemo(() => {
     const categories = dataCategorias;
@@ -106,23 +90,15 @@ export function PieChartWithNumber({linkApi}) {
     }));
   }, [dataCategorias]);
 
-
-
-
-
-
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Cantidad Desafios</CardTitle>
         <CardDescription>Creados</CardDescription>
       </CardHeader>
-
-
       <CardContent className="flex-1 pb-0">
-
-      <div className="flex justify-end mb-4">
-          <Select value={filter} onValueChange={(value) =>{ setFilter(value);console.log(value);}}>
+        <div className="flex justify-end mb-4">
+          <Select value={filter} onValueChange={(value) => { setFilter(value); console.log(value); }}>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Select a filter" />
             </SelectTrigger>
@@ -133,8 +109,6 @@ export function PieChartWithNumber({linkApi}) {
             </SelectContent>
           </Select>
         </div>
-
-
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
@@ -186,10 +160,9 @@ export function PieChartWithNumber({linkApi}) {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="leading-none text-muted-foreground">
-        Mostrando el total de Desafios en sus diferentes ambitos.
+          Mostrando el total de Desafios en sus diferentes ambitos.
         </div>
       </CardFooter>
     </Card>
   )
 }
-

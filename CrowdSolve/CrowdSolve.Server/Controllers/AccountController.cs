@@ -11,8 +11,6 @@ namespace CrowdSolve.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-
-
     public class AccountController : Controller
     {
         private readonly Authentication _authentication;
@@ -141,14 +139,12 @@ namespace CrowdSolve.Server.Controllers
 
             if (result.Success)
             {
-
-
                 return Ok(new
                 {
                     success = true,
                     message = result.Message,
                     data = result.Data,
-                    token = result.Token,
+                    token = result.Token
                 });
             }
             else

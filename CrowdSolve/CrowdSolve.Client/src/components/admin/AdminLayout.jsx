@@ -44,12 +44,10 @@ export default function AdminLayout() {
     const location = useLocation();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const [logo, setLogo] = useState("");
 
     const user = useSelector((state) => state.user.user);
-    
 
-    const [sidebarItems, setSidebarItems] = useState([
+    const sidebarItems = [
         {
             title: null,
             url: "#",
@@ -91,8 +89,8 @@ export default function AdminLayout() {
                 { title: t('AdminLayout.sideBarAdm.UserManual'), url: "/admin/user-manual", icon: "Book" },
             ],
         },
-    ]);
-    
+    ];
+
     const { api } = useAxios();
 
     const CrowdSolveLogo = GetLogo();
@@ -100,7 +98,6 @@ export default function AdminLayout() {
     const fetchData = async () => {
         try {
             const countRequestsResponse = await api.get("/api/Soportes/GetCantidadRegistros", { requireLoading: false })
-            console.log(countRequestsResponse.data.cantidadSoportes);
 
             sidebarItems[3].items[0].pending = countRequestsResponse.data.cantidadEmpresas;
             sidebarItems[3].items[1].pending = countRequestsResponse.data.cantidadSoportes;
@@ -111,6 +108,7 @@ export default function AdminLayout() {
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -144,7 +142,7 @@ export default function AdminLayout() {
                                                 <Link variant="secondary" className="w-full flex justify-start items-center gap-2" to={item.url}>
                                                     {(item.icon != "" && item.icon != null) && <Icon name={item.icon} />}
                                                     {item.title}
-                                                    {(item.pending!=null) && <Badge variant="outline secondary" className="ml-auto">{item.pending}</Badge>}
+                                                    {(item.pending != null) && <Badge variant="outline secondary" className="ml-auto">{item.pending}</Badge>}
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>

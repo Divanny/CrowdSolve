@@ -519,7 +519,7 @@ namespace CrowdSolve.Server.Controllers
         /// Obtiene la cantidad de soluciones enviadas
         /// </summary>
         [HttpGet("GetCantidadSoluciones", Name = "GetCantidadSoluciones")]
-        //[AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
         public object GetCantidadSoluciones()
         {
             var soluciones = _solucionesRepo.Get().Count();

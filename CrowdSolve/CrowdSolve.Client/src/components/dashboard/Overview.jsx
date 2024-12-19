@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
-
 import {
   Card,
   CardContent,
@@ -25,7 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-
 const chartConfig = {
   enero: { label: "Enero", color: "hsl(0, 30%, 20%)" },      // Background Dark
   febrero: { label: "Febrero", color: "hsl(15, 30%, 40%)" },   // Foreground
@@ -40,9 +37,6 @@ const chartConfig = {
   noviembre: { label: "Noviembre", color: "hsl(200, 70%, 60%)" }, // Ocean 4
   diciembre: { label: "Diciembre", color: "hsl(120, 60%, 50%)" }, // Success
 };
-
-
-
 
 export function Overview() {
   const [chartData, setChartData] = useState([]);
@@ -77,6 +71,7 @@ export function Overview() {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Filtrar datos por año seleccionado
