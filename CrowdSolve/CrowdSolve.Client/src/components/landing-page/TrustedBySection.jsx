@@ -86,7 +86,7 @@ export default function TrustedBySection() {
   return (
     
     <motion.section
-      className='bg-accent pb-20'
+      className='py-20 md:py-32'
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}

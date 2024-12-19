@@ -19,6 +19,7 @@ namespace CrowdSolve.Server.Controllers
         private readonly EmpresasRepo _empresasRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly SolucionesRepo _solucionesRepo;
+        private readonly FirebaseStorageService _firebaseStorageService;
 
         /// <summary>
         /// Constructor de la clase ParticipantesController.
@@ -26,7 +27,8 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
-        public ParticipantesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger)
+        /// <param name="firebaseStorageService"></param>
+        public ParticipantesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseStorageService firebaseStorageService)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
@@ -35,6 +37,7 @@ namespace CrowdSolve.Server.Controllers
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
+            _firebaseStorageService = firebaseStorageService;
         }
 
         /// <summary>
@@ -72,7 +75,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Resultado de la operación.</returns>
         [HttpPost(Name = "SaveParticipante")]
         [Authorize]
-        public OperationResult Post(ParticipantesModel ParticipantesModel)
+        public OperationResult Post([FromForm] ParticipantesModel ParticipantesModel)
         {
             try
             {
@@ -84,8 +87,20 @@ namespace CrowdSolve.Server.Controllers
 
                 if (usuario.idPerfil != (int)PerfilesEnum.Sin_perfil) return new OperationResult(false, "Este usuario no tiene permisos para registrarse como participante");
 
+                if (ParticipantesModel.FechaNacimiento > DateOnly.FromDateTime(DateTime.Now)) return new OperationResult(false, "La fecha de nacimiento no puede ser mayor a la fecha actual");
+
+                var age = DateTime.Now.Year - ParticipantesModel.FechaNacimiento.Year;
+                if (ParticipantesModel.FechaNacimiento.ToDateTime(TimeOnly.MinValue) > DateTime.Now.AddYears(-age)) age--;
+                if (age < 14) return new OperationResult(false, "El participante debe tener al menos 14 años");
+
                 usuario.idPerfil = (int)PerfilesEnum.Participante;
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
+
+                if (ParticipantesModel.Avatar != null)
+                {
+                    var logoUrl = _firebaseStorageService.UploadFileAsync(ParticipantesModel.Avatar.OpenReadStream(), $"profile-pictures/{usuario.NombreUsuario}/avatar.jpeg", ParticipantesModel.Avatar.ContentType).Result;
+                    usuario.AvatarURL = logoUrl;
+                }
 
                 _usuariosRepo.Edit(usuario);
 
@@ -107,34 +122,50 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="ParticipantesModel">Datos del Participante a actualizar.</param>
         /// <returns>Resultado de la operación.</returns>
         [HttpPut("{idParticipante}", Name = "UpdateParticipante")]
-        [Authorize]
-        //[AuthorizeByPermission(PermisosEnum.Editar_Participante)]
+        [AuthorizeByPermission(PermisosEnum.Administrar_Participantes)]
         public OperationResult Put(int idParticipante, [FromForm] ParticipantesModel ParticipantesModel)
         {
-            try
+            using (var trx = _crowdSolveContext.Database.BeginTransaction())
             {
-                var Participante = _participantesRepo.Get(x => x.idParticipante == idParticipante).FirstOrDefault();
-                if (Participante == null) return new OperationResult(false, "Este participante no se ha encontrado");
+                try
+                {
+                    var Participante = _participantesRepo.Get(x => x.idParticipante == idParticipante).FirstOrDefault();
+                    if (Participante == null) return new OperationResult(false, "Este participante no se ha encontrado");
 
-                var usuario = _usuariosRepo.Get(Participante.idUsuario);
-                if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
+                    var usuario = _usuariosRepo.Get(Participante.idUsuario);
+                    if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
-                if (ParticipantesModel.NombreUsuario != usuario.NombreUsuario && _usuariosRepo.Any(x => x.NombreUsuario == ParticipantesModel.NombreUsuario)) return new OperationResult(false, "Este usuario ya existe en el sistema");
-                if (ParticipantesModel.CorreoElectronico != usuario.CorreoElectronico && _usuariosRepo.Any(x => x.CorreoElectronico == ParticipantesModel.CorreoElectronico)) return new OperationResult(false, "Este correo electrónico ya está registrado");
+                    if (ParticipantesModel.NombreUsuario != usuario.NombreUsuario && _usuariosRepo.Any(x => x.NombreUsuario == ParticipantesModel.NombreUsuario)) return new OperationResult(false, "Este usuario ya existe en el sistema");
+                    if (ParticipantesModel.CorreoElectronico != usuario.CorreoElectronico && _usuariosRepo.Any(x => x.CorreoElectronico == ParticipantesModel.CorreoElectronico)) return new OperationResult(false, "Este correo electrónico ya está registrado");
 
-                _participantesRepo.Edit(ParticipantesModel);
-                _logger.LogHttpRequest(ParticipantesModel);
-                return new OperationResult(true, "Se ha editado la información del participante exitosamente", Participante);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex);
-                throw;
+                    if (ParticipantesModel.Avatar != null)
+                    {
+                        var logoUrl = _firebaseStorageService.UploadFileAsync(ParticipantesModel.Avatar.OpenReadStream(), $"profile-pictures/{usuario.NombreUsuario}/avatar.jpeg", ParticipantesModel.Avatar.ContentType).Result;
+                        usuario.AvatarURL = logoUrl;
+                    }
+
+                    usuario.NombreUsuario = ParticipantesModel.NombreUsuario;
+                    usuario.CorreoElectronico = ParticipantesModel.CorreoElectronico;
+                    usuario.idEstatusUsuario = ParticipantesModel.idEstatusUsuario ?? usuario.idEstatusUsuario;
+
+                    _usuariosRepo.Edit(usuario);
+                    _participantesRepo.Edit(ParticipantesModel);
+
+                    _logger.LogHttpRequest(ParticipantesModel);
+                    trx.Commit();
+                    return new OperationResult(true, "Se ha editado la información del participante exitosamente", Participante);
+                }
+                catch (Exception ex)
+                {
+                    trx.Rollback();
+                    _logger.LogError(ex);
+                    throw;
+                }
             }
         }
 
         /// <summary>
-        /// Obtiene la información del perfil de un participante.
+        /// Obtiene la información del perfil del participante en línea.
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
@@ -149,37 +180,71 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
+        /// Obtiene la información del perfil público de un participante.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        [HttpGet("PerfilPublico/{nombreUsuario}", Name = "GetPerfilPublico")]
+        public ParticipantesModel GetPerfilPublico(string nombreUsuario)
+        {
+            var usuario = _usuariosRepo.Get(x => x.NombreUsuario == nombreUsuario).FirstOrDefault();
+            if (usuario == null) throw new Exception("Este usuario no se ha encontrado");
+
+            var Participante = _participantesRepo.Get(x => x.idUsuario == usuario.idUsuario).FirstOrDefault();
+            if (Participante == null) throw new Exception("Este participante no se ha encontrado");
+
+            Participante.Soluciones = _solucionesRepo.Get(x => x.idUsuario == usuario.idUsuario && x.Publica == true).ToList();
+            return Participante;
+        }
+
+        /// <summary>
         /// Actualiza el perfil de un participante.
         /// </summary>
         /// <returns></returns>
         [HttpPut("MiPerfil", Name = "UpdatePerfilParticipante")]
-        [Authorize]
-        public OperationResult MiPerfil(ParticipantesModel participantesModel)
+        [AuthorizeByPermission(PermisosEnum.Mi_perfil)]
+        public OperationResult MiPerfil([FromForm] ParticipantesModel participantesModel)
         {
-            try
+            using (var trx = _crowdSolveContext.Database.BeginTransaction())
             {
-                var Participante = _participantesRepo.Get(x => x.idUsuario == _idUsuarioOnline).FirstOrDefault();
+                try
+                {
+                    var Participante = _participantesRepo.Get(x => x.idUsuario == _idUsuarioOnline).FirstOrDefault();
 
-                if (Participante == null) return new OperationResult(false, "Este participante no se ha encontrado");
-                if (participantesModel.idParticipante != Participante.idParticipante) return new OperationResult(false, "No tiene permisos para editar este perfil");
+                    if (Participante == null) return new OperationResult(false, "Este participante no se ha encontrado");
+                    if (participantesModel.idParticipante != Participante.idParticipante) return new OperationResult(false, "No tiene permisos para editar este perfil");
 
-                _participantesRepo.Edit(participantesModel);
+                    var usuario = _usuariosRepo.Get(participantesModel.idUsuario);
+                    if (usuario == null) return new OperationResult(false, "Este usuario no se ha encontrado");
 
-                _logger.LogHttpRequest(participantesModel);
-                return new OperationResult(true, "Se ha editado su perfil exitosamente", Participante);
+                    if (participantesModel.Avatar != null)
+                    {
+                        var logoUrl = _firebaseStorageService.UploadFileAsync(participantesModel.Avatar.OpenReadStream(), $"profile-pictures/{usuario.NombreUsuario}/avatar.jpeg", participantesModel.Avatar.ContentType).Result;
+                        usuario.AvatarURL = logoUrl;
+                        _usuariosRepo.Edit(usuario);
+                    }
+
+                    _participantesRepo.Edit(participantesModel);
+
+                    _logger.LogHttpRequest(participantesModel);
+                    trx.Commit();
+                    return new OperationResult(true, "Se ha editado su perfil exitosamente", Participante);
+                }
+                catch (Exception ex)
+                {
+                    trx.Rollback();
+                    _logger.LogError(ex);
+                    throw;
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex);
-                throw;
-            }
+
         }
 
         [HttpGet("GetRelationalObjects")]
         [Authorize]
         public object GetRelationalObjects()
         {
-            var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>(); 
+            var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>();
             var estatusUsuarios = _usuariosRepo.GetEstatusUsuarios();
 
             return new

@@ -48,17 +48,16 @@ export default function Footer() {
                     <div>
                         <h3 className="font-semibold mb-4">{t('footer.sections.product.title')}</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/como-funciona" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.howItWorks')}</Link></li>
-                            <li><Link href="/desafios" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.challenges')}</Link></li>
-                            <li><Link href="/empresas-registradas" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.registeredCompanies')}</Link></li>
+                            <li><Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.howItWorks')}</Link></li>
+                            <li><Link to="/challenges" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.challenges')}</Link></li>
+                            <li><Link to="/companies" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.registeredCompanies')}</Link></li>
                         </ul>
                     </div>
                     <div>
                         <h3 className="font-semibold mb-4">{t('footer.sections.company.title')}</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/about-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.aboutUs')}</Link></li>
-                            <li><Link href="/equipo" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.team')}</Link></li>
-                            <li><Link href="/contact-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.contact')}</Link></li>
+                            <li><Link to="/about-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.aboutUs')}</Link></li>
+                            <li><Link to="/contact-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.contact')}</Link></li>
                         </ul>
                     </div>
                 </div>

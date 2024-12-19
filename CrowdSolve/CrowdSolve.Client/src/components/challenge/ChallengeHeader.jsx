@@ -31,7 +31,7 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="relative">
               <img
-                src={challenge.logoEmpresa}
+                src={`/api/Account/GetAvatar/${challenge.idUsuarioEmpresa}`}
                 alt={`Logo de ${challenge.empresa}`}
                 className="w-16 h-16 rounded-full object-cover border-2 border-primary/10"
               />

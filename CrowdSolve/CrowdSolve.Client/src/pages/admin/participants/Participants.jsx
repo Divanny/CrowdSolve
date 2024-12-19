@@ -42,7 +42,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ParticipantFormDialog } from "@/components/participants/ParticipantFormDialog";
+import { ParticipantFormDialog } from "@/components/admin/participants/ParticipantFormDialog";
 import { useTranslation } from 'react-i18next';
 
 export default function Participants() {
@@ -92,7 +92,7 @@ export default function Participants() {
         <div className="flex items-center space-x-2">
           <Avatar>
             <AvatarImage
-              src={`/placeholder.svg?height=40&width=40`}
+              src={`/api/Account/GetAvatar/${row.original.idParticipante}`}
               alt={row.getValue("nombreUsuario")}
             />
             <AvatarFallback>

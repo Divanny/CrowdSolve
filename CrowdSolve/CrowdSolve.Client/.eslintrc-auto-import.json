@@ -254,6 +254,15 @@
     "ParticipantsSolutionsOverview": true,
     "ParticipantsStatsOverview": true,
     "DashboardPieChartChallenge": true,
-    "DashboardTopChallengeCompany": true
+    "DashboardTopChallengeCompany": true,
+    "ParticipantsProfileSkeleton": true,
+    "ParticipantsProfileHover": true,
+    "UiMagnetic-button": true,
+    "UiMeteors": true,
+    "UiBackground-beams": true,
+    "UiInfinite-moving-cards": true,
+    "UiMarquee": true,
+    "UiSpotlight": true,
+    "UiTypewriter-effect": true
   }
 }

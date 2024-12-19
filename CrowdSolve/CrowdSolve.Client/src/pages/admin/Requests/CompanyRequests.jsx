@@ -14,9 +14,6 @@ import {
   CircleCheckBig,
   ChevronDown,
   CircleSlash2,
-  Edit,
-  Eye,
-  FileText,
   MoreHorizontal,
   X,
   Search,
@@ -65,9 +62,6 @@ export default function CompanyRequests() {
   const [tamañoEmpresaFilter, setTamañoEmpresaFilter] = useState("");
   const [sectorSearch, setSectorSearch] = useState("");
   const [tamañoEmpresaSearch, setTamañoEmpresaSearch] = useState("");
-
-
-  
 
   const columns = [
     {
@@ -192,7 +186,7 @@ export default function CompanyRequests() {
             <div className="flex items-center space-x-2">
               <Avatar>
                 <AvatarImage
-                  src={`/placeholder.svg?height=40&width=40`}
+                  src={`/api/Account/GetAvatar/${row.getValue("idUsuario")}`}
                   alt={row.getValue("avatar")}
                 />
                 <AvatarFallback>{row.getValue("avatar")}</AvatarFallback>

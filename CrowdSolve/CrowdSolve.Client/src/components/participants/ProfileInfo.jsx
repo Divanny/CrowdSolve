@@ -1,10 +1,11 @@
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { Mail, Phone, Calendar, Building2 } from 'lucide-react'
+import { Mail, Phone, Calendar, Building2, Edit } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
-const ProfileInfo = ({ user }) => (
+const ProfileInfo = ({ user, onEdit }) => (
   <div className="sticky top-8 space-y-6">
     <div className="flex flex-col items-center lg:items-start">
-      <Avatar className="w-[296px] h-[296px] rounded-full mb-4">
+      <Avatar className="rounded-full mb-4 h-36 w-36 lg:h-48 lg:w-48">
         <AvatarImage src={`/api/Account/GetAvatar/${user.idUsuario}`} />
         <AvatarFallback className="text-4xl">
           {user.nombreUsuario.substring(0, 2).toUpperCase()}
@@ -27,6 +28,12 @@ const ProfileInfo = ({ user }) => (
           })} 
         />
       </div>
+      {onEdit && (
+        <Button onClick={onEdit} variant="outline" className="mt-4 w-full lg:w-auto">
+          <Edit className="w-4 h-4" />
+          Editar Perfil
+        </Button>
+      )}
     </div>
   </div>
 )

@@ -45,13 +45,7 @@ export default function CompanyListing() {
         const loadCompanies = async () => {
             try {
                 const response = await api.get("api/Empresas/GetEmpresasActivas", { requireLoading: false });
-                const companiesWithLogos = await Promise.all(response.data.map(async (company) => {
-                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${company.idUsuario}`, { responseType: 'blob', requireLoading: false });
-                    const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] });
-                    const url = URL.createObjectURL(avatarBlob);
-                    return { ...company, logo: url };
-                }));
-                setCompanies(companiesWithLogos);
+                setCompanies(response.data);
             } catch (error) {
                 console.error(error);
             }
@@ -191,7 +185,7 @@ export default function CompanyListing() {
                             <Card key={company.idEmpresa} className="flex flex-col h-full">
                                 <CardHeader>
                                     <div className="flex items-center space-x-4">
-                                        <img src={company.logo} alt={`${company.nombre} logo`} className="w-12 h-12 rounded-full object-cover" />
+                                        <img src={`/api/Account/GetAvatar/${company.idUsuario}`} alt={`${company.nombre} logo`} className="w-12 h-12 rounded-full object-cover" />
                                         <div>
                                             <CardTitle className="mb-1">{company.nombre}</CardTitle>
                                             <CardDescription>{relationalObjects.tamañosEmpresa?.find(t => t.idTamañoEmpresa == company.idTamañoEmpresa)?.descripcion}</CardDescription>

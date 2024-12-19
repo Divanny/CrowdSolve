@@ -30,8 +30,8 @@ const Administrators = lazy(() => import('@/pages/admin/administrators/Administr
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const ChallengeForm = lazy(() => import('@/pages/company/ChallengeForm'));
 const RolesAndPermissions = lazy(() => import('@/pages/admin/RolesAndPermissions'));
-const CompanyRequest = lazy(() => import('@/pages/admin/Requests/CompanyRequests'));
-const SupportRequest = lazy(() => import('@/pages/admin/Requests/SupportRequests'));
+const CompanyRequest = lazy(() => import('@/pages/admin/requests/CompanyRequests'));
+const SupportRequest = lazy(() => import('@/pages/admin/requests/SupportRequests'));
 const ChallengeEvaluation = lazy(() => import('@/pages/challenges/ChallengeEvaluation'));
 const AdminDashboard=lazy(() => import('@/pages/admin/AdminDashboard'));
 const CompanyDashboard = lazy(() => import('@/pages/company/CompanyDashboard'));
@@ -39,6 +39,8 @@ const CompanyChallenge = lazy(() => import('@/pages/company/CompanyChallenge'));
 const MySolutions = lazy(() => import('@/pages/participant/MySolutions'));
 const ChallengeRequest = lazy(() => import('@/pages/admin/challenges-requests/ChallengeRequests'));
 const MyProfile = lazy(() => import('@/pages/participant/MyProfile'));
+const PublicProfile = lazy(() => import('@/pages/participant/PublicProfile'));
+const Notifications = lazy(() => import('@/pages/Notifications'));
 
 const LazyComponent = ({ component: Component, ...props }) => (
   <Suspense fallback={<PageLoader />}>
@@ -59,7 +61,7 @@ const AppRoutes = () => (
       <Route path="/privacy-policy" element={<LazyComponent component={PrivacyPolicy} />} />
       <Route path="/usage-policy" element={<LazyComponent component={UsagePolicy} />} />
       <Route path="*" element={<LazyComponent component={NotFound} />} />
-
+      <Route path="/profile/:userName" element={<LazyComponent component={PublicProfile} />} />
     </Route>
     <Route path="/sign-in" element={<LazyComponent component={SignIn} />} />
     <Route path="/sign-up" element={<LazyComponent component={SignUp} />} />
@@ -94,6 +96,7 @@ const AppRoutes = () => (
       <Route element={<Layout />}>
         <Route path="/my-profile" element={<LazyComponent component={MyProfile} />} handle={{ permission: () => PermisosEnum.Mi_perfil }} />
         <Route path="/my-solutions" element={<LazyComponent component={MySolutions} />} handle={{ permission: () => PermisosEnum.Mis_Soluciones }} />
+        <Route path="/notifications" element={<LazyComponent component={Notifications} />} handle={{ permission: () => PermisosEnum.Notificaciones }} />
         <Route path="/challenge/:challengeId/evaluate" element={<LazyComponent component={ChallengeEvaluation} />} handle={{ permission: () => PermisosEnum.Evaluar_Desafío }} />
       </Route>
     </Route>

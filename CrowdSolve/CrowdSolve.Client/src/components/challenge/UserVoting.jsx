@@ -13,14 +13,17 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import ProfileHover from "@/components/participants/ProfileHover"
+import { useNavigate } from 'react-router-dom'
+import * as FileSaver from 'file-saver'
 
 const UserVoting = ({ initialSolutions }) => {
     const { api } = useAxios()
+    const navigate = useNavigate()
     const [solutions, setSolutions] = useState([])
     const [loadingSaveMeGusta, setLoadingSaveMeGusta] = useState(false)
 
     useEffect(() => {
-        // Sort solutions only once when the component mounts or when initialSolutions changes
         const sortedSolutions = [...initialSolutions].sort((a, b) => b.cantidadVotos - a.cantidadVotos)
         setSolutions(sortedSolutions)
     }, [initialSolutions])
@@ -28,15 +31,9 @@ const UserVoting = ({ initialSolutions }) => {
     const downloadAdjunto = async (adjunto) => {
         try {
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
-            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute('download', adjunto.nombre)
-            document.body.appendChild(link)
-            link.click()
-            link.parentNode.removeChild(link)
+            FileSaver.saveAs(response.data, adjunto.nombre)
         } catch (error) {
-            toast.error('Operación fallida', 
+            toast.error('Operación fallida',
                 {
                     description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
                 }
@@ -119,18 +116,20 @@ const UserVoting = ({ initialSolutions }) => {
             {solutions.map(solution => (
                 <Card key={solution.idSolucion} className="p-4 sm:p-6">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
-                        <div className="flex items-center gap-3 mb-4 sm:mb-0">
-                            <Avatar className="h-10 w-10">
-                                <AvatarImage src={solution.avatarUrl || `https://robohash.org/${solution.nombreUsuario}`} alt={solution.nombreUsuario} />
-                                <AvatarFallback>{solution.nombreUsuario.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <span className="font-semibold">{solution.nombreUsuario}</span>
-                                <span className="text-sm text-muted-foreground">
-                                    {formatearFecha(solution.fechaRegistro)}
-                                </span>
-                            </div>
-                        </div>
+                        <ProfileHover userName={solution.nombreUsuario}>
+                            <Button variant="link" className="flex items-center gap-3 mb-4 sm:mb-0 text-normal" onClick={() => navigate(`/profile/${solution.nombreUsuario}`)}>
+                                <Avatar className="h-10 w-10">
+                                    <AvatarImage src={`/api/Account/GetAvatar/${solution.idUsuario}`} alt={solution.nombreUsuario} />
+                                    <AvatarFallback>{solution.nombreUsuario.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col">
+                                    <span className="font-semibold">{solution.nombreUsuario}</span>
+                                    <span className="text-sm text-muted-foreground">
+                                        {formatearFecha(solution.fechaRegistro)}
+                                    </span>
+                                </div>
+                            </Button>
+                        </ProfileHover>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-8 w-8">

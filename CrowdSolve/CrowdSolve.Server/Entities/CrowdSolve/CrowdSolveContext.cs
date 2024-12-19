@@ -13,7 +13,7 @@ public partial class CrowdSolveContext : DbContext
     {
     }
 
-    public virtual DbSet<AdjuntosSoluciones> AdjuntosSoluciones { get; set; }
+    public virtual DbSet<Adjuntos> Adjuntos { get; set; }
 
     public virtual DbSet<Categorias> Categorias { get; set; }
 
@@ -75,9 +75,9 @@ public partial class CrowdSolveContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AdjuntosSoluciones>(entity =>
+        modelBuilder.Entity<Adjuntos>(entity =>
         {
-            entity.HasKey(e => e.idAdjunto);
+            entity.HasKey(e => e.idAdjunto).HasName("PK_AdjuntosSoluciones");
 
             entity.Property(e => e.ContentType)
                 .IsRequired()
@@ -306,13 +306,22 @@ public partial class CrowdSolveContext : DbContext
             entity.HasKey(e => e.idNotificacion);
 
             entity.Property(e => e.Fecha).HasColumnType("datetime");
+            entity.Property(e => e.Icono)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.Mensaje)
                 .IsRequired()
-                .HasMaxLength(100)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+            entity.Property(e => e.Severidad)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Titulo)
                 .IsRequired()
                 .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.UrlRedireccion)
+                .HasMaxLength(200)
                 .IsUnicode(false);
         });
 
@@ -360,6 +369,7 @@ public partial class CrowdSolveContext : DbContext
             entity.HasKey(e => e.idProcesoEvaluacion);
 
             entity.Property(e => e.FechaFinalizacion).HasColumnType("datetime");
+            entity.Property(e => e.FechaInicio).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Procesos>(entity =>

@@ -13,7 +13,7 @@ const SolutionsOverview = ({ solutions }) => {
           <Trophy className="w-6 h-6 text-primary" />
           <h2 className="text-xl font-semibold">Mis Soluciones</h2>
         </div>
-        <Link to="/my-solutions" passHref>
+        <Link to="/my-solutions">
           <Button variant="outline" className="gap-2">
             Ver todas
             <ExternalLink className="w-4 h-4" />

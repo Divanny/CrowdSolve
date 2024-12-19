@@ -187,8 +187,8 @@ export default function AdminLayout() {
                                     <div className='flex items-center justify-between w-full'>
                                         <div className='flex items-center '>
                                             <Avatar className="bg-accent" size="1">
-                                                <AvatarImage src={(logo) ? logo : `https://robohash.org/${user.nombreUsuario}`} />
-                                                <AvatarFallback>{user[0]}</AvatarFallback>
+                                                <AvatarImage src={(user) ? `/api/Account/GetAvatar/${user.idUsuario}` : `https://robohash.org/${user.nombreUsuario}`} />
+                                                <AvatarFallback>{user.nombreUsuario[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className='flex flex-col ml-2 text-left'>
                                                 <span className='text-x font-semibold'>{user.nombreUsuario}</span>

@@ -31,7 +31,7 @@ import { PhoneInput } from "@/components/ui/phone-input";
 
 import { DiplomaIcon } from "hugeicons-react";
 import { IdentityCardIcon } from "hugeicons-react";
-import AvatarPicker from "../ui/avatar-picker";
+import AvatarPicker from "@/components/ui/avatar-picker";
 import { useTranslation } from 'react-i18next';
 
 const RegistroEmpresa = () => {

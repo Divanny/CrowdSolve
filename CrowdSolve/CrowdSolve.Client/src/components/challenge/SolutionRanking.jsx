@@ -11,9 +11,13 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import useAxios from '@/hooks/use-axios'
 import { toast } from 'sonner'
 import { Badge } from "@/components/ui/badge"
+import ProfileHover from '@/components/participants/ProfileHover'
+import { useNavigate } from 'react-router-dom'
+import * as FileSaver from 'file-saver';
 
 const SolutionRanking = ({ idDesafio }) => {
     const { api } = useAxios()
+    const navigate = useNavigate()
     const [solutions, setSolutions] = useState([])
     const [detalleSolucionDialog, setDetalleSolucionDialog] = useState(false)
     const [solucionSeleccionada, setSolucionSeleccionada] = useState(null)
@@ -27,20 +31,6 @@ const SolutionRanking = ({ idDesafio }) => {
     const fetchRanking = async () => {
         try {
             const response = await api.get(`/api/Desafios/GetRanking/${idDesafio}`)
-
-            for (const solucion of response.data) {
-                try {
-                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${solucion.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                    if (responseAvatarURL.status == 200) {
-                        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                        solucion.avatarUrl = URL.createObjectURL(avatarBlob)
-                    }
-                }
-                catch {
-                    solucion.avatarUrl = null
-                }
-            }
-
             setSolutions(response.data)
         } catch (error) {
             toast.error("Error al cargar el ranking", {
@@ -52,13 +42,7 @@ const SolutionRanking = ({ idDesafio }) => {
     const downloadAdjunto = async (adjunto) => {
         try {
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
-            const url = window.URL.createObjectURL(new Blob([response.data], { type: adjunto.contentType }))
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute('download', adjunto.nombre)
-            document.body.appendChild(link)
-            link.click()
-            link.parentNode.removeChild(link)
+            FileSaver.saveAs(response.data, adjunto.nombre);
         } catch (error) {
             toast.error('Operación fallida',
                 {
@@ -151,13 +135,15 @@ const SolutionRanking = ({ idDesafio }) => {
                                 </div>
                             </TableCell>
                             <TableCell className="w-48">
-                                <div className="flex items-center space-x-2">
-                                    <Avatar>
-                                        <AvatarImage src={solucion.avatarUrl || `https://robohash.org/${solucion.nombreUsuario}`} alt={solucion.nombreUsuario} />
-                                        <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span>{solucion.nombreUsuario}</span>
-                                </div>
+                                <ProfileHover userName={solucion.nombreUsuario}>
+                                    <Button variant="link" className="flex items-center space-x-2 text-normal" onClick={() => navigate(`/profile/${solucion.nombreUsuario}`)}>
+                                        <Avatar>
+                                            <AvatarImage src={`/api/Account/GetAvatar/${solucion.idUsuario}`} alt={solucion.nombreUsuario} />
+                                            <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span>{solucion.nombreUsuario}</span>
+                                    </Button>
+                                </ProfileHover>
                             </TableCell>
                             <TableCell >{solucion.titulo}</TableCell>
                             {solucion.puntuacion != null && <TableCell className="w-24 text-center">{solucion.puntuacion}</TableCell>}
@@ -180,16 +166,18 @@ const SolutionRanking = ({ idDesafio }) => {
                                         </DialogHeader>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
                                             <div className="md:col-span-2 space-y-6">
-                                                <div className="flex items-center space-x-4">
-                                                    <Avatar className="w-16 h-16">
-                                                        <AvatarImage src={solucionSeleccionada?.avatarUrl || `https://robohash.org/${solucionSeleccionada?.nombreUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
-                                                        <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
-                                                    </Avatar>
-                                                    <div>
-                                                        <p className="text-lg font-semibold">{solucionSeleccionada?.nombreUsuario}</p>
-                                                        <p className="text-sm text-muted-foreground">Autor de la solución</p>
-                                                    </div>
-                                                </div>
+                                                <ProfileHover userName={solucionSeleccionada?.nombreUsuario}>
+                                                    <Button variant="link" className="flex items-center space-x-4 text-normal" onClick={() => navigate(`/profile/${solucionSeleccionada?.nombreUsuario}`)}>
+                                                        <Avatar className="w-16 h-16">
+                                                            <AvatarImage src={`/api/Account/GetAvatar/${solucionSeleccionada?.idUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
+                                                            <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className='flex flex-col justify-start'>
+                                                            <p className="text-lg font-semibold text-left">{solucionSeleccionada?.nombreUsuario}</p>
+                                                            <p className="text-sm text-muted-foreground text-left">Autor de la solución</p>
+                                                        </div>
+                                                    </Button>
+                                                </ProfileHover>
                                                 <div>
                                                     <Label className="text-lg font-semibold">Descripción</Label>
                                                     <ScrollArea className="h-[200px] w-full rounded-md border p-4 mt-2">
