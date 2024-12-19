@@ -1,4 +1,4 @@
-﻿using AntiVirus;
+using AntiVirus;
 using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
@@ -488,7 +488,7 @@ namespace CrowdSolve.Server.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetMisSoluciones", Name = "GetMisSoluciones")]
-        [Authorize]
+        [AuthorizeByPermission(PermisosEnum.Mis_Soluciones)]
         public List<SolucionesModel> GetMisSoluciones()
         {
             List<SolucionesModel> soluciones = _solucionesRepo.Get(x => x.idUsuario == _idUsuarioOnline).ToList();

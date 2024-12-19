@@ -119,8 +119,8 @@ export default function MySolutions() {
                 <Send className="w-6 h-6 mr-2" />
                 Mis Soluciones
             </h1>
-            <div className="flex justify-between items-center mb-6">
-                <div className="relative w-64">
+            <div className="flex justify-between items-center flex-col sm:flex-row mb-4 gap-2">
+                <div className="relative w-full sm:w-64">
                     <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4" />
                     <Input
                         type="text"
@@ -131,7 +131,7 @@ export default function MySolutions() {
                     />
                 </div>
                 <Select value={filterStatus} onValueChange={setFilterStatus}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-full sm:w-[180px]">
                         <SelectValue placeholder="Filtrar por estado" />
                     </SelectTrigger>
                     <SelectContent>
@@ -145,33 +145,31 @@ export default function MySolutions() {
                 {filteredSolutions.map((solution) => (
                     <Card key={solution.idSolucion}>
                         <CardContent className="p-6">
-                            <div className="flex justify-between items-start mb-4">
-                                <div>
-                                    <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-                                        <Avatar>
-                                            <AvatarImage src={`/api/Account/GetAvatar/${solution.desafio.idUsuarioEmpresa}`} />
-                                            <AvatarFallback>{solution.desafio.empresa.substring(0, 2).toUpperCase()}</AvatarFallback>
-                                        </Avatar>
-                                        {solution.desafio.titulo}
-                                    </h2>
-                                    <p className="text-sm text-muted-foreground mb-2">{solution.titulo}</p>
-                                    <div className="flex items-center space-x-2 mb-2">
-                                        <Badge variant={solution.desafio.severidadEstatusDesafio === 'success' ? 'default' : 'secondary'}>
-                                            {solution.desafio.estatusDesafio}
-                                        </Badge>
+                            <div className="flex flex-col sm:flex-row justify-between items-start mb-4">
+                                <div className="flex gap-2 sm:gap-4 items-start sm:items-center w-full sm:w-auto">
+                                    <Avatar>
+                                        <AvatarImage src={`/api/Account/GetAvatar/${solution.desafio.idUsuarioEmpresa}`} />
+                                        <AvatarFallback>{solution.desafio.empresa.substring(0, 2).toUpperCase()}</AvatarFallback>
+                                    </Avatar>
+                                    <div className="flex-1 min-w-0">
+                                        <h2 className="text-xl font-semibold truncate">{solution.desafio.titulo}</h2>
+                                        <p className="text-sm text-muted-foreground truncate">{solution.titulo}</p>
                                     </div>
                                 </div>
-                                <div>
-                                    <Badge variant={solution.severidadEstatusProceso} className="flex gap-1">
-                                        <Icon name={solution.iconoEstatusProceso} size={16} />
-                                        {solution.estatusProceso}
-                                    </Badge>
-                                </div>
+                                <Badge variant={solution.severidadEstatusProceso} className="flex gap-1 mt-2 sm:mt-0">
+                                    <Icon name={solution.iconoEstatusProceso} size={16} />
+                                    {solution.estatusProceso}
+                                </Badge>
                             </div>
-                            <div className="grid grid-cols-2 gap-4 mb-4">
+                            <div className="flex items-center space-x-2 mb-2">
+                                <Badge variant={solution.desafio.severidadEstatusDesafio === 'success' ? 'default' : 'secondary'}>
+                                    {solution.desafio.estatusDesafio}
+                                </Badge>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 w-full">
                                 <div>
                                     <p className="text-xs text-muted-foreground">Empresa</p>
-                                    <p className="text-sm font-medium">{solution.desafio.empresa}</p>
+                                    <p className="text-sm font-medium truncate">{solution.desafio.empresa}</p>
                                 </div>
                                 <div>
                                     <p className="text-xs text-muted-foreground">Fecha de envío</p>
@@ -188,8 +186,8 @@ export default function MySolutions() {
                                     {solution.cantidadVotos} votos
                                 </Badge>
                             </div>
-                            <div className="flex justify-between items-center">
-                                <div className="flex items-center space-x-2">
+                            <div className="flex flex-col sm:flex-row justify-between items-center">
+                                <div className="flex items-center space-x-2 mb-2 sm:mb-0">
                                     <Switch
                                         id={`public-${solution.idSolucion}`}
                                         checked={solution.publica ?? false}
