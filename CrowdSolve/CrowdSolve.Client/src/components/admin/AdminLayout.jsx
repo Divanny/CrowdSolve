@@ -104,39 +104,14 @@ export default function AdminLayout() {
 
             sidebarItems[3].items[0].pending = countRequestsResponse.data.cantidadEmpresas;
             sidebarItems[3].items[1].pending = countRequestsResponse.data.cantidadSoportes;
-            
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
 
-/*     useEffect(() => {
-        fetchData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); */
-
     useEffect(() => {
-        const fetchAvatar = async () => {
-            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
-            if (responseAvatarURL.status == 200) {
-                
-                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                setLogo(URL.createObjectURL(avatarBlob));
-                console.log(logo);
-            }
-
-        }
-
-        if (user) {
-            fetchAvatar();
-        }
-
         fetchData();
-        console.log(sidebarItems);
-
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, []);
 
     return (
         <SidebarProvider
