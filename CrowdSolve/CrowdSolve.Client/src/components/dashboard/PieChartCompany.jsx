@@ -28,7 +28,7 @@ import {
 
 
   const colorPalette = Array.from({ length: 40 }, (_, i) => `var(--chartColor-${40-i})`)
-
+  //Para armar un arreglo de colores
 
 export function PieChartCompany() {
   
