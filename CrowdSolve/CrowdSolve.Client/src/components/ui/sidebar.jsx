@@ -168,7 +168,8 @@ const Sidebar = React.forwardRef((
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE
             }
           }
-          side={side}>
+          side={side}
+          onOpenAutoFocus={(event) => event.preventDefault()}>
           <SheetTitle className="hidden" />
           <SheetDescription className="hidden" />
           <div className="flex h-full w-full flex-col">{children}</div>

@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Trophy, ExternalLink } from 'lucide-react'
 
-const SolutionsOverview = ({ solutions }) => {
+const SolutionsOverview = ({ solutions, myProfile = false }) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-6">
@@ -13,12 +13,12 @@ const SolutionsOverview = ({ solutions }) => {
           <Trophy className="w-6 h-6 text-primary" />
           <h2 className="text-xl font-semibold">Mis Soluciones</h2>
         </div>
-        <Link to="/my-solutions">
+        { myProfile && <Link to="/my-solutions" >
           <Button variant="outline" className="gap-2">
             Ver todas
             <ExternalLink className="w-4 h-4" />
           </Button>
-        </Link>
+        </Link> }
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">

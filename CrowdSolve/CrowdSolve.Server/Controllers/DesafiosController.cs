@@ -73,6 +73,30 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
+        /// Obtiene un desafío por su ID desde la vista de administrador.
+        /// </summary>
+        /// <param name="idDesafio">ID del desafío.</param>
+        /// <returns>Desafío encontrado.</returns>
+        [HttpGet("GetDesafioAdmin/{idDesafio}", Name = "GetDesafioAdmin")]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Ver_Desafíos)]
+        public IActionResult GetDesafioAdmin(int idDesafio)
+        {
+            DesafiosModel? desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+
+            if (desafio == null)
+            {
+                return NotFound("Desafío no encontrado");
+            }
+
+            desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.EvidenciaRecompensa = _adjuntosRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
+
+            return Ok(desafio);
+        }
+        
+        /// <summary>
         /// Obtiene todos los desafíos validados.
         /// </summary>
         /// <returns>Lista de desafíos validados.</returns>
@@ -732,6 +756,7 @@ namespace CrowdSolve.Server.Controllers
                 Categorias = _desafiosRepo.GetCategorias(),
                 TiposEvaluacion = _desafiosRepo.GetTiposEvaluacion(),
                 EstatusDesafios = (allEstatuses) ? _desafiosRepo.GetEstatusDesafios() : _desafiosRepo.GetEstatusDesafios().Where(x => estatusProcesoEnums.Contains(x.idEstatusProceso)),
+                EstatusProcesoEvaluacion = _crowdSolveContext.Set<EstatusProceso>().Where(x => x.idClaseProceso == (int)ClasesProcesoEnum.Proceso_de_Evaluación).ToList()
             };
         }
 

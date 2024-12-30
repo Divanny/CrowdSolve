@@ -11,14 +11,10 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
-  CircleCheckBig,
   ChevronDown,
-  CircleSlash2,
-  Edit,
   Eye,
   FileX,
   FileCheck,
-  FileText,
   UserPen,
   MoreHorizontal,
   X,
@@ -44,11 +40,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SupportDialog } from "../../../components/admin/Requests/SupportRequestDialog";
+import EstatusProcesoEnum from "@/enums/EstatusProcesoEnum";
 
 export default function SupportRequests() {
   const { api } = useAxios();
@@ -91,35 +87,35 @@ export default function SupportRequests() {
       enableHiding: false,
     },
     {
-        accessorKey: "nombreUsuario",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Usuario Afectado
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
+      accessorKey: "nombreUsuario",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Usuario Afectado
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
       },
-      {
-        accessorKey: "titulo",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Titulo
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
+    },
+    {
+      accessorKey: "titulo",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Titulo
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
       },
+    },
     {
       accessorKey: "mensaje",
       header: "Mensaje",
@@ -128,7 +124,7 @@ export default function SupportRequests() {
     {
       accessorKey: "fecha",
       header: "Fecha Soporte",
-      cell:({row})=>`${new Date(row.original.fecha).toLocaleDateString('es-ES', {
+      cell: ({ row }) => `${new Date(row.original.fecha).toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
@@ -148,13 +144,13 @@ export default function SupportRequests() {
           </Button>
         );
       },
-      cell:({getValue})=>{
-        return(
-        <div className="w-20 text-center">
+      cell: ({ getValue }) => {
+        return (
+          <div className="w-20 text-center">
             {getValue()}
           </div>
         );
-    }
+      }
     },
     {
       accessorKey: "apellidos",
@@ -170,46 +166,46 @@ export default function SupportRequests() {
           </Button>
         );
       },
-      cell:({getValue})=>{
-        return(
-        <div className="w-20 text-center">
+      cell: ({ getValue }) => {
+        return (
+          <div className="w-20 text-center">
             {getValue()}
           </div>
         );
-    }
-    },
-      {
-        accessorKey: "correoElectronico",
-        header: "Correo Electronico",
-        /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
-      },
-      {
-        accessorKey: "nombreAsignado",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Usuario Asignado
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell:({getValue})=>{
-          return(
-          <div className="w-20 text-center">
-              {getValue()}
-            </div>
-          );
       }
+    },
+    {
+      accessorKey: "correoElectronico",
+      header: "Correo Electronico",
+      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+    },
+    {
+      accessorKey: "nombreAsignado",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Usuario Asignado
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
       },
-      {
-        accessorKey: "idEstatusProceso",
-        header: "Estatus Solicitud",
-        /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
-      },
+      cell: ({ getValue }) => {
+        return (
+          <div className="w-20 text-center">
+            {getValue()}
+          </div>
+        );
+      }
+    },
+    {
+      accessorKey: "idEstatusProceso",
+      header: "Estatus Solicitud",
+      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+    },
     {
       id: "actions",
       cell: ({ row }) => (
@@ -222,60 +218,60 @@ export default function SupportRequests() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            
+
             <DropdownMenuItem
-            onClick={() => {
-              console.log(row.original);
-              setSelectedSupportRequest(row.original)
-              setDialogMode("view")
-              setIsDialogOpen(true)
-            }}
-          >
-            <Eye className="mr-2 h-4 w-4" />
-            Ver Detalle
-          </DropdownMenuItem>
+              onClick={() => {
+                console.log(row.original);
+                setSelectedSupportRequest(row.original)
+                setDialogMode("view")
+                setIsDialogOpen(true)
+              }}
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              Ver Detalle
+            </DropdownMenuItem>
 
             {row.original.idUsuarioAsignado === null && (
-            <DropdownMenuItem
-            onClick={() => {
-              assignMe(row.original.idSoporte)
+              <DropdownMenuItem
+                onClick={() => {
+                  assignMe(row.original.idSoporte)
 
-            }}
-          >
-            <UserPen className="mr-2 h-4 w-4" />
-            Asignarme Solicitud
-          </DropdownMenuItem>
-          )}
+                }}
+              >
+                <UserPen className="mr-2 h-4 w-4" />
+                Asignarme Solicitud
+              </DropdownMenuItem>
+            )}
 
-            {row.original.asignadoAMi === true && row.original.idEstatusProceso!=20 
-            && row.original.idEstatusProceso!=19 && (
-            <DropdownMenuItem
-            onClick={() => {
-              setSelectedSupportRequest(row.original.idSoporte)
-              setDialogMode("closeSupport")
-              setIsDialogOpen(true)
-            }}
-          >
-            <FileCheck className="mr-2 h-4 w-4" />
-            Finalizar Solicitud
-          </DropdownMenuItem>
-          )}
+            {row.original.asignadoAMi === true && row.original.idEstatusProceso != 20
+              && row.original.idEstatusProceso != 19 && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSelectedSupportRequest(row.original.idSoporte)
+                    setDialogMode("closeSupport")
+                    setIsDialogOpen(true)
+                  }}
+                >
+                  <FileCheck className="mr-2 h-4 w-4" />
+                  Finalizar Solicitud
+                </DropdownMenuItem>
+              )}
 
 
-            {row.original.asignadoAMi === true && row.original.idEstatusProceso!=20 
-            && row.original.idEstatusProceso!=19 && (
-            <DropdownMenuItem
-            onClick={() => {
-              setSelectedSupportRequest(row.original.idSoporte)
-              setDialogMode("declineSupport")
-              setIsDialogOpen(true)
-            }}
-          >
-            <FileX className="mr-2 h-4 w-4" />
-            Descargar Solicitud
-          </DropdownMenuItem>
-          )}
-            
+            {row.original.asignadoAMi === true && row.original.idEstatusProceso != 20
+              && row.original.idEstatusProceso != 19 && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSelectedSupportRequest(row.original.idSoporte)
+                    setDialogMode("declineSupport")
+                    setIsDialogOpen(true)
+                  }}
+                >
+                  <FileX className="mr-2 h-4 w-4" />
+                  Descargar Solicitud
+                </DropdownMenuItem>
+              )}
+
           </DropdownMenuContent>
         </DropdownMenu>
       ),
@@ -292,11 +288,11 @@ export default function SupportRequests() {
           }),
         ]);
 
-      
+
       setData(supportRequestsResponse.data);
       setUsuariosAdmin(relationalObjectsResponse.data.usuariosAdmin);
       setEstatusProcesos(relationalObjectsResponse.data.estatusProcesos);
-      
+
 
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -310,28 +306,28 @@ export default function SupportRequests() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const assignMe=async(supportId)=>{
+  const assignMe = async (supportId) => {
     try {
-      const response = await api.put(`api/Soportes/AsignarMe/${supportId}`,null, {
+      const response = await api.put(`api/Soportes/AsignarMe/${supportId}`, null, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-  
-       // Check if the response was successful
-    if (response.data.success) {
-      toast.success("Operación exitosa", {
-        description: response.data.message,
-      });
 
-      fetchData();
-    } else {
-      toast.warning("Operación fallida", {
-        description: response.data.message,
-      });
-      console.log(response.data);
-    }
+      // Check if the response was successful
+      if (response.data.success) {
+        toast.success("Operación exitosa", {
+          description: response.data.message,
+        });
+
+        fetchData();
+      } else {
+        toast.warning("Operación fallida", {
+          description: response.data.message,
+        });
+        console.log(response.data);
+      }
     } catch (error) {
       toast.error('Hubo un error al realizar la operación');
       console.error('Error:', error);
@@ -351,13 +347,13 @@ export default function SupportRequests() {
     onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
     globalFilterFn: (row, columnId, filterValue) => {
-        const value = row.getValue(columnId);
-        return value != null
-          ? String(value)
-              .toLowerCase()
-              .includes(String(filterValue).toLowerCase())
-          : false;
-      },
+      const value = row.getValue(columnId);
+      return value != null
+        ? String(value)
+          .toLowerCase()
+          .includes(String(filterValue).toLowerCase())
+        : false;
+    },
     state: {
       sorting,
       columnFilters,
@@ -377,9 +373,9 @@ export default function SupportRequests() {
   };
 
   const filteredUsuariosAdmin = usuariosAdmin.filter((usuario) =>
-    usuario.nombreUsuario.toLowerCase().includes(usuarioAdminSearch.toLowerCase()) ,
-    
-  
+    usuario.nombreUsuario.toLowerCase().includes(usuarioAdminSearch.toLowerCase()),
+
+
   );
 
   const filteredEstatusProceso = estatusProcesos.filter((estatus) =>
@@ -395,23 +391,23 @@ export default function SupportRequests() {
     );
   }
 
-  
+
 
   return (
     <div className="w-full">
       <div className="flex items-center py-4 gap-4">
         <div className="relative w-full sm:max-w-lg">
 
-          
+
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
             placeholder="Buscar Soporte"
             value={globalFilter ?? ""}
             onChange={(event) => {
-                const value = event.target.value;
-                setGlobalFilter(value);
-                table.setGlobalFilter(value);
+              const value = event.target.value;
+              setGlobalFilter(value);
+              table.setGlobalFilter(value);
             }}
             className="pl-8"
           />
@@ -508,7 +504,7 @@ export default function SupportRequests() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        
+
 
         <Button
           variant="outline"
@@ -587,9 +583,9 @@ export default function SupportRequests() {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={
-                    row.original.idEstatusProceso === 17
-                      ? "bg-[#FFD3A6] bg-opacity-30 border-[1px] font-bold"
-                      : row.original.idEstatusProceso===18 ? "bg-[#FFC7B0] bg-opacity-30 border-[1px] font-bold" :""
+                    row.original.idEstatusProceso === EstatusProcesoEnum.Soporte_Enviada
+                      ? "bg-muted border-[1px]"
+                      : row.original.idEstatusProceso === EstatusProcesoEnum.Soporte_En_progreso ? "bg-muted/50 border-[1px]" : ""
                   }
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -650,7 +646,6 @@ export default function SupportRequests() {
           }}
           support={selectedSupportRequest}
           mode={dialogMode}
-          /* relationalObjects={{ nivelesEducativos, estatusUsuarios }} */
         />
       )}
     </div>

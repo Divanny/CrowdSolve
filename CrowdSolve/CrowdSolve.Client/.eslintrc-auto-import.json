@@ -264,6 +264,8 @@
     "UiMarquee": true,
     "UiSpotlight": true,
     "UiTypewriter-effect": true,
-    "AdminParticipantsParticipantSolutionsDialog": true
+    "AdminParticipantsParticipantSolutionsDialog": true,
+    "AdminChallengesPrizeEvidenceDialog": true,
+    "UiTimeline": true
   }
 }

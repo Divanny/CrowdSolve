@@ -41,6 +41,8 @@ const ChallengeRequest = lazy(() => import('@/pages/admin/challenges-requests/Ch
 const MyProfile = lazy(() => import('@/pages/participant/MyProfile'));
 const PublicProfile = lazy(() => import('@/pages/participant/PublicProfile'));
 const Notifications = lazy(() => import('@/pages/Notifications'));
+const AdminChallenges = lazy(() => import('@/pages/admin/challenges/AdminChallenges'));
+const AdminChallengeDetails = lazy(() => import('@/pages/admin/challenges/AdminChallengeDetails'));
 
 const LazyComponent = ({ component: Component, ...props }) => (
   <Suspense fallback={<PageLoader />}>
@@ -77,9 +79,11 @@ const AppRoutes = () => (
         <Route index element={<LazyComponent component={AdminDashboard} />} handle={{ permission: () => PermisosEnum.Administrador_Dashboard}} />
         <Route path="participants" element={<LazyComponent component={Participants} />} handle={{ permission: () => PermisosEnum.Administrar_Participantes}} />
         <Route path="categories" element={<LazyComponent component={Categories} />} handle={{ permission: () => PermisosEnum.Administrar_Categorias}} />
-        <Route path="challenges" element={<LazyComponent component={ChallengeRequest} />} handle={{ permission: () => PermisosEnum.Solicitudes_Desafíos}} />
+        <Route path="challenges-requests" element={<LazyComponent component={ChallengeRequest} />} handle={{ permission: () => PermisosEnum.Solicitudes_Desafíos}} />
         <Route path="company-requests" element={<LazyComponent component={CompanyRequest} />} handle={{ permission: () => PermisosEnum.Solicitudes_Empresas}} />
         <Route path="support-requests" element={<LazyComponent component={SupportRequest} />} handle={{ permission: () => PermisosEnum.Solicitudes_Soportes}} />
+        <Route path="challenges" element={<LazyComponent component={AdminChallenges} />} handle={{ permission: () => PermisosEnum.Administrar_Desafíos}} />
+        <Route path="challenge/:challengeId" element={<LazyComponent component={AdminChallengeDetails} />} handle={{ permission: () => PermisosEnum.Administrador_Ver_Desafíos}} />
         <Route path="companies" element={<LazyComponent component={Companies} />} handle={{ permission: () => PermisosEnum.Administrar_Empresas}} />
         <Route path="administrators" element={<LazyComponent component={Administrators} />} handle={{ permission: () => PermisosEnum.Administrar_Administradores}} />
         <Route path="permissions" element={<LazyComponent component={RolesAndPermissions} />} handle={{ permission: () => PermisosEnum.Administrar_Roles_y_Permisos}} />

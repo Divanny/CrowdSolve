@@ -89,17 +89,17 @@ const Navbar = () => {
                                 <div className='flex items-center gap-4'>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>
-                                            <div className="flex items-center cursor-pointer">
+                                            <Button variant="ghost" size="icon">
                                                 {
                                                     theme == 'system' ? (
-                                                        <SunMoon className="mr-2" size={16} />
+                                                        <SunMoon size={16} />
                                                     ) : theme == 'light' ? (
-                                                        <Sun className="mr-2" size={16} />
+                                                        <Sun size={16} />
                                                     ) : (
-                                                        <Moon className="mr-2" size={16} />
+                                                        <Moon size={16} />
                                                     )
                                                 }
-                                            </div>
+                                            </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuPortal>
                                             <DropdownMenuContent className="w-36 mr-2">

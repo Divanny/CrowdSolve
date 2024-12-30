@@ -163,7 +163,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                             <span className="sr-only">Ver detalles</span>
                                         </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="max-w-4xl">
+                                    <DialogContent className="max-w-4xl" onOpenAutoFocus={(event) => event.preventDefault()}>
                                         <DialogHeader>
                                             <DialogTitle className="text-2xl font-bold">{solucionSeleccionada?.titulo}</DialogTitle>
                                             <VisuallyHidden>
