@@ -236,7 +236,7 @@ export default function AdminLayout() {
                         </BreadcrumbList>
                     </Breadcrumb>
                 </header>
-                <div className="flex flex-1 flex-col gap-4 p-2 sm:p-4 pt-0">
+                <div className="flex flex-1 flex-col gap-4 p-2 sm:px-4 pt-0">
                     <Outlet />
                 </div>
             </SidebarInset>

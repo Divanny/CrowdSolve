@@ -36,6 +36,7 @@ declare global {
   const ErrorBoundary: typeof import('@/components/ErrorBoundary.jsx')['ErrorBoundary']
   const FileUploader: typeof import('@/components/FileUploader.jsx')['FileUploader']
   const GoogleLoginButton: typeof import('@/components/GoogleLoginButton.jsx')['GoogleLoginButton']
+  const IconoArchivo: typeof import('@/components/IconoArchivo.jsx')['IconoArchivo']
   const Landing-pageChallengesPost: typeof import('@/components/landing-page/ChallengesPost.jsx')['ChallengesPost']
   const Landing-pageCrowdSourcingEasy: typeof import('@/components/landing-page/CrowdSourcingEasy.jsx')['CrowdSourcingEasy']
   const Landing-pageFAQSection: typeof import('@/components/landing-page/FAQSection.jsx')['FAQSection']

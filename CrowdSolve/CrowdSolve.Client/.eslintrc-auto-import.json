@@ -266,6 +266,7 @@
     "UiTypewriter-effect": true,
     "AdminParticipantsParticipantSolutionsDialog": true,
     "AdminChallengesPrizeEvidenceDialog": true,
-    "UiTimeline": true
+    "UiTimeline": true,
+    "IconoArchivo": true
   }
 }

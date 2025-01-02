@@ -16,6 +16,7 @@ import createEditorToConvertToHtml from '@/hooks/createEditorToConvertToHtml';
 import Icon from '@/components/ui/icon';
 import { Timeline, TimelineItem, TimelineHeader, TimelineTitle, TimelineTime, TimelineDescription } from '@/components/ui/timeline';
 import PrizeEvidenceDialog from '@/components/admin/challenges/PrizeEvidenceDialog';
+import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 
 const editor = createEditorToConvertToHtml();
 
@@ -100,10 +101,6 @@ const AdminChallengeDetails = () => {
         return <LoadingSkeleton />;
     }
 
-    if (!desafio) {
-        return <div className="text-center text-primary">No se pudo cargar el desafío.</div>;
-    }
-
     return (
         <div className="relative">
             <Button
@@ -113,73 +110,82 @@ const AdminChallengeDetails = () => {
             >
                 <ArrowLeft className="mr-2 h-4 w-4" /> Volver
             </Button>
-            <div className="flex flex-col xl:flex-row gap-8">
-                <div className='flex-1 order-2 xl:order-1'>
-                    <Card className="bg-card text-card-foreground p-6 mb-6">
-                        <ChallengeDetail desafio={desafio} htmlContent={htmlContent} getCategoryName={getCategoryName} />
-                    </Card>
+            {!desafio || !htmlContent ? (
+                <div className='w-full flex flex-col items-center justify-center gap-4 p-8'>
+                    <h1 className="text-2xl font-semibold text-center">Desafío no encontrado</h1>
+                    <p className="text-muted-foreground text-center">El desafío que buscas no existe o no tienes permisos para verlo.</p>
                 </div>
-                <div className='w-full xl:w-1/3 order-1 xl:order-2'>
-                    <Card className="bg-card text-card-foreground p-6 sticky top-8">
-                        <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-between sm:items-center mb-4">
-                            <h2 className="text-xl font-semibold">Información del Desafío</h2>
-                            <Badge variant={desafio.severidadEstatusDesafio}>
-                                <Icon name={desafio.iconoEstatusDesafio} className="mr-2 h-4 w-4" />
-                                {desafio.estatusDesafio}
-                            </Badge>
-                        </div>
-                        <div className="space-y-4">
-                            <div className="bg-background rounded-lg p-4 space-y-3">
-                                <div className="flex items-center text-muted-foreground">
-                                    <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                    <span className="text-sm"><span className='font-semibold'>Inicio:</span> {formatDate(desafio.fechaInicio)}</span>
-                                </div>
-                                <div className="flex items-center text-muted-foreground">
-                                    <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                    <span className="text-sm"><span className='font-semibold'>Cierre:</span> {formatDate(desafio.fechaLimite)}</span>
-                                </div>
-                                <div className="flex items-center text-muted-foreground">
-                                    <Users className="mr-2 h-5 w-5 text-primary" />
-                                    <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} soluciones enviadas</span>
-                                </div>
-                                <div className="flex items-center text-muted-foreground">
-                                    <Clock className="mr-2 h-5 w-5 text-primary" />
-                                    <span className="text-sm"><span className='font-semibold'>Registrado:</span> {formatDate(desafio.fechaRegistro)}</span>
+            ) : (
+                <div className="flex flex-col xl:flex-row gap-8">
+                    <div className='flex-1 order-2 xl:order-1'>
+                        <Card className="bg-card text-card-foreground p-6 mb-6">
+                            <ChallengeDetail desafio={desafio} htmlContent={htmlContent} getCategoryName={getCategoryName} />
+                        </Card>
+                    </div>
+                    <div className='w-full xl:w-1/3 order-1 xl:order-2'>
+                        <Card className="bg-card text-card-foreground p-6 sticky top-8">
+                            <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-between sm:items-center mb-4">
+                                <h2 className="text-xl font-semibold">Información del Desafío</h2>
+                                <Badge variant={desafio.severidadEstatusDesafio}>
+                                    <Icon name={desafio.iconoEstatusDesafio} className="mr-2 h-4 w-4" />
+                                    {desafio.estatusDesafio}
+                                </Badge>
+                            </div>
+                            <div className="space-y-4">
+                                <div className="bg-background rounded-lg p-4 space-y-3">
+                                    <div className="flex items-center text-muted-foreground">
+                                        <Calendar className="mr-2 h-5 w-5 text-primary" />
+                                        <span className="text-sm"><span className='font-semibold'>Inicio:</span> {formatDate(desafio.fechaInicio)}</span>
+                                    </div>
+                                    <div className="flex items-center text-muted-foreground">
+                                        <Calendar className="mr-2 h-5 w-5 text-primary" />
+                                        <span className="text-sm"><span className='font-semibold'>Cierre:</span> {formatDate(desafio.fechaLimite)}</span>
+                                    </div>
+                                    <div className="flex items-center text-muted-foreground">
+                                        <Users className="mr-2 h-5 w-5 text-primary" />
+                                        <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} soluciones enviadas</span>
+                                    </div>
+                                    <div className="flex items-center text-muted-foreground">
+                                        <Clock className="mr-2 h-5 w-5 text-primary" />
+                                        <span className="text-sm"><span className='font-semibold'>Registrado:</span> {formatDate(desafio.fechaRegistro)}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <PrizeEvidenceDialog evidence={desafio.evidenciaRecompensa}>
-                            <Button className="w-full mt-6" variant="outline">
-                                <Eye className="mr-2 h-4 w-4" /> Ver evidencia de premios
-                            </Button>
-                        </PrizeEvidenceDialog>
-                    </Card>
+                            {desafio.idEstatusProceso == EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios && (
+                                <PrizeEvidenceDialog evidence={desafio.evidenciaRecompensa} challengeId={desafio.idDesafio}>
+                                    <Button className="w-full mt-6" variant="outline">
+                                        <Eye className="mr-2 h-4 w-4" /> Ver evidencia de premios
+                                    </Button>
+                                </PrizeEvidenceDialog>
+                            )}
+                        </Card>
 
-                    <Card className="bg-card text-card-foreground p-6 mt-6">
-                        <h2 className="text-xl font-semibold mb-4">Proceso de evaluación</h2>
-                        <Timeline>
-                            {desafio.procesoEvaluacion.map((proceso, index) => {
-                                const status = getEvaluationStatus(proceso);
-                                return (
-                                    <TimelineItem key={index}>
-                                        <TimelineHeader>
-                                            <TimelineTitle className="text-sm font-medium">{getEvaluationTypeName(proceso.idTipoEvaluacion)}</TimelineTitle>
-                                            <TimelineTime variant={status.severidad}>
-                                                <Icon name={status.claseIcono} className="mr-2 h-4 w-4" />
-                                                {status.nombre}
-                                            </TimelineTime>
-                                        </TimelineHeader>
-                                        <TimelineDescription className="text-sm text-muted-foreground">
-                                            {formatDate(proceso.fechaInicio)} - {formatDate(proceso.fechaFinalizacion)}
-                                        </TimelineDescription>
-                                    </TimelineItem>
-                                );
-                            })}
-                        </Timeline>
-                    </Card>
+                        <Card className="bg-card text-card-foreground p-6 mt-6">
+                            <h2 className="text-xl font-semibold mb-4">Proceso de evaluación</h2>
+                            <Timeline>
+                                {desafio.procesoEvaluacion.map((proceso, index) => {
+                                    const status = getEvaluationStatus(proceso);
+                                    return (
+                                        <TimelineItem key={index}>
+                                            <TimelineHeader>
+                                                <TimelineTitle className="text-sm font-medium">{getEvaluationTypeName(proceso.idTipoEvaluacion)}</TimelineTitle>
+                                                <TimelineTime variant={status.severidad}>
+                                                    <Icon name={status.claseIcono} className="mr-2 h-4 w-4" />
+                                                    {status.nombre}
+                                                </TimelineTime>
+                                            </TimelineHeader>
+                                            <TimelineDescription className="text-sm text-muted-foreground">
+                                                {formatDate(proceso.fechaInicio)} - {formatDate(proceso.fechaFinalizacion)}
+                                            </TimelineDescription>
+                                        </TimelineItem>
+                                    );
+                                })}
+                            </Timeline>
+                        </Card>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
