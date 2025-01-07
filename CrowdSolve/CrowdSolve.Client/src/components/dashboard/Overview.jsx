@@ -24,46 +24,43 @@ import {
 } from "@/components/ui/select";
 
 const chartConfig = {
-  enero: { label: "Enero", color: "hsl(0, 30%, 20%)" },      // Background Dark
-  febrero: { label: "Febrero", color: "hsl(15, 30%, 40%)" },   // Foreground
-  marzo: { label: "Marzo", color: "hsl(30, 60%, 50%)" },      // Primary
-  abril: { label: "Abril", color: "hsl(120, 50%, 40%)" },      // Forest 1
-  mayo: { label: "Mayo", color: "hsl(210, 80%, 40%)" },         // Ocean 1
-  junio: { label: "Junio", color: "hsl(20, 80%, 60%)" },       // Sunset 1
-  julio: { label: "Julio", color: "hsl(340, 80%, 40%)" },      // Berry 1
-  agosto: { label: "Agosto", color: "hsl(230, 30%, 30%)" },    // Chart 2
-  septiembre: { label: "Septiembre", color: "hsl(120, 40%, 60%)" }, // Forest 4
-  octubre: { label: "Octubre", color: "hsl(340, 80%, 80%)" },  // Berry 5
-  noviembre: { label: "Noviembre", color: "hsl(200, 70%, 60%)" }, // Ocean 4
-  diciembre: { label: "Diciembre", color: "hsl(120, 60%, 50%)" }, // Success
+  enero: { label: "Enero", color: "hsl(0, 20.70%, 33.10%)" },
+  febrero: { label: "Febrero", color: "hsl(15, 30%, 40%)" },
+  marzo: { label: "Marzo", color: "hsl(30, 60%, 50%)" },
+  abril: { label: "Abril", color: "hsl(120, 50%, 40%)" },
+  mayo: { label: "Mayo", color: "hsl(210, 80%, 40%)" },
+  junio: { label: "Junio", color: "hsl(20, 80%, 60%)" },
+  julio: { label: "Julio", color: "hsl(340, 80%, 40%)" },
+  agosto: { label: "Agosto", color: "hsl(230, 30%, 30%)" },
+  septiembre: { label: "Septiembre", color: "hsl(120, 40%, 60%)" },
+  octubre: { label: "Octubre", color: "hsl(340, 80%, 80%)" },
+  noviembre: { label: "Noviembre", color: "hsl(200, 70%, 60%)" },
+  diciembre: { label: "Diciembre", color: "hsl(120, 60%, 50%)" },
 };
 
 export function Overview() {
+  const { api } = useAxios();
   const [chartData, setChartData] = useState([]);
   const [years, setYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState("");
 
   const fetchData = async () => {
     try {
-      const response = await fetch("/api/Desafios/GetCountForDate");
-      const data = await response.json();
+      const response = await Promise.all([
+        api.get("/api/Desafios/GetCountForDate", { requireLoading: false }),
+      ]);
 
-      // Mapear colores al chartData según chartConfig
+      const data = response[0].data;
+
       const enrichedData = data.map((item) => {
         const fill = chartConfig[item.month]?.color || "hsl(0, 0%, 70%)";
-        console.log("Procesando item:", item.month, "Asignado color:", chartConfig[item.month].color); // Registro de cada item
-        return {
-          ...item,
-          fill,
-        };
+        return { ...item, fill };
       });
 
-      // Obtener años únicos
       const years = Array.from(new Set(enrichedData.map((item) => item.year)));
       setYears(years);
-      setSelectedYear(years[0]); // Seleccionar el primer año por defecto
+      setSelectedYear(years[0]);
       setChartData(enrichedData);
-      console.log(chartData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -71,17 +68,17 @@ export function Overview() {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Filtrar datos por año seleccionado
   const filteredData = chartData.filter((item) => item.year === selectedYear);
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle>Overview</CardTitle>
-        <CardDescription>Filtrar datos por año</CardDescription>
+        <CardTitle className="text-lg md:text-xl">Overview</CardTitle>
+        <CardDescription className="text-sm md:text-base">
+          Filtrar datos por año
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex justify-end mb-4">
@@ -89,7 +86,7 @@ export function Overview() {
             value={selectedYear}
             onValueChange={(value) => setSelectedYear(value)}
           >
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-full md:w-[200px]">
               <SelectValue placeholder="Seleccionar año" />
             </SelectTrigger>
             <SelectContent>
@@ -102,40 +99,42 @@ export function Overview() {
           </Select>
         </div>
 
-        <ChartContainer config={chartConfig}>
-          <BarChart
-            data={filteredData}
-            margin={{
-              top: 20,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar
-              dataKey="count"
-              nameKey="month"
-              radius={8}
+        <div className="w-full h-[200px] md:h-[400px]">
+          <ChartContainer config={chartConfig}>
+            <BarChart
+              width={undefined} // Responsive
+              height={undefined} // Responsive
+              data={filteredData}
+              margin={{
+                top: 20,
+                left: 0,
+                right: 0,
+              }}
+              className="w-full"
             >
-              <LabelList
-                dataKey="count"
-                nameKey="month"
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
               />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey="count" nameKey="month" radius={8}>
+                <LabelList
+                  dataKey="count"
+                  nameKey="month"
+                  position="top"
+                  offset={12}
+                  className="fill-foreground text-xs md:text-sm"
+                />
+              </Bar>
+            </BarChart>
+          </ChartContainer>
+        </div>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="leading-none text-muted-foreground">

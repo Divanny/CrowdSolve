@@ -47,7 +47,7 @@ export default function AdminLayout() {
 
     const user = useSelector((state) => state.user.user);
 
-    const sidebarItems = [
+    const sidebarItems= [
         {
             title: null,
             url: "#",
@@ -98,7 +98,7 @@ export default function AdminLayout() {
     const fetchData = async () => {
         try {
             const countRequestsResponse = await api.get("/api/Soportes/GetCantidadRegistros", { requireLoading: false })
-
+            console.log(sidebarItems[3]);
             sidebarItems[3].items[0].pending = countRequestsResponse.data.cantidadEmpresas;
             sidebarItems[3].items[1].pending = countRequestsResponse.data.cantidadSoportes;
         } catch (error) {
