@@ -6,22 +6,22 @@ import { Marquee } from "@/components/ui/marquee";
 
 const reviews = [
   {
-    name: "Jack",
-    username: "@jack",
+    name: "Jean Güichardo",
+    username: "@Leru",
     body: "I've never seen anything like this before. It's amazing. I love it.",
-    img: "https://avatar.vercel.sh/jack",
+    img: "https://i.imgur.com/7QzhpGt.jpeg",
   },
   {
-    name: "Jill",
-    username: "@jill",
+    name: "Jesus Bidó",
+    username: "@whobido",
     body: "I don't know what to say. I'm speechless. This is amazing.",
-    img: "https://avatar.vercel.sh/jill",
+    img: "https://i.imgur.com/dsDzjOQ.jpeg",
   },
   {
-    name: "John",
-    username: "@john",
+    name: "Manuel Sánchez",
+    username: "@TakeCareWithManu",
     body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/john",
+    img: "https://i.imgur.com/3nyMUgM.png",
   },
   {
     name: "Jane",
@@ -30,10 +30,10 @@ const reviews = [
     img: "https://avatar.vercel.sh/jane",
   },
   {
-    name: "Jenny",
-    username: "@jenny",
+    name: "Jorge Cruz",
+    username: "@georgethe3",
     body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jenny",
+    img: "https://i.imgur.com/n0DUW83.png",
   },
   {
     name: "James",

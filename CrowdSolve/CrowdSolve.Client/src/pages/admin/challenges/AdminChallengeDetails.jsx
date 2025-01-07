@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Calendar, Users, Clock, ArrowLeft, Eye } from 'lucide-react';
+import { Calendar, Users, Clock, ArrowLeft, Eye, Ban, CircleCheck, CircleAlert } from 'lucide-react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import ChallengeDetail from '@/components/challenge/ChallengeDetail';
@@ -17,6 +17,12 @@ import Icon from '@/components/ui/icon';
 import { Timeline, TimelineItem, TimelineHeader, TimelineTitle, TimelineTime, TimelineDescription } from '@/components/ui/timeline';
 import PrizeEvidenceDialog from '@/components/admin/challenges/PrizeEvidenceDialog';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { Textarea } from '@/components/ui/textarea';
 
 const editor = createEditorToConvertToHtml();
 
@@ -28,6 +34,7 @@ const AdminChallengeDetails = () => {
     const [desafio, setDesafio] = useState(null);
     const [htmlContent, setHtmlContent] = useState('');
     const [relationalObjects, setRelationalObjects] = useState({});
+    const [rejectionReason, setRejectionReason] = useState("");
 
     useEffect(() => {
         const getChallenge = async () => {
@@ -46,8 +53,6 @@ const AdminChallengeDetails = () => {
 
                 setDesafio(desafioResponse.data);
                 setRelationalObjects(relationalObjectsResponse.data);
-
-                console.log(desafioResponse.data, relationalObjectsResponse.data);
             } catch (error) {
                 toast.error("No se pudo cargar el desafío.");
                 console.error(error);
@@ -59,6 +64,42 @@ const AdminChallengeDetails = () => {
 
         // eslint-disable-next-line
     }, [challengeId]);
+
+    const validateChallenge = async () => {
+        try {
+            const response = await api.put(`/api/Desafios/Validar/${challengeId}`);
+            if (response.data.success) {
+                toast.success('Operación exitosa', response.data.message);
+                navigate('/admin/challenges');
+            }
+            else {
+                toast.error('Error al validar el desafío', response.data.message);
+            }
+        } catch (error) {
+            toast.error('Error al validar el desafío', {
+                description: error.response?.data?.message ?? error.message,
+            });
+        }
+    };
+
+    const rejectChallenge = async () => {
+        try {
+            const response = await api.put(`/api/Desafios/Rechazar/${challengeId}`, null, {
+                params: { motivo: rejectionReason }
+            });
+            if (response.data.success) {
+                toast.success('Operación exitosa', response.data.message);
+                navigate('/admin/challenges');
+            }
+            else {
+                toast.error('Error al rechazar el desafío', response.data.message);
+            }
+        } catch (error) {
+            toast.error('Error al rechazar el desafío', {
+                description: error.response?.data?.message ?? error.message,
+            });
+        }
+    };
 
     const convertToHtml = () => {
         const html = editor.api.htmlReact.serialize({
@@ -152,12 +193,67 @@ const AdminChallengeDetails = () => {
                                 </div>
                             </div>
 
-                            {desafio.idEstatusProceso == EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios && (
+                            {desafio.idEstatusDesafio == EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios && (
                                 <PrizeEvidenceDialog evidence={desafio.evidenciaRecompensa} challengeId={desafio.idDesafio}>
                                     <Button className="w-full mt-6" variant="outline">
                                         <Eye className="mr-2 h-4 w-4" /> Ver evidencia de premios
                                     </Button>
                                 </PrizeEvidenceDialog>
+                            )}
+
+                            {desafio.idEstatusDesafio == EstatusProcesoEnum.Desafio_Sin_validar && (
+                                <div className='flex flex-col sm:flex-row gap-4 mt-6'>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button className="w-full order-1 sm:order-2" size="sm">
+                                                <CircleCheck className="h-4 w-4" />
+                                                Validar Desafío
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-80">
+                                            <div className='flex gap-2 items-center'>
+                                                <CircleAlert className="text-primary" />
+                                                <span className='text-sm'>¿Estás seguro de que deseas validar este desafío?</span>
+                                            </div>
+                                            <div className='flex gap-2 mt-4 justify-end'>
+                                                <Button size="sm" variant="outline">
+                                                    Cancelar
+                                                </Button>
+                                                <Button size="sm" onClick={validateChallenge}>
+                                                    Validar
+                                                </Button>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button className="w-full order-2 sm:order-1" size="sm" variant="ghostDestructive">
+                                                <Ban className="h-4 w-4" />
+                                                Rechazar Desafío
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-80">
+                                            <div className='flex gap-2 items-center'>
+                                                <CircleAlert className="text-primary" />
+                                                <span className='text-sm'>¿Estás seguro de que deseas rechazar este desafío?</span>
+                                            </div>
+                                            <Textarea
+                                                className="w-full mt-2 p-2"
+                                                placeholder="Motivo de rechazo"
+                                                value={rejectionReason}
+                                                onChange={(e) => setRejectionReason(e.target.value)}
+                                            />
+                                            <div className='flex gap-2 mt-4 justify-end'>
+                                                <Button size="sm" variant="outline">
+                                                    Cancelar
+                                                </Button>
+                                                <Button size="sm" onClick={rejectChallenge}>
+                                                    Rechazar
+                                                </Button>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
                             )}
                         </Card>
 
