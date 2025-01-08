@@ -230,6 +230,11 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             procesosRepo.CambiarEstatusProceso(idDesafio, new ProcesosModel(EstatusProcesoEnum.Desafío_Descartado, motivo));
         }
 
+        public void FinalizarDesafio(int idDesafio)
+        {
+            procesosRepo.CambiarEstatusProceso(idDesafio, new ProcesosModel(EstatusProcesoEnum.Desafío_Finalizado));
+        }
+
         public OperationResult ValidarUsuarioPuedeEvaluar(int idDesafio, int idUsuario)
         {
             var desafio = this.Get(x => x.idDesafio == idDesafio).FirstOrDefault();

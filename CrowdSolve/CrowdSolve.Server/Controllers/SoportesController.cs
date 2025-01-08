@@ -18,7 +18,6 @@ namespace CrowdSolve.Server.Controllers
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly SoportesRepo _soportesRepo;
         private readonly ProcesosRepo _procesosRepo;
-
         private readonly UsuariosRepo _usuariosRepo;
         private readonly Mailing _mailingService;
 
@@ -182,38 +181,13 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
-        [HttpGet("GetCantidadRegistros")]
-        //[Authorize]
-        public IActionResult GetCantidadRegistros()
-        {
-            try
-            {
-                // Obtener la cantidad de empresas con idEstatusUsuario igual a 1
-                var cantidadEmpresas = _usuariosRepo
-                    .Get()
-                    .Where(x => x.idEstatusUsuario == 1003 && x.idPerfil == 3)
-                    .Count();
-
-                // Obtener la cantidad total de soportes
-                var cantidadSoportes = _soportesRepo.Get().Where(x => x.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_Enviada || x.idEstatusProceso==(int)EstatusProcesoEnum.Soporte_En_progreso).Count();
-
-                // Devolver el resultado
-                return Ok(new
-                {
-                    CantidadEmpresas = cantidadEmpresas,
-                    CantidadSoportes = cantidadSoportes
-                });
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores
-                return StatusCode(500, new { Error = ex.Message });
-            }
-        }
-
+        /// <summary>
+        /// Me asigna una solicitud de soporte.
+        /// </summary>
+        /// <param name="idSoporte">ID de la solicitud de soporte.</param>
+        /// <returns>Resultado de la operación.</returns>
         [HttpPut("AsignarMe/{idSoporte}")]
-        //[Authorize]
-        //[AuthorizeByPermission(PermisosEnum.Aprobar_Empresa)]
+        [AuthorizeByPermission(PermisosEnum.Solicitudes_Soportes)]
         public OperationResult AsignarUsuario(int idSoporte)
         {
             try
@@ -231,7 +205,6 @@ namespace CrowdSolve.Server.Controllers
                 {
                     return new OperationResult(false, "Esta solicitud ya esta asignada");
                 }
-
 
                 Proceso.idUsuarioAsignado = _idUsuarioOnline;
                 Proceso.idEstatusProceso = (int)EstatusProcesoEnum.Soporte_En_progreso;
@@ -266,9 +239,13 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Finaliza una solicitud de soporte.
+        /// </summary>
+        /// <param name="idSoporte"></param>
+        /// <returns></returns>
         [HttpPut("Finalizar/{idSoporte}")]
-        //[Authorize]
-        //[AuthorizeByPermission(PermisosEnum.Aprobar_Empresa)]
+        [AuthorizeByPermission(PermisosEnum.Solicitudes_Soportes)]
         public OperationResult FinalizarSoporte(int idSoporte)
         {
             try
@@ -324,9 +301,13 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Descarta una solicitud de soporte.
+        /// </summary>
+        /// <param name="idSoporte"></param>
+        /// <returns></returns>
         [HttpPut("Descartar/{idSoporte}")]
-        //[Authorize]
-        //[AuthorizeByPermission(PermisosEnum.Aprobar_Empresa)]
+        [AuthorizeByPermission(PermisosEnum.Solicitudes_Soportes)]
         public OperationResult DescartarSoporte(int idSoporte)
         {
             try
@@ -380,6 +361,10 @@ namespace CrowdSolve.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtiene los objetos relacionales para la vista de soportes.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetRelationalObjects")]
         public object GetRelationalObjects()
         {
@@ -392,8 +377,5 @@ namespace CrowdSolve.Server.Controllers
                 usuariosAdmin =  usuarios
             };
         }
-
     }
-
-
 }

@@ -4,6 +4,8 @@
 
 * {
   font-family: "Poppins", sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--accent)) transparent;
 }
 
 html {

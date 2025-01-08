@@ -5,7 +5,6 @@ import useAxios from '@/hooks/use-axios'
 import { toast } from 'sonner'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Skeleton } from '@/components/ui/skeleton'
 import ProfileInfo from '@/components/participants/ProfileInfo'
 import SolutionsOverview from '@/components/participants/SolutionsOverview'
 import StatsOverview from '@/components/participants/StatsOverview'
@@ -120,7 +119,7 @@ const MyProfile = () => {
                     <TabsTrigger value="stats">Estadísticas</TabsTrigger>
                   </TabsList>
                   <TabsContent value="solutions">
-                    <SolutionsOverview solutions={user.soluciones} />
+                    <SolutionsOverview solutions={user.soluciones} myProfile={true}/>
                   </TabsContent>
                   <TabsContent value="stats">
                     <StatsOverview solutions={user.soluciones} />

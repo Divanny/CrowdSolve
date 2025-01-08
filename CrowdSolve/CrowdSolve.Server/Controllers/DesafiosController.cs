@@ -73,6 +73,30 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
+        /// Obtiene un desafío por su ID desde la vista de administrador.
+        /// </summary>
+        /// <param name="idDesafio">ID del desafío.</param>
+        /// <returns>Desafío encontrado.</returns>
+        [HttpGet("GetDesafioAdmin/{idDesafio}", Name = "GetDesafioAdmin")]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Ver_Desafíos)]
+        public IActionResult GetDesafioAdmin(int idDesafio)
+        {
+            DesafiosModel? desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+
+            if (desafio == null)
+            {
+                return NotFound("Desafío no encontrado");
+            }
+
+            desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
+            desafio.EvidenciaRecompensa = _adjuntosRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
+
+            return Ok(desafio);
+        }
+        
+        /// <summary>
         /// Obtiene todos los desafíos validados.
         /// </summary>
         /// <returns>Lista de desafíos validados.</returns>
@@ -353,6 +377,44 @@ namespace CrowdSolve.Server.Controllers
 
                 _desafiosRepo.DescartarDesafio(idDesafio, motivo);
                 return new OperationResult(true, "Se ha descartado el desafío exitosamente");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Finalizar un desafío por parte de un administrador
+        /// </summary>
+        /// <param name="idDesafio"></param>
+        /// <returns></returns>
+        [HttpPut("Finalizar/{idDesafio}", Name = "FinalizarDesafio")]
+        [AuthorizeByPermission(PermisosEnum.Administrar_Desafíos)]
+        public OperationResult FinalizarDesafio(int idDesafio)
+        {
+            try
+            {
+                var desafio = _desafiosRepo.Get(x => x.idDesafio == idDesafio).FirstOrDefault();
+                if (desafio == null) return new OperationResult(false, "Este desafío no se ha encontrado");
+
+                var proceso = _desafiosRepo.procesosRepo.Get(x => x.idRelacionado == desafio.idDesafio).FirstOrDefault();
+                if (proceso == null) return new OperationResult(false, "No se ha encontrado el proceso relacionado con este desafío");
+
+                if (proceso.idEstatusProceso != (int)(EstatusProcesoEnum.Desafío_En_espera_de_entrega_de_premios)) return new OperationResult(false, "El desafío no se encuentra en espera de entrega de premios");
+
+                _desafiosRepo.FinalizarDesafio(idDesafio);
+
+                _notificacionesRepo.EnviarNotificacion(
+                    desafio.idUsuarioEmpresa ?? 0,
+                    "Se ha finalizado tu desafío",
+                    $"El desafío <b>{desafio.Titulo}</b> ha sido finalizado exitosamente",
+                    desafio.idProceso,
+                    _crowdSolveContext.Set<Vistas>().Where(x => x.idVista == (int)PermisosEnum.Empresa_Dashboard).FirstOrDefault()?.URL ?? string.Empty
+                );
+
+                return new OperationResult(true, "Se ha finalizado el desafío exitosamente");
             }
             catch (Exception ex)
             {
@@ -686,19 +748,19 @@ namespace CrowdSolve.Server.Controllers
         [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
         public object GetCount()
         {
-            var desafio = _desafiosRepo.Get().Where(x=>x.FechaRegistro!=null)
-                .GroupBy(x=>new
+            var desafio = _desafiosRepo.Get().Where(x => x.FechaRegistro != null)
+                .GroupBy(x => new
                 {
-                    Month= x.FechaRegistro.Value.ToString("MMMM"),
-                    Year= x.FechaRegistro.Value.Year
+                    Month = x.FechaRegistro.Value.ToString("MMMM"),
+                    Year = x.FechaRegistro.Value.Year
                 })
-                .OrderByDescending(g=>g.Key.Year)
-                .ThenByDescending(g=>g.Key.Month)
-                .Select(g=>new
+                .OrderByDescending(g => g.Key.Year)
+                .ThenByDescending(g => g.Key.Month)
+                .Select(g => new
                 {
-                    Year=g.Key.Year,
-                    Month=g.Key.Month,
-                    Count=g.Count(),
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Count = g.Count(),
                 })
                 .ToList();
 
@@ -732,6 +794,7 @@ namespace CrowdSolve.Server.Controllers
                 Categorias = _desafiosRepo.GetCategorias(),
                 TiposEvaluacion = _desafiosRepo.GetTiposEvaluacion(),
                 EstatusDesafios = (allEstatuses) ? _desafiosRepo.GetEstatusDesafios() : _desafiosRepo.GetEstatusDesafios().Where(x => estatusProcesoEnums.Contains(x.idEstatusProceso)),
+                EstatusProcesoEvaluacion = _crowdSolveContext.Set<EstatusProceso>().Where(x => x.idClaseProceso == (int)ClasesProcesoEnum.Proceso_de_Evaluación).ToList()
             };
         }
 

@@ -11,17 +11,15 @@ import {
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
-  CircleCheckBig,
   ChevronDown,
-  CircleSlash2,
-  Edit,
-  Eye,
-  FileText,
   MoreHorizontal,
-  X,
   Search,
   FilterX,
-} from "lucide-react";
+  Eye,
+  Ban,
+  CircleCheck,
+} from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -41,22 +39,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
-import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
-import ChallengeRequestDetail from "@/components/admin/challenges-requests/ChallengeRequestDetail";
-import createEditorToConvertToHtml from "@/hooks/createEditorToConvertToHtml";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { ValidateChallengeDialog } from "@/components/admin/challenges-requests/ValidateChallengeDialog";
-
-const editor = createEditorToConvertToHtml();
+import { useNavigate } from "react-router-dom";
 
 export default function CompanyRequests() {
   const { api } = useAxios();
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState([]);
@@ -64,21 +55,9 @@ export default function CompanyRequests() {
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
-  const [selectedChallengeRequest, setSelectedChallengeRequest] =
-    useState(null);
+  const [selectedChallengeRequest, setSelectedChallengeRequest] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState("view");
-  const [htmlContent, setHtmlContent] = useState("");
-  const [relationalObjects, setRelationalObjects] = useState({});
-
-  const convertToHtml = () => {
-    const html = editor.api.htmlReact.serialize({
-      nodes: editor.children,
-      convertNewLinesToHtmlBr: true,
-      dndWrapper: (props) => <DndProvider backend={HTML5Backend} {...props} />,
-    });
-    setHtmlContent(html);
-  };
 
   const columns = [
     {
@@ -102,21 +81,26 @@ export default function CompanyRequests() {
     },
     {
       accessorKey: "titulo",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-left font-normal"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Título
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      header: "Título"
     },
     {
       accessorKey: "empresa",
+      header: "Empresa",
+      cell: ({ row }) => {
+        const idUsuarioEmpresa = row.original.idUsuarioEmpresa;
+        return (
+          <div className="flex items-center gap-2">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={`/api/Account/GetAvatar/${idUsuarioEmpresa}`} />
+              <AvatarFallback>{row.getValue("empresa")}</AvatarFallback>
+            </Avatar>
+            {row.getValue("empresa")}
+          </div>
+        );
+      }
+    },
+    {
+      accessorKey: "fechaRegistro",
       header: ({ column }) => {
         return (
           <Button
@@ -124,11 +108,13 @@ export default function CompanyRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Empresa
+            Fecha Registro
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
+      cell: ({ row }) =>
+        new Date(row.getValue("fechaRegistro")).toLocaleDateString(),
     },
     {
       accessorKey: "fechaInicio",
@@ -165,29 +151,6 @@ export default function CompanyRequests() {
         new Date(row.getValue("fechaLimite")).toLocaleDateString(),
     },
     {
-      id: "detail",
-      cell: ({ row }) => (
-        <Dialog>
-         {console.log(row.original)}
-          <DialogTrigger asChild>
-            <Button variant="outline" className="w-full sm:w-auto">
-              <Eye className="mr-2 h-4 w-4" />
-              Ver detalle
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-[90vw] sm:max-w-3xl max-h-[80vh] overflow-y-auto">
-            <div className="mt-4">
-              <ChallengeRequestDetail
-                desafio={row.original}
-                htmlContent={htmlContent}
-                getCategoryName={getCategoryName}
-              />
-            </div>
-          </DialogContent>
-        </Dialog>
-      ),
-    },
-    {
       id: "actions",
       cell: ({ row }) => (
         <DropdownMenu>
@@ -201,26 +164,34 @@ export default function CompanyRequests() {
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                setSelectedChallengeRequest(row.original.idDesafio);
+                navigate(`/admin/challenge/${row.original.idDesafio}`);
+              }}
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              Ver detalles
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setSelectedChallengeRequest(row.original);
                 setDialogMode("validate");
                 setIsDialogOpen(true);
               }}
             >
-              <CircleCheckBig className="mr-2 h-4 w-4" />
+              <CircleCheck className="mr-2 h-4 w-4" />
               Validar Desafío
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
-                setSelectedChallengeRequest(row.original.idDesafio);
+                setSelectedChallengeRequest(row.original);
                 setDialogMode("decline");
                 setIsDialogOpen(true);
               }}
             >
-              <CircleSlash2 className="mr-2 h-4 w-4" />
+              <Ban className="mr-2 h-4 w-4" />
               Rechazar Desafío
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu >
       ),
     },
   ];
@@ -229,35 +200,8 @@ export default function CompanyRequests() {
     setLoading(true);
 
     try {
-      const [challengeSinValidarResponse, relationalObjectsResponse] =
-        await Promise.all([
-          api.get("/api/Desafios/GetDesafiosSinValidar", {
-            requireLoading: false,
-          }),
-          api.get("/api/Desafios/GetRelationalObjects", {
-            requireLoading: false,
-          }),
-        ]);
-
-        console.log(challengeSinValidarResponse.data);
-
-      // challengeSinValidarResponse.data.shift();
-
-      for (const desafio of challengeSinValidarResponse.data) {
-        const slateContent = JSON.parse(
-          desafio.contenido
-        );
-
-        editor.tf.setValue(slateContent);
-        convertToHtml();
-      }
-      
-
+      const challengeSinValidarResponse = await api.get("/api/Desafios/GetDesafiosSinValidar", { requireLoading: false })
       setData(challengeSinValidarResponse.data);
-      console.log(challengeSinValidarResponse.data);
-
-      setRelationalObjects(relationalObjectsResponse.data);
-      console.log(relationalObjectsResponse.data)
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -269,11 +213,6 @@ export default function CompanyRequests() {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const getCategoryName = (idCategoria) => {
-    const category = relationalObjects.categorias.find(cat => cat.idCategoria === idCategoria);
-    return category ? category.nombre : 'Desconocida';
-  };
 
   const table = useReactTable({
     data,
@@ -291,8 +230,8 @@ export default function CompanyRequests() {
       const value = row.getValue(columnId);
       return value != null
         ? String(value)
-            .toLowerCase()
-            .includes(String(filterValue).toLowerCase())
+          .toLowerCase()
+          .includes(String(filterValue).toLowerCase())
         : false;
     },
     state: {
@@ -384,9 +323,9 @@ export default function CompanyRequests() {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -456,9 +395,8 @@ export default function CompanyRequests() {
             setIsDialogOpen(false);
             fetchData();
           }}
-          estatusId={selectedChallengeRequest}
+          estatusId={selectedChallengeRequest.idDesafio}
           mode={dialogMode}
-          /* relationalObjects={{ nivelesEducativos, estatusUsuarios }} */
         />
       )}
     </div>

@@ -113,7 +113,7 @@ const ChallengesPost = () => {
                                     <Link to={`/challenge/${challenge.idDesafio}`}>
                                         <CardContent className="p-6 space-y-4 flex flex-col justify-between h-full">
                                             <div className="flex flex-col gap-4">
-                                                <div className="flex items-center gap-4">
+                                                <div className="flex items-center gap-2">
                                                     <img
                                                         src={`/api/Account/GetAvatar/${challenge.idUsuarioEmpresa}`}
                                                         alt={challenge.empresa}
