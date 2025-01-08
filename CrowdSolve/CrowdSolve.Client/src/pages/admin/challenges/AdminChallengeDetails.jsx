@@ -23,6 +23,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Textarea } from '@/components/ui/textarea';
+import SolutionRanking from '@/components/challenge/SolutionRanking';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const editor = createEditorToConvertToHtml();
 
@@ -35,6 +37,7 @@ const AdminChallengeDetails = () => {
     const [htmlContent, setHtmlContent] = useState('');
     const [relationalObjects, setRelationalObjects] = useState({});
     const [rejectionReason, setRejectionReason] = useState("");
+    const [isRankingDialogOpen, setIsRankingDialogOpen] = useState(false);
 
     useEffect(() => {
         const getChallenge = async () => {
@@ -255,6 +258,26 @@ const AdminChallengeDetails = () => {
                                     </Popover>
                                 </div>
                             )}
+
+                            {(desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion ||
+                                desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_Finalizado ||
+                                desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios) &&
+                                (
+                                    <Dialog open={isRankingDialogOpen} onOpenChange={setIsRankingDialogOpen}>
+                                        <DialogTrigger asChild>
+                                            <Button className="w-full mt-6" variant="outline">
+                                                Ver Ranking de Soluciones
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="sm:max-w-[625px]">
+                                            <DialogHeader>
+                                                <DialogTitle>Ranking de Soluciones</DialogTitle>
+                                            </DialogHeader>
+                                            <SolutionRanking idDesafio={desafio.idDesafio} />
+                                        </DialogContent>
+                                    </Dialog>
+                                )
+                            }
                         </Card>
 
                         <Card className="bg-card text-card-foreground p-6 mt-6">
