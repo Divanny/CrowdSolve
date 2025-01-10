@@ -1,38 +1,28 @@
-import { useEffect, useState } from 'react';
-import { CheckCircle, Clock, AlertCircle, XCircle, Award } from 'lucide-react';
+import { CheckCircle, Clock, XCircle, Award, SearchCheck, BadgeAlert, Loader, Ban, Trash2, FileCheck2, AlertCircle } from 'lucide-react';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
-import useAxios from '@/hooks/use-axios';
-import { toast } from 'sonner';
 
-const timelineSteps = [
-    { status: EstatusProcesoEnum.Desafio_Sin_validar, label: 'Sin validar', icon: Clock, color: 'text-warning' },
-    { status: EstatusProcesoEnum.Desafio_Sin_iniciar, label: 'Sin iniciar', icon: Clock, color: 'text-primary' },
-    { status: EstatusProcesoEnum.Desafio_En_progreso, label: 'En progreso', icon: CheckCircle, color: 'text-success' },
-    { status: EstatusProcesoEnum.Desafio_En_evaluacion, label: 'En evaluación', icon: AlertCircle, color: 'text-warning' },
-    { status: EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios, label: 'Espera de premios', icon: Award, color: 'text-primary' },
-    { status: EstatusProcesoEnum.Desafio_Finalizado, label: 'Finalizado', icon: CheckCircle, color: 'text-success' },
-];
+const getTimelineSteps = (currentStatus) => {
+    const steps = [
+        { status: EstatusProcesoEnum.Desafio_Sin_validar, label: 'Sin validar', icon: BadgeAlert, color: 'primary' },
+        { status: EstatusProcesoEnum.Desafio_Sin_iniciar, label: 'Sin iniciar', icon: Clock, color: 'primary' },
+        { status: EstatusProcesoEnum.Desafio_En_progreso, label: 'En progreso', icon: Loader, color: 'primary' },
+        { status: EstatusProcesoEnum.Desafio_En_validación_de_soluciones, label: 'Validación de soluciones', icon: FileCheck2, color: 'primary' },
+        { status: EstatusProcesoEnum.Desafio_En_evaluacion, label: 'En evaluación', icon: SearchCheck, color: 'primary' },
+        { status: EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios, label: 'Espera de premios', icon: Award, color: 'primary' },
+        { status: EstatusProcesoEnum.Desafio_Finalizado, label: 'Finalizado', icon: CheckCircle, color: 'success' },
+    ];
 
-const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
-    const { api } = useAxios();
-    const [statusHistory, setStatusHistory] = useState([]);
+    if (currentStatus === EstatusProcesoEnum.Desafio_Rechazado) {
+        steps[0] = { status: EstatusProcesoEnum.Desafio_Rechazado, label: 'Rechazado', icon: Ban, color: 'destructive' };
+    } else if (currentStatus === EstatusProcesoEnum.Desafio_Descartado) {
+        steps[0] = { status: EstatusProcesoEnum.Desafio_Descartado, label: 'Descartado', icon: Trash2, color: 'destructive' };
+    }
 
-    useEffect(() => {
-        const fetchStatusHistory = async () => {
-            try {
-                const response = await api.get(`/api/Desafios/HistorialCambioEstatus/${idDesafio}`);
-                setStatusHistory(response);
-            } catch (error) {
-                toast.error('Operación fallida',
-                    { description: error.response?.data?.message ?? error.message }
-                );
-            }
-        };
+    return steps;
+};
 
-        fetchStatusHistory();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [idDesafio]);
+const ChallengeTimeline = ({ currentStatus }) => {
+    const timelineSteps = getTimelineSteps(currentStatus);
 
     const getCurrentStepIndex = () => {
         if (currentStatus === EstatusProcesoEnum.Desafio_Cancelado) {
@@ -81,8 +71,8 @@ const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
                     transition-all duration-300 ease-in-out
                     ${isActive
                                             ? isCurrent
-                                                ? 'bg-primary ring-4 ring-primary/30 scale-110'
-                                                : 'bg-primary'
+                                                ? `bg-primary ring-4 ring-primary/30 scale-110`
+                                                : `bg-primary`
                                             : 'bg-muted'
                                         }
                   `}
@@ -90,7 +80,7 @@ const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
                                     <StepIcon
                                         className={`
                       w-5 h-5 transition-colors duration-300
-                      ${isActive ? 'text-primary-foreground' : 'text-muted-foreground'}
+                      ${isActive ? `text-primary-foreground` : 'text-muted-foreground'}
                     `}
                                     />
                                 </div>
@@ -112,6 +102,20 @@ const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
                     })}
                 </div>
             </div>
+
+            {/* Estado sin validar */}
+            {currentStatus === EstatusProcesoEnum.Desafio_Sin_validar && (
+                <div className="mt-4 text-center">
+                    <div className="inline-flex items-center justify-center gap-2">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-warning">
+                            <AlertCircle className="w-5 h-5 text-warning-foreground" />
+                        </div>
+                        <span className="text-sm font-medium text-warning">
+                            El desafío aún no ha sido validado por la administración.
+                        </span>
+                    </div>
+                </div>
+            )}
 
             {/* Estado cancelado */}
             {currentStatus === EstatusProcesoEnum.Desafio_Cancelado && (
