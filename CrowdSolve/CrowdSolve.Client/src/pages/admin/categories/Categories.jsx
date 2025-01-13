@@ -185,7 +185,7 @@ export default function Categories() {
             requireLoading: false,
           }), */
         ]);
-
+        console.log(categoriasResponse.data);
       setData(categoriasResponse.data);
       /* setNivelesEducativos(relationalObjectsResponse.data.nivelesEducativos);
       setEstatusUsuarios(relationalObjectsResponse.data.estatusUsuarios); */
