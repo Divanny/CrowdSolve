@@ -5,6 +5,7 @@ using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +28,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly Mailing _mailingService;
         private readonly Scanner _scanner;
         private readonly FirebaseStorageService _firebaseStorageService;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
 
         /// <summary>
         /// Constructor de la clase SoportesController.
@@ -36,7 +39,7 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="logger"></param>
         /// <param name="mailing"></param>
         /// <param name="firebaseStorageService"></param>
-        public DesafiosController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing, FirebaseStorageService firebaseStorageService)
+        public DesafiosController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing, FirebaseStorageService firebaseStorageService, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
@@ -51,6 +54,8 @@ namespace CrowdSolve.Server.Controllers
             _mailingService = mailing;
             _scanner = new Scanner();
             _firebaseStorageService = firebaseStorageService;
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
         }
 
         /// <summary>
@@ -788,15 +793,21 @@ namespace CrowdSolve.Server.Controllers
                 };
             }
 
+            var categorias = _desafiosRepo.GetCategorias();
+            foreach (var categoria in categorias)
+            {
+                categoria.Nombre = _translationService.Traducir(categoria.Nombre, _idioma);
+                categoria.Descripcion = _translationService.Traducir(categoria.Descripcion, _idioma);
+            }
+
             return new
             {
                 DiasDespuesFechaFinalizacion = _desafiosRepo.diasDespuesFechaFinalizacion,
-                Categorias = _desafiosRepo.GetCategorias(),
+                Categorias = categorias,
                 TiposEvaluacion = _desafiosRepo.GetTiposEvaluacion(),
                 EstatusDesafios = (allEstatuses) ? _desafiosRepo.GetEstatusDesafios() : _desafiosRepo.GetEstatusDesafios().Where(x => estatusProcesoEnums.Contains(x.idEstatusProceso)),
                 EstatusProcesoEvaluacion = _crowdSolveContext.Set<EstatusProceso>().Where(x => x.idClaseProceso == (int)ClasesProcesoEnum.Proceso_de_Evaluación).ToList()
             };
         }
-
     }
 }
