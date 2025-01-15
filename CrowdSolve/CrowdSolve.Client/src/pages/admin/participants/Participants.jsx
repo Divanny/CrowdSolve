@@ -46,6 +46,7 @@ import { ParticipantFormDialog } from "@/components/admin/participants/Participa
 import { ParticipantSolutionsDialog } from "@/components/admin/participants/ParticipantSolutionsDialog";
 import { useTranslation } from 'react-i18next';
 import { Badge } from "@/components/ui/badge";
+import { set } from "date-fns";
 
 export default function Participants() {
   const { t } = useTranslation();
@@ -53,6 +54,7 @@ export default function Participants() {
   const [data, setData] = useState([]);
   const [nivelesEducativos, setNivelesEducativos] = useState([]);
   const [estatusUsuarios, setEstatusUsuarios] = useState([]);
+  const [perfilesUsuarios, setPerfilesUsuarios] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
@@ -222,6 +224,8 @@ export default function Participants() {
       setData(participantesResponse.data);
       setNivelesEducativos(relationalObjectsResponse.data.nivelesEducativos);
       setEstatusUsuarios(relationalObjectsResponse.data.estatusUsuarios);
+      setPerfilesUsuarios(relationalObjectsResponse.data.perfilesUsuarios);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -513,7 +517,7 @@ export default function Participants() {
           }}
           participant={selectedParticipant}
           mode={dialogMode}
-          relationalObjects={{ nivelesEducativos, estatusUsuarios }}
+          relationalObjects={{ nivelesEducativos, estatusUsuarios, perfilesUsuarios }}
         />
       )}
       {selectedParticipant && (
