@@ -43,8 +43,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CompanyFormDialog } from "../../../components/admin/companies/CompanyFormDialog";
+import { useTranslation } from 'react-i18next';
 
 export default function Companies() {
+    const { t } = useTranslation();
     const { api } = useAxios();
     const [data, setData] = useState([]);
     const [tamanosEmpresas, setTamanosEmpresas] = useState([]);
@@ -70,14 +72,14 @@ export default function Companies() {
                 <Checkbox
                     checked={table.getIsAllPageRowsSelected()}
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Seleccionar todo"
+                    aria-label= {t('CompaniesPage.selectAll')}
                 />
             ),
             cell: ({ row }) => (
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Seleccionar fila"
+                    aria-label={t('CompaniesPage.selectRow')}
                 />
             ),
             enableSorting: false,
@@ -103,27 +105,27 @@ export default function Companies() {
         },
         {
             accessorKey: "descripcion",
-            header: "Descripcion",
+            header: t('CompaniesPage.descripcion'),
         },
         {
             accessorKey: "direccion",
-            header: "Direccion",
+            header: t('CompaniesPage.direccion'),
         },
         {
             accessorKey: "telefono",
-            header: "Teléfono",
+            header: t('CompaniesPage.telefono'),
         },
         {
             accessorKey: "paginaWeb",
-            header: "Página Web",
+            header: t('CompaniesPage.paginaWeb'),
         },
         {
             accessorKey: "tamañoEmpresa",
-            header: "Tamaño Empresa",
+            header: t('CompaniesPage.tamanoEmpresa'),
         },
         {
             accessorKey: "sector",
-            header: "Sector",
+            header: t('CompaniesPage.sector'),
         },
         {
             accessorKey: "cantidadDesafios",
@@ -134,7 +136,7 @@ export default function Companies() {
                     className="w-full justify-start text-left font-normal"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                   >
-                    Cantidad de Desafíos
+                    {t('CompaniesPage.cantidadDesafios')}
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                   </Button>
                 );
@@ -149,7 +151,7 @@ export default function Companies() {
                     className="w-full justify-start text-left font-normal"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                   >
-                    Cantidad de Soluciones
+                    {t('CompaniesPage.cantidadSoluciones')}
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                   </Button>
                 );
@@ -157,7 +159,7 @@ export default function Companies() {
         },     
         {
             accessorKey: "estatusUsuario",
-            header: "Estatus",
+            header: t('CompaniesPage.estatusUsuario'),
             cell: ({ row }) => (
                 <span
                     className={`px-2 py-1 rounded-full text-xs font-semibold ${row.getValue("estatusUsuario") === "Activo"
@@ -177,12 +179,12 @@ export default function Companies() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Abrir menú</span>
+                            <span className="sr-only">{t('CompaniesPage.abrirMenu')}</span>
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                        <DropdownMenuLabel>{t('CompaniesPage.acciones')}</DropdownMenuLabel>
                         <DropdownMenuItem
                             onClick={() => {
                                 setSelectedCompany(row.original)
@@ -191,7 +193,7 @@ export default function Companies() {
                             }}
                         >
                             <Edit className="mr-2 h-4 w-4" />
-                            Editar
+                            {t('CompaniesPage.editar')}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() => {
@@ -201,7 +203,7 @@ export default function Companies() {
                             }}
                         >
                             <Eye className="mr-2 h-4 w-4" />
-                            Ver detalles
+                            {t('CompaniesPage.verDetalles')}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() =>
@@ -209,7 +211,7 @@ export default function Companies() {
                             }
                         >
                             <FileText className="mr-2 h-4 w-4" />
-                            Ver desafíos
+                            {t('CompaniesPage.verDesafios')}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -304,7 +306,7 @@ export default function Companies() {
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="text"
-                        placeholder="Buscar por nombre..."
+                        placeholder={t('CompaniesPage.buscarPorNombre')}
                         value={globalFilter ?? ""}
                         onChange={(event) => setGlobalFilter(event.target.value)}
                         className="pl-8"
@@ -313,7 +315,7 @@ export default function Companies() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline">
-                            Tamaño Empresa
+                        {t('CompaniesPage.tamanoEmpresaFiltro')}
                             {tamanosEmpresaFilter ? `: ${tamanosEmpresaFilter}` : ""}
                             <ChevronDown className="ml-2 h-4 w-4" />
                         </Button>
@@ -324,7 +326,7 @@ export default function Companies() {
                                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                                 <Input
                                     type="text"
-                                    placeholder="Buscar..."
+                                    placeholder={t('CompaniesPage.buscar')}
                                     value={tamanosEmpresaSearch}
                                     onChange={(e) => setTamanosEmpresaSearch(e.target.value)}
                                     className="pl-8"
@@ -338,7 +340,7 @@ export default function Companies() {
                                     table.getColumn("tamañoEmpresa")?.setFilterValue(undefined);
                                 }}
                             >
-                                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                                <X className="mr-2 h-4 w-4" /> {t('CompaniesPage.limpiarFiltro')}
                             </DropdownMenuItem>
                         )}
                         {filteredTamanosEmpresas.map((tamano) => (
@@ -357,7 +359,7 @@ export default function Companies() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline">
-                            Sector
+                        {t('CompaniesPage.sectorFiltro')}
                             {sectoresFilter ? `: ${sectoresFilter}` : ""}
                             <ChevronDown className="ml-2 h-4 w-4" />
                         </Button>
@@ -382,7 +384,7 @@ export default function Companies() {
                                     table.getColumn("sector")?.setFilterValue(undefined);
                                 }}
                             >
-                                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                                <X className="mr-2 h-4 w-4" /> {t('CompaniesPage.limpiarFiltro')}
                             </DropdownMenuItem>
                         )}
                         {filteredSectores.map((sector) => (
@@ -403,14 +405,14 @@ export default function Companies() {
                     onClick={clearFilters}
                     disabled={!globalFilter && !tamanosEmpresaFilter && !sectoresFilter}
                     size="icon"
-                    tooltip="Limpiar filtros"
+                    tooltip={t('CompaniesPage.limpiarFiltros')}
                 >
                     <FilterX className="h-4 w-4" />
                 </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
-                            Columnas <ChevronDown className="ml-2 h-4 w-4" />
+                        {t('CompaniesPage.columnaBoton')} <ChevronDown className="ml-2 h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -477,7 +479,7 @@ export default function Companies() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No se encontraron resultados.
+                                    {t('CompaniesPage.noResultsFound')}
                                 </TableCell>
                             </TableRow>
                         )}
@@ -486,8 +488,8 @@ export default function Companies() {
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} de{" "}
-                    {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
+                    {table.getFilteredSelectedRowModel().rows.length} {t('CompaniesPage.preposicionDe')}{" "}
+                    {table.getFilteredRowModel().rows.length} {t('CompaniesPage.rows')}(s) {t('CompaniesPage.selected')}(s).
                 </div>
                 <div className="space-x-2">
                     <Button
@@ -496,7 +498,7 @@ export default function Companies() {
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Anterior
+                        {t('CompaniesPage.previous')}
                     </Button>
                     <Button
                         variant="outline"
@@ -504,7 +506,7 @@ export default function Companies() {
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Siguiente
+                        {t('CompaniesPage.next')}
                     </Button>
                 </div>
             </div>

@@ -41,8 +41,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdministratorFormDialog } from "../../../components/admin/administrators/AdministratorFormDialog";
+import { useTranslation } from 'react-i18next';
 
 export default function Companies() {
+    const { t } = useTranslation();
     const { api } = useAxios();
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -63,14 +65,14 @@ export default function Companies() {
                 <Checkbox
                     checked={table.getIsAllPageRowsSelected()}
                     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Seleccionar todo"
+                    aria-label={t('Administrators.columns.select.ariaLabelAll')}
                 />
             ),
             cell: ({ row }) => (
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label="Seleccionar fila"
+                    aria-label={t('Administrators.columns.select.ariaLabelRow')}
                 />
             ),
             enableSorting: false,
@@ -78,7 +80,7 @@ export default function Companies() {
         },
         {
             accessorKey: "nombreUsuario",
-            header: "Nombre de Usuario",
+            header: t('Administrators.columns.nombreUsuario'),
             cell: ({ row }) => (
                 <div className="flex items-center space-x-2">
                     <Avatar>
@@ -103,7 +105,7 @@ export default function Companies() {
                     className="w-full justify-start text-left font-normal"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                   >
-                    Correo Electrónico
+                    {t('Administrators.columns.correoElectronico.header')}
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                   </Button>
                 );
@@ -111,18 +113,18 @@ export default function Companies() {
         },
         {
             accessorKey: "fechaRegistro",
-            header: "Fecha de Registro",
+            header: t('Administrators.columns.fechaRegistro'),
             cell: ({ row }) =>
               new Date(row.getValue("fechaRegistro")).toLocaleDateString(),
         },
         {
             accessorKey: "nombreEstatusUsuario",
-            header: "Estatus",
+            header: t('Administrators.columns.nombreEstatusUsuario.status'),
             cell: ({ row }) => (
                 <span
-                    className={`px-2 py-1 rounded-full text-xs font-semibold ${row.getValue("nombreEstatusUsuario") === "Activo"
+                    className={`px-2 py-1 rounded-full text-xs font-semibold ${row.getValue("nombreEstatusUsuario") === t('Administrators.columns.nombreEstatusUsuario.Activo')
                         ? "bg-green-100 text-green-800"
-                        : row.getValue("nombreEstatusUsuario") === "Inactivo"
+                        : row.getValue("nombreEstatusUsuario") === t('Administrators.columns.nombreEstatusUsuario.Inactivo')
                             ? "bg-red-100 text-red-800"
                             : "bg-yellow-100 text-yellow-800"
                         }`}
@@ -137,12 +139,12 @@ export default function Companies() {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Abrir menú</span>
+                            <span className="sr-only">{t('Administrators.abrirMenu')}</span>
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                        <DropdownMenuLabel>{t('Administrators.columns.actions.menu')}</DropdownMenuLabel>
                         <DropdownMenuItem
                             onClick={() => {
                                 setSelectedAdmin(row.original)
@@ -151,7 +153,7 @@ export default function Companies() {
                             }}
                         >
                             <Edit className="mr-2 h-4 w-4" />
-                            Editar
+                            {t('Administrators.columns.actions.edit')}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() => {
@@ -161,7 +163,7 @@ export default function Companies() {
                             }}
                         >
                             <Eye className="mr-2 h-4 w-4" />
-                            Ver detalles
+                            {t('Administrators.columns.actions.viewDetails')}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -245,7 +247,7 @@ export default function Companies() {
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="text"
-                        placeholder="Buscar por nombre de usuario o correo..."
+                        placeholder={t('Administrators.placeholders.search')}
                         value={globalFilter ?? ""}
                         onChange={(event) => setGlobalFilter(event.target.value)}
                         className="pl-8"
@@ -256,14 +258,14 @@ export default function Companies() {
                     onClick={clearFilters}
                     disabled={!globalFilter}
                     size="icon"
-                    tooltip="Limpiar filtros"
+                    tooltip={t('Administrators.buttons.clearFilters')}
                 >
                     <FilterX className="h-4 w-4" />
                 </Button>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
-                            Columnas <ChevronDown className="ml-2 h-4 w-4" />
+                        {t('Administrators.buttons.columns')} <ChevronDown className="ml-2 h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -330,7 +332,7 @@ export default function Companies() {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No se encontraron resultados.
+                                    {t('Administrators.placeholders.noResults')}
                                 </TableCell>
                             </TableRow>
                         )}
@@ -339,8 +341,8 @@ export default function Companies() {
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} de{" "}
-                    {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
+                    {table.getFilteredSelectedRowModel().rows.length} {t('Administrators.status.of')}{" "}
+                    {table.getFilteredRowModel().rows.length} {t('Administrators.status.row')}(s) {t('Administrators.status.selected')}(s).
                 </div>
                 <div className="space-x-2">
                     <Button
@@ -349,7 +351,7 @@ export default function Companies() {
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Anterior
+                        {t('Administrators.buttons.previousPage')}
                     </Button>
                     <Button
                         variant="outline"
@@ -357,7 +359,7 @@ export default function Companies() {
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Siguiente
+                         {t('Administrators.buttons.nextPage')}
                     </Button>
                 </div>
             </div>

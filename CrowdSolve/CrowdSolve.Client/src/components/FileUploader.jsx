@@ -10,8 +10,10 @@ import { useControllableState } from "@/hooks/use-controllable-state"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useTranslation } from 'react-i18next';
 
 export function FileUploader(props) {
+  const { t } = useTranslation();
   const {
     value: valueProp,
     onValueChange,
@@ -34,12 +36,13 @@ export function FileUploader(props) {
   const onDrop = React.useCallback(
     (acceptedFiles, rejectedFiles) => {
       if (!multiple && maxFileCount === 1 && acceptedFiles.length > 1) {
-        toast.error("No se puede subir más de 1 archivo a la vez")
+        toast.error(t('fileUploader.singleFileError'))
         return
       }
 
       if ((files?.length ?? 0) + acceptedFiles.length > maxFileCount) {
-        toast.error(`No se puede subir más de ${maxFileCount} archivos`)
+        let message = (t('fileUploader.maxFileCountError')).replace('{0}', maxFileCount)
+        toast.error(message)
         return
       }
 
@@ -55,7 +58,8 @@ export function FileUploader(props) {
 
       if (rejectedFiles.length > 0) {
         rejectedFiles.forEach(({ file }) => {
-          toast.error(`El archivo ${file.name} fue rechazado`)
+          let message = (t('fileUploader.fileRejectedError')).replace('{0}', file.name)
+          toast.error(message)
         })
       }
 
@@ -64,21 +68,20 @@ export function FileUploader(props) {
         updatedFiles.length > 0 &&
         updatedFiles.length <= maxFileCount
       ) {
-        const target =
-          updatedFiles.length > 0 ? `${updatedFiles.length} archivos` : `archivo`
-
+        const target = updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`
         toast.promise(onUpload(updatedFiles), {
-          loading: `Subiendo ${target}...`,
+
+          loading: (t('fileUploader.uploading')).replace('{0}', target),
           success: () => {
             setFiles([])
-            return `${target} subido`
+            return `${target} ${t('fileUploader.uploadSuccess')}`
           },
-          error: `Error al subir ${target}`,
+          error: `${t('fileUploader.uploadError')} ${target}`,
         })
       }
     },
 
-    [files, maxFileCount, multiple, onUpload, setFiles]
+    [files, maxFileCount, multiple, onUpload, setFiles, t]
   )
 
   function onRemove(index) {
@@ -135,7 +138,7 @@ export function FileUploader(props) {
                   />
                 </div>
                 <p className="font-medium text-muted-foreground">
-                  Suelta los archivos aquí
+                  {t('fileUploader.dropHere')}
                 </p>
               </div>
             ) : (
@@ -148,14 +151,14 @@ export function FileUploader(props) {
                 </div>
                 <div className="flex flex-col gap-px">
                   <p className="font-medium text-muted-foreground">
-                    Arrastra y suelta archivos aquí, o haz clic para seleccionar archivos
+                    {t('fileUploader.dragAndDropOrClick')}
                   </p>
                   <p className="text-sm text-muted-foreground/70">
-                    Puedes subir
+                    {t('fileUploader.canUpload')}
                     {maxFileCount > 1
-                      ? ` ${maxFileCount === Infinity ? "múltiples" : maxFileCount}
-                      archivos (hasta ${formatBytes(maxSize)} cada uno)`
-                      : ` un archivo de hasta ${formatBytes(maxSize)}`}
+                      ? ` ${maxFileCount === Infinity ? t('fileUploader.multiples') : maxFileCount}
+                      ${t('fileUploader.file')} ${formatBytes(maxSize)} ${t('fileUploader.cadaUno')}`
+                      : ` ${t('fileUploader.aFileUpTo')} ${formatBytes(maxSize)}`}
                   </p>
                 </div>
               </div>
@@ -182,6 +185,8 @@ export function FileUploader(props) {
 }
 
 function FileCard({ file, progress, onRemove }) {
+  const { t } = useTranslation();
+
   return (
     <div className="relative flex items-center gap-2.5">
       <div className="flex flex-1 gap-2.5">
@@ -207,7 +212,7 @@ function FileCard({ file, progress, onRemove }) {
           onClick={onRemove}
         >
           <X className="size-4" aria-hidden="true" />
-          <span className="sr-only">Eliminar archivo</span>
+          <span className="sr-only">{t('fileUploader.removeFile')}</span>
         </Button>
       </div>
     </div>

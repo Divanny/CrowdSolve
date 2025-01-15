@@ -12,10 +12,12 @@ import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 import ChallengeDetail from '@/components/challenge/ChallengeDetail';
 import ChallengeHeader from '@/components/challenge/ChallengeHeader';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useTranslation } from 'react-i18next';
 
 const editor = createEditorToConvertToHtml();
 
 const ChallengeEvaluation = () => {
+    const { t } = useTranslation();
     const { challengeId } = useParams();
     const { api } = useAxios();
     const navigate = useNavigate();
@@ -46,8 +48,8 @@ const ChallengeEvaluation = () => {
             ])
 
             if (challengeResponse.data.idEstatusDesafio !== EstatusProcesoEnum.Desafio_En_evaluacion) {
-                toast.warning("Operación fallida", {
-                    description: "El desafío no se encuentra en proceso de evaluación.",
+                toast.warning(t('challengeEvaluation.messages.operationFailed'), {
+                    description: t('challengeEvaluation.messages.notInEvaluationProcess'),
                 });
 
                 navigate(-1);
@@ -58,8 +60,8 @@ const ChallengeEvaluation = () => {
                 .sort((a, b) => new Date(a.fechaFinalizacion) - new Date(b.fechaFinalizacion))[0];
 
             if (!actualProcesoEvaluacion) {
-                toast.warning("Operación fallida", {
-                    description: "No hay un proceso de evaluación actual.",
+                toast.warning(t('challengeEvaluation.messages.operationFailed'), {
+                    description: t('challengeEvaluation.messages.noCurrentEvaluationProcess'),
                 });
                 navigate(-1);
             }
@@ -73,7 +75,7 @@ const ChallengeEvaluation = () => {
             setRelationalObjects(relationalObjectsResponse.data)
             setCurrentEvaluationProcess(actualProcesoEvaluacion);
         } catch (error) {
-            toast.error("Operación fallida", {
+            toast.error(t('challengeEvaluation.messages.operationFailed'), {
                 description: error.response?.data?.message ?? error.message,
             });
             navigate(-1);
@@ -91,7 +93,7 @@ const ChallengeEvaluation = () => {
             try {
                 const response = await api.get(`/api/Desafios/PuedoEvaluar/${challengeId}`, { requireLoading: false });
                 if (!response.data.success) {
-                    toast.warning("Operación fallida", {
+                    toast.warning(t('challengeEvaluation.messages.operationFailed'), {
                         description: response.data.message,
                     });
                     navigate(-1);
@@ -100,7 +102,7 @@ const ChallengeEvaluation = () => {
                     await fetchChallenge();
                 }
             } catch (error) {
-                toast.error("Operación fallida", {
+                toast.error(t('challengeEvaluation.messages.operationFailed'), {
                     description: error.response?.data?.message ?? error.message,
                 });
                 navigate(-1);
@@ -113,7 +115,7 @@ const ChallengeEvaluation = () => {
 
     const getCategoryName = (idCategoria) => {
         const category = relationalObjects.categorias.find(cat => cat.idCategoria === idCategoria);
-        return category ? category.nombre : 'Desconocida';
+        return category ? category.nombre : t('challengeEvaluation.messages.unknownCategory');
     };
 
     return (
@@ -136,9 +138,9 @@ const ChallengeEvaluation = () => {
                             {currentEvaluationProcess.idTipoEvaluacion === TiposEvaluacionEnum.Evaluacion_Empresa && (
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center">
-                                        <h2 className="text-2xl font-bold">Evaluar soluciones</h2>
+                                        <h2 className="text-2xl font-bold">{t('challengeEvaluation.messages.evaluateSolutions')}</h2>
                                         <span className="text-sm font-medium">
-                                            Finaliza: {new Date(currentEvaluationProcess.fechaFinalizacion).toLocaleDateString()}
+                                        {t('challengeEvaluation.messages.endsOn')} {new Date(currentEvaluationProcess.fechaFinalizacion).toLocaleDateString()}
                                         </span>
                                     </div>
                                     <CompanyEvaluation solutions={challenge.soluciones} reloadChallengeData={reloadChallengeData} />
@@ -147,9 +149,9 @@ const ChallengeEvaluation = () => {
                             {(currentEvaluationProcess.idTipoEvaluacion === TiposEvaluacionEnum.Voto_Comunidad || currentEvaluationProcess.tipo === TiposEvaluacionEnum.Voto_Comunidad) && (
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center">
-                                        <h2 className="text-2xl font-bold">Evaluar soluciones</h2>
+                                        <h2 className="text-2xl font-bold">{t('challengeEvaluation.messages.evaluateSolutions')}</h2>
                                         <span className="text-sm font-medium">
-                                            Finaliza: {new Date(currentEvaluationProcess.fechaFinalizacion).toLocaleDateString()}
+                                        {t('challengeEvaluation.messages.endsOn')} {new Date(currentEvaluationProcess.fechaFinalizacion).toLocaleDateString()}
                                         </span>
                                     </div>
                                     <UserVoting initialSolutions={challenge.soluciones} />

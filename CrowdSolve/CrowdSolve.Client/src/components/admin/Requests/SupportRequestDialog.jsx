@@ -14,9 +14,10 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-
+import { useTranslation } from 'react-i18next';
 
 export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [supportRequest, setSupportRequest] = useState(support)
 
@@ -40,7 +41,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
   
        // Check if the response was successful
     if (response.data.success) {
-      toast.success("Operación exitosa", {
+      toast.success(t('SupportRequestDialog.successfulOperation'), {
         description: response.data.message,
       });
 
@@ -48,13 +49,13 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
       onClose()
       
     } else {
-      toast.warning("Operación fallida", {
+      toast.warning(t('SupportRequestDialog.failedOperation'), {
         description: response.data.message,
       });
       console.log(response.data);
     }
     } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
+      toast.error(t('SupportRequestDialog.operationError'));
       console.error('Error:', error);
     }
   };
@@ -72,7 +73,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
   
        // Check if the response was successful
     if (response.data.success) {
-      toast.success("Operación exitosa", {
+      toast.success(t('SupportRequestDialog.successfulOperation'), {
         description: response.data.message,
       });
 
@@ -80,13 +81,13 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
       onClose()
       
     } else {
-      toast.warning("Operación fallida", {
+      toast.warning(t('SupportRequestDialog.failedOperation'), {
         description: response.data.message,
       });
       console.log(response.data);
     }
     } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
+      toast.error(t('SupportRequestDialog.operationError'));
       console.error('Error:', error);
     }
   };
@@ -98,24 +99,24 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
       {mode !="view" && (
       <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>{mode === "closeSupport" ? "Finalizar" : "Descartar"} Solicitud de Soporte</DialogTitle>
+          <DialogTitle>{mode === "closeSupport" ? t('SupportRequestDialog.finalize') : t('SupportRequestDialog.discard')} {t('SupportRequestDialog.SupportRequest')}</DialogTitle>
         </DialogHeader>
         <p className="text-sm text-red-500 mt-4 mb-6">
-          Una vez {mode === "closeSupport" ? "Finalizada" : "Descartada"} la solicitud de soporte, no se podrá recuperar trabajará más en ella.
+        {t('SupportRequestDialog.Once')} {mode === "closeSupport" ? t('SupportRequestDialog.finalized') : t('SupportRequestDialog.discarded')} {t('SupportRequestDialog.Confirmation')}
         </p>
         <DialogFooter>
           {mode === "closeSupport" && (
             <Button type="submit" onClick={FinalizarSoporte}>
-              Finalizar Soporte
+              {t('SupportRequestDialog.finalizeSupport')}
             </Button>
           )}
           {mode === "declineSupport" && (
             <Button type="submit" onClick={DescartarSoporte}>
-              Descartar Soporte
+              {t('SupportRequestDialog.discardSupport')}
             </Button>
           )}
           <Button type="button" variant="secondary" onClick={onClose}>
-            Cerrar
+          {t('SupportRequestDialog.close')}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -124,13 +125,13 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
       {mode=="view" && (
       <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle> Ver Solicitud Soporte</DialogTitle>
+          <DialogTitle> {t('SupportRequestDialog.viewSupportRequest')}</DialogTitle>
         </DialogHeader>
         <form className="space-y-2">
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="usuarioAfectado">Usuario Afectado</Label>
+              <Label htmlFor="usuarioAfectado">{t('SupportRequestDialog.affectedUser')}</Label>
               <Input
                 id="usuarioAfectado"
                 name="usuarioAfectado"
@@ -140,7 +141,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="titulo">Titulo</Label>
+              <Label htmlFor="titulo">{t('SupportRequestDialog.title')}</Label>
               <Input
                 id="titulo"
                 name="titulo"
@@ -151,7 +152,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="mensaje">Mensaje</Label>
+            <Label htmlFor="mensaje">{t('SupportRequestDialog.message')}</Label>
             <Textarea
               id="mensaje"
               name="mensaje"
@@ -163,7 +164,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
             />
 
             <div className="space-y-2">
-              <Label htmlFor="soporte">Fecha Soporte</Label>
+              <Label htmlFor="soporte">{t('SupportRequestDialog.supportDate')}</Label>
               <Input
                 id="soporte"
                 name="soporte"
@@ -173,7 +174,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="nombres">Nombres</Label>
+              <Label htmlFor="nombres">{t('SupportRequestDialog.names')}</Label>
               <Input
                 id="nombres"
                 name="nombres"
@@ -183,7 +184,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="apellidos">Apellidos</Label>
+              <Label htmlFor="apellidos">{t('SupportRequestDialog.lastNames')}</Label>
               <Input
                 id="apellidos"
                 name="apellidos"
@@ -193,7 +194,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="correoElectronico">Correo Electronico</Label>
+              <Label htmlFor="correoElectronico">{t('SupportRequestDialog.email')}</Label>
               <Input
                 id="correoElectronico"
                 name="correoElectronico"
@@ -203,7 +204,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="usuarioAsignado">Usuario Asignado</Label>
+              <Label htmlFor="usuarioAsignado">{t('SupportRequestDialog.assignedUser')}</Label>
               <Input
                 id="usuarioAsignado"
                 name="usuarioAsignado"
@@ -222,11 +223,11 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
         <DialogFooter>
           {mode === "edit" && (
             <Button type="submit">
-              Guardar cambios
+              {t('SupportRequestDialog.saveChanges')}
             </Button>
           )}
           <Button type="button" variant="secondary" onClick={onClose}>
-            Cerrar
+          {t('SupportRequestDialog.close')}
           </Button>
         </DialogFooter>
       </DialogContent>
