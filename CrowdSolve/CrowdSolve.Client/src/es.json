@@ -1,26 +1,49 @@
 {
-  "about": {
-    "title": "Conectando personas",
-    "description": "CrowdSolve es una plataforma diseñada para conectar a personas que buscan resolver problemas de manera colaborativa. Su objetivo es reunir a diferentes tipos de usuarios, como expertos, empresas y participantes interesados en encontrar soluciones innovadoras para desafíos específicos.",
-    "mission": "NUESTRA MISIÓN",
-    "mission_description": "CrowdSolve busca fomentar la colaboración abierta, donde las ideas y las soluciones se compartan y evalúen, permitiendo que los problemas se resuelvan de forma eficiente. Además, se enfoca en crear un espacio donde los usuarios puedan demostrar sus habilidades, trabajar en conjunto, y aportar valor tanto a nivel individual como a nivel organizacional.",
-    "section_title": "Facilitando la Creación de Soluciones Innovadoras",
-    "section_description": "Nuestro objetivo es empoderar a equipos y personas para que colaboren y encuentren soluciones innovadoras a desafíos específicos. Aquí es cómo planeamos lograrlo.",
-    "features": [
-      {
-        "title": "Fomentando la Colaboración Abierta",
-        "description": "Creemos que no hay lugar para grandes egos y siempre hay tiempo para ayudarnos mutuamente. Nos esforzamos por dar y recibir retroalimentación, ideas y perspectivas."
-      },
-      {
-        "title": "Avanzando con Claridad",
-        "description": "Audazmente, con valentía y con objetivos claros. Buscamos las grandes oportunidades y nos enfocamos en las cosas más importantes en las que trabajar."
-      },
-      {
-        "title": "Optimizando para el Empoderamiento",
-        "description": "Creemos que todos deberían estar empoderados para hacer lo que consideren mejor para los intereses de la empresa."
+    "about": {
+      "title": "Conectando personas",
+      "description": "CrowdSolve es una plataforma diseñada para conectar a personas que buscan resolver problemas de manera colaborativa. Su objetivo es reunir a diferentes tipos de usuarios, como expertos, empresas y participantes interesados en encontrar soluciones innovadoras para desafíos específicos.",
+      "mission": "NUESTRA MISIÓN",
+      "mission_description": "CrowdSolve busca fomentar la colaboración abierta, donde las ideas y las soluciones se compartan y evalúen, permitiendo que los problemas se resuelvan de forma eficiente. Además, se enfoca en crear un espacio donde los usuarios puedan demostrar sus habilidades, trabajar en conjunto, y aportar valor tanto a nivel individual como a nivel organizacional.",
+      "vision":"NUESTRA VISIÓN",
+      "vision_description":"CrowdSolve tiene como visión ser la plataforma global líder en resolución colaborativa de problemas, donde la inteligencia colectiva y la creatividad transformen desafíos en soluciones innovadoras. Buscamos crear un ecosistema inclusivo y gamificado que conecte a empresas, expertos y creativos de todo el mundo para impulsar el progreso y la innovación.",
+      "section_title": "Facilitando la Creación de Soluciones Innovadoras",
+      "section_description": "Nuestro objetivo es empoderar a equipos y personas para que colaboren y encuentren soluciones innovadoras a desafíos específicos. Aquí es cómo planeamos lograrlo.",
+      "features": [
+        {
+          "title": "Fomentando la Colaboración Abierta",
+          "description": "Creemos que no hay lugar para grandes egos y siempre hay tiempo para ayudarnos mutuamente. Nos esforzamos por dar y recibir retroalimentación, ideas y perspectivas."
+        },
+        {
+          "title": "Avanzando con Claridad",
+          "description": "Audazmente, con valentía y con objetivos claros. Buscamos las grandes oportunidades y nos enfocamos en las cosas más importantes en las que trabajar."
+        },
+        {
+          "title": "Optimizando para el Empoderamiento",
+          "description": "Creemos que todos deberían estar empoderados para hacer lo que consideren mejor para los intereses de la empresa."
+        },
+        {
+          "title": "Gamificación para la Participación",
+          "description": "Incorporamos puntos, insignias y rankings para incentivar la participación activa, recompensando el esfuerzo y la creatividad dentro de la comunidad."
+        },
+        {
+          "title": "Colaboración en Tiempo Real",
+          "description": "Ofrecemos herramientas de colaboración en línea que facilitan la interacción, el intercambio de ideas y la revisión de propuestas, promoviendo un trabajo conjunto eficiente y enriquecedor."
+        },
+        {
+          "title": "Impulsando la Innovación Global",
+          "description": "Conectamos a una red diversa de participantes globales, permitiendo que las ideas más innovadoras surjan de distintas perspectivas y experiencias."
+        }
+      ],
+
+      "stats_title": "Estadísticas de CrowdSolve",
+      "stats": {
+        "users": "Usuarios",
+        "projects": "Proyectos",
+        "uptime":  "Tiempo de Actividad",
+        "support": "Soporte"
       }
-    ]
-  },
+
+    },
 
   "MeetOurteam": {
     "title": "Conoce a nuestro equipo"
