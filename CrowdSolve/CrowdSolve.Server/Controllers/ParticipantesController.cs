@@ -50,7 +50,7 @@ namespace CrowdSolve.Server.Controllers
         [Authorize]
         public List<ParticipantesModel> Get()
         {
-            List<ParticipantesModel> Participantes = _participantesRepo.Get().ToList();
+            List<ParticipantesModel> Participantes = _participantesRepo.Get().Where(x => x.idPerfil == (int)PerfilesEnum.Participante).ToList();
             return Participantes;
         }
 
