@@ -43,5 +43,7 @@ namespace CrowdSolve.Server.Models
         public int? idEstatusUsuario { get; set; }
         public string? EstatusUsuario { get; set; }
         public List<SolucionesModel>? Soluciones { get; set; }
+
+        public int idPerfil { get; set; }
     }
 }

@@ -149,6 +149,7 @@ namespace CrowdSolve.Server.Controllers
                     usuario.NombreUsuario = ParticipantesModel.NombreUsuario;
                     usuario.CorreoElectronico = ParticipantesModel.CorreoElectronico;
                     usuario.idEstatusUsuario = ParticipantesModel.idEstatusUsuario ?? usuario.idEstatusUsuario;
+                    usuario.idPerfil = ParticipantesModel.idPerfil;
 
                     _usuariosRepo.Edit(usuario);
                     _participantesRepo.Edit(ParticipantesModel);
@@ -271,11 +272,13 @@ namespace CrowdSolve.Server.Controllers
         {
             var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>();
             var estatusUsuarios = _usuariosRepo.GetEstatusUsuarios();
+            var perfilesUsuarios = _usuariosRepo.GetPerfilesUsuarios();
 
             return new
             {
                 nivelesEducativos = nivelesEducativos,
-                estatusUsuarios = estatusUsuarios
+                estatusUsuarios = estatusUsuarios,
+                perfilesUsuarios = perfilesUsuarios
             };
         }
     }

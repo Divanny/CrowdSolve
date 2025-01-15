@@ -120,5 +120,10 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         {
             return dbContext.Set<EstatusUsuarios>().ToList();
         }
+
+        public List<Perfiles> GetPerfilesUsuarios()
+        {
+            return dbContext.Set<Perfiles>().ToList();
+        }
     }
 }
