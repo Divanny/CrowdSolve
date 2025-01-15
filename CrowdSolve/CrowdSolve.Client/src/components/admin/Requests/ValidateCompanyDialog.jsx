@@ -10,9 +10,10 @@ import {
 
 import useAxios from "@/hooks/use-axios"
 import { toast } from "sonner";
-
+import { useTranslation } from 'react-i18next';
 
 export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mode  }) {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [validateCompany, setValidateCompany] = useState(estatusId)
 
@@ -33,7 +34,7 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
   
        // Check if the response was successful
     if (response.data.success) {
-      toast.success("Operación exitosa", {
+      toast.success(t('validateCompanyDialog.operations.success'), {
         description: response.data.message,
       });
 
@@ -41,13 +42,13 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
       onClose()
       
     } else {
-      toast.warning("Operación fallida", {
+      toast.warning(t('validateCompanyDialog.operations.failure'), {
         description: response.data.message,
       });
       console.log(response.data);
     }
     } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
+      toast.error(t('validateCompanyDialog.operations.error'));
       console.error('Error:', error);
     }
   };
@@ -65,7 +66,7 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
   
        // Check if the response was successful
     if (response.data.success) {
-      toast.success("Operación exitosa", {
+      toast.success(t('validateCompanyDialog.operations.success'), {
         description: response.data.message,
       });
 
@@ -73,13 +74,13 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
       onClose()
       
     } else {
-      toast.warning("Operación fallida", {
+      toast.warning(t('validateCompanyDialog.operations.failure'), {
         description: response.data.message,
       });
       console.log(response.data);
     }
     } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
+      toast.error(t('validateCompanyDialog.operations.error'));
       console.error('Error:', error);
     }
   };
@@ -88,24 +89,24 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>{mode === "validate" ? "Validar" : "Rechazar"} Empresa</DialogTitle>
+          <DialogTitle>{mode === "validate" ? t('validateCompanyDialog.dialog.validate_company.validate') : t('validateCompanyDialog.dialog.decline_company.reject')} {t('validateCompanyDialog.dialog.title')}</DialogTitle>
         </DialogHeader>
         <p className="text-sm text-red-500 mt-4 mb-6">
-          Una vez {mode === "validate" ? "Validada" : "Rechazada"} la Empresa, no se podrá recuperar a menos que se solicite nuevamente.
+        {t('validateCompanyDialog.dialog.once')} {mode === "validate" ? t('validateCompanyDialog.dialog.validate_company.validate') : t('validateCompanyDialog.dialog.decline_company.reject')} {t('validateCompanyDialog.dialog.description')}
         </p>
         <DialogFooter>
           {mode === "validate" && (
             <Button type="submit" onClick={validarEmpresa}>
-              Validar Empresa
+              {t('validateCompanyDialog.dialog.validate_company.button')}
             </Button>
           )}
           {mode === "decline" && (
             <Button type="submit" onClick={rechazarEmpresa}>
-              Rechazar Empresa
+              {t('validateCompanyDialog.dialog.decline_company.button')}
             </Button>
           )}
           <Button type="button" variant="secondary" onClick={onClose}>
-            Cerrar
+          {t('validateCompanyDialog.dialog.close_button')}
           </Button>
         </DialogFooter>
       </DialogContent>

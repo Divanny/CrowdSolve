@@ -33,32 +33,35 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-
-const formSchema = z.object({
-    idDesafio: z.number().optional(),
-    idUsuarioEmpresa: z.number().optional(),
-    idEmpresa: z.number(),
-    empresa: z.string().optional(),
-    titulo: z.string().min(1, "Debe especificar el título"),
-    contenido: z.string().min(1, "Debe especificar el contenido"),
-    fechaInicio: z.date({ required_error: "Debe especificar la fecha inicio de envío de soluciones" }),
-    fechaLimite: z.date({ required_error: "Debe especificar la fecha límite de envío de soluciones" }),
-    categorias: z.array(z.object({
-        idDesafioCategoria: z.number().optional(),
-        idDesafio: z.number().optional(),
-        idCategoria: z.number()
-    })).min(1, "Debe especificar las categorías"),
-    procesoEvaluacion: z.array(z.object({
-        idProcesoEvaluacion: z.number().optional(),
-        idDesafio: z.number().optional(),
-        idTipoEvaluacion: z.number(),
-        fechaFinalizacion: z.date()
-    })).min(1, "Debe especificar el proceso de evaluación del desafío"),
-    idEstatusDesafio: z.number().optional(),
-    estatusDesafio: z.string().optional()
-})
+import { useTranslation } from 'react-i18next';
 
 export default function ChallengeForm() {
+    const { t } = useTranslation();
+
+    const formSchema = z.object({
+        idDesafio: z.number().optional(),
+        idUsuarioEmpresa: z.number().optional(),
+        idEmpresa: z.number(),
+        empresa: z.string().optional(),
+        titulo: z.string().min(1, t('challengeForm.messages.tituloRequerido')),
+        contenido: z.string().min(1, t('challengeForm.messages.contenidoRequerido')),
+        fechaInicio: z.date({ required_error: t('challengeForm.messages.fechaInicioRequerida') }),
+        fechaLimite: z.date({ required_error: t('challengeForm.messages.fechaLimiteRequerida') }),
+        categorias: z.array(z.object({
+            idDesafioCategoria: z.number().optional(),
+            idDesafio: z.number().optional(),
+            idCategoria: z.number()
+        })).min(1, t('challengeForm.messages.categoriasRequeridas')),
+        procesoEvaluacion: z.array(z.object({
+            idProcesoEvaluacion: z.number().optional(),
+            idDesafio: z.number().optional(),
+            idTipoEvaluacion: z.number(),
+            fechaFinalizacion: z.date()
+        })).min(1, t('challengeForm.messages.procesoEvaluacionRequerido')),
+        idEstatusDesafio: z.number().optional(),
+        estatusDesafio: z.string().optional()
+    })
+
     const { api } = useAxios()
     const navigate = useNavigate()
     const { challengeId } = useParams()
@@ -102,8 +105,8 @@ export default function ChallengeForm() {
                     })),
                 })
             } catch (error) {
-                toast.error("Operación errónea", {
-                    description: "Ocurrió un error al cargar el desafío",
+                toast.error(t('challengeForm.messages.operacionFallida'), {
+                    description: t('challengeForm.messages.errorCargaDesafio'),
                 });
                 console.error('Error fetching desafio:', error)
             }
@@ -117,8 +120,8 @@ export default function ChallengeForm() {
                 setTiposEvaluacionDisponibles(tiposEvaluacion)
                 setDiasDespuesFechaFinalizacion(diasDespuesFechaFinalizacion)
             } catch (error) {
-                toast.error("Operación errónea", {
-                    description: "Ocurrió un error al cargar los objetos relacionales",
+                toast.error(t('challengeForm.messages.operacionFallida'), {
+                    description: t('challengeForm.messages.errorCargaObjetosRelacionales'),
                 });
                 console.error('Error fetching relational objects:', error)
             }
@@ -142,7 +145,7 @@ export default function ChallengeForm() {
             const method = modoEdicion ? 'put' : 'post'
             const response = await api[method]('/api/Desafios', data)
             if (response.data.success) {
-                toast.success("Operación exitosa", {
+                toast.success(t('challengeForm.messages.operacionExitosa'), {
                     description: response.data.message,
                 });
                 navigate('/company')
@@ -157,13 +160,13 @@ export default function ChallengeForm() {
                         })
                     })
                 }
-                toast.warning("Operación fallida", {
+                toast.warning(t('challengeForm.messages.operacionFallida'), {
                     description: response.data.message,
                 });
             }
         } catch (error) {
-            toast.error("Operación errónea", {
-                description: "Ocurrió un error al guardar el desafío",
+            toast.error(t('challengeForm.messages.operacionFallida'), {
+                description: t('challengeForm.messages.errorGuardarDesafio'),
             });
             console.error('Error saving desafio:', error)
         }
@@ -207,19 +210,19 @@ export default function ChallengeForm() {
             <div className="mx-auto space-y-8">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                     {!modoEdicion && <div>
-                        <h1 className="text-2xl font-bold">Publicar desafío</h1>
-                        <p className="text-muted-foreground">Complete el formulario para publicar un nuevo desafío</p>
+                        <h1 className="text-2xl font-bold">{t('challengeForm.publicarDesafio.titulo')}</h1>
+                        <p className="text-muted-foreground">{t('challengeForm.publicarDesafio.descripcion')}</p>
                     </div>}
                     {modoEdicion && <div>
-                        <h1 className="text-2xl font-bold">Editar desafío</h1>
-                        <p className="text-muted-foreground">Complete el formulario para editar un desafío</p>
+                        <h1 className="text-2xl font-bold">{t('challengeForm.editarDesafio.titulo')}</h1>
+                        <p className="text-muted-foreground">{t('challengeForm.editarDesafio.descripcion')}</p>
                     </div>}
                     <div className='flex items-center gap-4'>
                         <Button variant="outline" className="text-sm" onClick={() => navigate(-1)}>
-                            <ArrowLeft className="mr-1 h-4 w-4" /> Volver
+                            <ArrowLeft className="mr-1 h-4 w-4" /> {t('challengeForm.volver')}
                         </Button>
                         <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
-                            <SaveIcon className="mr-1 h-4 w-4" /> Guardar Desafío
+                            <SaveIcon className="mr-1 h-4 w-4" /> {t('challengeForm.guardarDesafio')}
                         </Button>
                     </div>
                 </div>
@@ -230,9 +233,9 @@ export default function ChallengeForm() {
                             name="titulo"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Título del Desafío</FormLabel>
+                                    <FormLabel>{t('challengeForm.tituloDesafio')}</FormLabel>
                                     <FormControl>
-                                        <Input {...field} placeholder="Ingrese el título del desafío" />
+                                        <Input {...field} placeholder={t('challengeForm.placeholderTitulo')} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -245,14 +248,14 @@ export default function ChallengeForm() {
                                 name="categorias"
                                 render={({ field }) => (
                                     <FormItem className="md:col-span-2">
-                                        <FormLabel>Categorías</FormLabel>
+                                        <FormLabel>{t('challengeForm.categorias')}</FormLabel>
                                         {(modoEdicion && categoriasDisponibles.length > 0) &&
                                             <FormControl>
                                                 <MultiSelect
                                                     options={categoriasDisponibles.map(c => ({ value: c.idCategoria, label: c.nombre }))}
                                                     onValueChange={(values) => field.onChange(values.map(v => ({ idCategoria: v })))}
                                                     defaultValue={field.value.map(c => c.idCategoria)}
-                                                    placeholder="Seleccione las categorías"
+                                                    placeholder={t('challengeForm.seleccionarCategorias')}
                                                     variant="inverted"
                                                     maxCount={6}
                                                 />
@@ -264,7 +267,7 @@ export default function ChallengeForm() {
                                                     options={categoriasDisponibles.map(c => ({ value: c.idCategoria, label: c.nombre }))}
                                                     onValueChange={(values) => field.onChange(values.map(v => ({ idCategoria: v })))}
                                                     defaultValue={field.value.map(c => c.idCategoria)}
-                                                    placeholder="Seleccione las categorías"
+                                                    placeholder={t('challengeForm.seleccionarCategorias')}
                                                     variant="inverted"
                                                     maxCount={6}
                                                 />
@@ -280,7 +283,7 @@ export default function ChallengeForm() {
                                 name="fechaInicio"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Fecha de inicio</FormLabel>
+                                        <FormLabel>{t('challengeForm.fechaInicio')}</FormLabel>
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <FormControl>
@@ -289,7 +292,7 @@ export default function ChallengeForm() {
                                                         className={`w-full justify-start text-left font-normal ${!field.value && "text-muted-foreground"}`}
                                                     >
                                                         <CalendarIcon className="mr-2 h-4 w-4" />
-                                                        {field.value ? format(field.value, "PPP", { locale: es }) : <span>Seleccione una fecha</span>}
+                                                        {field.value ? format(field.value, "PPP", { locale: es }) : <span>{t('challengeForm.seleccionarFecha')}</span>}
                                                     </Button>
                                                 </FormControl>
                                             </PopoverTrigger>
@@ -312,7 +315,7 @@ export default function ChallengeForm() {
                                 name="fechaLimite"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Fecha límite</FormLabel>
+                                        <FormLabel>{t('challengeForm.fechaLimite')}</FormLabel>
                                         <Popover>
                                             <PopoverTrigger asChild>
                                                 <FormControl>
@@ -321,7 +324,7 @@ export default function ChallengeForm() {
                                                         className={`w-full justify-start text-left font-normal ${!field.value && "text-muted-foreground"}`}
                                                     >
                                                         <CalendarIcon className="mr-2 h-4 w-4" />
-                                                        {field.value ? format(field.value, "PPP", { locale: es }) : <span>Seleccione una fecha</span>}
+                                                        {field.value ? format(field.value, "PPP", { locale: es }) : <span>{t('challengeForm.seleccionarFecha')}</span>}
                                                     </Button>
                                                 </FormControl>
                                             </PopoverTrigger>
@@ -348,8 +351,8 @@ export default function ChallengeForm() {
                                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                                         <FormLabel>
                                             <div className="flex items-center gap-2">
-                                                Procesos de Evaluación
-                                                <span className="text-muted-foreground text-sm"> 
+                                                {t('challengeForm.procesosEvaluacion')}
+                                                <span className="text-muted-foreground text-sm">
                                                     Iniciará el día {format(addDays(form.getValues('fechaLimite'), diasDespuesFechaFinalizacion), "PPP", { locale: es })}
                                                 </span>
                                             </div>
@@ -358,12 +361,12 @@ export default function ChallengeForm() {
                                             <DialogTrigger asChild>
                                                 <Button variant="outline">
                                                     <PlusCircle className="mr-1 h-4 w-4" />
-                                                    Agregar Proceso de Evaluación
+                                                    {t('challengeForm.agregarProcesoEvaluacion')}
                                                 </Button>
                                             </DialogTrigger>
                                             <DialogContent>
                                                 <DialogHeader>
-                                                    <DialogTitle>Seleccionar Proceso de Evaluación</DialogTitle>
+                                                    <DialogTitle>{t('challengeForm.seleccionarProcesoEvaluacion')}</DialogTitle>
                                                 </DialogHeader>
                                                 <div className="grid gap-4 py-4">
                                                     {tiposEvaluacionDisponibles.filter(tipo => !field.value.some(p => p.idTipoEvaluacion === tipo.idTipoEvaluacion))
@@ -378,7 +381,7 @@ export default function ChallengeForm() {
                                                             </Button>
                                                         ))}
                                                     {tiposEvaluacionDisponibles.filter(tipo => !field.value.some(p => p.idTipoEvaluacion === tipo.idTipoEvaluacion)).length === 0 && (
-                                                        <p className="text-muted-foreground">No hay más procesos de evaluación disponibles</p>
+                                                        <p className="text-muted-foreground">{t('challengeForm.noMasProcesosDisponibles')}</p>
                                                     )}
                                                 </div>
                                             </DialogContent>
@@ -387,7 +390,7 @@ export default function ChallengeForm() {
                                     <FormControl>
                                         <div className="space-y-4">
                                             {field.value.length === 0 && (
-                                                <p className="text-muted-foreground text-center my-2 text-sm sm:text-base">No hay procesos de evaluación agregados</p>
+                                                <p className="text-muted-foreground text-center my-2 text-sm sm:text-base">{t('challengeForm.noProcesosAgregados')}</p>
                                             )}
 
                                             <DragDropContext onDragEnd={onDragEnd}>
@@ -402,7 +405,7 @@ export default function ChallengeForm() {
                                                                                 <GripVertical className="h-5 w-5" />
                                                                             </span>
                                                                             <span className="flex-grow text-sm sm:text-base">
-                                                                                {tiposEvaluacionDisponibles.find(t => t.idTipoEvaluacion === proceso.idTipoEvaluacion)?.nombre || 'Proceso sin nombre'}
+                                                                                {tiposEvaluacionDisponibles.find(t => t.idTipoEvaluacion === proceso.idTipoEvaluacion)?.nombre || t('challengeForm.noNombreProceso')}
                                                                             </span>
                                                                             <div className="flex items-center space-x-2 w-full sm:w-auto">
                                                                                 <Popover>
@@ -445,13 +448,13 @@ export default function ChallengeForm() {
                             name="contenido"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Contenido del Desafío</FormLabel>
+                                    <FormLabel>{t('challengeForm.contenidoDesafio')}</FormLabel>
                                     <FormControl>
                                         <div className='mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 relative rounded-md border'>
                                             <div className="relative flex size-full min-h-[350px] flex-col p-0 items-start">
                                                 <div className="size-full flex flex-col grow bg-card">
-                                                    {modoEdicion && field.value != '' && <PlateEditor value={field.value} onChange={({ value }) => field.onChange(JSON.stringify(value))} placeholder="Ingrese el contenido del desafío" />}
-                                                    {!modoEdicion && <PlateEditor onChange={({ value }) => field.onChange(JSON.stringify(value))} placeholder="Ingrese el contenido del desafío" />}
+                                                    {modoEdicion && field.value != '' && <PlateEditor value={field.value} onChange={({ value }) => field.onChange(JSON.stringify(value))} placeholder={t('challengeForm.placeholderContenido')} />}
+                                                    {!modoEdicion && <PlateEditor onChange={({ value }) => field.onChange(JSON.stringify(value))} placeholder={t('challengeForm.placeholderContenido')} />}
                                                 </div>
                                             </div>
                                         </div>

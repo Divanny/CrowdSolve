@@ -21,6 +21,7 @@ import {
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
 import AvatarPicker from "@/components/ui/avatar-picker";
+import { useTranslation } from 'react-i18next';
 
 export function CompanyFormDialog({
   isOpen,
@@ -32,6 +33,7 @@ export function CompanyFormDialog({
 }) {
   const { api } = useAxios();
   const [editedCompany, setEditedCompany] = useState(company);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setEditedCompany(company);
@@ -65,13 +67,13 @@ export function CompanyFormDialog({
     );
 
     if (response.data.success) {
-      toast.success("Operación exitosa", {
+      toast.success(t('CompanyFormDialog.messages.success'), {
         description: response.data.message,
       });
       onSaved();
       onClose();
     } else {
-      toast.warning("Operación fallida", {
+      toast.warning(t('CompanyFormDialog.messages.failure'), {
         description: response.data.message,
       });
     }
@@ -82,7 +84,7 @@ export function CompanyFormDialog({
       <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>
-            {mode === "edit" ? "Editar" : "Ver"} Empresa
+            {mode === "edit" ? t('CompanyFormDialog.title_edit') : t('CompanyFormDialog.title_view')} {t('CompanyFormDialog.company')}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSave} className="space-y-2">
@@ -97,7 +99,7 @@ export function CompanyFormDialog({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nombre">Nombre</Label>
+              <Label htmlFor="nombre">{t('CompanyFormDialog.fields.name')}</Label>
               <Input
                 id="nombre"
                 name="nombre"
@@ -107,11 +109,11 @@ export function CompanyFormDialog({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="descripcion">Descripción</Label>
+              <Label htmlFor="descripcion">{t('CompanyFormDialog.fields.description')}</Label>
               <Textarea
               id="descripcion"
               name="descripcion"
-              placeholder="Ingrese una descripción"
+              placeholder={t('CompanyFormDialog.placeholders.description')}
               value={editedCompany.descripcion}
               onChange={handleInputChange}
               rows={4}
@@ -122,9 +124,9 @@ export function CompanyFormDialog({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="telefono">Teléfono</Label>
+              <Label htmlFor="telefono">{t('CompanyFormDialog.fields.phone')}</Label>
               <PhoneInput
-                placeholder="Ingrese su teléfono"
+                placeholder={t('CompanyFormDialog.placeholders.phone')}
                 id="telefono"
                 name="telefono"
                 type="tel"
@@ -140,7 +142,7 @@ export function CompanyFormDialog({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="paginaWeb">Página Web</Label>
+              <Label htmlFor="paginaWeb">{t('CompanyFormDialog.fields.website')}</Label>
               <Input
                 id="paginaWeb"
                 name="paginaWeb"
@@ -152,7 +154,7 @@ export function CompanyFormDialog({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="tamañoEmpresa">Tamaño Empresa</Label>
+              <Label htmlFor="tamañoEmpresa">{t('CompanyFormDialog.fields.company_size')}</Label>
               <Select
                 id="tamañoEmpresa"
                 onValueChange={(value) =>
@@ -168,7 +170,7 @@ export function CompanyFormDialog({
                           (ne) =>
                             ne.idTamañoEmpresa == editedCompany.idTamañoEmpresa
                         ).nombre
-                      : "Seleccione un tamaño de empresa"}
+                      : t('CompanyFormDialog.placeholders.company_size')}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -185,7 +187,7 @@ export function CompanyFormDialog({
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="sector">Sector</Label>
+              <Label htmlFor="sector">{t('CompanyFormDialog.fields.sector')}</Label>
               <Select
                 id="sector"
                 onValueChange={(value) =>
@@ -201,7 +203,7 @@ export function CompanyFormDialog({
                           (ne) =>
                             ne.idSector == editedCompany.idSector
                         ).nombre
-                      : "Seleccione un sector"}
+                      : t('CompanyFormDialog.placeholders.sector')}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
@@ -222,11 +224,11 @@ export function CompanyFormDialog({
         <DialogFooter>
           {mode === "edit" && (
             <Button type="submit" onClick={handleSave}>
-              Guardar cambios
+             {t('CompanyFormDialog.buttons.save_changes')}
             </Button>
           )}
           <Button type="button" variant="secondary" onClick={onClose}>
-            Cerrar
+          {t('CompanyFormDialog.buttons.close')}
           </Button>
         </DialogFooter>
       </DialogContent>

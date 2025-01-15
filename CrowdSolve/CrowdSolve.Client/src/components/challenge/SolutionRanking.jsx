@@ -11,11 +11,13 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import useAxios from '@/hooks/use-axios'
 import { toast } from 'sonner'
 import { Badge } from "@/components/ui/badge"
+import { useTranslation } from 'react-i18next';
 import ProfileHover from '@/components/participants/ProfileHover'
 import { useNavigate } from 'react-router-dom'
 import * as FileSaver from 'file-saver';
 
 const SolutionRanking = ({ idDesafio }) => {
+    const { t } = useTranslation();
     const { api } = useAxios()
     const navigate = useNavigate()
     const [solutions, setSolutions] = useState([])
@@ -33,7 +35,7 @@ const SolutionRanking = ({ idDesafio }) => {
             const response = await api.get(`/api/Desafios/GetRanking/${idDesafio}`)
             setSolutions(response.data)
         } catch (error) {
-            toast.error("Error al cargar el ranking", {
+            toast.error(t('solutionRanking.Erroralcargarelranking'), {
                 description: error.response?.data?.message ?? error.message,
             })
         }
@@ -96,20 +98,20 @@ const SolutionRanking = ({ idDesafio }) => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead className="">Posición</TableHead>
-                        <TableHead className="">Usuario</TableHead>
-                        <TableHead className="">Título</TableHead>
+                        <TableHead className="">{t('solutionRanking.Posición')}</TableHead>
+                        <TableHead className="">{t('solutionRanking.Usuario')}</TableHead>
+                        <TableHead className="">{t('solutionRanking.Título')}</TableHead>
                         {
-                            solutions.length > 0 && solutions[0].puntuacion != null && <TableHead className="text-center">Puntuación</TableHead>
+                            solutions.length > 0 && solutions[0].puntuacion != null && <TableHead className="text-center">{t('solutionRanking.Puntuación')}</TableHead>
                         }
                         {
-                            solutions.length > 0 && solutions[0].cantidadVotosComunidad != null && <TableHead className="text-center">Votos Comunidad</TableHead>
+                            solutions.length > 0 && solutions[0].cantidadVotosComunidad != null && <TableHead className="text-center">{t('solutionRanking.VotosComunidad')}</TableHead>
                         }
                         {
-                            solutions.length > 0 && solutions[0].cantidadVotosParticipantes != null && <TableHead className="text-center">Votos Participantes</TableHead>
+                            solutions.length > 0 && solutions[0].cantidadVotosParticipantes != null && <TableHead className="text-center">{t('solutionRanking.VotosParticipantes')}</TableHead>
                         }
-                        <TableHead className="text-center">Puntuación final</TableHead>
-                        <TableHead className="text-right">Acciones</TableHead>
+                        <TableHead className="text-center">{t('solutionRanking.Puntuaciónfinal')}</TableHead>
+                        <TableHead className="text-right">{t('solutionRanking.Acciones')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -117,8 +119,8 @@ const SolutionRanking = ({ idDesafio }) => {
                         <TableRow>
                             <TableCell colSpan={7}>
                                 <div className="flex flex-col items-center gap-2 my-4">
-                                    <span className="text-lg font-semibold">No hay soluciones para mostrar</span>
-                                    <span className="text-muted-foreground">El ranking aún no está disponible</span>
+                                    <span className="text-lg font-semibold">{t('solutionRanking.Nohaysolucionesparamostrar')}</span>
+                                    <span className="text-muted-foreground">{t('solutionRanking.Elrankingaúnnoestádisponible')}</span>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -157,7 +159,7 @@ const SolutionRanking = ({ idDesafio }) => {
                                     <DialogTrigger asChild>
                                         <Button variant="ghost" size="icon" onClick={() => handleDialogOpen(solucion)}>
                                             <Eye className="h-4 w-4" />
-                                            <span className="sr-only">Ver detalles</span>
+                                            <span className="sr-only">{t('solutionRanking.Verdetalles')}</span>
                                         </Button>
                                     </DialogTrigger>
                                     <DialogContent className="max-w-4xl" onOpenAutoFocus={(event) => event.preventDefault()}>
@@ -174,12 +176,12 @@ const SolutionRanking = ({ idDesafio }) => {
                                                         </Avatar>
                                                         <div className='flex flex-col justify-start'>
                                                             <p className="text-lg font-semibold text-left">{solucionSeleccionada?.nombreUsuario}</p>
-                                                            <p className="text-sm text-muted-foreground text-left">Autor de la solución</p>
+                                                            <p className="text-sm text-muted-foreground text-left">{t('solutionRanking.Autordelasolución')}</p>
                                                         </div>
                                                     </Button>
                                                 </ProfileHover>
                                                 <div>
-                                                    <Label className="text-lg font-semibold">Descripción</Label>
+                                                    <Label className="text-lg font-semibold">{t('solutionRanking.Descripción')}</Label>
                                                     <ScrollArea className="h-[200px] w-full rounded-md border p-4 mt-2">
                                                         <p className="text-sm">{solucionSeleccionada?.descripcion}</p>
                                                     </ScrollArea>
@@ -206,23 +208,23 @@ const SolutionRanking = ({ idDesafio }) => {
                                             <div className="space-y-6">
                                                 <div className="bg-muted p-4 rounded-lg space-y-4">
                                                     <div>
-                                                        <Label className="text-sm font-medium">Fecha de envío</Label>
+                                                        <Label className="text-sm font-medium">{t('solutionRanking.Fechadeenvío')}</Label>
                                                         <p className="text-sm">{solucionSeleccionada && formatearFecha(solucionSeleccionada.fechaRegistro)}</p>
                                                     </div>
                                                     {solucion.puntuacion != null && <div>
-                                                        <Label className="text-sm font-medium">Puntuación de la empresa</Label>
+                                                        <Label className="text-sm font-medium">{t('solutionRanking.Puntuacióndelaempresa')}</Label>
                                                         <p className="text-sm">{solucionSeleccionada?.puntuacion}</p>
                                                     </div>}
                                                     {solucion.cantidadVotosComunidad != null && <div>
-                                                        <Label className="text-sm font-medium">Votos de la comunidad</Label>
+                                                        <Label className="text-sm font-medium">{t('solutionRanking.Votosdelacomunidad')}</Label>
                                                         <p className="text-sm">{solucionSeleccionada?.cantidadVotosComunidad}</p>
                                                     </div>}
                                                     {solucion.cantidadVotosParticipantes != null && <div>
-                                                        <Label className="text-sm font-medium">Votos de participantes</Label>
+                                                        <Label className="text-sm font-medium">{t('solutionRanking.Votosdeparticipantes')}</Label>
                                                         <p className="text-sm">{solucionSeleccionada?.cantidadVotosParticipantes}</p>
                                                     </div>}
                                                     {solucionSeleccionada?.puntuacionFinal != null && <div>
-                                                        <Label className="text-sm font-medium">Puntuación final</Label>
+                                                        <Label className="text-sm font-medium">{t('solutionRanking.Puntuaciónfinaldelasolución')}</Label>
                                                         <p className="text-sm">{solucionSeleccionada?.puntuacionFinal} / {solucionSeleccionada?.puntuacionMaxima}</p>
                                                     </div>}
                                                 </div>
@@ -230,7 +232,7 @@ const SolutionRanking = ({ idDesafio }) => {
                                         </div>
                                         <DialogFooter>
                                             <Button type="button" variant="secondary" onClick={() => setDetalleSolucionDialog(false)}>
-                                                Cerrar
+                                                {t('solutionRanking.Cerrar')}
                                             </Button>
                                         </DialogFooter>
                                     </DialogContent>

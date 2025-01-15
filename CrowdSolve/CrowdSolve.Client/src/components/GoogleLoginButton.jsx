@@ -37,18 +37,18 @@ function GoogleLoginButton() {
                     navigate(-1);
                 }
 
-                toast.success("Operación exitosa", {
-                    description: "Inicio de sesión con Google exitoso",
+                toast.success(t('GoogleLoginbutton.success.operationSuccess'), {
+                    description: t('GoogleLoginbutton.success.loginSuccess'),
                 });
             } else {
-                toast.warning("Operación errónea", {
-                    description: response.data.message || "Error al iniciar sesión con Google",
+                toast.warning(t('GoogleLoginbutton.warning.operationError'), {
+                    description: response.data.message || t('GoogleLoginbutton.warning.defaultErrorMessage'),
                 });
             }
         } catch (error) {
-            console.error('Error al iniciar sesión con Google:', error);
-            toast.error("Operación errónea", {
-                description: "Error al iniciar sesión con Google",
+            console.error(t('GoogleLoginbutton.error.loginError'), error);
+            toast.error(t('GoogleLoginbutton.error.operationError'), {
+                description: t('GoogleLoginbutton.error.loginError'),
             });
         }
     };
@@ -56,9 +56,9 @@ function GoogleLoginButton() {
     const login = useGoogleLogin({
         onSuccess: handleGoogleLoginSuccess,
         onError: (error) => {
-            console.error('Fallo en el inicio de sesión con Google:', error);
-            toast.error("Operación errónea", {
-                description: "Error al iniciar sesión con Google",
+            console.error(t('GoogleLoginbutton.error.loginError'), error);
+            toast.error(t('GoogleLoginbutton.error.operationError'), {
+                description: t('GoogleLoginbutton.warning.defaultErrorMessage'),
             });
         },
         flow: 'auth-code',
@@ -93,7 +93,7 @@ function GoogleLoginButton() {
                     fill="#EA4335"
                 />
             </svg>
-            {t('ContinueGoogle.continueWithGoogle')}
+            {t('GoogleLoginbutton.continueWithGoogle')}
         </Button>
     );
 }
