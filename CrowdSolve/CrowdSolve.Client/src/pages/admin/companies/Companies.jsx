@@ -92,7 +92,7 @@ export default function Companies() {
                 <div className="flex items-center space-x-2">
                     <Avatar>
                         <AvatarImage
-                            src={`/placeholder.svg?height=40&width=40`}
+                            src={`/api/Account/GetAvatar/${row.getValue("idUsuario")}`}
                             alt={row.getValue("nombre")}
                         />
                         <AvatarFallback>
@@ -228,8 +228,6 @@ export default function Companies() {
                         requireLoading: false,
                     }),
                 ]);
-            console.log(empresasResponse);
-            console.log(relationalObjectsResponse);
             setData(empresasResponse.data);
             setTamanosEmpresas(relationalObjectsResponse.data.tamañosEmpresa);
             setSectores(relationalObjectsResponse.data.sectores);

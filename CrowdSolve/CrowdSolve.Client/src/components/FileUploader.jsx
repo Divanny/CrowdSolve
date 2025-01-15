@@ -41,7 +41,7 @@ export function FileUploader(props) {
       }
 
       if ((files?.length ?? 0) + acceptedFiles.length > maxFileCount) {
-        let message= (t('fileUploader.maxFileCountError')).replace('{0}',maxFileCount)
+        let message = (t('fileUploader.maxFileCountError')).replace('{0}', maxFileCount)
         toast.error(message)
         return
       }
@@ -58,7 +58,7 @@ export function FileUploader(props) {
 
       if (rejectedFiles.length > 0) {
         rejectedFiles.forEach(({ file }) => {
-          let message= (t('fileUploader.fileRejectedError')).replace('{0}',file.name)
+          let message = (t('fileUploader.fileRejectedError')).replace('{0}', file.name)
           toast.error(message)
         })
       }
@@ -68,12 +68,10 @@ export function FileUploader(props) {
         updatedFiles.length > 0 &&
         updatedFiles.length <= maxFileCount
       ) {
-        const target =
-          updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`
-          let message= (t('fileUploader.uploading')).replace('{0}',target)
+        const target = updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`
         toast.promise(onUpload(updatedFiles), {
-          
-          loading: (t('fileUploader.uploading')).replace('{0}',target),
+
+          loading: (t('fileUploader.uploading')).replace('{0}', target),
           success: () => {
             setFiles([])
             return `${target} ${t('fileUploader.uploadSuccess')}`
@@ -83,7 +81,7 @@ export function FileUploader(props) {
       }
     },
 
-    [files, maxFileCount, multiple, onUpload, setFiles]
+    [files, maxFileCount, multiple, onUpload, setFiles, t]
   )
 
   function onRemove(index) {
@@ -140,7 +138,7 @@ export function FileUploader(props) {
                   />
                 </div>
                 <p className="font-medium text-muted-foreground">
-                {t('fileUploader.dropHere')}
+                  {t('fileUploader.dropHere')}
                 </p>
               </div>
             ) : (
@@ -153,10 +151,10 @@ export function FileUploader(props) {
                 </div>
                 <div className="flex flex-col gap-px">
                   <p className="font-medium text-muted-foreground">
-                  {t('fileUploader.dragAndDropOrClick')}
+                    {t('fileUploader.dragAndDropOrClick')}
                   </p>
                   <p className="text-sm text-muted-foreground/70">
-                  {t('fileUploader.canUpload')}
+                    {t('fileUploader.canUpload')}
                     {maxFileCount > 1
                       ? ` ${maxFileCount === Infinity ? t('fileUploader.multiples') : maxFileCount}
                       ${t('fileUploader.file')} ${formatBytes(maxSize)} ${t('fileUploader.cadaUno')}`
@@ -187,6 +185,8 @@ export function FileUploader(props) {
 }
 
 function FileCard({ file, progress, onRemove }) {
+  const { t } = useTranslation();
+
   return (
     <div className="relative flex items-center gap-2.5">
       <div className="flex flex-1 gap-2.5">

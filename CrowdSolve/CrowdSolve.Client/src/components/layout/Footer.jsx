@@ -48,28 +48,27 @@ export default function Footer() {
                     <div>
                         <h3 className="font-semibold mb-4">{t('footer.sections.product.title')}</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/como-funciona" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.howItWorks')}</Link></li>
-                            <li><Link href="/desafios" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.challenges')}</Link></li>
-                            <li><Link href="/empresas-registradas" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.registeredCompanies')}</Link></li>
+                            <li><Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.howItWorks')}</Link></li>
+                            <li><Link to="/challenges" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.challenges')}</Link></li>
+                            <li><Link to="/companies" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.registeredCompanies')}</Link></li>
                         </ul>
                     </div>
                     <div>
                         <h3 className="font-semibold mb-4">{t('footer.sections.company.title')}</h3>
                         <ul className="space-y-2">
-                            <li><Link href="/about-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.aboutUs')}</Link></li>
-                            <li><Link href="/equipo" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.team')}</Link></li>
-                            <li><Link href="/contact-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.contact')}</Link></li>
+                            <li><Link to="/about-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.aboutUs')}</Link></li>
+                            <li><Link to="/contact-us" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.company.links.contact')}</Link></li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div className="border-t border-muted-foreground/20 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
                 <p className="text-xs text-muted-foreground mb-4 sm:mb-0">
-                    &copy; {new Date().getFullYear()} {t('footer.copyright')}
+                    {new Date().getFullYear()} {t('footer.copyright')}
                 </p>
                 <nav className="flex flex-wrap justify-center sm:justify-end gap-4">
-                    <Link href="/terminos" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.terms')}</Link>
-                    <Link href="/privacidad" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.privacy')}</Link>
+                    <Link to="/terms-of-service" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.terms')}</Link>
+                    <Link to="/privacy-policy" className="text-xs text-muted-foreground hover:text-primary transition-colors">{t('footer.privacy')}</Link>
                 </nav>
             </div>
         </footer>

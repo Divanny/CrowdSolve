@@ -72,11 +72,7 @@ const Challenge = () => {
                 editor.tf.setValue(slateContent)
                 convertToHtml();
 
-                const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${desafioResponse.data.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false })
-                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                const url = URL.createObjectURL(avatarBlob)
-
-                setDesafio(prevDesafio => ({ ...prevDesafio, ...desafioResponse.data, logoEmpresa: url }))
+                setDesafio(desafioResponse.data)
                 setRelationalObjects(relationalObjectsResponse.data)
             } catch (error) {
                 toast.error("No se pudo cargar el desafío.")
@@ -212,10 +208,6 @@ const Challenge = () => {
         return <LoadingSkeleton />
     }
 
-    if (!desafio) {
-        return <div className="text-center text-primary">No se pudo cargar el desafío.</div>
-    }
-
     return (
         <div className="min-h-screen bg-background text-foreground">
             <div className="container mx-auto px-4 md:px-6 py-8 relative">
@@ -226,144 +218,153 @@ const Challenge = () => {
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" /> Volver
                 </Button>
-                {canEvaluate && (
-                    <Alert className="bg-primary/20 border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-                        <div className="flex items-start gap-4">
-                            <AlertTriangle className="h-5 w-5 text-primary mt-1" />
-                            <div>
-                                <AlertTitle className="font-semibold">
-                                    Desafío en Evaluación
-                                </AlertTitle>
-                                <AlertDescription className="mt-2">
-                                    Este desafío está actualmente en proceso de evaluación. ¡Participa en la evaluación!
-                                </AlertDescription>
-                            </div>
-                        </div>
-                        <Button
-                            variant="outline"
-                            onClick={() => navigate(`/challenge/${challengeId}/evaluate`)}
-                        >
-                            Participar
-                        </Button>
-                    </Alert>
-                )}
-                <div className="flex flex-col lg:flex-row gap-8">
-                    <div className='flex-1 order-2 lg:order-1'>
-                        <Card className="bg-card text-card-foreground p-6 mb-6">
-                            <ChallengeDetail desafio={desafio} htmlContent={htmlContent} getCategoryName={getCategoryName} />
-                        </Card>
+                {!desafio || !htmlContent ? (
+                    <div className='w-full flex flex-col items-center justify-center gap-4 p-8'>
+                        <h1 className="text-2xl font-semibold text-center">Desafío no encontrado</h1>
+                        <p className="text-muted-foreground text-center">El desafío que buscas no existe o no tienes permisos para verlo.</p>
                     </div>
-                    <div className='w-full lg:w-1/3 order-1 lg:order-2'>
-                        <Card className="bg-card text-card-foreground p-6 sticky top-8">
-                            <h2 className="text-xl font-semibold mb-4 text-foreground">Información del Desafío</h2>
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <Badge variant="primary" className="bg-primary/10 text-primary hover:bg-primary/20">
-                                        {getStatusName(desafio.idEstatusDesafio)}
-                                    </Badge>
-                                    <span className="text-sm font-medium text-foreground">{getDaysRemaining()} días restantes</span>
-                                </div>
-                                <div className="bg-background rounded-lg p-4 space-y-3">
-                                    <div className="flex items-center text-muted-foreground">
-                                        <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm"><span className='font-semibold'>Inicio:</span> {formatDate(desafio.fechaInicio)}</span>
-                                    </div>
-                                    <div className="flex items-center text-muted-foreground">
-                                        <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm"><span className='font-semibold'>Cierre:</span> {formatDate(desafio.fechaLimite)}</span>
-                                    </div>
-                                    <div className="flex items-center text-muted-foreground">
-                                        <Users className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} soluciones enviadas</span>
-                                    </div>
-                                    <div className="flex items-center text-muted-foreground">
-                                        <Clock className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm"><span className='font-semibold'>Registrado:</span> {formatDate(desafio.fechaRegistro)}</span>
+                ) : (
+                    <div>
+                        {canEvaluate && (
+                            <Alert className="bg-primary/20 border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                                <div className="flex items-start gap-4">
+                                    <AlertTriangle className="h-5 w-5 text-primary mt-1" />
+                                    <div>
+                                        <AlertTitle className="font-semibold">
+                                            Desafío en Evaluación
+                                        </AlertTitle>
+                                        <AlertDescription className="mt-2">
+                                            Este desafío está actualmente en proceso de evaluación. ¡Participa en la evaluación!
+                                        </AlertDescription>
                                     </div>
                                 </div>
-                            </div>
-
-                            {isCompany ? (
-                                isChallengeOwner && (
-                                    <Button className="w-full mt-6" variant="outline" onClick={() => navigate(`/company/challenge/${challengeId}`)}>
-                                        <Users className="mr-2 h-4 w-4" /> Ver soluciones
-                                    </Button>
-                                )
-                            ) : !user ? (
-                                <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/sign-in')}>
-                                    Iniciar sesión para participar
+                                <Button
+                                    variant="outline"
+                                    onClick={() => navigate(`/challenge/${challengeId}/evaluate`)}
+                                >
+                                    Participar
                                 </Button>
-                            ) : (
-                                desafio.yaParticipo ? (
-                                    <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/my-solutions')}>
-                                        <Users className="mr-2 h-4 w-4" /> Ver estatus de mi solución
-                                    </Button>
-                                ) : (
-                                    isChallengeInProgress ? (
-                                        isDesktop ? (
-                                            <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                                                <DialogTrigger asChild>
-                                                    <Button className="w-full mt-6">
-                                                        <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
-                                                    </Button>
-                                                </DialogTrigger>
-                                                <DialogContent className="sm:max-w-[625px]">
-                                                    <DialogHeader>
-                                                        <DialogTitle>Participar en el Desafío</DialogTitle>
-                                                        <DialogDescription>Complete el formulario para participar en el desafío.</DialogDescription>
-                                                    </DialogHeader>
-                                                    <SolutionForm
-                                                        solutionTitle={solutionTitle}
-                                                        setSolutionTitle={setSolutionTitle}
-                                                        solutionDescription={solutionDescription}
-                                                        setSolutionDescription={setSolutionDescription}
-                                                        solutionFiles={solutionFiles}
-                                                        setSolutionFiles={setSolutionFiles}
-                                                        handleSubmitSolution={handleSubmitSolution}
-                                                    />
-                                                </DialogContent>
-                                            </Dialog>
-                                        ) : (
-                                            <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                                                <DrawerTrigger asChild>
-                                                    <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
-                                                        <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
-                                                    </Button>
-                                                </DrawerTrigger>
-                                                <DrawerContent>
-                                                    <DrawerHeader className="text-left">
-                                                        <DrawerTitle>Participar en el Desafío</DrawerTitle>
-                                                        <DrawerDescription>Complete el formulario para participar en el desafío.</DrawerDescription>
-                                                    </DrawerHeader>
-                                                    <SolutionForm
-                                                        className="px-4"
-                                                        solutionTitle={solutionTitle}
-                                                        setSolutionTitle={setSolutionTitle}
-                                                        solutionDescription={solutionDescription}
-                                                        setSolutionDescription={setSolutionDescription}
-                                                        solutionFiles={solutionFiles}
-                                                        setSolutionFiles={setSolutionFiles}
-                                                        handleSubmitSolution={handleSubmitSolution}
-                                                    />
-                                                    <DrawerFooter className="pt-2">
-                                                        <DrawerClose asChild>
-                                                            <Button variant="outline">Cancelar</Button>
-                                                        </DrawerClose>
-                                                    </DrawerFooter>
-                                                </DrawerContent>
-                                            </Drawer>
-                                        )
-                                    ) : (
-                                        <div className="text-center text-muted-foreground mt-6">
-                                            El desafío no está en progreso.
+                            </Alert>
+                        )}
+                        <div className="flex flex-col lg:flex-row gap-8">
+                            <div className='flex-1 order-2 lg:order-1'>
+                                <Card className="bg-card text-card-foreground p-6 mb-6">
+                                    <ChallengeDetail desafio={desafio} htmlContent={htmlContent} getCategoryName={getCategoryName} />
+                                </Card>
+                            </div>
+                            <div className='w-full lg:w-1/3 order-1 lg:order-2'>
+                                <Card className="bg-card text-card-foreground p-6 sticky top-8">
+                                    <h2 className="text-xl font-semibold mb-4 text-foreground">Información del Desafío</h2>
+                                    <div className="space-y-4">
+                                        <div className="flex justify-between items-center">
+                                            <Badge variant="primary" className="bg-primary/10 text-primary hover:bg-primary/20">
+                                                {getStatusName(desafio.idEstatusDesafio)}
+                                            </Badge>
+                                            <span className="text-sm font-medium text-foreground">{getDaysRemaining()} días restantes</span>
                                         </div>
-                                    )
-                                )
-                            )}
-                        </Card>
+                                        <div className="bg-background rounded-lg p-4 space-y-3">
+                                            <div className="flex items-center text-muted-foreground">
+                                                <Calendar className="mr-2 h-5 w-5 text-primary" />
+                                                <span className="text-sm"><span className='font-semibold'>Inicio:</span> {formatDate(desafio.fechaInicio)}</span>
+                                            </div>
+                                            <div className="flex items-center text-muted-foreground">
+                                                <Calendar className="mr-2 h-5 w-5 text-primary" />
+                                                <span className="text-sm"><span className='font-semibold'>Cierre:</span> {formatDate(desafio.fechaLimite)}</span>
+                                            </div>
+                                            <div className="flex items-center text-muted-foreground">
+                                                <Users className="mr-2 h-5 w-5 text-primary" />
+                                                <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} soluciones enviadas</span>
+                                            </div>
+                                            <div className="flex items-center text-muted-foreground">
+                                                <Clock className="mr-2 h-5 w-5 text-primary" />
+                                                <span className="text-sm"><span className='font-semibold'>Registrado:</span> {formatDate(desafio.fechaRegistro)}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {isCompany ? (
+                                        isChallengeOwner && (
+                                            <Button className="w-full mt-6" variant="outline" onClick={() => navigate(`/company/challenge/${challengeId}`)}>
+                                                <Users className="mr-2 h-4 w-4" /> Ver soluciones
+                                            </Button>
+                                        )
+                                    ) : !user ? (
+                                        <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/sign-in')}>
+                                            Iniciar sesión para participar
+                                        </Button>
+                                    ) : (
+                                        desafio.yaParticipo ? (
+                                            <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/my-solutions')}>
+                                                <Users className="mr-2 h-4 w-4" /> Ver estatus de mi solución
+                                            </Button>
+                                        ) : (
+                                            isChallengeInProgress ? (
+                                                isDesktop ? (
+                                                    <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                                                        <DialogTrigger asChild>
+                                                            <Button className="w-full mt-6">
+                                                                <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
+                                                            </Button>
+                                                        </DialogTrigger>
+                                                        <DialogContent className="sm:max-w-[625px]">
+                                                            <DialogHeader>
+                                                                <DialogTitle>Participar en el Desafío</DialogTitle>
+                                                                <DialogDescription>Complete el formulario para participar en el desafío.</DialogDescription>
+                                                            </DialogHeader>
+                                                            <SolutionForm
+                                                                solutionTitle={solutionTitle}
+                                                                setSolutionTitle={setSolutionTitle}
+                                                                solutionDescription={solutionDescription}
+                                                                setSolutionDescription={setSolutionDescription}
+                                                                solutionFiles={solutionFiles}
+                                                                setSolutionFiles={setSolutionFiles}
+                                                                handleSubmitSolution={handleSubmitSolution}
+                                                            />
+                                                        </DialogContent>
+                                                    </Dialog>
+                                                ) : (
+                                                    <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                                                        <DrawerTrigger asChild>
+                                                            <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
+                                                                <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
+                                                            </Button>
+                                                        </DrawerTrigger>
+                                                        <DrawerContent>
+                                                            <DrawerHeader className="text-left">
+                                                                <DrawerTitle>Participar en el Desafío</DrawerTitle>
+                                                                <DrawerDescription>Complete el formulario para participar en el desafío.</DrawerDescription>
+                                                            </DrawerHeader>
+                                                            <SolutionForm
+                                                                className="px-4"
+                                                                solutionTitle={solutionTitle}
+                                                                setSolutionTitle={setSolutionTitle}
+                                                                solutionDescription={solutionDescription}
+                                                                setSolutionDescription={setSolutionDescription}
+                                                                solutionFiles={solutionFiles}
+                                                                setSolutionFiles={setSolutionFiles}
+                                                                handleSubmitSolution={handleSubmitSolution}
+                                                            />
+                                                            <DrawerFooter className="pt-2">
+                                                                <DrawerClose asChild>
+                                                                    <Button variant="outline">Cancelar</Button>
+                                                                </DrawerClose>
+                                                            </DrawerFooter>
+                                                        </DrawerContent>
+                                                    </Drawer>
+                                                )
+                                            ) : (
+                                                <div className="text-center text-muted-foreground mt-6">
+                                                    El desafío no está en progreso.
+                                                </div>
+                                            )
+                                        )
+                                    )}
+                                </Card>
+                            </div>
+                            {loading && <PageLoader progress={loadingProgress} />}
+                        </div>
                     </div>
-                    {loading && <PageLoader progress={loadingProgress} />}
-                </div>
+                )}
             </div>
         </div>
     )

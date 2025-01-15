@@ -23,7 +23,10 @@
         Administrar_Empresas = 2017,
         Administrar_Administradores = 2018,
         Solicitudes_Soportes = 2019,
-        Solicitudes_Empresas = 2020
+        Solicitudes_Empresas = 2020,
+        Solicitudes_Desafíos = 2021,
+        Notificaciones = 3021,
+        Administrar_Desafíos = 4022,
+        Administrador_Ver_Desafíos = 5021
     }
-
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ChevronsUpDown, Home } from "lucide-react"
 import { useSelector } from 'react-redux';
 import {
@@ -47,133 +47,99 @@ export default function AdminLayout() {
 
     const user = useSelector((state) => state.user.user);
 
+    const [pendingRequests, setPendingRequests] = useState({
+        cantidadEmpresas: 0,
+        cantidadSoportes: 0,
+        cantidadDesafios: 0
+    });
+
     const sidebarItems = [
-    
         {
             title: null,
             url: "#",
             items: [
-                {
-                    title: "Dashboard",
-                    url: "/admin",
-                    icon: "Gauge",
-                },
+                { title: "Dashboard", url: "/admin", icon: "Gauge" },
             ],
         },
         {
             title: t('AdminLayout.sideBarAdm.AdmUser'),
             url: "#",
             items: [
-                {
-                    title: t('AdminLayout.sideBarAdm.Participants'),
-                    url: "/admin/participants",
-                    icon: "Users",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.Companies'),
-                    url: "/admin/companies",
-                    icon: "Building2",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.Admins'),
-                    url: "/admin/administrators",
-                    icon: "ShieldCheck",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.RolesPermissions'),
-                    url: "/admin/permissions",
-                    icon: "Key",
-                },
+                { title: t('AdminLayout.sideBarAdm.Participants'), url: "/admin/participants", icon: "Users" },
+                { title: t('AdminLayout.sideBarAdm.Companies'), url: "/admin/companies", icon: "Building2" },
+                { title: t('AdminLayout.sideBarAdm.Admins'), url: "/admin/administrators", icon: "ShieldCheck" },
+                { title: t('AdminLayout.sideBarAdm.RolesPermissions'), url: "/admin/permissions", icon: "Key" },
             ],
         },
         {
             title: t('AdminLayout.sideBarAdm.AdmChallenges'),
             url: "#",
             items: [
-                {
-                    title: t('AdminLayout.sideBarAdm.Challenges'),
-                    url: "/admin/challenges",
-                    icon: "Flag",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.Solutions'),
-                    url: "/admin/solutions",
-                    icon: "Send",
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.Categories'),
-                    url: "/admin/categories",
-                    icon: "TableProperties",
-                },
+                { title: t('AdminLayout.sideBarAdm.Challenges'), url: "/admin/challenges", icon: "Puzzle" },
+                { title: t('AdminLayout.sideBarAdm.Categories'), url: "/admin/categories", icon: "TableProperties" },
             ],
         },
         {
-            title: t('AdminLayout.sideBarAdm.Solutions'),
+            title: t('AdminLayout.sideBarAdm.Requests'),
             url: "#",
             items: [
-                {
-                    title: t('AdminLayout.sideBarAdm.CompanyRequests'),
-                    url: "/admin/company-requests",
-                    icon: "Building2",
-                    pending: 3,
-                },
-                {
-                    title: t('AdminLayout.sideBarAdm.SupportRequests'),
-                    url: "/admin/support-requests",
-                    icon: "Headset",
-                    pending: 1,
-                },
+                { title: t('AdminLayout.sideBarAdm.CompanyRequests'), url: "/admin/company-requests", icon: "Building2", pending: 0 },
+                { title: t('AdminLayout.sideBarAdm.SupportRequests'), url: "/admin/support-requests", icon: "Headset", pending: 0 },
+                { title: t('AdminLayout.sideBarAdm.ChallengesRequests'), url: "/admin/challenges-requests", icon: "Puzzle", pending: 0 },
             ],
         },
         {
             title: t('AdminLayout.sideBarAdm.Settings'),
             url: "#",
             items: [
-                {
-                    title: t('AdminLayout.sideBarAdm.UserManual'),
-                    url: "/admin/user-manual",
-                    icon: "Book",
-                },
+                { title: t('AdminLayout.sideBarAdm.UserManual'), url: "/admin/user-manual", icon: "Book" },
             ],
         },
-    ]
-    
+    ];
+
     const { api } = useAxios();
 
     const CrowdSolveLogo = GetLogo();
 
-    const fetchData = async () => {
-        try {
-            const countRequestsResponse = await api.get("/api/Soportes/GetCantidadRegistros", { requireLoading: false })
-
-            sidebarItems[3].items[0].pending = countRequestsResponse.data.cantidadEmpresas;
-            sidebarItems[3].items[1].pending = countRequestsResponse.data.cantidadSoportes;
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
-
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [countRequestsResponse] = await Promise.allSettled([
+                    api.get("/api/Account/GetAdminCantidadSolicitudes", { requireLoading: false })
+                ]);
+
+                if (countRequestsResponse.status === "fulfilled") {
+                    setPendingRequests({
+                        cantidadEmpresas: countRequestsResponse.value.data.cantidadEmpresas,
+                        cantidadSoportes: countRequestsResponse.value.data.cantidadSoportes,
+                        cantidadDesafios: countRequestsResponse.value.data.cantidadDesafios
+                    });
+                } else {
+                    console.error("Error fetching data:", countRequestsResponse.reason);
+                }
+            } catch (error) {
+                console.error("Error in fetchData:", error);
+            }
+        };
+
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [location]);
 
-    useEffect(() => {
-        const fetchAvatar = async () => {
-            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
-            if (responseAvatarURL.status == 200) {
-                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                user.avatarURL = URL.createObjectURL(avatarBlob)
-            }
-
+    const updatedSidebarItems = sidebarItems.map((item, index) => {
+        if (index === 3) {
+            return {
+                ...item,
+                items: item.items.map((subItem, subIndex) => {
+                    if (subIndex === 0) subItem.pending = pendingRequests.cantidadEmpresas;
+                    if (subIndex === 1) subItem.pending = pendingRequests.cantidadSoportes;
+                    if (subIndex === 2) subItem.pending = pendingRequests.cantidadDesafios;
+                    return subItem;
+                })
+            };
         }
-
-        if (user) {
-            fetchAvatar();
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+        return item;
+    });
 
     return (
         <SidebarProvider
@@ -195,7 +161,7 @@ export default function AdminLayout() {
                     </div>
                 </SidebarHeader>
                 <SidebarContent>
-                    {sidebarItems.map((item) => (
+                    {updatedSidebarItems.map((item) => (
                         <SidebarGroup key={item.title}>
                             {item.title && <SidebarGroupLabel>{item.title}</SidebarGroupLabel>}
                             <SidebarGroupContent>
@@ -206,7 +172,14 @@ export default function AdminLayout() {
                                                 <Link variant="secondary" className="w-full flex justify-start items-center gap-2" to={item.url}>
                                                     {(item.icon != "" && item.icon != null) && <Icon name={item.icon} />}
                                                     {item.title}
-                                                    {item.pending > 0 && <Badge variant="outline secondary" className="ml-auto">{item.pending}</Badge>}
+                                                    {(item.pending != null) && (
+                                                        <Badge
+                                                            variant={item.url == location.pathname ? "solid" : "outline secondary"}
+                                                            className={item.url == location.pathname ? "bg-white text-primary ml-auto border-none" : "ml-auto"}
+                                                        >
+                                                            {item.pending}
+                                                        </Badge>
+                                                    )}
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>
@@ -224,8 +197,8 @@ export default function AdminLayout() {
                                     <div className='flex items-center justify-between w-full'>
                                         <div className='flex items-center '>
                                             <Avatar className="bg-accent" size="1">
-                                                <AvatarImage src={(user.avatarURL) ? user.avatarURL : `https://robohash.org/${user.nombreUsuario}`} />
-                                                <AvatarFallback>{user[0]}</AvatarFallback>
+                                                <AvatarImage src={(user) ? `/api/Account/GetAvatar/${user.idUsuario}` : `https://robohash.org/${user.nombreUsuario}`} />
+                                                <AvatarFallback>{user.nombreUsuario[0]}</AvatarFallback>
                                             </Avatar>
                                             <div className='flex flex-col ml-2 text-left'>
                                                 <span className='text-x font-semibold'>{user.nombreUsuario}</span>
@@ -247,7 +220,7 @@ export default function AdminLayout() {
                     )}
                 </SidebarFooter>
             </Sidebar>
-            <SidebarInset>
+            <SidebarInset className="overflow-x-auto">
                 <header className="flex h-16 shrink-0 items-center gap-2 px-4">
                     <SidebarTrigger className="-ml-1" />
                     <Separator orientation="vertical" className="mr-2 h-4" />
@@ -263,7 +236,7 @@ export default function AdminLayout() {
                         </BreadcrumbList>
                     </Breadcrumb>
                 </header>
-                <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+                <div className="flex flex-1 flex-col gap-4 p-2 sm:px-4 pt-0">
                     <Outlet />
                 </div>
             </SidebarInset>

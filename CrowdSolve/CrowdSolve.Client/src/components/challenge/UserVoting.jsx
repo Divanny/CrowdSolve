@@ -14,31 +14,27 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useTranslation } from 'react-i18next';
+import ProfileHover from "@/components/participants/ProfileHover"
+import { useNavigate } from 'react-router-dom'
+import * as FileSaver from 'file-saver'
 
 const UserVoting = ({ initialSolutions }) => {
     const { t } = useTranslation();
     const { api } = useAxios()
+    const navigate = useNavigate()
     const [solutions, setSolutions] = useState([])
     const [loadingSaveMeGusta, setLoadingSaveMeGusta] = useState(false)
 
     useEffect(() => {
-        // Sort solutions only once when the component mounts or when initialSolutions changes
         const sortedSolutions = [...initialSolutions].sort((a, b) => b.cantidadVotos - a.cantidadVotos)
         setSolutions(sortedSolutions)
     }, [initialSolutions])
 
-    const downloadAdjunto = async (idAdjunto) => {
+    const downloadAdjunto = async (adjunto) => {
         try {
-            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${idAdjunto}`, { responseType: 'blob' })
-            const url = window.URL.createObjectURL(new Blob([response.data]))
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute('download', response.headers['content-disposition'].split('filename=')[1])
-            document.body.appendChild(link)
-            link.click()
-            link.remove()
-        }
-        catch (error) {
+            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
+            FileSaver.saveAs(response.data, adjunto.nombre)
+        } catch (error) {
             toast.error(t('userVoting.descargarAdjuntoError'), {
                 description: error.message
             })
@@ -120,18 +116,20 @@ const UserVoting = ({ initialSolutions }) => {
             {solutions.map(solution => (
                 <Card key={solution.idSolucion} className="p-4 sm:p-6">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
-                        <div className="flex items-center gap-3 mb-4 sm:mb-0">
-                            <Avatar className="h-10 w-10">
-                                <AvatarImage src={solution.avatarUrl || `https://robohash.org/${solution.nombreUsuario}`} alt={solution.nombreUsuario} />
-                                <AvatarFallback>{solution.nombreUsuario.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div className="flex flex-col">
-                                <span className="font-semibold">{solution.nombreUsuario}</span>
-                                <span className="text-sm text-muted-foreground">
-                                    {formatearFecha(solution.fechaRegistro)}
-                                </span>
-                            </div>
-                        </div>
+                        <ProfileHover userName={solution.nombreUsuario}>
+                            <Button variant="link" className="flex items-center gap-3 mb-4 sm:mb-0 text-normal" onClick={() => navigate(`/profile/${solution.nombreUsuario}`)}>
+                                <Avatar className="h-10 w-10">
+                                    <AvatarImage src={`/api/Account/GetAvatar/${solution.idUsuario}`} alt={solution.nombreUsuario} />
+                                    <AvatarFallback>{solution.nombreUsuario.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col">
+                                    <span className="font-semibold">{solution.nombreUsuario}</span>
+                                    <span className="text-sm text-muted-foreground">
+                                        {formatearFecha(solution.fechaRegistro)}
+                                    </span>
+                                </div>
+                            </Button>
+                        </ProfileHover>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -157,7 +155,7 @@ const UserVoting = ({ initialSolutions }) => {
                                     key={adjunto.idAdjunto}
                                     variant="ghost"
                                     className="w-full flex items-center justify-between p-3 h-auto hover:bg-muted"
-                                    onClick={() => downloadAdjunto(adjunto.idAdjunto)}
+                                    onClick={() => downloadAdjunto(adjunto)}
                                 >
                                     <div className="flex items-center gap-2 overflow-hidden">
                                         <IconoArchivo tipo={adjunto.contentType} />

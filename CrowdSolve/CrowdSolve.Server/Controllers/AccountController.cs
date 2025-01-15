@@ -1,4 +1,5 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
@@ -16,16 +17,22 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
+        private readonly SoportesRepo _soportesRepo;
+        private readonly DesafiosRepo _desafiosRepo;
         private readonly FirebaseStorageService _firebaseStorageService;
+        private readonly Mailing _mailingService;
 
-        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger, FirebaseStorageService firebaseStorageService)
+        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger, FirebaseStorageService firebaseStorageService, Mailing mailing)
         {
             _authentication = authentication;
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _perfilesRepo = new PerfilesRepo(crowdSolveContext);
+            _soportesRepo = new SoportesRepo(crowdSolveContext, _idUsuarioOnline);
+            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _firebaseStorageService = firebaseStorageService;
+            _mailingService = mailing;
         }
 
         /// <summary>
@@ -73,6 +80,22 @@ namespace CrowdSolve.Server.Controllers
 
                 OperationResult result = _authentication.SignUp(credentials);
                 _logger.LogHttpRequest(result.Data);
+
+                string mailBody = $@"
+                    <h1>¡Bienvenido a CrowdSolve!</h1>
+                    <p>Estamos encantados de informarte que tu registro en nuestra plataforma ha sido exitoso.</p>
+                    <p>A continuación, los detalles de tu cuenta:</p>
+                    <ul>
+                        <li><b>Nombre:</b> {credentials.Username}</li>
+                        <li><b>Correo electrónico:</b> {credentials.Email}</li>
+                    </ul>
+                    <p>Ahora puedes acceder a nuestra plataforma y comenzar a disfrutar de todas las herramientas y recursos que hemos preparado para ti.</p>
+                    <p>Si tienes alguna pregunta o necesitas ayuda para comenzar, no dudes en contactarnos respondiendo a este correo.</p>
+                    <p>¡Gracias por unirte a CrowdSolve!</p>
+                ";
+
+                _mailingService.SendMail([credentials.Email], "¡Bienvenido a CrowdSolve!", mailBody, MailingUsers.noreply);
+
                 return result;
             }
             catch (Exception ex)
@@ -114,7 +137,7 @@ namespace CrowdSolve.Server.Controllers
         {
             if (request == null || string.IsNullOrEmpty(request.Code))
                 return BadRequest(new { success = false, message = "Código de token de Google no proporcionado." });
-                
+
             var result = await _authentication.GoogleLogin(request.Code);
 
             if (result.Success)
@@ -248,7 +271,8 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="idUsuario">ID del usuario.</param>
         /// <returns>Avatar del usuario.</returns>
         [HttpGet("GetAvatar/{idUsuario}", Name = "GetAvatar")]
-        public async Task<IActionResult> GetAvatar(int idUsuario){
+        public async Task<IActionResult> GetAvatar(int idUsuario)
+        {
             var usuario = _usuariosRepo.Get(idUsuario);
             if (usuario == null) return NotFound();
 
@@ -261,6 +285,38 @@ namespace CrowdSolve.Server.Controllers
 
             var stream = await _firebaseStorageService.GetFileAsync(usuario.AvatarURL);
             return File(stream, "image/jpeg");
+        }
+
+        /// <summary>
+        /// Obtiene la cantidad de registros pendientes de revisión.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetAdminCantidadSolicitudes")]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
+        public IActionResult GetCantidadRegistros()
+        {
+            try
+            {
+                var cantidadEmpresasPendientes = _usuariosRepo
+                    .Get()
+                    .Where(x => x.idEstatusUsuario == (int)EstatusUsuariosEnum.Pendiente_de_validar && x.idPerfil == (int)PerfilesEnum.Empresa)
+                    .Count();
+
+                var cantidadSoportesPendientes = _soportesRepo.Get().Where(x => x.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_Enviada || x.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_En_progreso).Count();
+
+                var cantidadDesafiosPendientes = _desafiosRepo.Get().Where(x => x.idEstatusDesafio == (int)EstatusProcesoEnum.Desafío_Sin_validar).Count();
+
+                return Ok(new
+                {
+                    CantidadEmpresas = cantidadEmpresasPendientes,
+                    CantidadSoportes = cantidadSoportesPendientes,
+                    CantidadDesafios = cantidadDesafiosPendientes
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = ex.Message });
+            }
         }
 
         public class GoogleLoginRequest

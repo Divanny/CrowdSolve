@@ -17,6 +17,9 @@ import { toast } from 'sonner'
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
 import { useTranslation } from 'react-i18next';
+import ProfileHover from '@/components/participants/ProfileHover';
+import { useNavigate } from 'react-router-dom'
+import * as FileSaver from 'file-saver';
 
 const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = true }) => {
     const { t } = useTranslation();
@@ -26,6 +29,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
     const [razonRechazo, setRazonRechazo] = useState('')
     const [selectedEstatus, setSelectedEstatus] = useState(null);
     const [validationError, setValidationError] = useState('');
+    const navigate = useNavigate();
 
     const formatearFecha = (fecha) => {
         return new Date(fecha).toLocaleDateString('es-ES', {
@@ -115,19 +119,11 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
         setRazonRechazo('');
     };
 
-    const downloadAdjunto = async (idAdjunto) => {
+    const downloadAdjunto = async (adjunto) => {
         try {
-            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${idAdjunto}`, { responseType: 'blob' });
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', response.headers['content-disposition'].split('filename=')[1]);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-        }
-        catch (error) {
+            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
+            FileSaver.saveAs(response.data, adjunto.nombre);
+        } catch (error) {
             toast.error(t('solutionsValidation.failedOperation'), {
                 description: error.message
             });
@@ -160,13 +156,15 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                     {solutions.map((solucion) => (
                         <TableRow key={solucion.idSolucion}>
                             <TableCell>
-                                <div className="flex items-center space-x-2">
-                                    <Avatar>
-                                        <AvatarImage src={solucion.avatarUrl || `https://robohash.org/${solucion.nombreUsuario}`} alt={solucion.nombreUsuario} />
-                                        <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span>{solucion.nombreUsuario}</span>
-                                </div>
+                                <ProfileHover userName={solucion.nombreUsuario}>
+                                    <Button variant="link" className="flex items-center space-x-2 text-normal" onClick={() => navigate(`/profile/${solucion.nombreUsuario}`)}>
+                                        <Avatar>
+                                            <AvatarImage src={`/api/Account/GetAvatar/${solucion.idUsuario}`} alt={solucion.nombreUsuario} />
+                                            <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span>{solucion.nombreUsuario}</span>
+                                    </Button>
+                                </ProfileHover>
                             </TableCell>
                             <TableCell>{solucion.titulo}</TableCell>
                             <TableCell>{formatearFecha(solucion.fechaRegistro)}</TableCell>
@@ -183,7 +181,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                             <span className="sr-only">{t('solutionsValidation.viewDetails')}</span>
                                         </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="max-w-4xl">
+                                    <DialogContent className="max-w-4xl" onOpenAutoFocus={(event) => event.preventDefault()}>
                                         <DialogHeader>
                                             <DialogTitle className="text-2xl font-bold">{solucionSeleccionada?.titulo}</DialogTitle>
                                             <VisuallyHidden>
@@ -192,16 +190,18 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                         </DialogHeader>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
                                             <div className="md:col-span-2 space-y-6">
-                                                <div className="flex items-center space-x-4">
-                                                    <Avatar className="w-16 h-16">
-                                                        <AvatarImage src={solucionSeleccionada?.avatarUrl || `https://robohash.org/${solucionSeleccionada?.nombreUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
-                                                        <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
-                                                    </Avatar>
-                                                    <div>
-                                                        <p className="text-lg font-semibold">{solucionSeleccionada?.nombreUsuario}</p>
-                                                        <p className="text-sm text-muted-foreground">{t('solutionsValidation.solutionAuthor')}</p>
-                                                    </div>
-                                                </div>
+                                                <ProfileHover userName={solucionSeleccionada?.nombreUsuario}>
+                                                    <Button variant="link" className="flex items-center space-x-4 text-normal" onClick={() => navigate(`/profile/${solucionSeleccionada?.nombreUsuario}`)}>
+                                                        <Avatar className="w-16 h-16">
+                                                            <AvatarImage src={`/api/Account/GetAvatar/${solucionSeleccionada?.idUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
+                                                            <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className='flex flex-col justify-start'>
+                                                            <p className="text-lg font-semibold text-left">{solucionSeleccionada?.nombreUsuario}</p>
+                                                            <p className="text-sm text-muted-foreground text-left">{t('solutionsValidation.solutionAuthor')}</p>
+                                                        </div>
+                                                    </Button>
+                                                </ProfileHover>
                                                 <Separator />
                                                 <div>
                                                     <Label className="text-lg font-semibold">{t('solutionsValidation.description')}</Label>
@@ -218,7 +218,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                                 variant="outline"
                                                                 size="sm"
                                                                 className="flex items-center justify-start space-x-2 w-full"
-                                                                onClick={() => downloadAdjunto(adjunto.idAdjunto)}
+                                                                onClick={() => downloadAdjunto(adjunto)}
                                                             >
                                                                 <IconoArchivo tipo={adjunto.contentType} />
                                                                 <span className="truncate flex-1">{adjunto.nombre}</span>
@@ -227,7 +227,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                         ))}
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div >
                                             <div className="space-y-6">
                                                 <div className="bg-muted p-4 rounded-lg space-y-4">
                                                     <div className="flex items-center space-x-2">
@@ -300,7 +300,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                             </div>
                                                         )}
                                                         <Button onClick={handleSaveEstatus} className="mt-4">
-                                                        {t('solutionsValidation.save')}
+                                                            {t('solutionsValidation.save')}
                                                         </Button>
                                                         {solucionSeleccionada?.idEstatusProceso !== EstatusProcesoEnum.Solucion_Enviada && (
                                                             <p className="text-sm">
@@ -316,20 +316,20 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                     </div>
                                                 )}
                                             </div>
-                                        </div>
+                                        </div >
                                         <DialogFooter>
                                             <Button type="button" variant="secondary" onClick={() => setDetalleSolucionDialog(false)}>
-                                            {t('solutionsValidation.close')}
+                                                {t('solutionsValidation.close')}
                                             </Button>
                                         </DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
-                            </TableCell>
-                        </TableRow>
+                                    </DialogContent >
+                                </Dialog >
+                            </TableCell >
+                        </TableRow >
                     ))}
-                </TableBody>
-            </Table>
-        </div>
+                </TableBody >
+            </Table >
+        </div >
     );
 };
 

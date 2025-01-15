@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -20,13 +19,14 @@ import { User, Building, Send, BellRing, SunMoon, Globe, LogOut, Check, Moon, Su
 import flags from "react-phone-number-input/flags";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import useAxios from '@/hooks/use-axios';
 import usePermisoAcceso from '@/hooks/use-permiso-acceso';
 import PermisosEnum from '@/enums/PermisosEnum';
+import { Badge } from '@/components/ui/badge';
+import { useEffect, useState } from 'react';
+import useAxios from '@/hooks/use-axios';
 
 const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
     const { t } = useTranslation();
-    const { api } = useAxios();
     const theme = useSelector((state) => state.theme.theme);
     const language = useSelector((state) => state.language.language);
     const navigate = useNavigate();
@@ -37,6 +37,24 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
     const canAccessProfile = usePermisoAcceso(PermisosEnum.Mi_perfil);
     const canAccessSolutions = usePermisoAcceso(PermisosEnum.Mis_Soluciones);
     const canAccessAdmin = usePermisoAcceso(PermisosEnum.Administrador_Dashboard);
+
+    const { api } = useAxios();
+    const [notificationCount, setNotificationCount] = useState(0);
+
+    useEffect(() => {
+        const fetchNotificationCount = async () => {
+            try {
+                const response = await api.get('/api/Notificaciones/Count',
+                    { requireLoading: false }
+                );
+                setNotificationCount(response.data.count);
+            } catch (error) {
+                console.error('Error fetching notification count:', error);
+            }
+        };
+
+        fetchNotificationCount();
+    }, [api]);
 
     const handleLogout = () => {
         dispatch(clearUser());
@@ -53,29 +71,13 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
         dispatch(setLanguage(language));
     }
 
-    useEffect(() => {
-        const fetchAvatar = async () => {
-            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${user.idUsuario}`, { responseType: 'blob', requireLoading: false })
-            if (responseAvatarURL.status == 200) {
-                const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                user.avatarURL = URL.createObjectURL(avatarBlob)
-            }
-        }
-
-        if (user) {
-            fetchAvatar();
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
-
     return (
         <DropdownMenuContent className="w-56 mr-2">
             { showHeader && <DropdownMenuLabel>
                 <div className='flex items-center'>
                     <Avatar className="bg-accent" size="1">
-                        <AvatarImage src={(user.avatarURL) ? user.avatarURL : `https://robohash.org/${user.nombreUsuario}`} />
-                        <AvatarFallback>{user[0]}</AvatarFallback>
+                        <AvatarImage src={(user) ? `/api/Account/GetAvatar/${user.idUsuario}` : `https://robohash.org/${user.nombreUsuario}`} />
+                        <AvatarFallback>{user.nombreUsuario[0]}</AvatarFallback>
                     </Avatar>
                     <div className='flex flex-col ml-2'>
                         <span className='text-sm font-semibold'>{user.nombreUsuario}</span>
@@ -104,9 +106,10 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
                         {t('ProfileDropdownMenuContent.solutions')}
                     </DropdownMenuItem>
                 )}
-                <DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate('/notifications')}>
                     <BellRing className="mr-2" size={16} />
                     {t('ProfileDropdownMenuContent.notifications')}
+                    { notificationCount > 0 && <Badge className="ml-auto" variant="secondary">{notificationCount}</Badge> }
                 </DropdownMenuItem>
                 {canAccessAdmin && (
                     <DropdownMenuItem onSelect={() => navigate('/admin')}>

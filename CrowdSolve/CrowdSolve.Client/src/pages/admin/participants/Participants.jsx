@@ -42,8 +42,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ParticipantFormDialog } from "../../../components/admin/participants/ParticipantFormDialog";
+import { ParticipantFormDialog } from "@/components/admin/participants/ParticipantFormDialog";
+import { ParticipantSolutionsDialog } from "@/components/admin/participants/ParticipantSolutionsDialog";
 import { useTranslation } from 'react-i18next';
+import { Badge } from "@/components/ui/badge";
 
 export default function Participants() {
   const { t } = useTranslation();
@@ -64,6 +66,7 @@ export default function Participants() {
   const [selectedParticipant, setSelectedParticipant] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState("view");
+  const [isSolutionsDialogOpen, setIsSolutionsDialogOpen] = useState(false);
 
   const columns = [
     {
@@ -87,12 +90,12 @@ export default function Participants() {
     },
     {
       accessorKey: "nombreUsuario",
-      header: t('Participants.nombre_usuario'),
+      header: () => t('Participants.nombre_usuario'),
       cell: ({ row }) => (
         <div className="flex items-center space-x-2">
           <Avatar>
             <AvatarImage
-              src={`/placeholder.svg?height=40&width=40`}
+              src={`/api/Account/GetAvatar/${row.original.idUsuario}`}
               alt={row.getValue("nombreUsuario")}
             />
             <AvatarFallback>
@@ -105,27 +108,16 @@ export default function Participants() {
     },
     {
       accessorKey: "correoElectronico",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-left font-normal"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            {t('Participants.correo_electronico')}
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      header: () => t('Participants.correo_electronico')
     },
     {
       accessorKey: "nombreCompleto",
-      header: t('Participants.nombre_completo'),
+      header: () => t('Participants.nombre_completo'),
       cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`,
     },
     {
       accessorKey: "telefono",
-      header: t('Participants.telefono'),
+      header: () => t('Participants.telefono'),
     },
     {
       accessorKey: "fechaNacimiento",
@@ -149,11 +141,6 @@ export default function Participants() {
       header: t('Participants.nivel_educativo'),
     },
     {
-      accessorKey: "soluciones",
-      header: t('Participants.soluciones_enviadas'),
-      cell: ({ row }) => row.original.soluciones.length,
-    },
-    {
       accessorKey: "fechaRegistro",
       header: t('Participants.fecha_registro'),
       cell: ({ row }) =>
@@ -163,16 +150,16 @@ export default function Participants() {
       accessorKey: "estatusUsuario",
       header: t('Participants.estatus_usuario'),
       cell: ({ row }) => (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-semibold ${row.getValue("estatusUsuario") === "Activo"
-            ? "bg-green-100 text-green-800"
+        <Badge
+          variant={`${row.getValue("estatusUsuario") === "Activo"
+            ? "success"
             : row.getValue("estatusUsuario") === "Inactivo"
-              ? "bg-red-100 text-red-800"
-              : "bg-yellow-100 text-yellow-800"
+              ? "destructive"
+              : "warning"
             }`}
         >
           {row.getValue("estatusUsuario")}
-        </span>
+        </Badge>
       ),
     },
     {
@@ -208,9 +195,10 @@ export default function Participants() {
               {t('Participants.ver_detalles')}
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() =>
-                console.log("Ver soluciones", row.original.idParticipante)
-              }
+              onClick={() => {
+                setSelectedParticipant(row.original);
+                setIsSolutionsDialogOpen(true);
+              }}
             >
               <FileText className="mr-2 h-4 w-4" />
               {t('Participants.ver_soluciones')}
@@ -526,6 +514,13 @@ export default function Participants() {
           participant={selectedParticipant}
           mode={dialogMode}
           relationalObjects={{ nivelesEducativos, estatusUsuarios }}
+        />
+      )}
+      {selectedParticipant && (
+        <ParticipantSolutionsDialog
+          isOpen={isSolutionsDialogOpen}
+          onClose={() => setIsSolutionsDialogOpen(false)}
+          participant={selectedParticipant}
         />
       )}
     </div>

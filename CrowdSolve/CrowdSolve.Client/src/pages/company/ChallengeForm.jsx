@@ -34,34 +34,34 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { useTranslation } from 'react-i18next';
-const { t } = useTranslation();
-const formSchema = z.object({
-    
-    idDesafio: z.number().optional(),
-    idUsuarioEmpresa: z.number().optional(),
-    idEmpresa: z.number(),
-    empresa: z.string().optional(),
-    titulo: z.string().min(1, t('challengeForm.messages.tituloRequerido')),
-    contenido: z.string().min(1, t('challengeForm.messages.contenidoRequerido')),
-    fechaInicio: z.date({ required_error: t('challengeForm.messages.fechaInicioRequerida') }),
-    fechaLimite: z.date({ required_error: t('challengeForm.messages.fechaLimiteRequerida') }),
-    categorias: z.array(z.object({
-        idDesafioCategoria: z.number().optional(),
-        idDesafio: z.number().optional(),
-        idCategoria: z.number()
-    })).min(1, t('challengeForm.messages.categoriasRequeridas')),
-    procesoEvaluacion: z.array(z.object({
-        idProcesoEvaluacion: z.number().optional(),
-        idDesafio: z.number().optional(),
-        idTipoEvaluacion: z.number(),
-        fechaFinalizacion: z.date()
-    })).min(1, t('challengeForm.messages.procesoEvaluacionRequerido')),
-    idEstatusDesafio: z.number().optional(),
-    estatusDesafio: z.string().optional()
-})
 
 export default function ChallengeForm() {
     const { t } = useTranslation();
+
+    const formSchema = z.object({
+        idDesafio: z.number().optional(),
+        idUsuarioEmpresa: z.number().optional(),
+        idEmpresa: z.number(),
+        empresa: z.string().optional(),
+        titulo: z.string().min(1, t('challengeForm.messages.tituloRequerido')),
+        contenido: z.string().min(1, t('challengeForm.messages.contenidoRequerido')),
+        fechaInicio: z.date({ required_error: t('challengeForm.messages.fechaInicioRequerida') }),
+        fechaLimite: z.date({ required_error: t('challengeForm.messages.fechaLimiteRequerida') }),
+        categorias: z.array(z.object({
+            idDesafioCategoria: z.number().optional(),
+            idDesafio: z.number().optional(),
+            idCategoria: z.number()
+        })).min(1, t('challengeForm.messages.categoriasRequeridas')),
+        procesoEvaluacion: z.array(z.object({
+            idProcesoEvaluacion: z.number().optional(),
+            idDesafio: z.number().optional(),
+            idTipoEvaluacion: z.number(),
+            fechaFinalizacion: z.date()
+        })).min(1, t('challengeForm.messages.procesoEvaluacionRequerido')),
+        idEstatusDesafio: z.number().optional(),
+        estatusDesafio: z.string().optional()
+    })
+
     const { api } = useAxios()
     const navigate = useNavigate()
     const { challengeId } = useParams()
@@ -69,6 +69,7 @@ export default function ChallengeForm() {
 
     const [categoriasDisponibles, setCategoriasDisponibles] = useState([])
     const [tiposEvaluacionDisponibles, setTiposEvaluacionDisponibles] = useState([])
+    const [diasDespuesFechaFinalizacion, setDiasDespuesFechaFinalizacion] = useState(5)
     const [dialogoAbierto, setDialogoAbierto] = useState(false)
 
     const form = useForm({
@@ -114,9 +115,10 @@ export default function ChallengeForm() {
         const fetchRelationalObjects = async () => {
             try {
                 const response = await api.get('/api/Desafios/GetRelationalObjects')
-                const { categorias, tiposEvaluacion } = response.data
+                const { categorias, tiposEvaluacion, diasDespuesFechaFinalizacion } = response.data
                 setCategoriasDisponibles(categorias)
                 setTiposEvaluacionDisponibles(tiposEvaluacion)
+                setDiasDespuesFechaFinalizacion(diasDespuesFechaFinalizacion)
             } catch (error) {
                 toast.error(t('challengeForm.messages.operacionFallida'), {
                     description: t('challengeForm.messages.errorCargaObjetosRelacionales'),
@@ -347,7 +349,14 @@ export default function ChallengeForm() {
                             render={({ field }) => (
                                 <FormItem>
                                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                                        <FormLabel>{t('challengeForm.procesosEvaluacion')}</FormLabel>
+                                        <FormLabel>
+                                            <div className="flex items-center gap-2">
+                                                {t('challengeForm.procesosEvaluacion')}
+                                                <span className="text-muted-foreground text-sm">
+                                                    Iniciará el día {format(addDays(form.getValues('fechaLimite'), diasDespuesFechaFinalizacion), "PPP", { locale: es })}
+                                                </span>
+                                            </div>
+                                        </FormLabel>
                                         <Dialog open={dialogoAbierto} onOpenChange={setDialogoAbierto}>
                                             <DialogTrigger asChild>
                                                 <Button variant="outline">

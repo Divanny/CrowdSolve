@@ -5,7 +5,7 @@ const ChallengeDetail = ({ desafio, htmlContent, getCategoryName }) => {
         <>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
                 <img
-                    src={desafio.logoEmpresa}
+                    src={`/api/Account/GetAvatar/${desafio.idUsuarioEmpresa}`}
                     alt={`Logo de ${desafio.empresa}`}
                     className="w-16 h-16 rounded-full object-cover"
                 />

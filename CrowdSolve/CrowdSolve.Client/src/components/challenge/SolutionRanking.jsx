@@ -5,17 +5,21 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Eye, Trophy } from 'lucide-react'
+import { Eye, Trophy, FileIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon } from 'lucide-react'
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import useAxios from '@/hooks/use-axios'
 import { toast } from 'sonner'
 import { Badge } from "@/components/ui/badge"
 import { useTranslation } from 'react-i18next';
+import ProfileHover from '@/components/participants/ProfileHover'
+import { useNavigate } from 'react-router-dom'
+import * as FileSaver from 'file-saver';
 
 const SolutionRanking = ({ idDesafio }) => {
     const { t } = useTranslation();
     const { api } = useAxios()
+    const navigate = useNavigate()
     const [solutions, setSolutions] = useState([])
     const [detalleSolucionDialog, setDetalleSolucionDialog] = useState(false)
     const [solucionSeleccionada, setSolucionSeleccionada] = useState(null)
@@ -29,25 +33,48 @@ const SolutionRanking = ({ idDesafio }) => {
     const fetchRanking = async () => {
         try {
             const response = await api.get(`/api/Desafios/GetRanking/${idDesafio}`)
-
-            for (const solucion of response.data) {
-                try {
-                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${solucion.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                    if (responseAvatarURL.status == 200) {
-                        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                        solucion.avatarUrl = URL.createObjectURL(avatarBlob)
-                    }
-                }
-                catch {
-                    solucion.avatarUrl = null
-                }
-            }
-
             setSolutions(response.data)
         } catch (error) {
             toast.error(t('solutionRanking.Erroralcargarelranking'), {
                 description: error.response?.data?.message ?? error.message,
             })
+        }
+    }
+
+    const downloadAdjunto = async (adjunto) => {
+        try {
+            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
+            FileSaver.saveAs(response.data, adjunto.nombre);
+        } catch (error) {
+            toast.error('Operación fallida',
+                {
+                    description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
+                }
+            )
+        }
+    }
+
+    const formatearTamaño = (bytes) => {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+        if (bytes === 0) return '0 Byte'
+        const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)).toString())
+        return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i]
+    }
+
+    const IconoArchivo = ({ tipo }) => {
+        switch (tipo) {
+            case 'image/png':
+            case 'image/jpeg':
+            case 'image/gif':
+            case 'image/webp':
+            case 'image/svg+xml':
+                return <ImageIcon className="w-4 h-4" />
+            case 'application/pdf':
+                return <FileTextIcon className="w-4 h-4" />
+            case 'application/zip':
+                return <FileZipIcon className="w-4 h-4" />
+            default:
+                return <FileIcon className="w-4 h-4" />
         }
     }
 
@@ -110,13 +137,15 @@ const SolutionRanking = ({ idDesafio }) => {
                                 </div>
                             </TableCell>
                             <TableCell className="w-48">
-                                <div className="flex items-center space-x-2">
-                                    <Avatar>
-                                        <AvatarImage src={solucion.avatarUrl || `https://robohash.org/${solucion.nombreUsuario}`} alt={solucion.nombreUsuario} />
-                                        <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span>{solucion.nombreUsuario}</span>
-                                </div>
+                                <ProfileHover userName={solucion.nombreUsuario}>
+                                    <Button variant="link" className="flex items-center space-x-2 text-normal" onClick={() => navigate(`/profile/${solucion.nombreUsuario}`)}>
+                                        <Avatar>
+                                            <AvatarImage src={`/api/Account/GetAvatar/${solucion.idUsuario}`} alt={solucion.nombreUsuario} />
+                                            <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span>{solucion.nombreUsuario}</span>
+                                    </Button>
+                                </ProfileHover>
                             </TableCell>
                             <TableCell >{solucion.titulo}</TableCell>
                             {solucion.puntuacion != null && <TableCell className="w-24 text-center">{solucion.puntuacion}</TableCell>}
@@ -133,27 +162,47 @@ const SolutionRanking = ({ idDesafio }) => {
                                             <span className="sr-only">{t('solutionRanking.Verdetalles')}</span>
                                         </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="max-w-4xl">
+                                    <DialogContent className="max-w-4xl" onOpenAutoFocus={(event) => event.preventDefault()}>
                                         <DialogHeader>
                                             <DialogTitle className="text-2xl font-bold">{solucionSeleccionada?.titulo}</DialogTitle>
                                         </DialogHeader>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
                                             <div className="md:col-span-2 space-y-6">
-                                                <div className="flex items-center space-x-4">
-                                                    <Avatar className="w-16 h-16">
-                                                        <AvatarImage src={solucionSeleccionada?.avatarUrl || `https://robohash.org/${solucionSeleccionada?.nombreUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
-                                                        <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
-                                                    </Avatar>
-                                                    <div>
-                                                        <p className="text-lg font-semibold">{solucionSeleccionada?.nombreUsuario}</p>
-                                                        <p className="text-sm text-muted-foreground">{t('solutionRanking.Autordelasolución')}</p>
-                                                    </div>
-                                                </div>
+                                                <ProfileHover userName={solucionSeleccionada?.nombreUsuario}>
+                                                    <Button variant="link" className="flex items-center space-x-4 text-normal" onClick={() => navigate(`/profile/${solucionSeleccionada?.nombreUsuario}`)}>
+                                                        <Avatar className="w-16 h-16">
+                                                            <AvatarImage src={`/api/Account/GetAvatar/${solucionSeleccionada?.idUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
+                                                            <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className='flex flex-col justify-start'>
+                                                            <p className="text-lg font-semibold text-left">{solucionSeleccionada?.nombreUsuario}</p>
+                                                            <p className="text-sm text-muted-foreground text-left">{t('solutionRanking.Autordelasolución')}</p>
+                                                        </div>
+                                                    </Button>
+                                                </ProfileHover>
                                                 <div>
                                                     <Label className="text-lg font-semibold">{t('solutionRanking.Descripción')}</Label>
                                                     <ScrollArea className="h-[200px] w-full rounded-md border p-4 mt-2">
                                                         <p className="text-sm">{solucionSeleccionada?.descripcion}</p>
                                                     </ScrollArea>
+                                                </div>
+                                                <div>
+                                                    <Label className="text-lg font-semibold">Archivos adjuntos</Label>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                                                        {solucionSeleccionada?.adjuntos.map((adjunto) => (
+                                                            <Button
+                                                                key={adjunto.idAdjunto}
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="flex items-center justify-start space-x-2 w-full"
+                                                                onClick={() => downloadAdjunto(adjunto)}
+                                                            >
+                                                                <IconoArchivo tipo={adjunto.contentType} />
+                                                                <span className="truncate flex-1">{adjunto.nombre}</span>
+                                                                <span className="text-xs text-muted-foreground whitespace-nowrap">{formatearTamaño(adjunto.tamaño)}</span>
+                                                            </Button>
+                                                        ))}
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="space-y-6">
@@ -183,7 +232,7 @@ const SolutionRanking = ({ idDesafio }) => {
                                         </div>
                                         <DialogFooter>
                                             <Button type="button" variant="secondary" onClick={() => setDetalleSolucionDialog(false)}>
-                                            {t('solutionRanking.Cerrar')}
+                                                {t('solutionRanking.Cerrar')}
                                             </Button>
                                         </DialogFooter>
                                     </DialogContent>

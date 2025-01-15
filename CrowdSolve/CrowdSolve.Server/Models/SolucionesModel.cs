@@ -27,9 +27,12 @@ public class SolucionesModel
 
     public string? ArchivoRuta { get; set; }
 
+    public int idProceso { get; set; }
     public int idEstatusProceso { get; set; }
 
     public string? EstatusProceso { get; set; }
+    public string? SeveridadEstatusProceso { get; set; }
+    public string? IconoEstatusProceso { get; set; }
 
     public bool? Publica { get; set; }
 
@@ -44,7 +47,10 @@ public class SolucionesModel
     public int? CantidadVotosParticipantes { get; set; }
 
     public int? PuntuacionFinal { get; set; }
+
     public int? PuntuacionMaxima { get; set; }
 
-    public List<AdjuntosSoluciones>? Adjuntos { get; set; }
+    public DesafiosModel? Desafio { get; set; }
+    
+    public List<AdjuntosModel>? Adjuntos { get; set; }
 }

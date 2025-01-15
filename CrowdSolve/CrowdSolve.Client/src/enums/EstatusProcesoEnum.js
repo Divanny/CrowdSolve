@@ -18,5 +18,6 @@ export default {
     Desafio_Sin_iniciar: 21,
     Desafio_Sin_validar: 22,
     Desafio_Rechazado: 23,
-    Desafio_Descartado: 25
+    Desafio_Descartado: 25,
+    Desafio_En_validación_de_soluciones: 1002
 };

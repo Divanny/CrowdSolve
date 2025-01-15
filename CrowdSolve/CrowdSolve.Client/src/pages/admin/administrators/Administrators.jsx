@@ -85,7 +85,7 @@ export default function Companies() {
                 <div className="flex items-center space-x-2">
                     <Avatar>
                         <AvatarImage
-                            src={`/placeholder.svg?height=40&width=40`}
+                            src={`/api/Account/GetAvatar/${row.getValue("idUsuario")}`}
                             alt={row.getValue("nombreUsuario")}
                         />
                         <AvatarFallback>

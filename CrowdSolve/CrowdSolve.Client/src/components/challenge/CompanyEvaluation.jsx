@@ -15,7 +15,9 @@ import { VisuallyHidden } from '@radix-ui/themes'
 import useAxios from '@/hooks/use-axios';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-
+import { useNavigate } from 'react-router-dom'
+import ProfileHover from '../participants/ProfileHover'
+import * as FileSaver from 'file-saver'
 
 const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
     const { t } = useTranslation();
@@ -23,6 +25,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
     const [puntuaciones, setPuntuaciones] = useState({})
     const [detalleSolucionDialog, setDetalleSolucionDialog] = useState(false)
     const [solucionSeleccionada, setSolucionSeleccionada] = useState(null)
+    const navigate = useNavigate()
 
     const handlePuntuacionChange = (idSolucion, value) => {
         setPuntuaciones(prev => ({ ...prev, [idSolucion]: value[0] }))
@@ -98,19 +101,11 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
         setPuntuaciones(prev => ({ ...prev, [solucion.idSolucion]: solucion.puntuacion || 0 }));
     };
 
-    const downloadAdjunto = async (idAdjunto) => {
+    const downloadAdjunto = async (adjunto) => {
         try {
-            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${idAdjunto}`, { responseType: 'blob' });
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', response.headers['content-disposition'].split('filename=')[1]);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-        }
-        catch (error) {
+            const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
+            FileSaver.saveAs(response.data, adjunto.nombre);
+        } catch (error) {
             toast.error(t('companyEvaluation.messages.operationFailed'), {
                 description: error.message
             });
@@ -140,13 +135,15 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                     {solutions.map((solucion) => (
                         <TableRow key={solucion.idSolucion}>
                             <TableCell>
-                                <div className="flex items-center space-x-2">
-                                    <Avatar>
-                                        <AvatarImage src={solucion.avatarUrl || `https://robohash.org/${solucion.nombreUsuario}`} alt={solucion.nombreUsuario} />
-                                        <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span>{solucion.nombreUsuario}</span>
-                                </div>
+                                <ProfileHover userName={solucion.nombreUsuario}>
+                                    <Button variant="link" className="flex items-center space-x-2 text-normal" onClick={() => navigate(`/profile/${solucion.nombreUsuario}`)}>
+                                        <Avatar>
+                                            <AvatarImage src={`/api/Account/GetAvatar/${solucion.idUsuario}`} alt={solucion.nombreUsuario} />
+                                            <AvatarFallback>{solucion.nombreUsuario.charAt(0)}</AvatarFallback>
+                                        </Avatar>
+                                        <span>{solucion.nombreUsuario}</span>
+                                    </Button>
+                                </ProfileHover>
                             </TableCell>
                             <TableCell>{solucion.titulo}</TableCell>
                             <TableCell>{formatearFecha(solucion.fechaRegistro)}</TableCell>
@@ -166,7 +163,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                             <span className="sr-only">{t('companyEvaluation.buttons.viewDetails')}</span>
                                         </Button>
                                     </DialogTrigger>
-                                    <DialogContent className="max-w-4xl">
+                                    <DialogContent className="max-w-4xl" onOpenAutoFocus={(event) => event.preventDefault()}>
                                         <DialogHeader>
                                             <DialogTitle className="text-2xl font-bold">{solucionSeleccionada?.titulo}</DialogTitle>
                                             <VisuallyHidden>
@@ -175,16 +172,18 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                         </DialogHeader>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
                                             <div className="md:col-span-2 space-y-6">
-                                                <div className="flex items-center space-x-4">
-                                                    <Avatar className="w-16 h-16">
-                                                        <AvatarImage src={solucionSeleccionada?.avatarUrl || `https://robohash.org/${solucionSeleccionada?.nombreUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
-                                                        <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
-                                                    </Avatar>
-                                                    <div>
-                                                        <p className="text-lg font-semibold">{solucionSeleccionada?.nombreUsuario}</p>
-                                                        <p className="text-sm text-muted-foreground">{t('companyEvaluation.messages.authorOfSolution')}</p>
-                                                    </div>
-                                                </div>
+                                                <ProfileHover userName={solucionSeleccionada?.nombreUsuario}>
+                                                    <Button variant="link" className="flex items-center space-x-4 text-normal" onClick={() => navigate(`/profile/${solucionSeleccionada?.nombreUsuario}`)}>
+                                                        <Avatar className="w-16 h-16">
+                                                            <AvatarImage src={`/api/Account/GetAvatar/${solucionSeleccionada?.idUsuario}`} alt={solucionSeleccionada?.nombreUsuario} />
+                                                            <AvatarFallback>{solucionSeleccionada?.nombreUsuario.charAt(0)}</AvatarFallback>
+                                                        </Avatar>
+                                                        <div className='flex flex-col justify-start'>
+                                                            <p className="text-lg font-semibold text-left">{solucionSeleccionada?.nombreUsuario}</p>
+                                                            <p className="text-sm text-muted-foreground text-left">{t('companyEvaluation.messages.authorOfSolution')}</p>
+                                                        </div>
+                                                    </Button>
+                                                </ProfileHover>
                                                 <Separator />
                                                 <div>
                                                     <Label className="text-lg font-semibold">{t('companyEvaluation.messages.description')}</Label>
@@ -201,7 +200,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                                                 variant="outline"
                                                                 size="sm"
                                                                 className="flex items-center justify-start space-x-2 w-full"
-                                                                onClick={() => downloadAdjunto(adjunto.idAdjunto)}
+                                                                onClick={() => downloadAdjunto(adjunto)}
                                                             >
                                                                 <IconoArchivo tipo={adjunto.contentType} />
                                                                 <span className="truncate flex-1">{adjunto.nombre}</span>
@@ -252,14 +251,14 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                                         </span>
                                                     </div>
                                                     <Button onClick={() => handleGuardarPuntuacion(solucionSeleccionada)} className="w-full">
-                                                    {t('companyEvaluation.messages.saveRating')}
+                                                        {t('companyEvaluation.messages.saveRating')}
                                                     </Button>
                                                 </div>
                                             </div>
                                         </div>
                                         <DialogFooter>
                                             <Button type="button" variant="secondary" onClick={() => setDetalleSolucionDialog(false)}>
-                                            {t('companyEvaluation.buttons.close')}
+                                                {t('companyEvaluation.buttons.close')}
                                             </Button>
                                         </DialogFooter>
                                     </DialogContent>

@@ -7,9 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
 {
-    public class SolucionesRepo: Repository<Soluciones, SolucionesModel>
+    public class SolucionesRepo : Repository<Soluciones, SolucionesModel>
     {
         public ProcesosRepo procesosRepo;
+        public AdjuntosRepo adjuntosRepo;
         public int _idUsuarioEnLinea;
         public SolucionesRepo(DbContext dbContext, int idUsuarioEnLinea) : base
         (
@@ -42,11 +43,25 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             Titulo = s.Titulo,
                             Descripcion = s.Descripcion,
                             FechaRegistro = s.FechaRegistro,
+                            idProceso = proceso.idProceso,
                             idEstatusProceso = proceso.idEstatusProceso,
                             EstatusProceso = estatusProceso.Nombre,
+                            SeveridadEstatusProceso = estatusProceso.Severidad,
+                            IconoEstatusProceso = estatusProceso.ClaseIcono,
                             Publica = s.Publica,
                             Puntuacion = s.Puntuacion,
-                            Adjuntos = DB.Set<AdjuntosSoluciones>().Where(a => a.idSolucion == s.idSolucion).ToList(),
+                            Adjuntos = DB.Set<Adjuntos>().Where(a => a.idProceso == proceso.idProceso)
+                                         .Select(a => new AdjuntosModel
+                                         {
+                                             idAdjunto = a.idAdjunto,
+                                             idProceso = a.idProceso,
+                                             Nombre = a.Nombre,
+                                             ContentType = a.ContentType,
+                                             Tamaño = a.Tamaño,
+                                             FechaSubida = a.FechaSubida,
+                                             RutaArchivo = a.RutaArchivo,
+                                             idUsuario = a.idUsuario
+                                         }).ToList(),
                             MeGusta = DB.Set<VotosUsuarios>().Any(v => v.idSolucion == s.idSolucion && v.idUsuario == idUsuarioEnLinea),
                             CantidadVotos = DB.Set<VotosUsuarios>().Where(v => v.idSolucion == s.idSolucion).Count()
                         });
@@ -54,6 +69,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         )
         {
             procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Solución, dbContext, idUsuarioEnLinea);
+            adjuntosRepo = new AdjuntosRepo(dbContext);
             _idUsuarioEnLinea = idUsuarioEnLinea;
         }
         public override Soluciones Add(SolucionesModel model)
@@ -67,16 +83,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
                     var creado = base.Add(model);
 
-                    if (model.Adjuntos != null && model.Adjuntos.Count > 0)
-                    {
-                        foreach (var adjuntos in model.Adjuntos)
-                        {
-                            adjuntos.idSolucion = creado.idSolucion;
-                        }
-
-                        dbContext.Set<AdjuntosSoluciones>().AddRange(model.Adjuntos);
-                    }
-
                     ProcesosModel procesoModel = new ProcesosModel
                     {
                         idEstatusProceso = (int)EstatusProcesoEnum.Solución_Enviada,
@@ -84,7 +90,17 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                         idRelacionado = creado.idSolucion,
                     };
 
-                    procesosRepo.Add(procesoModel);
+                    var proceso = procesosRepo.Add(procesoModel);
+
+                    if (model.Adjuntos != null && model.Adjuntos.Count > 0)
+                    {
+                        foreach (var adjunto in model.Adjuntos)
+                        {
+                            adjunto.idProceso = proceso.idProceso;
+                            adjuntosRepo.Add(adjunto);
+                        }
+                    }
+
                     trx.Commit();
                     return creado;
                 }
@@ -111,15 +127,18 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
                     if (model.Adjuntos != null && model.Adjuntos.Count > 0)
                     {
-                        dbContext.Set<AdjuntosSoluciones>().RemoveRange(dbContext.Set<AdjuntosSoluciones>().Where(x => x.idSolucion == model.idSolucion));
+                        var adjuntos = adjuntosRepo.Get(x => x.idProceso == solucion.idProceso).ToList();
 
-
-                        foreach (var adjuntos in model.Adjuntos)
+                        foreach (var adjunto in adjuntos)
                         {
-                            adjuntos.idSolucion = model.idSolucion;
+                            adjuntosRepo.Delete(adjunto.idAdjunto);
                         }
 
-                        dbContext.Set<AdjuntosSoluciones>().AddRange(model.Adjuntos);
+                        foreach (var adjunto in model.Adjuntos)
+                        {
+                            adjunto.idProceso = solucion.idProceso;
+                            adjuntosRepo.Add(adjunto);
+                        }
                     }
 
                     solucion.Titulo = model.Titulo;

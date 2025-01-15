@@ -45,7 +45,6 @@ import { LinkToolbarButton } from './link-toolbar-button';
 import { ListToolbarButton } from './list-toolbar-button';
 import { MarkToolbarButton } from './mark-toolbar-button';
 import { MediaToolbarButton } from './media-toolbar-button';
-import { ModeDropdownMenu } from './mode-dropdown-menu';
 import { MoreDropdownMenu } from './more-dropdown-menu';
 import { OutdentToolbarButton } from './outdent-toolbar-button';
 import { TableDropdownMenu } from './table-dropdown-menu';
@@ -60,15 +59,6 @@ export function FixedToolbarButtons() {
     (<div className="flex w-full">
       {!readOnly && (
         <>
-          <ToolbarGroup>
-            <AIToolbarButton
-              className="gap-1.5 text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-500"
-              tooltip="Edit, generate, and more">
-              <SparklesIcon className="!size-3.5" />
-              Ask AI
-            </AIToolbarButton>
-          </ToolbarGroup>
-
           <ToolbarGroup>
             <InsertDropdownMenu />
             <TurnIntoDropdownMenu />

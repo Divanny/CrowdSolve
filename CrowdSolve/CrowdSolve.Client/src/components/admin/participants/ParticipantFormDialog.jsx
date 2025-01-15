@@ -15,6 +15,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import useAxios from "@/hooks/use-axios"
 import { toast } from "sonner";
 import AvatarPicker from "@/components/ui/avatar-picker";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import { CalendarIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 
@@ -27,13 +29,12 @@ import {
 } from "@/components/ui/popover"
 import { useTranslation } from 'react-i18next';
 
-export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, mode, relationalObjects  }) {
+export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, mode, relationalObjects }) {
   const { t } = useTranslation();
   const { api } = useAxios();
   const [editedParticipant, setEditedParticipant] = useState(participant)
 
   useEffect(() => {
-    console.log(participant);
     setEditedParticipant(participant)
   }, [participant])
 
@@ -81,7 +82,22 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
         </DialogHeader>
         <form onSubmit={handleSave} className="space-y-2">
           <div className="space-y-2">
-            <AvatarPicker avatar={editedParticipant.avatar} onAvatarChange={(value) => setEditedParticipant((prevData) => ({ ...prevData, avatar: value }))} disabled={mode === "view"} />
+            {mode === "edit" ? (
+              <AvatarPicker
+                avatarURL={`/api/Account/GetAvatar/${editedParticipant.idUsuario}`}
+                onAvatarChange={(value) => setEditedParticipant((prevData) => ({ ...prevData, avatar: value }))}
+                disabled={mode === "view"} />
+            ) : (
+              <Avatar className="w-32 h-32 mx-auto">
+                <AvatarImage
+                  src={`/api/Account/GetAvatar/${editedParticipant.idUsuario}`}
+                  alt={editedParticipant.nombreUsuario}
+                />
+                <AvatarFallback>
+                  {editedParticipant.nombreUsuario.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            )}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">

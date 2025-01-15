@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace CrowdSolve.Server.Entities.CrowdSolve;
 
-public partial class AdjuntosSoluciones
+public partial class Adjuntos
 {
     public int idAdjunto { get; set; }
 
-    public int idSolucion { get; set; }
+    public int idProceso { get; set; }
 
     public string Nombre { get; set; }
 
@@ -20,4 +20,6 @@ public partial class AdjuntosSoluciones
     public DateTime FechaSubida { get; set; }
 
     public string RutaArchivo { get; set; }
+
+    public int? idUsuario { get; set; }
 }

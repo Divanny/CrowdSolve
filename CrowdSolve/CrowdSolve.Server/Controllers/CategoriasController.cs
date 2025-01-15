@@ -36,7 +36,7 @@ namespace CrowdSolve.Server.Controllers
         /// </summary>
         /// <returns>Lista de Categorias.</returns>
         [HttpGet(Name = "GetCategorias")]
-        [Authorize]
+        //[Authorize]
         public List<CategoriasModel> Get()
         {
             List<CategoriasModel> categorias = _categoriasRepo.Get().ToList();

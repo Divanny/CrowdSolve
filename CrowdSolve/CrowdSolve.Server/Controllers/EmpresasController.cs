@@ -2,9 +2,11 @@
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Repositories;
 using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CrowdSolve.Server.Controllers
 {
@@ -20,6 +22,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly SolucionesRepo _solucionesRepo;
         private readonly ParticipantesRepo _participantesRepo;
         private readonly UsuariosRepo _usuariosRepo;
+        private readonly AdjuntosRepo _adjuntosRepo;
+        private readonly NotificacionesRepo _notificacionesRepo;
         private readonly FirebaseStorageService _firebaseStorageService;
 
         /// <summary>
@@ -38,6 +42,8 @@ namespace CrowdSolve.Server.Controllers
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
             _participantesRepo = new ParticipantesRepo(crowdSolveContext);
+            _adjuntosRepo = new AdjuntosRepo(crowdSolveContext);
+            _notificacionesRepo = new NotificacionesRepo(crowdSolveContext);
             _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _firebaseStorageService = firebaseStorageService;
         }
@@ -141,7 +147,7 @@ namespace CrowdSolve.Server.Controllers
                     var logoUrl = _firebaseStorageService.UploadFileAsync(empresasModel.Avatar.OpenReadStream(), $"companies/{empresasModel.Nombre}/logo", empresasModel.Avatar.ContentType).Result;
                     usuario.AvatarURL = logoUrl;
                 }
-                
+
                 _usuariosRepo.Edit(usuario);
                 _empresasRepo.Edit(empresasModel);
                 _logger.LogHttpRequest(empresasModel);
@@ -218,6 +224,12 @@ namespace CrowdSolve.Server.Controllers
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Activo;
                 _usuariosRepo.Edit(usuario);
 
+                _notificacionesRepo.EnviarNotificacion(
+                    Empresa.idUsuario,
+                    "Se ha aprobado tu empresa",
+                    $"Tu empresa {Empresa.Nombre} ha sido aprobada exitosamente"
+                );
+
                 _logger.LogHttpRequest(idEmpresa);
                 return new OperationResult(true, "Se ha aprobado la empresa exitosamente", Empresa);
             }
@@ -255,6 +267,12 @@ namespace CrowdSolve.Server.Controllers
                 usuario.idEstatusUsuario = (int)EstatusUsuariosEnum.Empresa_rechazada;
                 _usuariosRepo.Edit(usuario);
 
+                _notificacionesRepo.EnviarNotificacion(
+                    Empresa.idUsuario,
+                    "Se ha rechazado tu empresa",
+                    $"Tu empresa {Empresa.Nombre} ha sido rechazada"
+                );
+
                 _logger.LogHttpRequest(idEmpresa);
                 return new OperationResult(true, "Se ha rechazado la empresa exitosamente", Empresa);
             }
@@ -264,6 +282,49 @@ namespace CrowdSolve.Server.Controllers
                 throw;
             }
         }
+
+        [HttpGet("CantidadEmpresas")]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
+        public object GetCantidadEmpresa()
+        {
+            var empresas = _crowdSolveContext.Set<Empresas>().Count();
+
+            var sectoresEmpresas = _crowdSolveContext.Set<Sectores>().Select(s => new
+            {
+                s.idSector,
+                s.Nombre,
+                CantidadSector = _crowdSolveContext.Set<Empresas>().Count(e => e.idSector == s.idSector)
+            }).ToList();
+
+            var tamañosEmpresas = _crowdSolveContext.Set<TamañosEmpresa>()
+                .Select(t => new
+                {
+                    t.idTamañoEmpresa,
+                    t.Nombre,
+                    CantidadTamaño = _crowdSolveContext.Set<Empresas>()
+                        .Count(e => e.idTamañoEmpresa == t.idTamañoEmpresa)
+                })
+                .ToList();
+
+            return new
+            {
+                cantidadEmpresa = empresas,
+                tamañosEmpresa = tamañosEmpresas,
+                sectores = sectoresEmpresas
+            };
+        }
+
+        [HttpGet("GetEmpresasOrdenDesafios", Name = "GetEmpresasOrdenDesafios")]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
+        public List<EmpresasModel> GetInOrder()
+        {
+            // Obtén las empresas y ordénalas por 'cantidadDesafios' en orden descendente
+            List<EmpresasModel> empresas = _empresasRepo.Get()
+                .OrderByDescending(e => e.CantidadDesafios)
+                .Take(10).ToList();
+            return empresas;
+        }
+
 
         [HttpGet("GetDashboardData", Name = "GetDashboardData")]
         [AuthorizeByPermission(PermisosEnum.Empresa_Dashboard)]
@@ -278,6 +339,9 @@ namespace CrowdSolve.Server.Controllers
             foreach (var desafio in desafios)
             {
                 desafio.SolucionesPendientes = _desafiosRepo.GetCantidadSolucionesPendientesDesafio(desafio.idDesafio);
+                var resultado = _desafiosRepo.ValidarUsuarioPuedeEvaluar(desafio.idDesafio, _idUsuarioOnline);
+                desafio.PuedoEvaluar = resultado.Success;
+                desafio.EvidenciaRecompensa = _adjuntosRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
             }
 
             return new
@@ -287,7 +351,7 @@ namespace CrowdSolve.Server.Controllers
                 totalDesafios = desafios.Count,
                 totalParticipaciones = _solucionesRepo.Get(x => idsDesafios.Contains(x.idDesafio)).Count(),
                 totalDesafiosSinValidar = _desafiosRepo.Get(x => x.idEmpresa == empresaInfo.idEmpresa).Where(x => x.idEstatusDesafio == (int)EstatusProcesoEnum.Desafío_Sin_validar).Count(),
-                totalSolucionesSinEvaluar = _solucionesRepo.Get(x => idsDesafios.Contains(x.idDesafio)).Where(x => x.idEstatusProceso == (int)EstatusProcesoEnum.Solución_Enviada).Count(), 
+                totalSolucionesSinEvaluar = _solucionesRepo.Get(x => idsDesafios.Contains(x.idDesafio)).Where(x => x.idEstatusProceso == (int)EstatusProcesoEnum.Solución_Enviada).Count(),
             };
         }
 
@@ -302,8 +366,8 @@ namespace CrowdSolve.Server.Controllers
 
             return new
             {
-                tamañosEmpresa = tamañosEmpresa,
-                sectores = sectores
+                tamañosEmpresa,
+                sectores
             };
         }
     }

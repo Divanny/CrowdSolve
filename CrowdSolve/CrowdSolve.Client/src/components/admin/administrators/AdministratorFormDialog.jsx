@@ -20,7 +20,6 @@ export function AdministratorFormDialog({ isOpen, onClose, onSaved, admin, mode 
   const [editedAdmin, setEditedAdmin] = useState(admin)
 
   useEffect(() => {
-    console.log(admin);
     setEditedAdmin(admin)
   }, [admin])
 

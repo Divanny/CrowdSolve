@@ -9,7 +9,7 @@ import ChallengeDetail from '@/components/challenge/ChallengeDetail';
 import ChallengeHeader from '@/components/challenge/ChallengeHeader';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Edit } from 'lucide-react';
+import { ArrowLeft, Edit, AlertCircle, XCircle, Slash } from 'lucide-react';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 import SolutionsValidation from '@/components/admin/companies/SolutionsValidation';
 import ChallengeTimeline from '@/components/challenge/ChallengeTimeline';
@@ -51,23 +51,7 @@ const CompanyChallenge = () => {
             editor.tf.setValue(slateContent)
             convertToHtml();
 
-            const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${challengeResponse.data.idUsuarioEmpresa}`, { responseType: 'blob', requireLoading: false })
-            const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-            const url = URL.createObjectURL(avatarBlob)
-
-            for (const solucion of challengeResponse.data.soluciones) {
-                try {
-                    const responseAvatarURL = await api.get(`/api/Account/GetAvatar/${solucion.idUsuario}`, { responseType: 'blob', requireLoading: false })
-                    if (responseAvatarURL.status == 200) {
-                        const avatarBlob = new Blob([responseAvatarURL.data], { type: responseAvatarURL.headers['content-type'] })
-                        solucion.avatarUrl = URL.createObjectURL(avatarBlob)
-                    }
-                }
-                catch {
-                    solucion.avatarUrl = null
-                }
-            }
-            setChallenge({ ...challengeResponse.data, logoEmpresa: url })
+            setChallenge(challengeResponse.data)
             setRelationalObjects(relationalObjectsResponse.data)
         } catch (error) {
             toast.error("Operación fallida", {
@@ -113,25 +97,53 @@ const CompanyChallenge = () => {
                                     </Button>
                                 )}
                             </div>
-                            <ChallengeTimeline idDesafio={challenge.idDesafio} currentStatus={challenge.idEstatusDesafio} />
+                            <ChallengeTimeline currentStatus={challenge.idEstatusDesafio} />
                             <ChallengeHeader
                                 challenge={challenge}
                                 htmlContent={htmlContent}
                                 getCategoryName={getCategoryName}
                                 ChallengeDetail={ChallengeDetail}
                             />
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-2xl font-bold">Soluciones</h2>
-                                </div>
-                                {
-                                    (challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion ||
-                                        challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Finalizado ||
-                                        challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios) ? (
-                                        <SolutionRanking idDesafio={challenge.idDesafio} />
-                                    ) : <SolutionsValidation solutions={challenge.soluciones} reloadChallengeData={fetchChallenge} canValidate={challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_progreso} />
-                                }
-                            </div>
+                            {
+                                challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar ? (
+                                    <div className='w-full'>
+                                        <div className="flex flex-col items-center gap-2 my-4">
+                                            <AlertCircle className="text-warning" size={24} />
+                                            <span className="text-lg font-semibold">Desafío sin validar</span>
+                                            <span className="text-muted-foreground">El desafío aún no ha sido validado por la administración.</span>
+                                        </div>
+                                    </div>
+                                ) : challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Rechazado ? (
+                                    <div className='w-full'>
+                                        <div className="flex flex-col items-center gap-2 my-4">
+                                            <XCircle className="text-destructive" size={24} />
+                                            <span className="text-lg font-semibold">Desafío rechazado</span>
+                                            <span className="text-muted-foreground">El desafío fue rechazado por la administración.</span>
+                                        </div>
+                                    </div>
+                                ) : challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Descartado ? (
+                                    <div className='w-full'>
+                                        <div className="flex flex-col items-center gap-2 my-4">
+                                            <Slash className="text-destructive" size={24} />
+                                            <span className="text-lg font-semibold">Desafío descartado</span>
+                                            <span className="text-muted-foreground">El desafío fue descartado.</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4">
+                                        <div className="flex justify-between items-center">
+                                            <h2 className="text-2xl font-bold">Soluciones</h2>
+                                        </div>
+                                        {
+                                            (challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion ||
+                                                challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Finalizado ||
+                                                challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios) ? (
+                                                <SolutionRanking idDesafio={challenge.idDesafio} />
+                                            ) : <SolutionsValidation solutions={challenge.soluciones} reloadChallengeData={fetchChallenge} canValidate={challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_progreso} />
+                                        }
+                                    </div>
+                                )
+                            }
                         </>
                     )
                 }

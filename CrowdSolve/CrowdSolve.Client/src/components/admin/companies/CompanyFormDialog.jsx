@@ -36,7 +36,6 @@ export function CompanyFormDialog({
   const { t } = useTranslation();
 
   useEffect(() => {
-    console.log(company);
     setEditedCompany(company);
   }, [company]);
 
