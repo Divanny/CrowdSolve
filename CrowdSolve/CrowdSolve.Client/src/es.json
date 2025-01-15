@@ -108,6 +108,8 @@
     "phone_label": "Teléfono",
     "education_level_label": "Nivel de educación",
     "education_level_placeholder": "Seleccione un nivel de educación",
+    "user_profile_label": "Perfil de Usuario",
+    "user_profile_placeholder": "Seleccione un perfil",
     "select": "Seleccionar",
     "user_status_label": "Estatus del usuario",
     "user_status_placeholder": "Seleccione un estatus",
