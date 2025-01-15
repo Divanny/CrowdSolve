@@ -54,6 +54,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="crowdsolve-e4ade-firebase-adminsdk-4q77k-452ab49a66.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\MailTemplates\forgot-password-email.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
