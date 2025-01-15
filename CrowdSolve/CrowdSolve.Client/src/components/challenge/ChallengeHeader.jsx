@@ -14,8 +14,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+import { useTranslation } from 'react-i18next';
 
 export default function ChallengeHeader({ challenge, htmlContent, getCategoryName, ChallengeDetail }) {
+  const { t } = useTranslation();
   const getDaysRemaining = () => {
     const today = new Date()
     const endDate = new Date(challenge.fechaLimite)
@@ -36,7 +38,7 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
                 className="w-16 h-16 rounded-full object-cover border-2 border-primary/10"
               />
               <div className="absolute -bottom-1 -right-1 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full">
-                Empresa
+              {t('challengeHeader.company')}
               </div>
             </div>
             <div className="space-y-1">
@@ -64,7 +66,7 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
           <div className="flex items-center gap-3">
             <CalendarDays className="h-5 w-5 text-muted-foreground" />
             <div className="space-y-1">
-              <p className="text-xs sm:text-sm text-muted-foreground">Fecha inicio</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t('challengeHeader.startDate')}</p>
               <p className="text-sm sm:text-base font-medium">
                 {new Date(challenge.fechaInicio).toLocaleDateString('es-ES', {
                   year: 'numeric',
@@ -77,7 +79,7 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
           <div className="flex items-center gap-3">
             <Clock className="h-5 w-5 text-muted-foreground" />
             <div className="space-y-1">
-              <p className="text-xs sm:text-sm text-muted-foreground">Fecha límite</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t('challengeHeader.deadline')}</p>
               <p className="text-sm sm:text-base font-medium">
                 {new Date(challenge.fechaLimite).toLocaleDateString('es-ES', {
                   year: 'numeric',
@@ -90,8 +92,8 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
           <div className="flex items-center gap-3">
             <Trophy className="h-5 w-5 text-muted-foreground" />
             <div className="space-y-1">
-              <p className="text-xs sm:text-sm text-muted-foreground">Días restantes</p>
-              <p className="text-sm sm:text-base font-medium">{getDaysRemaining()} días</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t('challengeHeader.daysRemaining')}</p>
+              <p className="text-sm sm:text-base font-medium">{getDaysRemaining()} {t('challengeHeader.days')}</p>
             </div>
           </div>
         </div>
@@ -100,7 +102,7 @@ export default function ChallengeHeader({ challenge, htmlContent, getCategoryNam
           <DialogTrigger asChild>
             <Button variant="outline" className="w-full sm:w-auto">
               <Eye className="mr-2 h-4 w-4" />
-              Ver contenido del desafío
+              {t('challengeHeader.viewChallengeContent')}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-[90vw] sm:max-w-3xl max-h-[80vh] overflow-y-auto">

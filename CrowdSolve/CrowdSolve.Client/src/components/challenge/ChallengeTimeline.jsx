@@ -1,27 +1,31 @@
 import { CheckCircle, Clock, XCircle, Award, SearchCheck, BadgeAlert, Loader, Ban, Trash2, FileCheck2, AlertCircle } from 'lucide-react';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
+import { useTranslation } from 'react-i18next';
 
-const getTimelineSteps = (currentStatus) => {
-    const steps = [
-        { status: EstatusProcesoEnum.Desafio_Sin_validar, label: 'Sin validar', icon: BadgeAlert, color: 'primary' },
-        { status: EstatusProcesoEnum.Desafio_Sin_iniciar, label: 'Sin iniciar', icon: Clock, color: 'primary' },
-        { status: EstatusProcesoEnum.Desafio_En_progreso, label: 'En progreso', icon: Loader, color: 'primary' },
-        { status: EstatusProcesoEnum.Desafio_En_validación_de_soluciones, label: 'Validación de soluciones', icon: FileCheck2, color: 'primary' },
-        { status: EstatusProcesoEnum.Desafio_En_evaluacion, label: 'En evaluación', icon: SearchCheck, color: 'primary' },
-        { status: EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios, label: 'Espera de premios', icon: Award, color: 'primary' },
-        { status: EstatusProcesoEnum.Desafio_Finalizado, label: 'Finalizado', icon: CheckCircle, color: 'success' },
-    ];
-
-    if (currentStatus === EstatusProcesoEnum.Desafio_Rechazado) {
-        steps[0] = { status: EstatusProcesoEnum.Desafio_Rechazado, label: 'Rechazado', icon: Ban, color: 'destructive' };
-    } else if (currentStatus === EstatusProcesoEnum.Desafio_Descartado) {
-        steps[0] = { status: EstatusProcesoEnum.Desafio_Descartado, label: 'Descartado', icon: Trash2, color: 'destructive' };
-    }
-
-    return steps;
-};
 
 const ChallengeTimeline = ({ currentStatus }) => {
+    const { t } = useTranslation();
+
+    const getTimelineSteps = (currentStatus) => {
+        const steps = [
+            { status: EstatusProcesoEnum.Desafio_Sin_validar, label: t('challengetimelineSteps.Desafio_Sin_validar.label'), icon: BadgeAlert, color: 'primary' },
+            { status: EstatusProcesoEnum.Desafio_Sin_iniciar, label: t('challengetimelineSteps.Desafio_Sin_iniciar.label'), icon: Clock, color: 'primary' },
+            { status: EstatusProcesoEnum.Desafio_En_progreso, label: t('challengetimelineSteps.Desafio_En_progreso.label'), icon: Loader, color: 'primary' },
+            { status: EstatusProcesoEnum.Desafio_En_validación_de_soluciones, label: 'Validación de soluciones', icon: FileCheck2, color: 'primary' },
+            { status: EstatusProcesoEnum.Desafio_En_evaluacion, label: t('challengetimelineSteps.Desafio_En_evaluacion.label'), icon: SearchCheck, color: 'primary' },
+            { status: EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios, label: t('challengetimelineSteps.Desafio_En_espera_de_entrega_de_premios.label'), icon: Award, color: 'primary' },
+            { status: EstatusProcesoEnum.Desafio_Finalizado, label: t('challengetimelineSteps.Desafio_Finalizado.label'), icon: CheckCircle, color: 'success' },
+        ];
+
+        if (currentStatus === EstatusProcesoEnum.Desafio_Rechazado) {
+            steps[0] = { status: EstatusProcesoEnum.Desafio_Rechazado, label: 'Rechazado', icon: Ban, color: 'destructive' };
+        } else if (currentStatus === EstatusProcesoEnum.Desafio_Descartado) {
+            steps[0] = { status: EstatusProcesoEnum.Desafio_Descartado, label: 'Descartado', icon: Trash2, color: 'destructive' };
+        }
+
+        return steps;
+    };
+    
     const timelineSteps = getTimelineSteps(currentStatus);
 
     const getCurrentStepIndex = () => {
@@ -125,7 +129,7 @@ const ChallengeTimeline = ({ currentStatus }) => {
                             <XCircle className="w-5 h-5 text-destructive-foreground" />
                         </div>
                         <span className="text-sm font-medium text-destructive">
-                            Desafío Cancelado
+                            {t('challengetimelineSteps.currentStatus.Desafio_Cancelado')}
                         </span>
                     </div>
                 </div>

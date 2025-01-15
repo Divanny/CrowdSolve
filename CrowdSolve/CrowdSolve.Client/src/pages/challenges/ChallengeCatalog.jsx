@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslation } from 'react-i18next';
 import { Search, Calendar, Users, BookmarkPlus, Filter, Lightbulb, Code, Cpu } from 'lucide-react'
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -30,32 +31,35 @@ import useAxios from '@/hooks/use-axios'
 import { useNavigate, useParams } from "react-router-dom"
 
 function getTimeAgo(date) {
+  const { t } = useTranslation();
   const now = new Date()
   const diffTime = Math.abs(now.getTime() - date.getTime())
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
-  if (diffDays === 1) return "hace 1 día"
-  if (diffDays < 7) return `hace ${diffDays} días`
+  if (diffDays === 1) return t('ChallengeCatalog.timeAgo.1dayAgo')
+  if (diffDays < 7) return ` ${diffDays} ${t('ChallengeCatalog.timeAgo.?daysAgo')}`
   if (diffDays < 30) {
     const weeks = Math.floor(diffDays / 7)
-    return `hace ${weeks} ${weeks === 1 ? 'semana' : 'semanas'}`
+    return `${t('ChallengeCatalog.timeAgo.since')} ${weeks} ${weeks === 1 ? t('ChallengeCatalog.timeAgo.week') : t('ChallengeCatalog.timeAgo.weeks')}`
   }
   const months = Math.floor(diffDays / 30)
-  return `hace ${months} ${months === 1 ? 'mes' : 'meses'}`
+  return `${t('ChallengeCatalog.timeAgo.since')} ${months} ${months === 1 ? t('ChallengeCatalog.timeAgo.month') : t('ChallengeCatalog.timeAgo.months')}`
 }
 
 function getTimeRemaining(deadline) {
+  const { t } = useTranslation();
   const now = new Date()
   const timeRemaining = deadline.getTime() - now.getTime()
   const daysRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24))
 
-  if (daysRemaining < 0) return "Cerrado"
-  if (daysRemaining === 0) return "Cierra hoy"
-  if (daysRemaining === 1) return "1 día restante"
-  return `${daysRemaining} días restantes`
+  if (daysRemaining < 0) return t('ChallengeCatalog.timeAgo.close')
+  if (daysRemaining === 0) return t('ChallengeCatalog.timeAgo.closeToday')
+  if (daysRemaining === 1) return t('ChallengeCatalog.timeAgo.dayRemaining')
+  return `${daysRemaining} ${t('ChallengeCatalog.timeAgo.daysRemaining')}`
 }
 
 export default function ChallengeCatalog() {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [searchQuery, setSearchQuery] = React.useState("")
   const [selectedCategories, setSelectedCategories] = React.useState([])
@@ -140,11 +144,11 @@ export default function ChallengeCatalog() {
               transition={{ duration: 0.8 }}
             >
               <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl mb-6">
-                Encuentra tu próximo
-                <span className="block text-primary">desafío innovador</span>
+              {t('ChallengeCatalog.pageTitle')}
+                <span className="block text-primary">{t('ChallengeCatalog.pageTitle2')}</span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-[42rem] mb-8">
-                Explora los últimos desafíos de innovación y demuestra tu talento en nuestra plataforma líder.
+              {t('ChallengeCatalog.pagedescription')}
               </p>
             </motion.div>
 
@@ -311,14 +315,14 @@ export default function ChallengeCatalog() {
               <SheetTrigger asChild>
                 <Button variant="outline" className="w-full">
                   <Filter className="mr-2 h-4 w-4" />
-                  Filtros
+                  {t(`ChallengeCatalog.filter`)}
                 </Button>
               </SheetTrigger>
               <SheetContent side="left">
                 <SheetHeader>
-                  <SheetTitle>Filtros</SheetTitle>
+                  <SheetTitle>{t('ChallengeCatalog.filter')}</SheetTitle>
                   <SheetDescription>
-                    Ajusta tus preferencias de búsqueda
+                  {t('ChallengeCatalog.searchPreferences')}
                   </SheetDescription>
                 </SheetHeader>
                 <ScrollArea className="h-[calc(100vh-10rem)] pr-4">
@@ -349,7 +353,7 @@ export default function ChallengeCatalog() {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4" />
                   <Input
                     type="search"
-                    placeholder="Buscar desafíos..."
+                    placeholder={t('ChallengeCatalog.searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-9 bg-card"
@@ -361,9 +365,9 @@ export default function ChallengeCatalog() {
                   <SelectValue placeholder="Ordenar por" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="recent">Más recientes</SelectItem>
-                  <SelectItem value="popular">Más populares</SelectItem>
-                  <SelectItem value="closing">Próximos a cerrar</SelectItem>
+                  <SelectItem value="recent">{t('ChallengeCatalog.itemSelect.recent')}</SelectItem>
+                  <SelectItem value="popular">{t('ChallengeCatalog.itemSelect.popular')}</SelectItem>
+                  <SelectItem value="closing">{t('ChallengeCatalog.itemSelect.closeSoon')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -407,11 +411,12 @@ export default function ChallengeCatalog() {
 }
 
 function FilterContent({ selectedCategories, selectedStatus, handleCategoryChange, handleStatusChange, categorias, estatus, loading }) {
+  const { t } = useTranslation();
   if (loading) {
     return (
       <>
         <div>
-          <Label className="text-sm font-medium mb-3 block">Categorías</Label>
+          <Label className="text-sm font-medium mb-3 block">{t('ChallengeCatalog.categories.label')}</Label>
           <div className="space-y-2">
             {Array(5).fill(0).map((_, index) => (
               <Skeleton key={index} className="h-6 w-full" />
@@ -419,7 +424,7 @@ function FilterContent({ selectedCategories, selectedStatus, handleCategoryChang
           </div>
         </div>
         <div>
-          <Label className="text-sm font-medium mb-3 block">Estatus</Label>
+          <Label className="text-sm font-medium mb-3 block">{t('ChallengeCatalog.categories.status')}</Label>
           <div className="space-y-2">
             {Array(3).fill(0).map((_, index) => (
               <Skeleton key={index} className="h-6 w-full" />
@@ -433,7 +438,7 @@ function FilterContent({ selectedCategories, selectedStatus, handleCategoryChang
   return (
     <>
       <div>
-        <Label className="text-sm font-medium mb-3 block">Categorías</Label>
+        <Label className="text-sm font-medium mb-3 block">{t('ChallengeCatalog.categories.label')}</Label>
         <div className="space-y-2">
           {categorias.map(categoria => (
             <div key={categoria.idCategoria} className="flex items-center">
@@ -454,7 +459,7 @@ function FilterContent({ selectedCategories, selectedStatus, handleCategoryChang
       </div>
 
       <div>
-        <Label className="text-sm font-medium mb-3 block">Estatus</Label>
+        <Label className="text-sm font-medium mb-3 block">{t('ChallengeCatalog.categories.status')}</Label>
         <div className="space-y-2">
           {estatus.map(status => (
             <div key={status.idEstatusProceso} className="flex items-center">
@@ -478,6 +483,7 @@ function FilterContent({ selectedCategories, selectedStatus, handleCategoryChang
 }
 
 function ChallengeCard({ desafio, categorias, estatus }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const getCategoryName = (idCategoria) => {
@@ -542,7 +548,7 @@ function ChallengeCard({ desafio, categorias, estatus }) {
             </span>
             <span className="flex items-center gap-1">
               <Users className="h-4 w-4" />
-              {desafio.soluciones ? desafio.soluciones.length : 'Sin'} soluciones
+              {desafio.soluciones ? desafio.soluciones.length : 'Sin'} {t('ChallengeCatalog.solutions')}
             </span>
           </div>
         </div>

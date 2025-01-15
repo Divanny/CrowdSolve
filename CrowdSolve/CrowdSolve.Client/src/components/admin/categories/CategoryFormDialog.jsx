@@ -45,14 +45,14 @@ export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }
     });
 
     if (response.data.success) {
-      toast.success("Operación exitosa", {
+      toast.success(t('CategoryFormdialog.operations.success'), {
         description: response.data.message,
       });
         
       onSaved()
       onClose()
     } else {
-      toast.warning("Operación fallida", {
+      toast.warning(t('CategoryFormdialog.operations.failure'), {
         description: response.data.message,
       });
       console.log(response);
@@ -63,7 +63,7 @@ export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>{mode === "edit" ? "Editar" : "Ver"} Categoria</DialogTitle>
+          <DialogTitle>{mode === "edit" ? t('CategoryFormdialog.editTitle') : t('CategoryFormdialog.viewTitle')} {t('CategoryFormdialog.title')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSave} className="space-y-2">
           <div className="space-y-2">
@@ -87,7 +87,7 @@ export function CategoryFormDialog({ isOpen, onClose, onSaved, category, mode  }
             <Textarea
               id="descripcion"
               name="descripcion"
-              placeholder={t('CategoryFormdialog.close')}
+              placeholder={t('CategoryFormdialog.descriptionPlaceholder')}
               value={editedCategory.descripcion}
               onChange={handleInputChange}
               rows={4}

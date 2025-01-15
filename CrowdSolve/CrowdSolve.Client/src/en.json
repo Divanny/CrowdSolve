@@ -4,6 +4,8 @@
     "description": "CrowdSolve is a platform designed to connect people who seek to solve problems collaboratively. Its aim is to bring together different types of users, such as experts, companies, and participants interested in finding innovative solutions to specific challenges.",
     "mission": "OUR MISSION",
     "mission_description": "CrowdSolve aims to foster open collaboration, where ideas and solutions are shared and evaluated, allowing problems to be solved efficiently. Additionally, it focuses on creating a space where users can showcase their skills, work together, and contribute value at both an individual and organizational level.",
+    "vision": "OUR VISION",
+    "vision_description": "CrowdSolve's vision is to be the global leader in collaborative problem-solving, where collective intelligence and creativity transform challenges into innovative solutions. We aim to create an inclusive and gamified ecosystem that connects businesses, experts, and creatives from around the world to drive progress and innovation.",
     "section_title": "Facilitating the Creation of Innovative Solutions",
     "section_description": "Our goal is to empower teams and individuals to collaborate and find innovative solutions to specific challenges. Here’s how we plan to achieve it.",
     "features": [
@@ -18,15 +20,36 @@
       {
         "title": "Optimizing for Empowerment",
         "description": "We believe everyone should be empowered to do what they think is best for the company's interests."
+      },
+      {
+        "title": "Gamification for Participation",
+        "description": "We incorporate points, badges, and rankings to incentivize active participation, rewarding effort and creativity within the community."
+      },
+      {
+        "title": "Real-Time Collaboration",
+        "description": "We offer online collaboration tools that facilitate interaction, idea exchange, and proposal review, promoting efficient and enriching teamwork."
+      },
+      {
+        "title": "Driving Global Innovation",
+        "description": "We connect a diverse network of global participants, enabling the most innovative ideas to emerge from different perspectives and experiences."
       }
-    ]
+      
+    ],
+
+    "stats_title": "CrowdSolve Stats",
+    "stats": {
+        "users": "Users",
+        "projects": "Projects",
+        "uptime":  "Up Time",
+        "support": "Support"
+      }
   },
   "MeetOurteam": {
     "title": "Meet Our Team"
   },
 
-  "AdminLayout":{
-    "sideBarAdm":{
+  "AdminLayout": {
+    "sideBarAdm": {
       "AdmUser": "User administration",
       "Participants": "Participants",
       "Companies": "Companies",
@@ -44,14 +67,19 @@
       "UserManual": "User manual"
     },
     "authAdminLayout": {
-    "signIn": "Sign In",
-    "signUp": "Sign Up"
-  }
-},
-  
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
+    }
+  },
+
   "CategoryFormdialog": {
-    "editTitle": "Edit Category",
-    "viewTitle": "View Category",
+    "operations": {
+      "success": "Operation successful",
+      "failure": "Operation failed"
+    },
+    "title": "Category",
+    "editTitle": "Edit",
+    "viewTitle": "View",
     "nameLabel": "Category Name",
     "descriptionLabel": "Description",
     "descriptionPlaceholder": "Enter a description",
@@ -83,8 +111,9 @@
     }
   },
   "ParticipantFormDialog": {
-    "title_edit": "Edit Participant",
-    "title_view": "View Participant",
+    "participant": "Participant",
+    "title_edit": "Edit",
+    "title_view": "View",
     "username_label": "Username",
     "email_label": "Email",
     "first_name_label": "First Name",
@@ -94,12 +123,15 @@
     "phone_label": "Phone",
     "education_level_label": "Education Level",
     "education_level_placeholder": "Select an education level",
+    "select": "Select",
     "user_status_label": "User Status",
     "user_status_placeholder": "Select a status",
     "description_label": "Personal Description",
     "description_placeholder": "Enter a personal description",
     "button_save_changes": "Save Changes",
-    "button_close": "Close"
+    "button_close": "Close",
+    "successOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida"
   },
   "faq_section": {
     "title": "Frequently Asked Questions about CrowdSolve",
@@ -187,8 +219,8 @@
     "settings": "Settings",
     "notifications": "Notifications",
     "admin": "Admin",
-    "toastMessageTitle":"Operation successful",
-    "toastMessageDescription":"You have successfully logged out",
+    "toastMessageTitle": "Operation successful",
+    "toastMessageDescription": "You have successfully logged out",
     "appearance": "Appearance",
     "language": "Language",
     "logout": "Log out",
@@ -230,16 +262,40 @@
     }
   },
   "GoogleLoginbutton": {
+    "success": {
+      "operationSuccess": "Successful Operation",
+      "loginSuccess": "Google login successful"
+    },
+    "warning": {
+      "operationError": "Operation Failed",
+      "loginWarning": "Google login failed",
+      "defaultErrorMessage": "Error logging in with Google"
+    },
+    "error": {
+      "operationError": "Operation Failed",
+      "loginError": "Error logging in with Google:"
+    },
     "continueWithGoogle": "Continue with Google"
   },
   "RegistroEmpresa": {
+    "successfulOperation": "Operation successful",
+    "failedOperation": "Operation failed",
+    "failedOpeDescription": "Please fill out all fields",
     "companyName": "Company Name",
     "companyDescription": "Description",
     "phone": "Phone",
+    "phPhone": "Enter the company's phone number",
+    "phName": "Enter the company's name",
+    "phDescription": "Enter a brief description of the company",
+    "select": "Select",
+    "selectSector": "Select a sector",
     "sector": "Sector",
     "website": "Website",
+    "enterWebsite": "Enter the company's website",
     "companySize": "Company Size",
+    "selectComSize": "Select a company size",
     "address": "Address",
+    "enterComAddress": "Enter the company address",
     "register": "Register"
   },
   "RegistroEmpresaEntry": {
@@ -252,6 +308,9 @@
     "continueButton": "Great! Continue"
   },
   "RegistroParticipante": {
+    "successfulOperation": "Operation successful",
+    "failedOperation": "Operation failed",
+    "failedOpeDescription": "Please fill out all fields",
     "nombres": "First Name",
     "apellidos": "Last Name",
     "fechaNacimiento": "Date of Birth",
@@ -299,7 +358,7 @@
       "searchPlaceholder": "Search by category name",
       "noResults": "No results found.",
       "rowsSelected": "row(s) selected",
-      "de":"of",
+      "de": "of",
       "buttons": {
         "previous": "Previous",
         "next": "Next",
@@ -322,7 +381,7 @@
         "description": "An error occurred. Please try again."
       }
     },
-    "abrirMenu":"OpenMenu"
+    "abrirMenu": "OpenMenu"
   },
   "Participants": {
     "select_all": "Select all",
@@ -349,7 +408,12 @@
     "columna": "Columns",
     "no_resultados": "No results found",
     "PrevButton": "Previous",
-    "NextButton": "Next"
+    "NextButton": "Next",
+    "openMenu": "Open Menu",
+    "searchStatus": "Search status...",
+    "of": "of",
+    "row": "row",
+    "selected": "Selected"
   },
   "RoleAndPermissions": {
     "saveChanges": {
@@ -387,7 +451,7 @@
       "checkEmailDescription": "We sent a reset link to",
       "validateLinkButton": "Validate reset link",
       "resendCodeLink": "Didn't receive the code?",
-      "resendCodeBt":"Resend code",
+      "resendCodeBt": "Resend code",
       "setNewPasswordTitle": "Set new password",
       "setNewPasswordDescription": "Enter your new password below.",
       "newPasswordLabel": "New password",
@@ -432,7 +496,7 @@
     "creativeMessage": "Awaken your creativity",
     "showTalentMessage": "Show your talent",
     "solveProblemsMessage": "Solve problems",
-    "noAccount":"Dont have an account?"
+    "noAccount": "Dont have an account?"
   },
   "SignUp": {
     "signUpTitle": "Create account",
@@ -455,10 +519,10 @@
     "creativeMessage": "Awaken your creativity",
     "showTalentMessage": "Show your talent",
     "solveProblemsMessage": "Solve problems",
-    "haveaccount":"Already have an account?",
-    "userName":"Username",
-    "Email":"Email",
-    "password":"Password"
+    "haveaccount": "Already have an account?",
+    "userName": "Username",
+    "Email": "Email",
+    "password": "Password"
   },
   "AccessDenied": {
     "accessDeniedTitle": "Access Denied",
@@ -467,8 +531,17 @@
     "goHomeButton": "Go Home"
   },
   "ChallengeCatalog": {
-    "pageTitle": "Explore our Challenges section",
-    "searchPlaceholder": "Search",
+    "pageTitle": "Find your next",
+    "pageTitle2": "innovative challenge",
+    "searchPlaceholder": "Search challenges..",
+    "pagedescription": "Explore the latest innovation challenges and showcase your talent on our leading platform.",
+    "filter": "Filters",
+    "searchPreferences": "Adjust your search preferences",
+    "itemSelect": {
+      "recent": "Most recent",
+      "popular": "Most popular",
+      "closeSoon": "Closing soon"
+    },
     "filters": {
       "all": "All",
       "design": "Design",
@@ -478,7 +551,8 @@
       "cybersecurity": "Cybersecurity"
     },
     "categories": {
-      "label": "Category:",
+      "label": "Category",
+      "status": "Status",
       "company": "Company:",
       "endDate": "End date:"
     },
@@ -494,8 +568,73 @@
       "viewMore": "View more",
       "previous": "Previous",
       "next": "Next"
+    },
+    "timeAgo": {
+      "since": "",
+      "1dayAgo": "1 day ago",
+      "?daysAgo": "days ago",
+      "week": "week ago",
+      "weeks": "weeks ago",
+      "month": "month ago",
+      "months": "months ago",
+      "close": "Closed",
+      "closeToday": "Close Today",
+      "dayRemaining": "1 day remaining",
+      "daysremaining": "days remaining"
+    },
+    "solutions": "Solutions"
+  },
+  "challengeEvaluation": {
+    "messages": {
+      "operationFailed": "Operation failed",
+      "notInEvaluationProcess": "The challenge is not in the evaluation process.",
+      "noCurrentEvaluationProcess": "There is no current evaluation process.",
+      "evaluationFailed": "Evaluation failed",
+      "unknownCategory": "Unknown",
+      "evaluateSolutions": "Evaluate solutions",
+      "endsOn": "Ends on: ",
+      "companyEvaluation": "Company Evaluation",
+      "communityVoting": "Community Voting"
+    },
+    "buttons": {
+      "reload": "Reload"
+    },
+    "headers": {
+      "evaluationTitle": "Evaluation Solutions"
+    },
+    "descriptions": {
+      "noChallengeOrLoading": "No challenge data available or still loading."
     }
   },
+
+  "CompanyFormDialog": {
+    "company": "Company",
+    "title_edit": "Edit",
+    "title_view": "View",
+    "fields": {
+      "name": "Name",
+      "description": "Description",
+      "phone": "Phone",
+      "website": "Website",
+      "company_size": "Company Size",
+      "sector": "Sector"
+    },
+    "placeholders": {
+      "description": "Enter a description",
+      "phone": "Enter your phone number",
+      "company_size": "Select a company size",
+      "sector": "Select a sector"
+    },
+    "buttons": {
+      "save_changes": "Save Changes",
+      "close": "Close"
+    },
+    "messages": {
+      "success": "Operation successful",
+      "failure": "Operation failed"
+    }
+  },
+
   "CompanyListing": {
     "general": {
       "searchPlaceholder": "Search for companies...",
@@ -525,6 +664,38 @@
         "viewChallenges": "View challenges"
       }
     }
+  },
+  "CompaniesPage": {
+    "selectAll": "Select all",
+    "selectRow": "Select row",
+    "nombre": "Name",
+    "descripcion": "Description",
+    "direccion": "Address",
+    "telefono": "Phone",
+    "paginaWeb": "Website",
+    "tamanoEmpresa": "Company Size",
+    "sector": "Sector",
+    "cantidadDesafios": "Number of Challenges",
+    "cantidadSoluciones": "Number of Solutions",
+    "estatusUsuario": "Status",
+    "acciones": "Actions",
+    "abrirMenu": "Open menu",
+    "editar": "Edit",
+    "verDetalles": "View details",
+    "verDesafios": "View challenges",
+    "buscarPorNombre": "Search by name...",
+    "tamanoEmpresaFiltro": "Company Size",
+    "buscar": "Search...",
+    "limpiarFiltro": "Clear filter",
+    "sectorFiltro": "Sector",
+    "limpiarFiltros": "Clear filters",
+    "columnaBoton": "Columns",
+    "noResultsFound": "No results found.",
+    "previous": "Previous",
+    "next": "Next",
+    "preposicionDe": "of",
+    "rows": "row",
+    "selected": "selected"
   },
   "ContactUs": {
     "contact": {
@@ -586,31 +757,31 @@
         "title": "1. Information We Collect",
         "description": "We collect the following information:",
         "list": {
-          "infoCollect1":"Registration information: name, email address, password.",
-          "infoCollect2":"Profile information: professional experience, skills, profile picture (optional).",
-          "infoCollect3":"User-generated content: proposals, comments, votes.",
-          "infoCollect4":"Usage information: interactions with the platform, participation in challenges.",
-          "infoCollect5":"Payment information: to process rewards (only for winning participants)."
+          "infoCollect1": "Registration information: name, email address, password.",
+          "infoCollect2": "Profile information: professional experience, skills, profile picture (optional).",
+          "infoCollect3": "User-generated content: proposals, comments, votes.",
+          "infoCollect4": "Usage information: interactions with the platform, participation in challenges.",
+          "infoCollect5": "Payment information: to process rewards (only for winning participants)."
         }
       },
       "informationUsage": {
         "title": "2. How We Use Your Information",
         "description": "We use your information to:",
         "list": {
-          "infoUsage1":"Provide and improve our services.",
-          "infoUsage2":"Facilitate participation in challenges and collaboration between users.",
-          "infoUsage3":"Process payments and rewards.",
-          "infoUsage4":"Send notifications related to the service and updates.",
-          "infoUsage5":"Prevent fraud and ensure platform security."
+          "infoUsage1": "Provide and improve our services.",
+          "infoUsage2": "Facilitate participation in challenges and collaboration between users.",
+          "infoUsage3": "Process payments and rewards.",
+          "infoUsage4": "Send notifications related to the service and updates.",
+          "infoUsage5": "Prevent fraud and ensure platform security."
         }
       },
       "informationSharing": {
         "title": "3. Sharing Information",
         "description": "We share your information in the following circumstances:",
         "list": {
-          "infoSharing1":"With companies posting challenges, limited to the information necessary to evaluate proposals.",
-          "infoSharing2":"With service providers that help us operate the platform.",
-          "infoSharing3":"When required by law or to protect our legal rights."
+          "infoSharing1": "With companies posting challenges, limited to the information necessary to evaluate proposals.",
+          "infoSharing2": "With service providers that help us operate the platform.",
+          "infoSharing3": "When required by law or to protect our legal rights."
         }
       },
       "dataSecurity": {
@@ -621,11 +792,11 @@
         "title": "5. Your Rights",
         "description": "You have the right to:",
         "list": {
-          "uRights1":"Access your personal information.",
-          "uRights2":"Correct inaccurate data.",
-          "uRights3":"Request the deletion of your data.",
-          "uRights4":"Object to the processing of your data.",
-          "uRights5":"Request data portability."
+          "uRights1": "Access your personal information.",
+          "uRights2": "Correct inaccurate data.",
+          "uRights3": "Request the deletion of your data.",
+          "uRights4": "Object to the processing of your data.",
+          "uRights5": "Request data portability."
         }
       },
       "cookies": {
@@ -651,8 +822,8 @@
     "effectiveDate": "August 8, 2024",
     "intro": "Welcome to CrowdSolve! Before accessing our services, please read these Terms of Service.",
     "overview": "These Terms of Service ('Terms') govern your use of CrowdSolve, including our web platform, collaboration tools, and all associated services (together, our 'Services'). These Terms are a contract between you and CrowdSolve. By accessing our Services, you agree to these Terms.",
-    "readPls":"Please, read our",
-    "readPlsDesc":", which describes how we collect and use personal information.",
+    "readPls": "Please, read our",
+    "readPlsDesc": ", which describes how we collect and use personal information.",
     "privacyPolicyLink": {
       "text": "Privacy Policy",
       "url": "/privacy-policy"
@@ -687,7 +858,7 @@
         "content": "We may modify these Terms from time to time. We will notify you of any significant changes to the Terms. Your continued use of our Services after such changes constitutes your acceptance of the new Terms."
       }
     ],
-    "byUsing":"By using CrowdSolve, you agree to these Terms of Service. If you do not agree to these Terms, please do not use our Services. If you have any questions about these Terms, contact us at",
+    "byUsing": "By using CrowdSolve, you agree to these Terms of Service. If you do not agree to these Terms, please do not use our Services. If you have any questions about these Terms, contact us at",
     "contact": {
       "text": "If you have any questions about these Terms, contact us at",
       "email": "support@crowdsolve.site",
@@ -707,69 +878,69 @@
   "UsagePolicy": {
     "title": "Acceptable Use Policy",
     "effectiveDate": "Effective since August 8, 2024",
-    "accpUP":"This Acceptable Use Policy (AUP) describes prohibited practices when using CrowdSolve. By using our platform, you agree to comply with this AUP. CrowdSolve reserves the right to modify this policy at any time.",
+    "accpUP": "This Acceptable Use Policy (AUP) describes prohibited practices when using CrowdSolve. By using our platform, you agree to comply with this AUP. CrowdSolve reserves the right to modify this policy at any time.",
     "generalConduct": {
       "header": "1. General Conduct",
       "header2": "CrowdSolve users must:",
       "content": {
-        "gC1":"Comply with all applicable laws.",
-        "gC2":"Respect intellectual property rights.",
-        "gC3":"Be honest and transparent in all interactions.",
-        "gC4":"Maintain confidentiality of sensitive information shared in challenges.",
-        "gC5":"Treat other users with respect and professionalism."
-        }
+        "gC1": "Comply with all applicable laws.",
+        "gC2": "Respect intellectual property rights.",
+        "gC3": "Be honest and transparent in all interactions.",
+        "gC4": "Maintain confidentiality of sensitive information shared in challenges.",
+        "gC5": "Treat other users with respect and professionalism."
+      }
     },
     "prohibitedActivities": {
       "header": "2. Prohibited Activities",
-      "header2":"Users must not:",
+      "header2": "Users must not:",
       "content": {
-        "pAc1":"Post illegal, defamatory, harassing, obscene, or fraudulent content.",
-        "pAc2":"Infringe on the intellectual property rights of others.",
-        "pAc3":"Use the platform to distribute spam or malware.",
-        "pAc4":"Attempt to access other users' accounts or systems without authorization.",
-        "pAc5":"Manipulate the platform's voting or evaluation systems.",
-        "pAc6":"Create multiple accounts to bypass rules or gain an unfair advantage.",
-        "pAc7":"Disclose confidential information of other users or companies without authorization."
+        "pAc1": "Post illegal, defamatory, harassing, obscene, or fraudulent content.",
+        "pAc2": "Infringe on the intellectual property rights of others.",
+        "pAc3": "Use the platform to distribute spam or malware.",
+        "pAc4": "Attempt to access other users' accounts or systems without authorization.",
+        "pAc5": "Manipulate the platform's voting or evaluation systems.",
+        "pAc6": "Create multiple accounts to bypass rules or gain an unfair advantage.",
+        "pAc7": "Disclose confidential information of other users or companies without authorization."
       }
     },
     "challengeContent": {
       "header": "3. Challenge Content",
-      "header2":"Companies that post challenges must:",
+      "header2": "Companies that post challenges must:",
       "content": {
-        "chC1":"Provide accurate and clear information about the challenge requirements.",
-        "chC2":"Set fair terms for the transfer of intellectual property.",
-        "chC3":"Fulfill promises regarding rewards and deadlines.",
-        "chC4":"Do not request solutions for illegal or unethical activities."
-    }
+        "chC1": "Provide accurate and clear information about the challenge requirements.",
+        "chC2": "Set fair terms for the transfer of intellectual property.",
+        "chC3": "Fulfill promises regarding rewards and deadlines.",
+        "chC4": "Do not request solutions for illegal or unethical activities."
+      }
     },
     "proposalsAndSolutions": {
       "header": "4. Proposals and Solutions",
-      "header2":"Participants submitting proposals must:",
+      "header2": "Participants submitting proposals must:",
       "content": {
-        "pASol":"Submit only original work or have the necessary rights for the content submitted.",
-        "pASo2":"Respect the confidentiality of information provided in challenges.",
-        "pASo3":"Do not copy or plagiarize other participants' work.",
-        "pASo4":"Provide accurate information about your skills and experience."
+        "pASol": "Submit only original work or have the necessary rights for the content submitted.",
+        "pASo2": "Respect the confidentiality of information provided in challenges.",
+        "pASo3": "Do not copy or plagiarize other participants' work.",
+        "pASo4": "Provide accurate information about your skills and experience."
       }
     },
     "platformUsage": {
       "header": "5. Platform Usage",
-      "header2":"Users must not:",
+      "header2": "Users must not:",
       "content": {
-        "pU1":"Do not attempt to interfere with the proper functioning of the platform.",
-        "pU2":"Do not use bots, scrapers, or other automated means to access CrowdSolve.",
-        "pU3":"Do not collect information from other users without their consent.",
-        "pU4":"Do not sell or transfer your account to third parties."
+        "pU1": "Do not attempt to interfere with the proper functioning of the platform.",
+        "pU2": "Do not use bots, scrapers, or other automated means to access CrowdSolve.",
+        "pU3": "Do not collect information from other users without their consent.",
+        "pU4": "Do not sell or transfer your account to third parties."
       }
     },
     "nonComplianceConsequences": {
       "header": "6. Consequences of Non-Compliance",
       "header2": "Violation of this AUP may result in:",
       "content": {
-        "nonCC1":"Removal of infringing content.",
-        "nonCC2":"Suspension or termination of the user's account.",
-        "nonCC3":"Disqualification from current or future challenges.",
-        "nonCC4":"Legal actions in cases of serious violations."
+        "nonCC1": "Removal of infringing content.",
+        "nonCC2": "Suspension or termination of the user's account.",
+        "nonCC3": "Disqualification from current or future challenges.",
+        "nonCC4": "Legal actions in cases of serious violations."
       }
     },
     "reportingViolations": {
@@ -784,5 +955,446 @@
       "termsOfService": "View Terms of Service",
       "privacyPolicy": "View Privacy Policy"
     }
+  },
+
+  "SupportRequestDialog": {
+    "closeSupport": "Close Support",
+    "declineSupport": "Decline Support",
+    "finalize": "Finalize ",
+    "finalizeSupport": "Finalize support",
+    "discardSupport": "Discard support",
+    "SupportRequest": "Support Request",
+    "discard": "Discard ",
+    "viewSupportRequest": "View Support Request",
+    "Once": "Once",
+    "finalized": "finalized",
+    "Confirmation": " the support request cannot be reopened or worked on further.",
+    "discarded": "discarded",
+    "close": "Close",
+    "saveChanges": "Save changes",
+    "affectedUser": "Affected User",
+    "title": "Title",
+    "message": "Message",
+    "supportDate": "Support Date",
+    "names": "First Name",
+    "lastNames": "Last Name",
+    "email": "Email",
+    "assignedUser": "Assigned User",
+    "successfulOperation": "Operation successful",
+    "failedOperation": "Operation failed",
+    "operationError": "An error occurred while performing the operation",
+    "rows": "row",
+    "selected": "selected"
+  },
+
+  "solutionsValidation": {
+    "successOperation": "Operation successful",
+    "failedOperation": "Operation failed",
+    "noSolutionsToValidate": {
+      "title": "No solutions to validate",
+      "description": "Please come back later"
+    },
+    "user": "User",
+    "title": "Title",
+    "date": "Date",
+    "status": "Status",
+    "selectStatus": "Seleccione un estatus",
+    "actions": "Actions",
+    "viewDetails": "View details",
+    "solutionDetails": "Solution Details",
+    "solutionAuthor": "Solution author",
+    "description": "Description",
+    "attachments": "Attachments",
+    "fileSize": "Size",
+    "submissionDate": "Submission date",
+    "validation": "Validation",
+    "validate": "Validate",
+    "incomplete": "Incomplete",
+    "discard": "Discard",
+    "reason": "Reason",
+    "reasonPlaceholder": "Explain the reason for the status change...",
+    "statusUpdated": "This solution has already been",
+    "reasonForRejection": "Reason:",
+    "save": "Save",
+    "close": "Close",
+    "downloadError": {
+      "title": "Operation failed",
+      "description": "An error occurred during the download"
+    },
+    "requiredReason": "The reason is required for this status."
+  },
+
+  "validateCompanyDialog": {
+    "operations": {
+      "success": "Operation successful",
+      "failure": "Operation failed",
+      "error": "An error occurred while performing the operation"
+    },
+    "dialog": {
+      "validate_company": {
+        "validate": "Validate",
+        "button": "Validate Company"
+      },
+      "decline_company": {
+        "reject": "Reject",
+        "button": "Reject Company"
+      },
+      "close_button": "Close",
+      "once": "Once",
+      "title": "Company",
+      "description": "the company, it cannot be retrieved unless requested again."
+    }
+  },
+
+  "adminFormDialog": {
+    "operations": {
+      "success": "Operation successful",
+      "failure": "Operation failed"
+    },
+    "dialog": {
+      "participant": "Participant",
+      "edit": "Edit",
+      "view": "View",
+      "title": {
+        "edit": "Edit Participant",
+        "view": "View Participant"
+      },
+      "fields": {
+        "username": "Username",
+        "email": "Email"
+      },
+      "avatarPicker": "Avatar",
+      "buttons": {
+        "saveChanges": "Save changes",
+        "close": "Close"
+      }
+    }
+  },
+
+  "challengeHeader": {
+    "company": "Company",
+    "startDate": "Start date",
+    "deadline": "Deadline",
+    "daysRemaining": "Days remaining",
+    "days": "days",
+    "viewChallengeContent": "View challenge content"
+  },
+
+  "challengetimelineSteps": {
+    "operations": {
+      "success": "Operation successful",
+      "failure": "Operation failed",
+
+      "Desafio_Sin_validar": {
+        "label": "Not validated"
+      },
+
+      "Desafio_Sin_iniciar": {
+        "label": "Not started"
+      },
+      "Desafio_En_progreso": {
+        "label": "In progress"
+      },
+      "Desafio_En_evaluacion": {
+        "label": "Under evaluation"
+      },
+      "Desafio_En_espera_de_entrega_de_premios": {
+        "label": "Waiting for prizes"
+      },
+      "Desafio_Finalizado": {
+        "label": "Completed"
+      },
+
+      "currentStatus": {
+        "Desafio_Cancelado": "Challenge Cancelled"
+      },
+      "statusLabels": {
+        "startDate": "Start date",
+        "deadline": "Deadline",
+        "daysRemaining": "Days remaining"
+      }
+    }
+  },
+
+  "companyEvaluation": {
+    "messages": {
+      "operationSuccessful": "Operation successful",
+      "operationFailed": "Operation failed",
+      "noSolutionsToEvaluate": "No solutions to evaluate",
+      "pleaseComeBackLater": "Please, come back later",
+      "solutionDetails": "Solution details",
+      "authorOfSolution": "Author of the solution",
+      "description": "Description",
+      "attachedFiles": "Attached files",
+      "fileName": "File name",
+      "fileSize": "File size",
+      "sendDate": "Send date",
+      "status": "Status",
+      "rating": "Rating",
+      "saveRating": "Save rating"
+    },
+    "buttons": {
+      "viewDetails": "View details",
+      "close": "Close",
+      "downloadFile": "Download file",
+      "saveRating": "Save rating"
+    },
+    "fields": {
+      "user": "User",
+      "title": "Title",
+      "date": "Date",
+      "status": "Status",
+      "rating": "Rating",
+      "tableActions": "Actions"
+    },
+    "statuses": {
+      "notEvaluated": "Not evaluated"
+    },
+    "statusVariants": {
+      "outline": "Outline"
+    },
+    "rating": {
+      "notEvaluated": "Not evaluated"
+    }
+  },
+
+  "solutionRanking": {
+    "Nohaysolucionesparamostrar": "No solutions to display",
+    "Elrankingaúnnoestádisponible": "The ranking is not yet available",
+    "Posición": "Position",
+    "Usuario": "User",
+    "Título": "Title",
+    "Puntuación": "Score",
+    "VotosComunidad": "Community Votes",
+    "VotosParticipantes": "Participants Votes",
+    "Puntuaciónfinal": "Final Score",
+    "Acciones": "Actions",
+    "Verdetalles": "View details",
+    "Autordelasolución": "Solution Author",
+    "Descripción": "Description",
+    "Fechadeenvío": "Submission Date",
+    "Puntuacióndelaempresa": "Company Score",
+    "Votosdelacomunidad": "Community Votes",
+    "Votosdeparticipantes": "Participants Votes",
+    "Cerrar": "Close",
+    "Erroralcargarelranking": "Error loading the ranking",
+    "Puntuaciónfinaldelasolución": "Final solution score",
+    "Votosdelosparticipantes": "Votes from participants",
+    "Accionesdelasolución": "Solution actions",
+    "Fechaderegistro": "Submission date",
+    "Nombredelusuario": "User name"
+  },
+
+  "userVoting": {
+    "descargarAdjuntoError": "Operation failed",
+    "Operacionencurso": "Operation in progress",
+    "esperaOperacion": "Please wait for the current operation to finish before continuing.",
+    "operacionFallidaGuardarVoto": "Operation failed while saving vote",
+    "noHaySolucionesParaEvaluar": "No solutions to evaluate",
+    "vuelveMasTarde": "Please, come back later",
+    "copiarEnlace": "Copy link",
+    "reportar": "Report",
+    "sinSolucionesParaMostrar": "No solutions to display",
+    "titulo": "Title",
+    "descripcion": "Description",
+    "fechaEnvio": "Submission Date",
+    "acciones": "Actions",
+    "verDetalles": "View details",
+    "autorSolucion": "Solution Author",
+    "errorCargando": "Error loading",
+    "finalScore": "Final solution score",
+    "votesFromParticipants": "Votes from participants",
+    "actionsOfSolution": "Solution actions",
+    "submissionDate": "Submission date",
+    "userName": "User name",
+    "meGusta": "Like",
+    "voto": "vote",
+    "votos": "votes"
+  },
+
+  "layout": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+
+  "fileUploader": {
+    "singleFileError": "Cannot upload more than 1 file at a time",
+    "maxFileCountError": "Cannot upload more than {0} files",
+    "files": "files",
+    "fileRejectedError": "The file {0} was rejected",
+    "uploading": "Uploading {0}...",
+    "uploadSuccess": " uploaded successfully",
+    "uploadError": "Error uploading ",
+    "dropHere": "Drop files here",
+    "dragAndDropOrClick": "Drag and drop files here, or click to select files",
+    "canUpload": "You can upload ",
+    "multiples": "multiple",
+    "file": "files (up to",
+    "cadaUno": "each)",
+    "aFileUpTo": "a file up to",
+    "removeFile": "Remove file",
+    "uploadProgress": "Upload progress",
+    "fileName": "File name",
+    "fileSize": "File size",
+    "noFilesMessage": "No files to display",
+    "actions": "Actions",
+    "deleteFile": "Delete file"
+  },
+  "pageLoader": {
+    "cargando": "Loading..."
+  },
+
+  "protetedRoute": {
+    "toast": {
+      "sessionExpired": {
+        "title": "Must log in",
+        "description": "Session expired. Please log in again."
+      },
+      "fetchUserError": {
+        "title": "Error retrieving user information",
+        "description": "{error_message}"
+      }
+    },
+    "compareRoutes": {
+      "parameterValidation": {
+        "isParam": "Checks if a segment is a parameter.",
+        "isNumber": "Checks if a segment is a number."
+      }
+    },
+    "canAccess": {
+      "toast": {
+        "warning": {
+          "title": "Warning - View access restricted",
+          "description": "The view {0} does not have assigned access. For development purposes, access will be allowed."
+        }
+      },
+      "messages": {
+        "developmentMode": "Access granted during development mode."
+      }
+    }
+  },
+
+  "Administrators": {
+    "columns": {
+      "select": {
+        "ariaLabelAll": "Select all",
+        "ariaLabelRow": "Select row"
+      },
+      "nombreUsuario": "Username",
+      "correoElectronico": {
+        "header": "Email",
+        "tooltip": "Sort by Email"
+      },
+      "fechaRegistro": "Registration Date",
+      "nombreEstatusUsuario": {
+        "status": "Status",
+        "Activo": "Active",
+        "Inactivo": "Inactive",
+        "default": "Pending"
+      },
+      "actions": {
+        "menu": "Actions",
+        "edit": "Edit",
+        "viewDetails": "View details"
+      }
+    },
+    "buttons": {
+      "clearFilters": "Clear filters",
+      "columns": "Columns",
+      "previousPage": "Previous",
+      "nextPage": "Next"
+    },
+    "placeholders": {
+      "search": "Search by username or email...",
+      "noResults": "No results found."
+    },
+    "status": {
+      "of": "of",
+      "row": "row",
+      "selected": "Selected",
+      "selectedRows": "{selected} of {total} row(s) selected."
+    },
+    "dialogs": {
+      "form": {
+        "saved": "Saved successfully."
+      }
+    },
+    "abrirMenu": "Open menu"
+  },
+
+  "challengeForm": {
+    "formSchema": {
+      "idDesafio": "Challenge ID",
+      "idUsuarioEmpresa": "User ID (Company)",
+      "idEmpresa": "Company ID",
+      "empresa": "Company",
+      "titulo": "Title",
+      "contenido": "Content",
+      "fechaInicio": "Start Date",
+      "fechaLimite": "Deadline Date",
+      "categorias": "Categories",
+      "procesoEvaluacion": "Evaluation Process",
+      "idEstatusDesafio": "Challenge Status ID",
+      "estatusDesafio": "Challenge Status"
+    },
+    "messages": {
+      "tituloRequerido": "Title is required",
+      "contenidoRequerido": "Content is required",
+      "fechaInicioRequerida": "Start Date is required",
+      "fechaLimiteRequerida": "Deadline Date is required",
+      "categoriasRequeridas": "Categories are required",
+      "procesoEvaluacionRequerido": "Evaluation process is required",
+      "errorCargaDesafio": "Error loading the challenge",
+      "errorCargaObjetosRelacionales": "Error loading relational objects",
+      "operacionExitosa": "Operation successful",
+      "operacionFallida": "Operation failed",
+      "errorGuardarDesafio": "Error saving the challenge"
+    },
+    "buttons": {
+      "limpiarFiltros": "Clear Filters",
+      "columnas": "Columns",
+      "paginaAnterior": "Previous Page",
+      "paginaSiguiente": "Next Page"
+    },
+    "placeholders": {
+      "buscar": "Search by challenge title or category...",
+      "noResultados": "No results found"
+    },
+    "dialogs": {
+      "formGuardado": "Form saved successfully"
+    },
+    "acciones": {
+      "agregarProcesoEvaluacion": "Add Evaluation Process",
+      "eliminarProcesoEvaluacion": "Delete Evaluation Process",
+      "actualizarFecha": "Update Date",
+      "ordenarProcesoEvaluacion": "Reorder Evaluation Process"
+    },
+    "publicarDesafio": {
+      "titulo": "Publish Challenge",
+      "descripcion": "Fill out the form to publish a new challenge"
+    },
+    "editarDesafio": {
+      "titulo": "Edit Challenge",
+      "descripcion": "Fill out the form to edit a challenge"
+    },
+    "volver": "Go back",
+    "guardarDesafio": "Save Challenge",
+    "tituloDesafio": "Challenge Title",
+    "placeholderTitulo": "Enter the challenge title",
+    "categorias": "Categories",
+    "seleccionarCategorias": "Select categories",
+    "fechaInicio": "Start Date",
+    "fechaLimite": "Deadline",
+    "seleccionarFecha": "Select a date",
+    "procesosEvaluacion": "Evaluation Processes",
+    "agregarProcesoEvaluacion": "Add Evaluation Process",
+    "seleccionarProcesoEvaluacion": "Select Evaluation Process",
+    "noMasProcesosDisponibles": "No more evaluation processes available",
+    "noProcesosAgregados": "No evaluation processes added",
+    "procesosEvaluacionNoAgregados": "No evaluation processes added yet",
+    "noNombreProceso": "Unnamed process",
+    "eliminarProceso": "Delete Process",
+    "contenidoDesafio": "Challenge Content",
+    "placeholderContenido": "Enter the challenge content"
   }
 }

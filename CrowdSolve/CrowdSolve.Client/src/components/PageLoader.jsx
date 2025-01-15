@@ -3,8 +3,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Lottie from 'lottie-react';
 import animationData from '@/assets/CrowdSolveLoading.json';
+import { useTranslation } from 'react-i18next';
 
 const PageLoader = ({ progress }) => {
+  const { t } = useTranslation();
   return (
     <AnimatePresence>
       <motion.div
@@ -40,7 +42,7 @@ const PageLoader = ({ progress }) => {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-            <p className="text-lg font-medium text-foreground mb-2">Cargando...</p>
+            <p className="text-lg font-medium text-foreground mb-2">{t('pageLoader.cargando')}</p>
             {progress !== undefined && (
                 <div className="relative pt-1">
                   <div className="overflow-hidden h-2 mb-4 text-xs flex rounded-full bg-secondary">

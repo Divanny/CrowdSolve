@@ -27,8 +27,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useTranslation } from 'react-i18next';
 
 export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, mode, relationalObjects }) {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [editedParticipant, setEditedParticipant] = useState(participant)
 
@@ -60,13 +62,13 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
     });
 
     if (response.data.success) {
-      toast.success("Operación exitosa", {
+      toast.success(t('ParticipantFormDialog.successOperation'), {
         description: response.data.message,
       });
       onSaved()
       onClose()
     } else {
-      toast.warning("Operación fallida", {
+      toast.warning(t('ParticipantFormDialog.failedOperation'), {
         description: response.data.message,
       });
     }
@@ -76,7 +78,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>{mode === "edit" ? "Editar" : "Ver"} Participante</DialogTitle>
+          <DialogTitle>{mode === "edit" ? t('ParticipantFormDialog.title_edit') : t('ParticipantFormDialog.title_view')} {t('ParticipantFormDialog.participant')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSave} className="space-y-2">
           <div className="space-y-2">
@@ -99,7 +101,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nombreUsuario">Nombre de usuario</Label>
+              <Label htmlFor="nombreUsuario">{t('ParticipantFormDialog.username_label')}</Label>
               <Input
                 id="nombreUsuario"
                 name="nombreUsuario"
@@ -109,7 +111,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="correoElectronico">Correo Electrónico</Label>
+              <Label htmlFor="correoElectronico">{t('ParticipantFormDialog.email_label')}</Label>
               <Input
                 type="email"
                 id="correoElectronico"
@@ -122,7 +124,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nombres">Nombres</Label>
+              <Label htmlFor="nombres">{t('ParticipantFormDialog.first_name_label')}</Label>
               <Input
                 id="nombres"
                 name="nombres"
@@ -132,7 +134,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="apellidos">Apellidos</Label>
+              <Label htmlFor="apellidos">{t('ParticipantFormDialog.last_name_label')}</Label>
               <Input
                 id="apellidos"
                 name="apellidos"
@@ -144,7 +146,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="fechaNacimiento">Fecha de nacimiento</Label>
+              <Label htmlFor="fechaNacimiento">{t('ParticipantFormDialog.birthdate_label')}</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -158,7 +160,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
                     disabled={mode === "view"}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {editedParticipant.fechaNacimiento ? format(editedParticipant.fechaNacimiento, "PPP") : <span>Seleccione una fecha</span>}
+                    {editedParticipant.fechaNacimiento ? format(editedParticipant.fechaNacimiento, "PPP") : <span>{t('ParticipantFormDialog.birthdate_placeholder')}</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -175,7 +177,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
               </Popover>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="telefono">Teléfono</Label>
+              <Label htmlFor="telefono">{t('ParticipantFormDialog.phone_label')}</Label>
               <PhoneInput
                 placeholder="Ingrese su teléfono"
                 id="telefono"
@@ -190,7 +192,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nivelEducativo">Nivel educativo</Label>
+              <Label htmlFor="nivelEducativo">{t('ParticipantFormDialog.education_level_label')}</Label>
               <Select
                 id="nivelEducativo"
                 onValueChange={(value) => handleSelectChange("idNivelEducativo", value)}
@@ -198,7 +200,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
                 disabled={mode === "view"}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Seleccione">{editedParticipant.idNivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == editedParticipant.idNivelEducativo).nombre : "Seleccione un nivel educativo"}</SelectValue>
+                  <SelectValue placeholder={t('ParticipantFormDialog.select')}>{editedParticipant.idNivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == editedParticipant.idNivelEducativo).nombre : t('ParticipantFormDialog.education_level_placeholder')}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {relationalObjects.nivelesEducativos && relationalObjects.nivelesEducativos.map((ne) => (
@@ -210,7 +212,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="estatusUsuario">Estatus del usuario</Label>
+              <Label htmlFor="estatusUsuario">{t('ParticipantFormDialog.user_status_label')}</Label>
               <Select
                 id="estatusUsuario"
                 onValueChange={(value) => handleSelectChange("idEstatusUsuario", value)}
@@ -218,7 +220,7 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
                 disabled={mode === "view"}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Seleccione">{editedParticipant.idEstatusUsuario ? relationalObjects.estatusUsuarios.find((eu) => eu.idEstatusUsuario == editedParticipant.idEstatusUsuario).nombre : "Seleccione un estatus"}</SelectValue>
+                  <SelectValue placeholder={t('ParticipantFormDialog.select')}>{editedParticipant.idEstatusUsuario ? relationalObjects.estatusUsuarios.find((eu) => eu.idEstatusUsuario == editedParticipant.idEstatusUsuario).nombre : t('ParticipantFormDialog.user_status_placeholder')}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {relationalObjects.estatusUsuarios && relationalObjects.estatusUsuarios.map((eu) => (
@@ -231,11 +233,11 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="descripcionPersonal">Descripción personal</Label>
+            <Label htmlFor="descripcionPersonal">{t('ParticipantFormDialog.description_label')}</Label>
             <Textarea
               id="descripcionPersonal"
               name="descripcionPersonal"
-              placeholder="Ingrese una descripción personal"
+              placeholder={t('ParticipantFormDialog.description_placeholder')}
               value={editedParticipant.descripcionPersonal}
               onChange={handleInputChange}
               rows={4}
@@ -247,11 +249,11 @@ export function ParticipantFormDialog({ isOpen, onClose, onSaved, participant, m
         <DialogFooter>
           {mode === "edit" && (
             <Button type="submit" onClick={handleSave}>
-              Guardar cambios
+              {t('ParticipantFormDialog.button_save_changes')}
             </Button>
           )}
           <Button type="button" variant="secondary" onClick={onClose}>
-            Cerrar
+          {t('ParticipantFormDialog.button_close')}
           </Button>
         </DialogFooter>
       </DialogContent>

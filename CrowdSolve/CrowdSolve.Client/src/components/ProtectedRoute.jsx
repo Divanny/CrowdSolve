@@ -35,12 +35,12 @@ const ProtectedRoute = () => {
             if (error.response && error.response.status === 401) {
                 dispatch(setUser({ user: null, token: null, views: [] }));
 
-                toast.warning("Debe iniciar sesión", {
-                    description: "Sesión expirada. Por favor, inicia sesión nuevamente.",
+                toast.warning(t('protetedRoute.toast.sessionExpired.title'), {
+                    description: t('protetedRoute.toast.sessionExpired.description'),
                 });
             }
             else {
-                toast.error("Error al obtener la información del usuario", {
+                toast.error(t('protetedRoute.toast.fetchUserError.title'), {
                     description: error.message,
                 });
             }
@@ -77,8 +77,8 @@ const ProtectedRoute = () => {
         if (!view) {
             // eslint-disable-next-line no-undef
             if (process.env.NODE_ENV === 'development') {
-                toast.warning('Advertencia - Vista sin acceso', {
-                    description: `La vista "${location.pathname}" no tiene acceso asignado. Por motivos de desarrollo, se permitirá el acceso.`
+                toast.warning(t('protetedRoute.canAccess.toast.warning.title'), {
+                    description: (t('protetedRoute.canAccess.toast.warning.description')).replace('{0}',location.pathname)
                 })
                 return true;
             }
