@@ -87,7 +87,7 @@ export default function Participants() {
     },
     {
       accessorKey: "nombreUsuario",
-      header: "Nombre de Usuario",
+      header: t('Participants.nombre_usuario'),
       cell: ({ row }) => (
         <div className="flex items-center space-x-2">
           <Avatar>
@@ -120,12 +120,12 @@ export default function Participants() {
     },
     {
       accessorKey: "nombreCompleto",
-      header: "Nombre Completo",
+      header: t('Participants.nombre_completo'),
       cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`,
     },
     {
       accessorKey: "telefono",
-      header: "Teléfono",
+      header: t('Participants.telefono'),
     },
     {
       accessorKey: "fechaNacimiento",
@@ -146,22 +146,22 @@ export default function Participants() {
     },
     {
       accessorKey: "nivelEducativo",
-      header: "Nivel Educativo",
+      header: t('Participants.nivel_educativo'),
     },
     {
       accessorKey: "soluciones",
-      header: "Soluciones Enviadas",
+      header: t('Participants.soluciones_enviadas'),
       cell: ({ row }) => row.original.soluciones.length,
     },
     {
       accessorKey: "fechaRegistro",
-      header: "Fecha de Registro",
+      header: t('Participants.fecha_registro'),
       cell: ({ row }) =>
         new Date(row.getValue("fechaRegistro")).toLocaleDateString(),
     },
     {
       accessorKey: "estatusUsuario",
-      header: "Estatus",
+      header: t('Participants.estatus_usuario'),
       cell: ({ row }) => (
         <span
           className={`px-2 py-1 rounded-full text-xs font-semibold ${row.getValue("estatusUsuario") === "Activo"
@@ -181,7 +181,7 @@ export default function Participants() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menú</span>
+              <span className="sr-only">{t('Participants.openMenu')}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -374,7 +374,7 @@ export default function Participants() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Buscar estatus..."
+                  placeholder={t('Participants.searchStatus')}
                   value={estatusUsuarioSearch}
                   onChange={(e) => setEstatusUsuarioSearch(e.target.value)}
                   className="pl-8"
@@ -492,8 +492,8 @@ export default function Participants() {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} de{" "}
-          {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
+          {table.getFilteredSelectedRowModel().rows.length} {t('Participants.of')}{" "}
+          {table.getFilteredRowModel().rows.length} {t('Participants.row')}(s) {t('Participants.selected')}(s).
         </div>
         <div className="space-x-2">
           <Button

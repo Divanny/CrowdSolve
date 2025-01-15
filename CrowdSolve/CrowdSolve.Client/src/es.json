@@ -32,14 +32,19 @@
   },
 
   "CategoryFormdialog": {
-    "editTitle": "Editar Categoria",
-    "viewTitle": "Ver Categoria",
-    "nameLabel": "Nombre Categoria",
+    "operations": {
+    "success": "Operación exitosa",
+    "failure": "Operación fallida"
+    },
+    "title": "Categoría",
+    "editTitle": "Editar",
+    "viewTitle": "Ver",
+    "nameLabel": "Nombre de la Categoría",
     "descriptionLabel": "Descripción",
     "descriptionPlaceholder": "Ingrese una descripción",
     "saveChanges": "Guardar cambios",
     "close": "Cerrar"
-  },
+},
 
   "challengesPost": {
     "sectionLabel": "Desafíos",
@@ -68,23 +73,27 @@
   },
 
   "ParticipantFormDialog": {
-    "title_edit": "Editar Participante",
-    "title_view": "Ver Participante",
+    "participant": "Participante",
+    "title_edit": "Editar",
+    "title_view": "Ver",
     "username_label": "Nombre de usuario",
-    "email_label": "Correo Electrónico",
-    "first_name_label": "Nombres",
-    "last_name_label": "Apellidos",
+    "email_label": "Correo electrónico",
+    "first_name_label": "Nombre",
+    "last_name_label": "Apellido",
     "birthdate_label": "Fecha de nacimiento",
     "birthdate_placeholder": "Seleccione una fecha",
     "phone_label": "Teléfono",
-    "education_level_label": "Nivel educativo",
-    "education_level_placeholder": "Seleccione un nivel educativo",
+    "education_level_label": "Nivel de educación",
+    "education_level_placeholder": "Seleccione un nivel de educación",
+    "select": "Seleccionar",
     "user_status_label": "Estatus del usuario",
     "user_status_placeholder": "Seleccione un estatus",
     "description_label": "Descripción personal",
     "description_placeholder": "Ingrese una descripción personal",
     "button_save_changes": "Guardar cambios",
-    "button_close": "Cerrar"
+    "button_close": "Cerrar",
+    "successOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida"
   },
   "faq_section": {
     "title": "Preguntas frecuentes sobre CrowdSolve",
@@ -192,12 +201,14 @@
     }
   },
 
-  "ProfileDropdownMenuContent":{
+  "ProfileDropdownMenuContent": {
   "profile": "Perfil",
   "solutions": "Soluciones",
-  "settings": "Configuración",
+  "settings": "Configuraciones",
   "notifications": "Notificaciones",
-  "admin": "Administración",
+  "admin": "Administrador",
+  "toastMessageTitle": "Operación exitosa",
+  "toastMessageDescription": "Has cerrado sesión correctamente",
   "appearance": "Apariencia",
   "language": "Idioma",
   "logout": "Cerrar sesión",
@@ -211,13 +222,14 @@
     "en": "Inglés"
   },
   "user": {
-    "name": "Nombre de Usuario",
-    "profile": "Nombre del Perfil",
-    "participant_info": "Información del Participante",
-    "first_name": "Nombres",
-    "last_name": "Apellidos"
+    "name": "Nombre de usuario",
+    "profile": "Nombre de perfil",
+    "participant_info": "Información del participante",
+    "first_name": "Nombre",
+    "last_name": "Apellido"
   }
 },
+
 
 "Sidebar": {
     "hamburgerIconAlt": "Ícono de menú",
@@ -241,19 +253,45 @@
   },
 
   "GoogleLoginbutton": {
+    "success": {
+        "operationSuccess": "Operación exitosa",
+        "loginSuccess": "Inicio de sesión con Google exitoso"
+    },
+    "warning": {
+        "operationError": "Operación fallida",
+        "loginWarning": "Error en el inicio de sesión con Google",
+        "defaultErrorMessage": "Error al iniciar sesión con Google"
+    },
+    "error": {
+        "operationError": "Operación fallida",
+        "loginError": "Error al iniciar sesión con Google:"
+    },
     "continueWithGoogle": "Continuar con Google"
-  },
+},
+
 
   "RegistroEmpresa": {
+    "successfulOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida",
+    "failedOpeDescription": "Por favor, complete todos los campos",
     "companyName": "Nombre de la empresa",
     "companyDescription": "Descripción",
     "phone": "Teléfono",
+    "phPhone": "Ingrese el teléfono de la empresa",
+    "phName": "Ingrese el nombre de la empresa",
+    "phDescription": "Ingrese una breve descripción de la empresa",
+    "select": "Seleccione",
+    "selectSector": "Seleccione un sector",
     "sector": "Sector",
     "website": "Página web",
+    "enterWebsite": "Ingrese la página web de la empresa",
     "companySize": "Tamaño de la empresa",
+    "selectComSize": "Seleccione un tamaño de empresa",
     "address": "Dirección",
-    "register": "Registrarse"
+    "enterComAddress": "Ingrese la dirección de la empresa",
+    "register": "Registrar"
   },
+
   "RegistroEmpresaEntry": {
     "welcomeTitle": "Bienvenido a CrowdSolve",
     "welcomeDescription": "Un par de cosas clave que debe saber antes de crear su cuenta de empresa:",
@@ -265,6 +303,9 @@
   },
 
   "RegistroParticipante": {
+    "successfulOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida",
+    "failedOpeDescription":"Por favor, complete todos los campos",
   "nombres": "Nombres",
   "apellidos": "Apellidos",
   "fechaNacimiento": "Fecha de Nacimiento",
@@ -340,29 +381,39 @@
   }
   },
 
-      "Participants":{
-        "select_all": "Seleccionar todo",
-        "select_row": "Seleccionar fila",
-        "nombre_usuario": "Nombre de Usuario",
-        "correo_electronico": "Correo Electrónico",
-      "nombre_completo": "Nombre Completo",
-      "telefono": "Teléfono",
-      "fecha_nacimiento": "Fecha de Nacimiento",
-      "nivel_educativo": "Nivel Educativo",
-      "soluciones_enviadas": "Soluciones Enviadas",
-      "fecha_registro": "Fecha de Registro",
-      "estatus_usuario": "Estatus",
-      "acciones": "Acciones",
-     "ver_detalles": "Ver detalles",
-       "editar": "Editar",
-      "ver_soluciones": "Ver soluciones",
-      "buscar": "Buscar por nombre de usuario, correo o nombre completo...",
-      "filtro_nivel_educativo": "Nivel Educativo",
-      "filtro_estatus_usuario": "Estatus Usuario",
-      "limpiar_filtro": "Limpiar filtro",
-      "columna": "Columnas",
-      "no_resultados": "No se encontraron resultados."
-      },
+      "Participants": {
+    "select_all": "Seleccionar todo",
+    "select_row": "Seleccionar fila",
+    "nombre_usuario": "Nombre de Usuario",
+    "correo_electronico": "Correo Electrónico",
+    "nombre_completo": "Nombre Completo",
+    "telefono": "Teléfono",
+    "fecha_nacimiento": "Fecha de Nacimiento",
+    "nivel_educativo": "Nivel Educativo",
+    "buscarPH": "Buscar...",
+    "soluciones_enviadas": "Soluciones Enviadas",
+    "fecha_registro": "Fecha de Registro",
+    "estatus_usuario": "Estatus",
+    "acciones": "Acciones",
+    "ver_detalles": "Ver detalles",
+    "editar": "Editar",
+    "ver_soluciones": "Ver soluciones",
+    "buscar": "Buscar por nombre de usuario, correo electrónico o nombre completo...",
+    "filtro_nivel_educativo": "Nivel Educativo",
+    "filtro_estatus_usuario": "Estatus de Usuario",
+    "limpiar_filtro": "Limpiar filtro",
+    "limpiarFiltros": "Limpiar filtros",
+    "columna": "Columnas",
+    "no_resultados": "No se encontraron resultados",
+    "PrevButton": "Anterior",
+    "NextButton": "Siguiente",
+    "openMenu": "Abrir Menú",
+    "searchStatus": "Buscar estatus...",
+    "of": "de",
+    "row": "fila",
+    "selected": "Seleccionada"
+    },
+
 
       "RoleAndPermissions":{
         "saveChanges": {
@@ -447,7 +498,8 @@
   "successMessageDescription": "Inicio de sesión exitoso",
   "creativeMessage": "Despierta tu creatividad",
   "showTalentMessage": "Demuestra tu talento",
-  "solveProblemsMessage": "Resuelve problemas"
+  "solveProblemsMessage": "Resuelve problemas",
+  "noAccount":"¿No tienes una cuenta?"
       },
 
       "SignUp":{
@@ -470,7 +522,11 @@
   "privacyPolicyLink": "Política de privacidad",
   "creativeMessage": "Despierta tu creatividad",
   "showTalentMessage": "Demuestra tu talento",
-  "solveProblemsMessage": "Resuelve problemas"
+  "solveProblemsMessage": "Resuelve problemas",
+  "haveaccount": "¿Ya tienes una cuenta?",
+    "userName": "Nombre de usuario",
+    "Email": "Correo electrónico",
+    "password": "Contraseña"
       },
 
       "AccessDenied":{
@@ -482,33 +538,14 @@
 
 
     "ChallengeCatalog":{
-      "pageTitle": "Explora en nuestra sección de Desafíos",
-  "searchPlaceholder": "Buscar",
-  "filters": {
-    "all": "Todos",
-    "design": "Diseño",
-    "software": "Software",
-    "data": "Datos",
-    "ai": "IA",
-    "cybersecurity": "CiberSeguridad"
-  },
-  "categories": {
-    "label": "Categoría",
-    "company": "Empresa",
-    "endDate": "Fecha de finalización"
-  },
-  "noResults": {
-    "title": "No encontrado",
-    "imageAlt": "No encontrado"
-  },
-  "pagination": {
-    "page": "Página",
-    "of": "de"
-  },
-  "buttons": {
-    "viewMore": "Ver más",
-    "previous": "Anterior",
-    "next": "Siguiente"
+    "pageTitle": "Encuentra tu próximo",
+  "pageTitle2": "desafío innovador",
+  "searchPlaceholder": "Buscar desafíos...",
+  "pagedescription": "Explora los últimos desafíos de innovación y demuestra tu talento en nuestra plataforma líder.",
+  "itemSelect": {
+    "recent": "Más recientes",
+    "popular": "Más populares",
+    "closeSoon": "Próximos a cerrar"
   }
     },
 
@@ -542,6 +579,39 @@
         }
       }
     },
+
+    "CompaniesPage": {
+    "selectAll": "Seleccionar todo",
+    "selectRow": "Seleccionar fila",
+    "nombre": "Nombre",
+    "descripcion": "Descripción",
+    "direccion": "Dirección",
+    "telefono": "Teléfono",
+    "paginaWeb": "Página web",
+    "tamanoEmpresa": "Tamaño de la empresa",
+    "sector": "Sector",
+    "cantidadDesafios": "Cantidad de desafíos",
+    "cantidadSoluciones": "Cantidad de soluciones",
+    "estatusUsuario": "Estado",
+    "acciones": "Acciones",
+    "abrirMenu": "Abrir menú",
+    "editar": "Editar",
+    "verDetalles": "Ver detalles",
+    "verDesafios": "Ver desafíos",
+    "buscarPorNombre": "Buscar por nombre...",
+    "tamanoEmpresaFiltro": "Tamaño de la empresa",
+    "buscar": "Buscar...",
+    "limpiarFiltro": "Limpiar filtro",
+    "sectorFiltro": "Sector",
+    "limpiarFiltros": "Limpiar filtros",
+    "columnaBoton": "Columnas",
+    "noResultsFound": "No se encontraron resultados.",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "preposicionDe": "de",
+    "rows": "fila",
+    "selected": "seleccionada"
+},
 
   
     "ContactUs":{
@@ -797,7 +867,416 @@
     "termsOfService": "Ver Términos de Servicio",
     "privacyPolicy": "Ver Política de Privacidad"
   }
+  },
+
+  "SupportRequestDialog": {
+    "closeSupport": "Finalizar Soporte",
+    "declineSupport": "Descartar Soporte",
+    "finalize": "Finalizar ",
+    "finalizeSupport": "Finalizar soporte",
+    "discardSupport": "Descartar soporte",
+    "SupportRequest": "Solicitud de Soporte",
+    "discard": "Descartar ",
+    "viewSupportRequest": "Ver Solicitud de Soporte",
+    "Once": "Una vez",
+    "finalized": "finalizada",
+    "Confirmation": " la solicitud de soporte no podrá ser reabierta ni trabajada nuevamente.",
+    "discarded": "descartada",
+    "close": "Cerrar",
+    "saveChanges": "Guardar cambios",
+    "affectedUser": "Usuario Afectado",
+    "title": "Título",
+    "message": "Mensaje",
+    "supportDate": "Fecha de Soporte",
+    "names": "Nombres",
+    "lastNames": "Apellidos",
+    "email": "Correo Electrónico",
+    "assignedUser": "Usuario Asignado",
+    "successfulOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida",
+    "operationError": "Hubo un error al realizar la operación",
+    "rows": "fila",
+    "selected": "seleccionada"
+  },
+
+  "solutionsValidation": {
+  "successOperation": "Operación exitosa",
+  "failedOperation": "Operación fallida",
+  "noSolutionsToValidate": {
+    "title": "No hay soluciones para validar",
+    "description": "Por favor, regrese más tarde"
+  },
+  "user": "Usuario",
+  "title": "Título",
+  "date": "Fecha",
+  "status": "Estatus",
+  "selectStatus": "Seleccione un estatus",
+  "actions": "Acciones",
+  "viewDetails": "Ver detalles",
+  "solutionDetails": "Detalles de la solución",
+  "solutionAuthor": "Autor de la solución",
+  "description": "Descripción",
+  "attachments": "Adjuntos",
+  "fileSize": "Tamaño",
+  "submissionDate": "Fecha de envío",
+  "validation": "Validación",
+  "validate": "Validar",
+  "incomplete": "Incompleto",
+  "discard": "Descartar",
+  "reason": "Razón",
+  "reasonPlaceholder": "Explique la razón del cambio de estatus...",
+  "statusUpdated": "Esta solución ya ha sido",
+  "reasonForRejection": "Razón:",
+  "save": "Guardar",
+  "close": "Cerrar",
+  "downloadError": {
+    "title": "Operación fallida",
+    "description": "Ocurrió un error durante la descarga"
+  },
+  "requiredReason": "La razón es requerida para este estatus."
+},
+
+"validateCompanyDialog": {
+  "operations": {
+    "success": "Operación exitosa",
+    "failure": "Operación fallida",
+    "error": "Hubo un error al realizar la operación"
+  },
+  "dialog": {
+    "validate_company": {
+      "validate": "Validar",
+      "button": "Validar Empresa"
+    },
+    "decline_company": {
+      "reject": "Rechazar",
+      "button": "Rechazar Empresa"
+    },
+    "close_button": "Cerrar",
+    "once": "Una vez",
+    "title": "Empresa",
+    "description": "la empresa, no se podrá recuperar a menos que se solicite nuevamente."
   }
+},
+
+"adminFormDialog": {
+  "operations": {
+    "success": "Operation successful",
+    "failure": "Operation failed"
+  },
+  "dialog": {
+    "participant":"Participant",
+    "edit": "Edit",
+    "view": "View",
+    "title": {
+      "edit": "Edit Participant",
+      "view": "View Participant"
+    },
+    "fields": {
+      "username": 
+        "Username"
+      ,
+      "email": 
+        "Email"
+    },
+    "avatarPicker": 
+       "Avatar"
+    ,
+    "buttons": {
+      "saveChanges": "Save changes",
+      "close": "Close"
+    }
+  }
+},
+
+"challengeHeader": {
+  "company": "Empresa",
+  "startDate": "Fecha de inicio",
+  "deadline": "Fecha límite",
+  "daysRemaining": "Días restantes",
+  "days": "días",
+  "viewChallengeContent": "Ver contenido del desafío"
+},
+
+"challengetimelineSteps": {
+  "Desafio_Sin_validar": {
+    "label": "Sin validar"
+  },
+  "Desafio_Sin_iniciar": {
+    "label": "Sin iniciar"
+  },
+  "Desafio_En_progreso": {
+    "label": "En progreso"
+  },
+  "Desafio_En_evaluacion": {
+    "label": "En evaluación"
+  },
+  "Desafio_En_espera_de_entrega_de_premios": {
+    "label": "Espera de premios"
+  },
+  "Desafio_Finalizado": {
+    "label": "Finalizado"
+  },
+  "currentStatus": {
+    "Desafio_Cancelado": "Desafío Cancelado"
+  },
+  "statusLabels": {
+    "startDate": "Fecha de inicio",
+    "deadline": "Fecha límite",
+    "daysRemaining": "Días restantes"
+  }
+},
+
+"solutionRanking": {
+  "Nohaysolucionesparamostrar": "No hay soluciones para mostrar",
+  "Elrankingaúnnoestádisponible": "El ranking aún no está disponible",
+  "Posición": "Posición",
+  "Usuario": "Usuario",
+  "Título": "Título",
+  "Puntuación": "Puntuación",
+  "VotosComunidad": "Votos Comunidad",
+  "VotosParticipantes": "Votos Participantes",
+  "Puntuaciónfinal": "Puntuación final",
+  "Acciones": "Acciones",
+  "Verdetalles": "Ver detalles",
+  "Autordelasolución": "Autor de la solución",
+  "Descripción": "Descripción",
+  "Fechadeenvío": "Fecha de envío",
+  "Puntuacióndelaempresa": "Puntuación de la empresa",
+  "Votosdelacomunidad": "Votos de la comunidad",
+  "Votosdeparticipantes": "Votos de participantes",
+  "Cerrar": "Cerrar",
+  "Erroralcargarelranking": "Error al cargar el ranking",
+  "Puntuaciónfinaldelasolución": "Puntuación final de la solución",
+  "Votosdelosparticipantes": "Votos de los participantes",
+  "Accionesdelasolución": "Acciones de la solución",
+  "Fechaderegistro": "Fecha de registro",
+  "Nombredelusuario": "Nombre del usuario"
+},
+
+"userVoting": {
+  "descargarAdjuntoError": "Operación fallida",
+  "Operacionencurso": "Operación en curso",
+  "esperaOperacion": "Por favor, espera a que la operación actual termine antes de continuar.",
+  "operacionFallidaGuardarVoto": "Operación fallida al guardar voto",
+  "noHaySolucionesParaEvaluar": "No hay soluciones para evaluar",
+  "vuelveMasTarde": "Por favor, vuelve más tarde",
+  "copiarEnlace": "Copiar enlace",
+  "reportar": "Reportar",
+  "sinSolucionesParaMostrar": "No hay soluciones para mostrar",
+  "titulo": "Título",
+  "descripcion": "Descripción",
+  "fechaEnvio": "Fecha de envío",
+  "acciones": "Acciones",
+  "verDetalles": "Ver detalles",
+  "autorSolucion": "Autor de la solución",
+  "errorCargando": "Error al cargar",
+  "finalScore": "Puntuación final de la solución",
+  "votesFromParticipants": "Votos de los participantes",
+  "actionsOfSolution": "Acciones de la solución",
+  "submissionDate": "Fecha de envío",
+  "userName": "Nombre de usuario",
+  "meGusta": "Me gusta",
+  "voto": "voto",
+  "votos": "votos"
+},
+
+"layout":{
+    "signIn":"Iniciar sesión",
+    "signUp":"Registrarse"
+  },
+
+  "fileUploader": {
+    "singleFileError": "No se puede cargar más de 1 archivo a la vez",
+    "maxFileCountError": "No se pueden cargar más de {0} archivos",
+    "files": "archivos",
+    "fileRejectedError": "El archivo {0} fue rechazado",
+    "uploading": "Cargando {0}...",
+    "uploadSuccess": " cargado con éxito",
+    "uploadError": "Error al cargar ",
+    "dropHere": "Suelta los archivos aquí",
+    "dragAndDropOrClick": "Arrastra y suelta archivos aquí, o haz clic para seleccionarlos",
+    "canUpload": "Puedes cargar ",
+    "multiples": "múltiples",
+    "file": "archivos (hasta",
+    "cadaUno": "cada uno)",
+    "aFileUpTo": "un archivo de hasta",
+    "removeFile": "Eliminar archivo",
+    "uploadProgress": "Progreso de carga",
+    "fileName": "Nombre del archivo",
+    "fileSize": "Tamaño del archivo",
+    "noFilesMessage": "No hay archivos para mostrar",
+    "actions": "Acciones",
+    "deleteFile": "Eliminar archivo"
+},
+
+
+  "pageLoader":{
+    "cargando": "Cargando..."
+  },
+
+  "protetedRoute": {
+    "toast": {
+        "sessionExpired": {
+            "title": "Debe iniciar sesión",
+            "description": "La sesión ha expirado. Por favor, inicie sesión nuevamente."
+        },
+        "fetchUserError": {
+            "title": "Error al obtener la información del usuario",
+            "description": "{error_message}"
+        }
+    },
+    "compareRoutes": {
+        "parameterValidation": {
+            "isParam": "Verifica si un segmento es un parámetro.",
+            "isNumber": "Verifica si un segmento es un número."
+        }
+    },
+    "canAccess": {
+        "toast": {
+            "warning": {
+                "title": "Advertencia - Acceso restringido a la vista",
+                "description": "La vista \"{location_pathname}\" no tiene acceso asignado. Por motivos de desarrollo, se permitirá el acceso."
+            }
+        },
+        "messages": {
+            "developmentMode": "Acceso permitido durante el modo de desarrollo."
+        }
+    }
+},
+
+
+  "Administrators": {
+    "columns": {
+      "select": {
+        "ariaLabelAll": "Seleccionar todo",
+        "ariaLabelRow": "Seleccionar fila"
+      },
+      "nombreUsuario": "Nombre de Usuario",
+      "correoElectronico": {
+        "header": "Correo Electrónico",
+        "tooltip": "Ordenar por Correo Electrónico"
+      },
+      "fechaRegistro": "Fecha de Registro",
+      "nombreEstatusUsuario": {
+        "status": "Estatus",
+        "Activo": "Activo",
+        "Inactivo": "Inactivo",
+        "default": "Pendiente"
+      },
+      "actions": {
+        "menu": "Acciones",
+        "edit": "Editar",
+        "viewDetails": "Ver detalles"
+      }
+    },
+    "buttons": {
+      "clearFilters": "Limpiar filtros",
+      "columns": "Columnas",
+      "previousPage": "Anterior",
+      "nextPage": "Siguiente"
+    },
+    "placeholders": {
+      "search": "Buscar por nombre de usuario o correo...",
+      "noResults": "No se encontraron resultados."
+    },
+    "status": {
+      "of": "de",
+      "row": "fila",
+      "selected": "Seleccionado",
+      "selectedRows": "{selected} de {total} fila(s) seleccionada(s)."
+    },
+    "dialogs": {
+      "form": {
+        "saved": "Guardado con éxito."
+      }
+    },
+    "abrirMenu": "Abrir menú"
+  },
+  
+  "challengeForm": {
+    "formSchema": {
+      "idDesafio": "ID del Desafío",
+      "idUsuarioEmpresa": "ID de Usuario (Empresa)",
+      "idEmpresa": "ID de Empresa",
+      "empresa": "Empresa",
+      "titulo": "Título",
+      "contenido": "Contenido",
+      "fechaInicio": "Fecha de Inicio",
+      "fechaLimite": "Fecha Límite",
+      "categorias": "Categorías",
+      "procesoEvaluacion": "Proceso de Evaluación",
+      "idEstatusDesafio": "ID de Estado del Desafío",
+      "estatusDesafio": "Estado del Desafío"
+    },
+    "messages": {
+      "tituloRequerido": "El título es requerido",
+      "contenidoRequerido": "El contenido es requerido",
+      "fechaInicioRequerida": "La fecha de inicio es requerida",
+      "fechaLimiteRequerida": "La fecha límite es requerida",
+      "categoriasRequeridas": "Las categorías son requeridas",
+      "procesoEvaluacionRequerido": "El proceso de evaluación es requerido",
+      "errorCargaDesafio": "Error al cargar el desafío",
+      "errorCargaObjetosRelacionales": "Error al cargar objetos relacionales",
+      "operacionExitosa": "Operación exitosa",
+      "operacionFallida": "Operación fallida",
+      "errorGuardarDesafio": "Error al guardar el desafío"
+    },
+    "buttons": {
+      "limpiarFiltros": "Limpiar Filtros",
+      "columnas": "Columnas",
+      "paginaAnterior": "Página Anterior",
+      "paginaSiguiente": "Página Siguiente"
+    },
+    "placeholders": {
+      "buscar": "Buscar por título de desafío o categoría...",
+      "noResultados": "No se encontraron resultados"
+    },
+    "dialogs": {
+      "formGuardado": "Formulario guardado exitosamente"
+    },
+    "acciones": {
+      "agregarProcesoEvaluacion": "Agregar Proceso de Evaluación",
+      "eliminarProcesoEvaluacion": "Eliminar Proceso de Evaluación",
+      "actualizarFecha": "Actualizar Fecha",
+      "ordenarProcesoEvaluacion": "Reordenar Proceso de Evaluación"
+    },
+    "publicarDesafio": {
+      "titulo": "Publicar Desafío",
+      "descripcion": "Rellene el formulario para publicar un nuevo desafío"
+    },
+    "editarDesafio": {
+      "titulo": "Editar Desafío",
+      "descripcion": "Rellene el formulario para editar un desafío"
+    },
+    "volver": "Volver",
+    "guardarDesafio": "Guardar Desafío",
+    "tituloDesafio": "Título del Desafío",
+    "placeholderTitulo": "Ingrese el título del desafío",
+    "categorias": "Categorías",
+    "seleccionarCategorias": "Seleccionar categorías",
+    "fechaInicio": "Fecha de Inicio",
+    "fechaLimite": "Fecha Límite",
+    "seleccionarFecha": "Seleccionar una fecha",
+    "procesosEvaluacion": "Procesos de Evaluación",
+    "agregarProcesoEvaluacion": "Agregar Proceso de Evaluación",
+    "seleccionarProcesoEvaluacion": "Seleccionar Proceso de Evaluación",
+    "noMasProcesosDisponibles": "No hay más procesos de evaluación disponibles",
+    "noProcesosAgregados": "No se han agregado procesos de evaluación",
+    "procesosEvaluacionNoAgregados": "Aún no se han agregado procesos de evaluación",
+    "noNombreProceso": "Proceso sin nombre",
+    "eliminarProceso": "Eliminar Proceso",
+    "contenidoDesafio": "Contenido del Desafío",
+    "placeholderContenido": "Ingrese el contenido del desafío"
+  }
+
+
+
+
+
+
+
+
+
 
   
 

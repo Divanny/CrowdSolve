@@ -16,8 +16,10 @@ import useAxios from '@/hooks/use-axios'
 import { toast } from 'sonner'
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select"
+import { useTranslation } from 'react-i18next';
 
 const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = true }) => {
+    const { t } = useTranslation();
     const { api } = useAxios()
     const [detalleSolucionDialog, setDetalleSolucionDialog] = useState(false)
     const [solucionSeleccionada, setSolucionSeleccionada] = useState(null)
@@ -81,19 +83,19 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
             const response = await api.put(`/api/Soluciones/CambiarEstatus/${solucion.idSolucion}`, payload);
 
             if (response.data.success) {
-                toast.success("Operación exitosa", {
+                toast.success(t('solutionsValidation.successOperation'), {
                     description: response.data.message
                 });
                 setDetalleSolucionDialog(false);
                 setRazonRechazo('');
                 await reloadChallengeData();
             } else {
-                toast.warning("Operación fallida", {
+                toast.warning(t('solutionsValidation.failedOperation'), {
                     description: response.data.message
                 });
             }
         } catch (error) {
-            toast.error("Operación fallida", {
+            toast.error(t('solutionsValidation.failedOperation'), {
                 description: error.message
             });
         }
@@ -101,7 +103,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
 
     const handleSaveEstatus = async () => {
         if ((selectedEstatus === EstatusProcesoEnum.Solucion_Incompleta || selectedEstatus === EstatusProcesoEnum.Solucion_Descartada) && !razonRechazo) {
-            setValidationError('El motivo es requerido para este estatus.');
+            setValidationError(t('solutionsValidation.requiredReason'));
             return;
         }
         setValidationError('');
@@ -126,7 +128,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
             link.remove();
         }
         catch (error) {
-            toast.error("Operación fallida", {
+            toast.error(t('solutionsValidation.failedOperation'), {
                 description: error.message
             });
         }
@@ -137,11 +139,11 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Usuario</TableHead>
-                        <TableHead>Título</TableHead>
-                        <TableHead>Fecha</TableHead>
-                        <TableHead>Estatus</TableHead>
-                        <TableHead className="text-right">Acciones</TableHead>
+                        <TableHead>{t('solutionsValidation.user')}</TableHead>
+                        <TableHead>{t('solutionsValidation.title')}</TableHead>
+                        <TableHead>{t('solutionsValidation.date')}</TableHead>
+                        <TableHead>{t('solutionsValidation.status')}</TableHead>
+                        <TableHead className="text-right">{t('solutionsValidation.actions')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -149,8 +151,8 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                         <TableRow>
                             <TableCell colSpan={5}>
                                 <div className="flex flex-col items-center gap-2 my-4">
-                                    <span className="text-lg font-semibold">No hay soluciones para validar</span>
-                                    <span className="text-muted-foreground">Por favor, vuelve más tarde</span>
+                                    <span className="text-lg font-semibold">{t('solutionsValidation.noSolutionsToValidate.title')}</span>
+                                    <span className="text-muted-foreground">{t('solutionsValidation.noSolutionsToValidate.description')}</span>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -178,14 +180,14 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                     <DialogTrigger asChild>
                                         <Button variant="ghost" size="icon" onClick={() => handleDialogOpen(solucion)}>
                                             <Eye className="h-4 w-4" />
-                                            <span className="sr-only">Ver detalles</span>
+                                            <span className="sr-only">{t('solutionsValidation.viewDetails')}</span>
                                         </Button>
                                     </DialogTrigger>
                                     <DialogContent className="max-w-4xl">
                                         <DialogHeader>
                                             <DialogTitle className="text-2xl font-bold">{solucionSeleccionada?.titulo}</DialogTitle>
                                             <VisuallyHidden>
-                                                <DialogDescription>Detalles de la solución</DialogDescription>
+                                                <DialogDescription>{t('solutionsValidation.solutionDetails')}</DialogDescription>
                                             </VisuallyHidden>
                                         </DialogHeader>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
@@ -197,18 +199,18 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                     </Avatar>
                                                     <div>
                                                         <p className="text-lg font-semibold">{solucionSeleccionada?.nombreUsuario}</p>
-                                                        <p className="text-sm text-muted-foreground">Autor de la solución</p>
+                                                        <p className="text-sm text-muted-foreground">{t('solutionsValidation.solutionAuthor')}</p>
                                                     </div>
                                                 </div>
                                                 <Separator />
                                                 <div>
-                                                    <Label className="text-lg font-semibold">Descripción</Label>
+                                                    <Label className="text-lg font-semibold">{t('solutionsValidation.description')}</Label>
                                                     <ScrollArea className="h-[200px] w-full rounded-md border p-4 mt-2">
                                                         <p className="text-sm">{solucionSeleccionada?.descripcion}</p>
                                                     </ScrollArea>
                                                 </div>
                                                 <div>
-                                                    <Label className="text-lg font-semibold">Archivos adjuntos</Label>
+                                                    <Label className="text-lg font-semibold">{t('solutionsValidation.attachments')}</Label>
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                                                         {solucionSeleccionada?.adjuntos.map((adjunto) => (
                                                             <Button
@@ -232,7 +234,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                         <div>
                                                             <div className='flex items-center gap-1'>
                                                                 <Calendar className="w-4 h-4 text-muted-foreground" />
-                                                                <Label className="text-sm font-medium">Fecha de envío</Label>
+                                                                <Label className="text-sm font-medium">{t('solutionsValidation.submissionDate')}</Label>
                                                             </div>
                                                             <p className="text-sm">{formatearFecha(solucionSeleccionada?.fechaRegistro)}</p>
                                                         </div>
@@ -241,7 +243,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                         <div>
                                                             <div className='flex items-center gap-1'>
                                                                 <Clock className="w-4 h-4 text-muted-foreground" />
-                                                                <Label className="text-sm font-medium">Estatus</Label>
+                                                                <Label className="text-sm font-medium">{t('solutionsValidation.status')}</Label>
                                                             </div>
                                                             <Badge variant={getBadgeVariant(solucionSeleccionada?.idEstatusProceso)} className="mt-1">
                                                                 {solucionSeleccionada?.estatusProceso || 'Enviada'}
@@ -252,17 +254,17 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                 <Separator />
                                                 {canValidate && (
                                                     <div className="space-y-4">
-                                                        <Label className="text-lg font-semibold">Validación</Label>
+                                                        <Label className="text-lg font-semibold">{t('solutionsValidation.validation')}</Label>
                                                         <Select onValueChange={setSelectedEstatus}>
                                                             <SelectTrigger className="w-full">
-                                                                <SelectValue placeholder="Seleccione un estatus" />
+                                                                <SelectValue placeholder={t('solutionsValidation.selectStatus')} />
                                                             </SelectTrigger>
                                                             <SelectContent>
                                                                 <SelectItem value={EstatusProcesoEnum.Solucion_Evaluada}>
                                                                     <Badge variant="success">
                                                                         <div className="flex items-center gap-1">
                                                                             <CheckCircle className="w-4 h-4" />
-                                                                            Validar
+                                                                            {t('solutionsValidation.validate')}
                                                                         </div>
                                                                     </Badge>
                                                                 </SelectItem>
@@ -270,7 +272,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                                     <Badge variant="warning">
                                                                         <div className="flex items-center gap-1">
                                                                             <TriangleAlert className="w-4 h-4" />
-                                                                            Incompleta
+                                                                            {t('solutionsValidation.incomplete')}
                                                                         </div>
                                                                     </Badge>
                                                                 </SelectItem>
@@ -278,7 +280,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                                     <Badge variant="destructive">
                                                                         <div className="flex items-center gap-1">
                                                                             <XCircle className="w-4 h-4" />
-                                                                            Descartar
+                                                                            {t('solutionsValidation.discard')}
                                                                         </div>
                                                                     </Badge>
                                                                 </SelectItem>
@@ -286,10 +288,10 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                         </Select>
                                                         {(selectedEstatus === EstatusProcesoEnum.Solucion_Incompleta || selectedEstatus === EstatusProcesoEnum.Solucion_Descartada) && (
                                                             <div>
-                                                                <Label htmlFor="razon-rechazo">Motivo</Label>
+                                                                <Label htmlFor="razon-rechazo">{t('solutionsValidation.reason')}</Label>
                                                                 <Textarea
                                                                     id="razon-rechazo"
-                                                                    placeholder="Explique el motivo del cambio de estatus..."
+                                                                    placeholder={t('solutionsValidation.reasonPlaceholder')}
                                                                     value={razonRechazo}
                                                                     onChange={(e) => setRazonRechazo(e.target.value)}
                                                                     className="mt-2"
@@ -298,15 +300,15 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                                             </div>
                                                         )}
                                                         <Button onClick={handleSaveEstatus} className="mt-4">
-                                                            Guardar
+                                                        {t('solutionsValidation.save')}
                                                         </Button>
                                                         {solucionSeleccionada?.idEstatusProceso !== EstatusProcesoEnum.Solucion_Enviada && (
                                                             <p className="text-sm">
-                                                                Esta solución ya ha sido {solucionSeleccionada?.estatusProceso.toLowerCase()}.
+                                                                {t('solutionsValidation.statusUpdated')} {solucionSeleccionada?.estatusProceso.toLowerCase()}.
                                                                 {solucionSeleccionada?.razonRechazo && (
                                                                     <>
                                                                         <br />
-                                                                        <strong>Motivo:</strong> {solucionSeleccionada.razonRechazo}
+                                                                        <strong>{t('solutionsValidation.reasonForRejection')}</strong> {solucionSeleccionada.razonRechazo}
                                                                     </>
                                                                 )}
                                                             </p>
@@ -317,7 +319,7 @@ const SolutionsValidation = ({ solutions, reloadChallengeData, canValidate = tru
                                         </div>
                                         <DialogFooter>
                                             <Button type="button" variant="secondary" onClick={() => setDetalleSolucionDialog(false)}>
-                                                Cerrar
+                                            {t('solutionsValidation.close')}
                                             </Button>
                                         </DialogFooter>
                                     </DialogContent>

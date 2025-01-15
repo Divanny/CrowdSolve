@@ -87,8 +87,8 @@ const RegistroEmpresa = () => {
         e.preventDefault();
 
         if (!formData.nombre || !formData.telefono || !formData.idSector || !formData.idTamañoEmpresa || !formData.direccion) {
-            toast.warning("Operación fallida", {
-                description: "Por favor, complete todos los campos",
+            toast.warning(t('RegistroEmpresa.failedOperation'), {
+                description: t('RegistroEmpresa.failedOpeDescription'),
             });
             return;
         }
@@ -118,11 +118,11 @@ const RegistroEmpresa = () => {
                     }));
                 }
 
-                toast.success("Operación exitosa", {
+                toast.success(t('RegistroEmpresa.successfulOperation'), {
                     description: response.data.message,
                 });
             } else {
-                toast.warning("Operación fallida", {
+                toast.warning(t('RegistroEmpresa.failedOperation'), {
                     description: response.data.message,
                 });
             }
@@ -139,17 +139,17 @@ const RegistroEmpresa = () => {
             </div>
             <div className="space-y-2">
                 <Label htmlFor="nombre">{t('RegistroEmpresa.companyName')}</Label>
-                <Input id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} required placeholder="Ingrese el nombre de la empresa" autoComplete="organization" />
+                <Input id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} required placeholder={t('RegistroEmpresa.phName')} autoComplete="organization" />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="direccion">{t('RegistroEmpresa.companyDescription')}</Label>
-                <Textarea id="descripcion" name="descripcion" value={formData.descripcion} onChange={handleChange} rows={2} required placeholder="Ingrese una descripcion breve de la empresa" autoComplete="description" />
+                <Textarea id="descripcion" name="descripcion" value={formData.descripcion} onChange={handleChange} rows={2} required placeholder={t('RegistroEmpresa.phDescription')} autoComplete="description" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="telefono">{t('RegistroEmpresa.phone')}</Label>
                     <PhoneInput
-                        placeholder="Ingrese el teléfono de la empresa"
+                        placeholder={t('RegistroEmpresa.phPhone')}
                         id="telefono"
                         name="telefono"
                         type="tel"
@@ -166,7 +166,7 @@ const RegistroEmpresa = () => {
                         value={formData.idSector}
                     >
                         <SelectTrigger>
-                            <SelectValue placeholder="Seleccione">{formData.idSector ? relationalObjects.sectores.find((ne) => ne.idSector == formData.idSector).nombre : "Seleccione un sector"}</SelectValue>
+                            <SelectValue placeholder={t('RegistroEmpresa.select')}>{formData.idSector ? relationalObjects.sectores.find((ne) => ne.idSector == formData.idSector).nombre : t('RegistroEmpresa.selectSector')}</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                             {relationalObjects.sectores && relationalObjects.sectores.map((ne) => (
@@ -180,7 +180,7 @@ const RegistroEmpresa = () => {
             </div>
             <div className="space-y-2">
                 <Label htmlFor="paginaWeb">{t('RegistroEmpresa.website')}</Label>
-                <Input id="paginaWeb" name="paginaWeb" type="url" value={formData.paginaWeb} onChange={handleChange} placeholder="Ingrese la página web de la empresa" autoComplete="url" />
+                <Input id="paginaWeb" name="paginaWeb" type="url" value={formData.paginaWeb} onChange={handleChange} placeholder={t('RegistroEmpresa.enterWebsite')} autoComplete="url" />
             </div>
             <div className="space-y-2">
                 <Label htmlFor="tamanoEmpresa">{t('RegistroEmpresa.companySize')}</Label>
@@ -190,7 +190,7 @@ const RegistroEmpresa = () => {
                     value={formData.idTamañoEmpresa}
                 >
                     <SelectTrigger>
-                        <SelectValue placeholder="Seleccione">{formData.idTamañoEmpresa ? relationalObjects.tamañosEmpresa.find((ne) => ne.idTamañoEmpresa == formData.idTamañoEmpresa).nombre : "Seleccione un tamaño de empresa"}</SelectValue>
+                        <SelectValue placeholder={t('RegistroEmpresa.select')}>{formData.idTamañoEmpresa ? relationalObjects.tamañosEmpresa.find((ne) => ne.idTamañoEmpresa == formData.idTamañoEmpresa).nombre : t('RegistroEmpresa.selectComSize')}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                         {relationalObjects.tamañosEmpresa && relationalObjects.tamañosEmpresa.map((ne) => (
@@ -203,7 +203,7 @@ const RegistroEmpresa = () => {
             </div>
             <div className="space-y-2">
                 <Label htmlFor="direccion">{t('RegistroEmpresa.address')}</Label>
-                <Textarea id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} rows={3} placeholder="Ingrese la dirección de la empresa" autoComplete="street-address" />
+                <Textarea id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} rows={3} placeholder={t('RegistroEmpresa.enterComAddress')} autoComplete="street-address" />
             </div>
             <Button type="submit" className="w-full">
             {t('RegistroEmpresa.register')}

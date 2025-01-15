@@ -3,18 +3,23 @@ import { CheckCircle, Clock, AlertCircle, XCircle, Award } from 'lucide-react';
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 import useAxios from '@/hooks/use-axios';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+
+const { t } = useTranslation();
 
 const timelineSteps = [
-    { status: EstatusProcesoEnum.Desafio_Sin_validar, label: 'Sin validar', icon: Clock, color: 'text-warning' },
-    { status: EstatusProcesoEnum.Desafio_Sin_iniciar, label: 'Sin iniciar', icon: Clock, color: 'text-primary' },
-    { status: EstatusProcesoEnum.Desafio_En_progreso, label: 'En progreso', icon: CheckCircle, color: 'text-success' },
-    { status: EstatusProcesoEnum.Desafio_En_evaluacion, label: 'En evaluación', icon: AlertCircle, color: 'text-warning' },
-    { status: EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios, label: 'Espera de premios', icon: Award, color: 'text-primary' },
-    { status: EstatusProcesoEnum.Desafio_Finalizado, label: 'Finalizado', icon: CheckCircle, color: 'text-success' },
+    
+    { status: EstatusProcesoEnum.Desafio_Sin_validar, label: t('challengetimelineSteps.Desafio_Sin_validar.label'), icon: Clock, color: 'text-warning' },
+    { status: EstatusProcesoEnum.Desafio_Sin_iniciar, label: t('challengetimelineSteps.Desafio_Sin_iniciar.label'), icon: Clock, color: 'text-primary' },
+    { status: EstatusProcesoEnum.Desafio_En_progreso, label: t('challengetimelineSteps.Desafio_En_progreso.label'), icon: CheckCircle, color: 'text-success' },
+    { status: EstatusProcesoEnum.Desafio_En_evaluacion, label: t('challengetimelineSteps.Desafio_En_evaluacion.label'), icon: AlertCircle, color: 'text-warning' },
+    { status: EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios, label: t('challengetimelineSteps.Desafio_En_espera_de_entrega_de_premios.label'), icon: Award, color: 'text-primary' },
+    { status: EstatusProcesoEnum.Desafio_Finalizado, label: t('challengetimelineSteps.Desafio_Finalizado.label'), icon: CheckCircle, color: 'text-success' },
 ];
 
 const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
-    const { api } = useAxios();
+    
+    const { api } = useAxios();        
     const [statusHistory, setStatusHistory] = useState([]);
 
     useEffect(() => {
@@ -23,7 +28,7 @@ const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
                 const response = await api.get(`/api/Desafios/HistorialCambioEstatus/${idDesafio}`);
                 setStatusHistory(response);
             } catch (error) {
-                toast.error('Operación fallida',
+                toast.error(t('challengetimelineSteps.operations.success'),
                     { description: error.response?.data?.message ?? error.message }
                 );
             }
@@ -121,7 +126,7 @@ const ChallengeTimeline = ({ idDesafio, currentStatus }) => {
                             <XCircle className="w-5 h-5 text-destructive-foreground" />
                         </div>
                         <span className="text-sm font-medium text-destructive">
-                            Desafío Cancelado
+                        {t('challengetimelineSteps.currentStatus.Desafio_Cancelado')}
                         </span>
                     </div>
                 </div>

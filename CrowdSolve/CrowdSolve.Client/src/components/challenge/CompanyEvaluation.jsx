@@ -14,8 +14,11 @@ import { Slider } from "@/components/ui/slider"
 import { VisuallyHidden } from '@radix-ui/themes'
 import useAxios from '@/hooks/use-axios';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+
 
 const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
+    const { t } = useTranslation();
     const { api } = useAxios()
     const [puntuaciones, setPuntuaciones] = useState({})
     const [detalleSolucionDialog, setDetalleSolucionDialog] = useState(false)
@@ -71,20 +74,20 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
             const response = await api.put(`/api/Soluciones/Puntuar/${solucion.idSolucion}`, { ...solucion, puntuacion: puntuaciones[solucion.idSolucion] })
 
             if (response.data.success) {
-                toast.success("Operación exitosa", {
+                toast.success(t('companyEvaluation.messages.operationSuccessful'), {
                     description: response.data.message
                 });
                 setDetalleSolucionDialog(false);
                 await reloadChallengeData();
             }
             else {
-                toast.warning("Operación fallida", {
+                toast.warning(t('companyEvaluation.messages.operationFailed'), {
                     description: response.data.message
                 });
             }
         }
         catch (error) {
-            toast.error("Operación fallida", {
+            toast.error(t('companyEvaluation.messages.operationFailed'), {
                 description: error.message
             });
         }
@@ -108,7 +111,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
             link.remove();
         }
         catch (error) {
-            toast.error("Operación fallida", {
+            toast.error(t('companyEvaluation.messages.operationFailed'), {
                 description: error.message
             });
         }
@@ -119,19 +122,19 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Usuario</TableHead>
-                        <TableHead>Título</TableHead>
-                        <TableHead>Fecha</TableHead>
-                        <TableHead>Estatus</TableHead>
-                        <TableHead>Puntuación</TableHead>
-                        <TableHead className="text-right">Acciones</TableHead>
+                        <TableHead>{t('companyEvaluation.fields.user')}</TableHead>
+                        <TableHead>{t('companyEvaluation.fields.title')}</TableHead>
+                        <TableHead>{t('companyEvaluation.fields.date')}</TableHead>
+                        <TableHead>{t('companyEvaluation.fields.status')}</TableHead>
+                        <TableHead>{t('companyEvaluation.fields.rating')}</TableHead>
+                        <TableHead className="text-right">{t('companyEvaluation.fields.tableActions')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {solutions.length === 0 && (
                         <div className="flex flex-col items-center gap-2 my-4">
-                            <span className="text-lg font-semibold">No hay soluciones para evaluar</span>
-                            <span className="text-muted-foreground">Por favor, vuelve más tarde</span>
+                            <span className="text-lg font-semibold">{t('companyEvaluation.messages.noSolutionsToEvaluate')}</span>
+                            <span className="text-muted-foreground">{t('companyEvaluation.messages.pleaseComeBackLater')}</span>
                         </div>
                     )}
                     {solutions.map((solucion) => (
@@ -152,7 +155,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                             </TableCell>
                             <TableCell>
                                 <Badge variant={getBadgeVariant(solucion.puntuacion)}>
-                                    {solucion.puntuacion || 'Sin evaluar'}
+                                    {solucion.puntuacion || t('companyEvaluation.statuses.notEvaluated')}
                                 </Badge>
                             </TableCell>
                             <TableCell className="text-right">
@@ -160,14 +163,14 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                     <DialogTrigger asChild>
                                         <Button variant="ghost" size="icon" onClick={() => handleDialogOpen(solucion)}>
                                             <Eye className="h-4 w-4" />
-                                            <span className="sr-only">Ver detalles</span>
+                                            <span className="sr-only">{t('companyEvaluation.buttons.viewDetails')}</span>
                                         </Button>
                                     </DialogTrigger>
                                     <DialogContent className="max-w-4xl">
                                         <DialogHeader>
                                             <DialogTitle className="text-2xl font-bold">{solucionSeleccionada?.titulo}</DialogTitle>
                                             <VisuallyHidden>
-                                                <DialogDescription>Detalles de la solución</DialogDescription>
+                                                <DialogDescription>{t('companyEvaluation.messages.solutionDetails')}</DialogDescription>
                                             </VisuallyHidden>
                                         </DialogHeader>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-4">
@@ -179,18 +182,18 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                                     </Avatar>
                                                     <div>
                                                         <p className="text-lg font-semibold">{solucionSeleccionada?.nombreUsuario}</p>
-                                                        <p className="text-sm text-muted-foreground">Autor de la solución</p>
+                                                        <p className="text-sm text-muted-foreground">{t('companyEvaluation.messages.authorOfSolution')}</p>
                                                     </div>
                                                 </div>
                                                 <Separator />
                                                 <div>
-                                                    <Label className="text-lg font-semibold">Descripción</Label>
+                                                    <Label className="text-lg font-semibold">{t('companyEvaluation.messages.description')}</Label>
                                                     <ScrollArea className="h-[200px] w-full rounded-md border p-4 mt-2">
                                                         <p className="text-sm">{solucionSeleccionada?.descripcion}</p>
                                                     </ScrollArea>
                                                 </div>
                                                 <div>
-                                                    <Label className="text-lg font-semibold">Archivos adjuntos</Label>
+                                                    <Label className="text-lg font-semibold">{t('companyEvaluation.messages.attachedFiles')}</Label>
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                                                         {solucionSeleccionada?.adjuntos.map((adjunto) => (
                                                             <Button
@@ -214,7 +217,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                                         <div>
                                                             <div className='flex items-center gap-1'>
                                                                 <Calendar className="w-4 h-4 text-muted-foreground" />
-                                                                <Label className="text-sm font-medium">Fecha de envío</Label>
+                                                                <Label className="text-sm font-medium">{t('companyEvaluation.messages.sendDate')}</Label>
                                                             </div>
                                                             <p className="text-sm">{formatearFecha(solucionSeleccionada?.fechaRegistro)}</p>
                                                         </div>
@@ -223,7 +226,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                                         <div>
                                                             <div className='flex items-center gap-1'>
                                                                 <Clock className="w-4 h-4 text-muted-foreground" />
-                                                                <Label className="text-sm font-medium">Estatus</Label>
+                                                                <Label className="text-sm font-medium">{t('companyEvaluation.fields.status')}</Label>
                                                             </div>
                                                             <Badge variant="outline" className="mt-1">{solucionSeleccionada?.estatusProceso}</Badge>
                                                         </div>
@@ -233,7 +236,7 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                                 <div className="space-y-4">
                                                     <Label htmlFor={`puntuacion-${solucionSeleccionada?.idSolucion}`} className="text-lg font-semibold flex items-center gap-2">
                                                         <Star className="w-5 h-5 text-primary" />
-                                                        Puntuación
+                                                        {t('companyEvaluation.messages.rating')}
                                                     </Label>
                                                     <div className="flex items-center space-x-4">
                                                         <Slider
@@ -249,14 +252,14 @@ const CompanyEvaluation = ({ solutions, reloadChallengeData }) => {
                                                         </span>
                                                     </div>
                                                     <Button onClick={() => handleGuardarPuntuacion(solucionSeleccionada)} className="w-full">
-                                                        Guardar puntuación
+                                                    {t('companyEvaluation.messages.saveRating')}
                                                     </Button>
                                                 </div>
                                             </div>
                                         </div>
                                         <DialogFooter>
                                             <Button type="button" variant="secondary" onClick={() => setDetalleSolucionDialog(false)}>
-                                                Cerrar
+                                            {t('companyEvaluation.buttons.close')}
                                             </Button>
                                         </DialogFooter>
                                     </DialogContent>

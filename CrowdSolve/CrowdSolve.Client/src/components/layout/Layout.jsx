@@ -30,6 +30,7 @@ import ProfileDropdownMenuContent from '@/components/layout/ProfileDropdownMenuC
 import Icon from "@/components/ui/icon";
 import { Badge } from "@/components/ui/badge"
 import { ChevronsUpDown, X } from "lucide-react"
+import { useTranslation } from 'react-i18next';
 
 const sidebarItems = [
     {
@@ -62,6 +63,7 @@ const sidebarItems = [
 
 
 const Layout = () => {
+    const { t } = useTranslation();
     const location = useLocation();
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -139,8 +141,8 @@ const Layout = () => {
                         </DropdownMenu>
                     ) : (
                         <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-                            <Button variant="outline" onClick={() => navigate('/sign-in')}>Iniciar sesión</Button>
-                            <Button onClick={() => navigate('/sign-up')}>Registrarse</Button>
+                            <Button variant="outline" onClick={() => navigate('/sign-in')}>{t('layout.signIn')}</Button>
+                            <Button onClick={() => navigate('/sign-up')}>{t('layout.signUp')}</Button>
                         </div>
                     )}
                 </SidebarFooter>

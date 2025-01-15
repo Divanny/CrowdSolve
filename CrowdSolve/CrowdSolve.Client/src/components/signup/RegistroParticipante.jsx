@@ -78,8 +78,8 @@ const RegistroParticipante = () => {
         e.preventDefault();
 
         if (!formData.nombres || !formData.apellidos || !formData.fechaNacimiento || !formData.telefono || !formData.idNivelEducativo || !formData.descripcionPersonal) {
-            toast.warning("Operación fallida", {
-                description: "Por favor, complete todos los campos",
+            toast.warning(t('RegistroParticipante.failedOperation'), {
+                description: t('RegistroParticipante.failedOpeDescription'),
             });
             return;
         }
@@ -102,11 +102,11 @@ const RegistroParticipante = () => {
                     }));
                 }
 
-                toast.success("Operación exitosa", {
+                toast.success(t('RegistroParticipante.successfulOperation'), {
                     description: response.data.message,
                 });
             } else {
-                toast.warning("Operación fallida", {
+                toast.warning(t('RegistroParticipante.failedOperation'), {
                     description: response.data.message,
                 });
             }

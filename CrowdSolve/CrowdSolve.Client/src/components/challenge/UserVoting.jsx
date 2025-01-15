@@ -13,8 +13,10 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useTranslation } from 'react-i18next';
 
 const UserVoting = ({ initialSolutions }) => {
+    const { t } = useTranslation();
     const { api } = useAxios()
     const [solutions, setSolutions] = useState([])
     const [loadingSaveMeGusta, setLoadingSaveMeGusta] = useState(false)
@@ -37,7 +39,7 @@ const UserVoting = ({ initialSolutions }) => {
             link.remove()
         }
         catch (error) {
-            toast.error("Operación fallida", {
+            toast.error(t('userVoting.descargarAdjuntoError'), {
                 description: error.message
             })
         }
@@ -79,8 +81,8 @@ const UserVoting = ({ initialSolutions }) => {
 
     const handleLike = async (solution) => {
         if (loadingSaveMeGusta) {
-            toast.warning("Operación en curso", {
-                description: "Por favor, espera a que la operación actual termine antes de continuar."
+            toast.warning(t('userVoting.Operacionencurso'), {
+                description: t('userVoting.esperaOperacion')
             })
         }
 
@@ -98,7 +100,7 @@ const UserVoting = ({ initialSolutions }) => {
             })
         }
         catch (error) {
-            toast.error("Operación fallida al guardar voto", {
+            toast.error(t('userVoting.operacionFallidaGuardarVoto'), {
                 description: error.message
             })
         }
@@ -111,8 +113,8 @@ const UserVoting = ({ initialSolutions }) => {
         <div className="flex flex-col gap-4 w-full mx-auto">
             {solutions.length === 0 && (
                 <div className="flex flex-col items-center gap-2 my-4">
-                    <span className="text-lg font-semibold">No hay soluciones para evaluar</span>
-                    <span className="text-muted-foreground">Por favor, vuelve más tarde</span>
+                    <span className="text-lg font-semibold">{t('userVoting.noHaySolucionesParaEvaluar')}</span>
+                    <span className="text-muted-foreground">{t('userVoting.vuelveMasTarde')}</span>
                 </div>
             )}
             {solutions.map(solution => (
@@ -137,8 +139,8 @@ const UserVoting = ({ initialSolutions }) => {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem>Copiar enlace</DropdownMenuItem>
-                                <DropdownMenuItem>Reportar</DropdownMenuItem>
+                                <DropdownMenuItem>{t('userVoting.copiarEnlace')}</DropdownMenuItem>
+                                <DropdownMenuItem>{t('userVoting.reportar')}</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -182,11 +184,11 @@ const UserVoting = ({ initialSolutions }) => {
                             ) : (
                                 <ThumbsUp className="w-4 h-4" fill={solution.meGusta ? 'currentColor' : 'none'} />
                             )}
-                            <span className="hidden sm:inline">Me gusta</span>
+                            <span className="hidden sm:inline">{t('userVoting.meGusta')}</span>
                             <span className="text-sm font-medium">({solution.cantidadVotos})</span>
                         </Button>
                         <span className="text-sm text-muted-foreground">
-                            {solution.cantidadVotos} {solution.cantidadVotos === 1 ? 'voto' : 'votos'}
+                            {solution.cantidadVotos} {solution.cantidadVotos === 1 ? t('userVoting.voto') : t('userVoting.votos')}
                         </span>
                     </div>
                 </Card>

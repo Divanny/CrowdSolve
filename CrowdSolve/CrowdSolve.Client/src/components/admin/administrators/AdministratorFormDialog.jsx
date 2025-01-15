@@ -12,8 +12,10 @@ import { Label } from "@/components/ui/label"
 import useAxios from "@/hooks/use-axios"
 import { toast } from "sonner";
 import AvatarPicker from "@/components/ui/avatar-picker";
+import { useTranslation } from 'react-i18next';
 
 export function AdministratorFormDialog({ isOpen, onClose, onSaved, admin, mode  }) {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [editedAdmin, setEditedAdmin] = useState(admin)
 
@@ -42,13 +44,13 @@ export function AdministratorFormDialog({ isOpen, onClose, onSaved, admin, mode 
     });
 
     if (response.data.success) {
-      toast.success("Operación exitosa", {
+      toast.success(t('adminFormDialog.operations.success'), {
         description: response.data.message,
       });
       onSaved()
       onClose()
     } else {
-      toast.warning("Operación fallida", {
+      toast.warning(t('adminFormDialog.operations.failure'), {
         description: response.data.message,
       });
     }
@@ -58,7 +60,7 @@ export function AdministratorFormDialog({ isOpen, onClose, onSaved, admin, mode 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>{mode === "edit" ? "Editar" : "Ver"} Participante</DialogTitle>
+          <DialogTitle>{mode === "edit" ? t('adminFormDialog.dialog.edit') : t('adminFormDialog.dialog.view')} {t('adminFormDialog.dialog.participant')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSave} className="space-y-2">
           <div className="space-y-2">
@@ -66,7 +68,7 @@ export function AdministratorFormDialog({ isOpen, onClose, onSaved, admin, mode 
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nombreUsuario">Nombre de usuario</Label>
+              <Label htmlFor="nombreUsuario">{t('adminFormDialog.dialog.fields.username')}</Label>
               <Input
                 id="nombreUsuario"
                 name="nombreUsuario"
@@ -76,7 +78,7 @@ export function AdministratorFormDialog({ isOpen, onClose, onSaved, admin, mode 
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="correoElectronico">Correo Electrónico</Label>
+              <Label htmlFor="correoElectronico">{t('adminFormDialog.dialog.fields.email')}</Label>
               <Input
                 type="email"
                 id="correoElectronico"
@@ -91,11 +93,11 @@ export function AdministratorFormDialog({ isOpen, onClose, onSaved, admin, mode 
         <DialogFooter>
           {mode === "edit" && (
             <Button type="submit" onClick={handleSave}>
-              Guardar cambios
+              {t('adminFormDialog.dialog.buttons.saveChanges')}
             </Button>
           )}
           <Button type="button" variant="secondary" onClick={onClose}>
-            Cerrar
+          {t('adminFormDialog.dialog.buttons.close')}
           </Button>
         </DialogFooter>
       </DialogContent>
