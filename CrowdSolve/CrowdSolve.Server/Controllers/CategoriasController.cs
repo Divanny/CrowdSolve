@@ -32,9 +32,9 @@ namespace CrowdSolve.Server.Controllers
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            _categoriasRepo = new CategoriasRepo(crowdSolveContext);
             _translationService = translationService;
             _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _categoriasRepo = new CategoriasRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>
@@ -46,11 +46,6 @@ namespace CrowdSolve.Server.Controllers
         public List<CategoriasModel> Get()
         {
             List<CategoriasModel> categorias = _categoriasRepo.Get().ToList();
-            foreach (var categoria in categorias)
-            {
-                categoria.Nombre = _translationService.Traducir(categoria.Nombre, _idioma);
-                categoria.Descripcion = _translationService.Traducir(categoria.Descripcion, _idioma);
-            }
             return categorias;
         }
 
