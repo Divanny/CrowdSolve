@@ -106,7 +106,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns></returns>
         [HttpPost("SubirArchivos/{guid?}", Name = "SubirArchivos")]
         [AuthorizeByPermission(PermisosEnum.Ver_Desafio)]
-        public OperationResult Subir([FromForm] IFormFile filePart, string? guid = null)
+        public OperationResult Subir(IFormFile filePart, string? guid = null)
         {
             var tempDir = Path.Combine(_filesTempDir, _idUsuarioOnline.ToString());
 
