@@ -21,6 +21,9 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Navigate to CrowdSolve directory
+        run: cd CrowdSolve
+
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
