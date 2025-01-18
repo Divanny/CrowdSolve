@@ -4,14 +4,19 @@
       "ignored": "true",
       "type": "apis.azure"
     },
-    "mssql1": {
-      "ignored": "true",
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:CrowdSolve"
-    },
     "identityapp1": {
       "ignored": "true",
       "type": "identityapp"
+    },
+    "mssql2": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:FileStorage"
+    },
+    "mssql1": {
+      "secretStore": "AzureAppSettings",
+      "type": "mssql.onprem",
+      "connectionId": "ConnectionStrings:CrowdSolve"
     }
   }
 }
