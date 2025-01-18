@@ -43,6 +43,7 @@ const PublicProfile = lazy(() => import('@/pages/participant/PublicProfile'));
 const Notifications = lazy(() => import('@/pages/Notifications'));
 const AdminChallenges = lazy(() => import('@/pages/admin/challenges/AdminChallenges'));
 const AdminChallengeDetails = lazy(() => import('@/pages/admin/challenges/AdminChallengeDetails'));
+const UserManual = lazy(() => import('@/pages/admin/UserManual'));
 
 const LazyComponent = ({ component: Component, ...props }) => (
   <Suspense fallback={<PageLoader />}>
@@ -87,6 +88,7 @@ const AppRoutes = () => (
         <Route path="companies" element={<LazyComponent component={Companies} />} handle={{ permission: () => PermisosEnum.Administrar_Empresas}} />
         <Route path="administrators" element={<LazyComponent component={Administrators} />} handle={{ permission: () => PermisosEnum.Administrar_Administradores}} />
         <Route path="permissions" element={<LazyComponent component={RolesAndPermissions} />} handle={{ permission: () => PermisosEnum.Administrar_Roles_y_Permisos}} />
+        <Route path="user-manual" element={<LazyComponent component={UserManual} />} handle={{ permission: () => PermisosEnum.Administrador_Manual_Usuario}} />
         <Route path="*" element={<LazyComponent component={NotFound} />} />
       </Route>
       {/* Company */}

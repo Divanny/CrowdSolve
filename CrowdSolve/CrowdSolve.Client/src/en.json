@@ -123,6 +123,8 @@
     "phone_label": "Phone",
     "education_level_label": "Education Level",
     "education_level_placeholder": "Select an education level",
+    "user_profile_label": "User Profile",
+    "user_profile_placeholder": "Select a profile",
     "select": "Select",
     "user_status_label": "User Status",
     "user_status_placeholder": "Select a status",

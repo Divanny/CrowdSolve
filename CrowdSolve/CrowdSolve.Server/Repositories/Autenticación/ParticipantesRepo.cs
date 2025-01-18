@@ -44,7 +44,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             NivelEducativo = nivelEducativo.Nombre,
                             DescripcionPersonal = p.DescripcionPersonal,
                             idEstatusUsuario = usuario.idEstatusUsuario,
-                            EstatusUsuario = estatusUsuario.Nombre
+                            EstatusUsuario = estatusUsuario.Nombre,
+                            idPerfil = usuario.idPerfil
                         });
             }
         )
