@@ -46,7 +46,6 @@ import { ParticipantFormDialog } from "@/components/admin/participants/Participa
 import { ParticipantSolutionsDialog } from "@/components/admin/participants/ParticipantSolutionsDialog";
 import { useTranslation } from 'react-i18next';
 import { Badge } from "@/components/ui/badge";
-import { set } from "date-fns";
 
 export default function Participants() {
   const { t } = useTranslation();

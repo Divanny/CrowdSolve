@@ -193,9 +193,9 @@
       "product": {
         "title": "Producto",
         "links": {
-          "howItWorks": "Cómo funciona",
           "challenges": "Desafíos",
-          "registeredCompanies": "Empresas Registradas"
+          "registeredCompanies": "Empresas Registradas",
+          "helpCenter": "Centro de Ayuda"
         }
       },
       "company": {
@@ -1286,5 +1286,168 @@
     "eliminarProceso": "Eliminar Proceso",
     "contenidoDesafio": "Contenido del Desafío",
     "placeholderContenido": "Ingrese el contenido del desafío"
+  },
+
+  "HelpCenterLayout": {
+    "title": "Centro de Ayuda",
+    "categories": {
+      "Challenges": "Desafíos",
+      "User": "Usuario",
+      "Solutions": "Soluciones",
+      "ContactUs": "Contáctanos",
+      "Legal": "Legal",
+      "UserManual": "Manual de Usuario"
+    },
+    "items": {
+      "PostNewChallenge": "Publicar nuevo desafío",
+      "ViewChallengeCatalog": "Ver catálogo de desafíos",
+      "ParticipateInChallenge": "Participar en el desafío",
+      "EvaluateChallenge": "Evaluar desafío",
+      "CreateCompanyUser": "Creación de usuario empresa",
+      "CreateParticipantUser": "Creación de usuario participantes",
+      "EditMyProfile": "Editar mi perfil",
+      "ForgotPassword": "Olvidar contraseña",
+      "ViewMySolutions": "Ver mis soluciones",
+      "ChangeSolutionPrivacy": "Cambiar privacidad de solución",
+      "SendMessage": "Enviar mensaje",
+      "TermsAndConditions": "Términos y condiciones",
+      "PrivacyPolicy": "Privacidad",
+      "UserManual": "Manual de Usuario",
+      "UsagePolicy": "Política de Uso",
+      "backToAdmin": "Volver al Admin"
+    }
+  },
+  "helpCenter": {
+    "postNewChallenge": {
+      "title": "Publicar nuevo desafío",
+      "description": "Aquí encontrarás información sobre cómo funcionan los desafíos y sus diferentes estatus.",
+      "statusesTitle": "Estatus de los Desafíos",
+      "importantInfoTitle": "Información importante",
+      "importantInfoDescription": "Asegúrate de seguir todas las instrucciones y cumplir con los requisitos del desafío para evitar descalificaciones.",
+      "faqTitle": "Preguntas frecuentes sobre la publicación de desafíos",
+      "howToPostTitle": "¿Cómo puedo publicar un nuevo desafío?",
+      "howToPostSteps": "Para publicar un nuevo desafío, sigue estos pasos:",
+      "steps": [
+        "Navega al Dashboard de tu empresa.",
+        "Haz clic en \"Publicar Nuevo Desafío\".",
+        "Rellena el formulario del desafío con los detalles requeridos, incluyendo:",
+        "Haz clic en \"Enviar\" para publicar tu desafío."
+      ],
+      "details": [
+        "Título: Proporciona un título descriptivo para tu desafío.",
+        "Contenido: Describe el desafío en detalle.",
+        "Fecha de Inicio: Selecciona la fecha en que comenzará el desafío.",
+        "Fecha Límite: Selecciona la fecha límite para el desafío.",
+        "Categorías: Elige las categorías relevantes para el desafío.",
+        "Proceso de Evaluación: Define los criterios y el proceso de evaluación."
+      ],
+      "problemsTitle": "¿Qué debo hacer si encuentro problemas?",
+      "problemsDescription": "Si encuentras algún problema, por favor contacta al soporte."
+    },
+    "viewChallengeCatalog": {
+      "title": "Catálogo de Desafíos",
+      "description": "Aquí puedes ver todos los desafíos disponibles.",
+      "featuresTitle": "Características",
+      "feature1": "Funcionalidad de búsqueda",
+      "feature2": "Filtrado",
+      "feature3": "Ordenar",
+      "feature4": "Diseño adaptable",
+      "feature5": "Interfaz animada",
+      "statusesTitle": "Estatus de los Desafíos",
+      "statusColumn": "Estatus",
+      "descriptionColumn": "Descripción",
+      "statusInProgress": "Desafío en progreso",
+      "statusInProgressDescription": "El desafío está actualmente en curso.",
+      "statusUnderEvaluation": "Desafío en evaluación",
+      "statusUnderEvaluationDescription": "El desafío está siendo evaluado.",
+      "statusAwaitingPrizes": "Desafío en espera de entrega de premios",
+      "statusAwaitingPrizesDescription": "El desafío está esperando la entrega de premios.",
+      "statusCompleted": "Desafío finalizado",
+      "statusCompletedDescription": "El desafío ha finalizado.",
+      "statusCancelled": "Desafío cancelado",
+      "statusCancelledDescription": "El desafío ha sido cancelado.",
+      "statusUnvalidated": "Desafío sin validar",
+      "statusUnvalidatedDescription": "El desafío aún no ha sido validado por la administración.",
+      "statusRejected": "Desafío rechazado",
+      "statusRejectedDescription": "El desafío ha sido rechazado.",
+      "statusDiscarded": "Desafío descartado",
+      "statusDiscardedDescription": "El desafío ha sido descartado.",
+      "statusSolutionValidation": "Desafío en validación de soluciones",
+      "statusSolutionValidationDescription": "El desafío está en proceso de validación de soluciones.",
+      "importantInfoTitle": "Información importante",
+      "importantInfoDescription": "Asegúrate de seguir todas las instrucciones y cumplir con los requisitos del desafío para evitar descalificaciones.",
+      "howToUseTitle": "Cómo usar",
+      "searchingTitle": "Buscar",
+      "searchingSteps": "Pasos para buscar desafíos:",
+      "searchSteps": ["Usa la barra de búsqueda en la parte superior del catálogo para buscar desafíos por título o nombre de la empresa."],
+      "filteringTitle": "Filtrar",
+      "filteringSteps": "Pasos para filtrar desafíos:",
+      "filterSteps": ["En el escritorio: Usa la barra lateral a la izquierda para filtrar desafíos por categoría y estatus.", "En el móvil: Haz clic en el botón 'Filtrar' para abrir la hoja de filtros, luego selecciona los filtros deseados."],
+      "sortingTitle": "Ordenar",
+      "sortingDescription": "Usa el menú desplegable junto a la barra de búsqueda para ordenar desafíos por recencia, popularidad o fecha de cierre.",
+      "challengeCardTitle": "Tarjeta de Desafío",
+      "challengeCardDescription": "Cada tarjeta de desafío en el catálogo muestra la siguiente información:",
+      "challengeCardInfo": ["Título del desafío", "Nombre y logo de la empresa", "Estatus del desafío", "Categorías", "Tiempo desde la publicación", "Tiempo restante hasta la fecha límite", "Número de soluciones enviadas"],
+      "troubleshootingTitle": "Solución de problemas",
+      "troubleshootingDescription": "Si encuentras algún problema mientras usas el Catálogo de Desafíos:",
+      "troubleshootingSteps": ["Asegúrate de tener una conexión a internet estable, ya que el catálogo obtiene datos del servidor.", "Intenta actualizar la página si la lista de desafíos no se carga o parece desactualizada.", "Limpia la caché de tu navegador si experimentas problemas persistentes.", "Si los problemas persisten, por favor contacta a nuestro equipo de soporte para asistencia."]
+    },
+    "participateInChallenge": {
+      "title": "Participar en el desafío",
+      "description": "Aquí encontrarás información sobre cómo participar en los desafíos.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes estar registrado en la plataforma.",
+      "requirement2": "Debes haber iniciado sesión.",
+      "requirement3": "Debes cumplir con los requisitos específicos del desafío.",
+      "stepsTitle": "Pasos para participar",
+      "loginTitle": "Iniciar sesión",
+      "loginDescription": "Asegúrate de haber iniciado sesión en tu cuenta.",
+      "submitTitle": "Enviar solución",
+      "submitDescription": "Sigue estos pasos para enviar tu solución:",
+      "submitSteps": [
+        "Navega al desafío en el que deseas participar.",
+        "Haz clic en el botón 'Participar en el Desafío'.",
+        "Rellena el formulario con el título y la descripción de tu solución.",
+        "Adjunta los archivos necesarios.",
+        "Haz clic en 'Enviar solución' para completar el proceso."
+      ],
+      "uploadTitle": "Subir archivos",
+      "uploadDescription": "Puedes subir archivos como parte de tu solución.",
+      "uploadSteps": [
+        "Haz clic en 'Seleccionar archivos' para elegir los archivos desde tu dispositivo.",
+        "Asegúrate de que los archivos no excedan el tamaño máximo permitido.",
+        "Espera a que los archivos se carguen completamente antes de enviar tu solución."
+      ],
+      "troubleshootingTitle": "Solución de problemas",
+      "troubleshootingDescription": "Si encuentras algún problema mientras participas en un desafío:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "evaluateChallenge": {
+      "title": "Evaluar un desafío",
+      "description": "Aquí encontrarás información sobre cómo evaluar las soluciones de un desafío.",
+      "importantInfoTitle": "Información importante",
+      "importantInfoDescription": "Para poder evaluar un desafío, el mismo debe estar en fase de evaluación.",
+      "stepsTitle": "Pasos para evaluar",
+      "companyEvaluationTitle": "Evaluación por empresas",
+      "companyEvaluationDescription": "Las empresas pueden ver todas las soluciones y asignar una puntuación del 1 al 100.",
+      "companyEvaluationSteps": [
+        "Navega al desafío que deseas evaluar.",
+        "Si el desafío está en fase de evaluación, verás una alerta indicando que puedes evaluar.",
+        "Haz clic en 'Participar' para comenzar la evaluación.",
+        "Revisa cada solución y asigna una puntuación del 1 al 100."
+      ],
+      "participantEvaluationTitle": "Evaluación por participantes",
+      "participantEvaluationDescription": "Los participantes pueden ver todas las soluciones del desafío en el que participaron y dar 'me gusta' a las que les gusten.",
+      "participantEvaluationSteps": [
+        "Navega al desafío en el que participaste.",
+        "Si el desafío está en fase de evaluación, verás una alerta indicando que puedes evaluar.",
+        "Haz clic en 'Participar' para comenzar la evaluación.",
+        "Revisa cada solución y da 'me gusta' a las que te gusten."
+      ]
+    }
   }
 }
