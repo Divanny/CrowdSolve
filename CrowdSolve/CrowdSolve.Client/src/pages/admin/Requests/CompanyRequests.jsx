@@ -20,7 +20,6 @@ import {
   FilterX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -40,7 +39,6 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
-import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ValidateCompanyDialog } from "../../../components/admin/Requests/ValidateCompanyDialog";
 
@@ -65,60 +63,42 @@ export default function CompanyRequests() {
 
   const columns = [
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Seleccionar todo"
-        />
-      ),
+      accessorKey: "nombre",
+      header: "Nombre",
       cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Seleccionar fila"
-        />
+          <div className="flex items-center space-x-2">
+              <Avatar>
+                  <AvatarImage
+                      src={`/api/Account/GetAvatar/${row.original.idUsuario}`}
+                      alt={row.getValue("nombre")}
+                  />
+                  <AvatarFallback>
+                      {row.getValue("nombre").slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+              </Avatar>
+              <span>{row.getValue("nombre")}</span>
+          </div>
       ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-        accessorKey: "nombre",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Nombre Empresa
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-      },
+  },
     {
       accessorKey: "descripcion",
       header: "Descripcion",
       /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
-      cell:({getValue})=>{
-        return(
-        <div className="w-80">
+      cell: ({ getValue }) => {
+        return (
+          <div className="w-80">
             {getValue()}
           </div>
         );
-    }
+      }
     },
     {
       accessorKey: "telefono",
-      header: "Telefono",
-      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+      header: "Telefono"
     },
     {
       accessorKey: "paginaWeb",
-      header: "Pagina Web",
-      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+      header: "Pagina Web"
     },
     {
       accessorKey: "tamañoEmpresa",
@@ -134,13 +114,13 @@ export default function CompanyRequests() {
           </Button>
         );
       },
-      cell:({getValue})=>{
-        return(
-        <div className="w-20 text-center">
+      cell: ({ getValue }) => {
+        return (
+          <div className="w-20 text-center">
             {getValue()}
           </div>
         );
-    }
+      }
     },
     {
       accessorKey: "sector",
@@ -156,94 +136,18 @@ export default function CompanyRequests() {
           </Button>
         );
       },
-      cell:({getValue})=>{
-        return(
-        <div className="w-20 text-center">
+      cell: ({ getValue }) => {
+        return (
+          <div className="w-20 text-center">
             {getValue()}
           </div>
         );
-    }
+      }
     },
     {
-      accessorKey: "direccion",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-left font-normal"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Dirección
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      accessorKey: "estatusUsuario",
+      header: "Estatus Empresa"
     },
-    {
-        accessorKey: "avatar",
-        header: "Avatar",
-        cell: ({ row }) => (
-            <div className="flex items-center space-x-2">
-              <Avatar>
-                <AvatarImage
-                  src={`/api/Account/GetAvatar/${row.getValue("idUsuario")}`}
-                  alt={row.getValue("avatar")}
-                />
-                <AvatarFallback>{row.getValue("avatar")}</AvatarFallback>
-              </Avatar>
-              <span>{row.getValue("avatar")}</span>
-            </div>
-          ),
-    },
-      {
-        accessorKey: "cantidadDesafios",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Cant. Desafios
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell:({getValue})=>{
-            return(
-            <div className="text-center">
-                {getValue()}
-              </div>
-            );
-        }
-      },
-      {
-        accessorKey: "cantidadSoluciones",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Cant. Soluciones
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell:({getValue})=>{
-            return(
-            <div  style={{ width: "80px", textAlign: "center" }}>
-                {getValue()}
-              </div>
-            );
-        }
-      },
-      {
-        accessorKey: "estatusUsuario",
-        header: "Estatus Empresa",
-        /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
-      },
     {
       id: "actions",
       cell: ({ row }) => (
@@ -322,13 +226,13 @@ export default function CompanyRequests() {
     onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
     globalFilterFn: (row, columnId, filterValue) => {
-        const value = row.getValue(columnId);
-        return value != null
-          ? String(value)
-              .toLowerCase()
-              .includes(String(filterValue).toLowerCase())
-          : false;
-      },
+      const value = row.getValue(columnId);
+      return value != null
+        ? String(value)
+          .toLowerCase()
+          .includes(String(filterValue).toLowerCase())
+        : false;
+    },
     state: {
       sorting,
       columnFilters,
@@ -363,7 +267,7 @@ export default function CompanyRequests() {
     );
   }
 
-  
+
 
   return (
     <div className="w-full">
@@ -375,9 +279,9 @@ export default function CompanyRequests() {
             placeholder="Buscar por nombre de Empresa"
             value={globalFilter ?? ""}
             onChange={(event) => {
-                const value = event.target.value;
-                setGlobalFilter(value);
-                table.setGlobalFilter(value);
+              const value = event.target.value;
+              setGlobalFilter(value);
+              table.setGlobalFilter(value);
             }}
             className="pl-8"
           />
@@ -474,7 +378,7 @@ export default function CompanyRequests() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        
+
 
         <Button
           variant="outline"
@@ -563,10 +467,6 @@ export default function CompanyRequests() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} de{" "}
-          {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -597,7 +497,7 @@ export default function CompanyRequests() {
           }}
           estatusId={selectedCompanyRequest}
           mode={dialogMode}
-          /* relationalObjects={{ nivelesEducativos, estatusUsuarios }} */
+        /* relationalObjects={{ nivelesEducativos, estatusUsuarios }} */
         />
       )}
     </div>

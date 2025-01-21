@@ -38,7 +38,7 @@ const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 const CompanyDashboard = lazy(() => import('@/pages/company/CompanyDashboard'));
 const CompanyChallenge = lazy(() => import('@/pages/company/CompanyChallenge'));
 const MySolutions = lazy(() => import('@/pages/participant/MySolutions'));
-const ChallengeRequest = lazy(() => import('@/pages/admin/challenges-requests/ChallengeRequests'));
+const ChallengeRequest = lazy(() => import('@/pages/admin/Requests/ChallengeRequests'));
 const MyProfile = lazy(() => import('@/pages/participant/MyProfile'));
 const PublicProfile = lazy(() => import('@/pages/participant/PublicProfile'));
 const Notifications = lazy(() => import('@/pages/Notifications'));

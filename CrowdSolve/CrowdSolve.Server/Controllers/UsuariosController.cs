@@ -144,6 +144,18 @@ namespace CrowdSolve.Server.Controllers
         }
 
         /// <summary>
+        /// Obtiene todos los Participantes.
+        /// </summary>
+        /// <returns>Lista de Participantes.</returns>
+        [HttpGet("GetAdministrators", Name = "GetAdministrators")]
+        [AuthorizeByPermission(PermisosEnum.Administrar_Administradores)]
+        public List<ParticipantesModel> GetAdministrators()
+        {
+            List<ParticipantesModel> Participantes = _participantesRepo.Get().Where(x => x.idPerfil == (int)PerfilesEnum.Administrador).ToList();
+            return Participantes;
+        }
+
+        /// <summary>
         /// Obtiene los estatus de los usuarios.
         /// </summary>
         [HttpGet("GetEstatusUsuarios", Name = "GetEstatusUsuarios")]

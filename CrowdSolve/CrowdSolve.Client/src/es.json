@@ -384,7 +384,8 @@
         "previous": "Anterior",
         "next": "Siguiente",
         "clearFilters": "Limpiar filtros",
-        "columns": "Columnas"
+        "columns": "Columnas",
+        "create": "Crear nueva categoría"
       },
       "pagination": {
         "selected": "Seleccionado",
