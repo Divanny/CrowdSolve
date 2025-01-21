@@ -2,13 +2,17 @@
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
 {
     public class EmpresasRepo : Repository<Empresas, EmpresasModel>
     {
-        public EmpresasRepo(DbContext dbContext) : base
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
+
+        public EmpresasRepo(DbContext dbContext, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (
             dbContext,
             new ObjectsMapper<EmpresasModel, Empresas>(e => new Empresas()
@@ -50,7 +54,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
         )
         {
-
+            _translationService = translationService;
+            _idioma = idioma;
         }
 
         public EmpresasModel GetByUserId(int idUsuario)
@@ -58,6 +63,17 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             var empresaModel = this.Get(x => x.idUsuario == idUsuario).FirstOrDefault();
 
             return empresaModel;
+        }
+
+        public override IEnumerable<EmpresasModel> Get(Func<Empresas, bool> filter = null)
+        {
+            var empresas = base.Get(filter).ToList();
+            foreach (var empresa in empresas)
+            {
+                empresa.Sector = _translationService.Traducir(empresa.Sector, _idioma);
+                empresa.TamañoEmpresa = _translationService.Traducir(empresa.TamañoEmpresa, _idioma);
+            }
+            return empresas;
         }
 
         public List<EmpresasModel> GetEmpresasActivas(Func<Empresas, bool> filter = null)

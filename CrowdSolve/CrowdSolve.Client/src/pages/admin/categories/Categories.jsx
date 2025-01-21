@@ -14,9 +14,7 @@ import {
   ChevronDown,
   Edit,
   Eye,
-  FileText,
   MoreHorizontal,
-  X,
   Search,
   FilterX
 } from "lucide-react";
@@ -185,7 +183,6 @@ export default function Categories() {
             requireLoading: false,
           }), */
         ]);
-
       setData(categoriasResponse.data);
       /* setNivelesEducativos(relationalObjectsResponse.data.nivelesEducativos);
       setEstatusUsuarios(relationalObjectsResponse.data.estatusUsuarios); */

@@ -3,6 +3,7 @@ using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly PerfilesRepo _perfilesRepo;
         private readonly ParticipantesRepo _participantesRepo;
         private readonly EmpresasRepo _empresasRepo;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
 
 
         /// <summary>
@@ -27,15 +30,17 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
-        public UsuariosController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger)
+        public UsuariosController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            _usuariosRepo = new UsuariosRepo(crowdSolveContext);
-            _perfilesRepo = new PerfilesRepo(crowdSolveContext);
             _participantesRepo = new ParticipantesRepo(crowdSolveContext);
             _empresasRepo = new EmpresasRepo(crowdSolveContext);
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _perfilesRepo = new PerfilesRepo(crowdSolveContext, _translationService, _idioma);
+            _usuariosRepo = new UsuariosRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>
@@ -51,6 +56,11 @@ namespace CrowdSolve.Server.Controllers
             foreach (var usuario in usuarios)
             {
                 usuario.ContraseñaHashed = null;
+
+                if (usuario.NombreEstatusUsuario != null)
+                {
+                    usuario.NombreEstatusUsuario = _translationService.Traducir(usuario.NombreEstatusUsuario, _idioma);
+                }
             }
 
             return usuarios;
@@ -150,7 +160,14 @@ namespace CrowdSolve.Server.Controllers
         [Authorize]
         public List<EstatusUsuarios> GetEstatusUsuarios()
         {
-            return _usuariosRepo.GetEstatusUsuarios();
+            var estatusUsuarios = _usuariosRepo.GetEstatusUsuarios();
+
+            foreach (var estatus in estatusUsuarios)
+            {
+                estatus.Nombre = _translationService.Traducir(estatus.Nombre, _idioma);
+            }
+
+            return estatusUsuarios;
         }
 
         [HttpGet("GetCantidadUsuarios", Name = "GetCantidadUsuarios")]
