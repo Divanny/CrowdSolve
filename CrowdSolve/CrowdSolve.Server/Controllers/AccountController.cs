@@ -87,7 +87,6 @@ namespace CrowdSolve.Server.Controllers
                 OperationResult result = _authentication.SignUp(credentials);
                 _logger.LogHttpRequest(result.Data);
 
-
                 return result;
             }
             catch (Exception ex)

@@ -127,8 +127,6 @@ const AdminChallengeDetails = () => {
         const startDate = new Date(procesoEvaluacion.fechaInicio);
         const endDate = new Date(procesoEvaluacion.fechaFinalizacion);
 
-        console.log(relationalObjects.estatusProcesoEvaluacion);
-
         if (today < startDate) {
             return relationalObjects.estatusProcesoEvaluacion.find(status => status.idEstatusProceso === EstatusProcesoEnum.Proceso_de_Evaluacion_No_iniciado);
         } else if (today >= startDate && today <= endDate) {
