@@ -267,6 +267,7 @@
     "AdminParticipantsParticipantSolutionsDialog": true,
     "AdminChallengesPrizeEvidenceDialog": true,
     "UiTimeline": true,
-    "IconoArchivo": true
+    "IconoArchivo": true,
+    "Help-centerHelpCenterLayout": true
   }
 }

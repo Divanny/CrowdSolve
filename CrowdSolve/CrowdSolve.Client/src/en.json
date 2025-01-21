@@ -185,7 +185,7 @@
       "product": {
         "title": "Product",
         "links": {
-          "howItWorks": "How It Works",
+          "helpCenter": "Help Center",
           "challenges": "Challenges",
           "registeredCompanies": "Registered Companies"
         }
@@ -1398,5 +1398,417 @@
     "eliminarProceso": "Delete Process",
     "contenidoDesafio": "Challenge Content",
     "placeholderContenido": "Enter the challenge content"
+  },
+
+  "HelpCenterLayout": {
+    "title": "Help Center",
+    "categories": {
+      "Challenges": "Challenges",
+      "User": "User",
+      "Solutions": "Solutions",
+      "ContactUs": "Contact Us",
+      "Legal": "Legal",
+      "UserManual": "User Manual"
+    },
+    "items": {
+      "PostNewChallenge": "Post New Challenge",
+      "ViewChallengeCatalog": "View Challenge Catalog",
+      "ParticipateInChallenge": "Participate in Challenge",
+      "EvaluateChallenge": "Evaluate Challenge",
+      "CreateCompanyUser": "Create Company User",
+      "CreateParticipantUser": "Create Participant User",
+      "EditMyProfile": "Edit My Profile",
+      "ForgotPassword": "Forgot Password",
+      "ViewMySolutions": "View My Solutions",
+      "ChangeSolutionPrivacy": "Change Solution Privacy",
+      "SendMessage": "Send Message",
+      "TermsAndConditions": "Terms and Conditions",
+      "PrivacyPolicy": "Privacy Policy",
+      "UserManual": "User Manual",
+      "UsagePolicy": "Usage Policy",
+      "backToAdmin": "Back to Admin"
+    }
+  },
+  "helpCenter": {
+    "postNewChallenge": {
+      "title": "Post New Challenge",
+      "description": "Here you will find information on how challenges work and their different statuses.",
+      "statusesTitle": "Challenge Statuses",
+      "importantInfoTitle": "Important Information",
+      "importantInfoDescription": "Make sure to follow all instructions and meet the challenge requirements to avoid disqualifications.",
+      "faqTitle": "Frequently Asked Questions about Posting Challenges",
+      "howToPostTitle": "How can I post a new challenge?",
+      "howToPostSteps": "To post a new challenge, follow these steps:",
+      "steps": [
+        "Navigate to your company's Dashboard.",
+        "Click on \"Post New Challenge\".",
+        "Fill out the challenge form with the required details, including:",
+        "Click \"Submit\" to post your challenge."
+      ],
+      "details": [
+        "Title: Provide a descriptive title for your challenge.",
+        "Content: Describe the challenge in detail.",
+        "Start Date: Select the date when the challenge will begin.",
+        "Deadline: Select the deadline for the challenge.",
+        "Categories: Choose the relevant categories for the challenge.",
+        "Evaluation Process: Define the criteria and evaluation process."
+      ],
+      "problemsTitle": "What should I do if I encounter problems?",
+      "problemsDescription": "If you encounter any problems, please contact support."
+    },
+    "viewChallengeCatalog": {
+      "title": "Challenge Catalog",
+      "description": "Here you can view all available challenges.",
+      "featuresTitle": "Features",
+      "feature1": "Search Functionality",
+      "feature2": "Filtering",
+      "feature3": "Sorting",
+      "feature4": "Responsive Design",
+      "feature5": "Animated UI",
+      "statusesTitle": "Challenge Statuses",
+      "statusColumn": "Status",
+      "descriptionColumn": "Description",
+      "statusInProgress": "Challenge in progress",
+      "statusInProgressDescription": "The challenge is currently in progress.",
+      "statusUnderEvaluation": "Challenge under evaluation",
+      "statusUnderEvaluationDescription": "The challenge is being evaluated.",
+      "statusAwaitingPrizes": "Challenge awaiting prize delivery",
+      "statusAwaitingPrizesDescription": "The challenge is awaiting prize delivery.",
+      "statusCompleted": "Challenge completed",
+      "statusCompletedDescription": "The challenge has been completed.",
+      "statusCancelled": "Challenge cancelled",
+      "statusCancelledDescription": "The challenge has been cancelled.",
+      "statusUnvalidated": "Challenge unvalidated",
+      "statusUnvalidatedDescription": "The challenge has not yet been validated by administration.",
+      "statusRejected": "Challenge rejected",
+      "statusRejectedDescription": "The challenge has been rejected.",
+      "statusDiscarded": "Challenge discarded",
+      "statusDiscardedDescription": "The challenge has been discarded.",
+      "statusSolutionValidation": "Challenge in solution validation",
+      "statusSolutionValidationDescription": "The challenge is in the process of validating solutions.",
+      "importantInfoTitle": "Important Information",
+      "importantInfoDescription": "Make sure to follow all instructions and meet the challenge requirements to avoid disqualifications.",
+      "howToUseTitle": "How to Use",
+      "searchingTitle": "Searching",
+      "searchingSteps": "Steps to search for challenges:",
+      "searchSteps": ["Use the search bar at the top of the catalog to search for challenges by title or company name."],
+      "filteringTitle": "Filtering",
+      "filteringSteps": "Steps to filter challenges:",
+      "filterSteps": ["On desktop: Use the sidebar on the left to filter challenges by category and status.", "On mobile: Click the 'Filter' button to open the filter sheet, then select your desired filters."],
+      "sortingTitle": "Sorting",
+      "sortingDescription": "Use the dropdown menu next to the search bar to sort challenges by recency, popularity, or closing date.",
+      "challengeCardTitle": "Challenge Card",
+      "challengeCardDescription": "Each challenge card in the catalog displays the following information:",
+      "challengeCardInfo": ["Challenge title", "Company name and logo", "Challenge status", "Categories", "Time since posting", "Time remaining until deadline", "Number of solutions submitted"],
+      "troubleshootingTitle": "Troubleshooting",
+      "troubleshootingDescription": "If you encounter any issues while using the Challenge Catalog:",
+      "troubleshootingSteps": ["Ensure you have a stable internet connection, as the catalog fetches data from the server.", "Try refreshing the page if the challenge list doesn't load or appears outdated.", "Clear your browser cache if you're experiencing persistent issues.", "If problems persist, please contact our support team for assistance."]
+    },
+    "participateInChallenge": {
+      "title": "Participate in the challenge",
+      "description": "Here you will find information on how to participate in challenges.",
+      "requirementsTitle": "Requirements",
+      "requirement1": "You must be registered on the platform.",
+      "requirement2": "You must be logged in.",
+      "requirement3": "You must meet the specific requirements of the challenge.",
+      "stepsTitle": "Steps to participate",
+      "loginTitle": "Log in",
+      "loginDescription": "Make sure you are logged into your account.",
+      "submitTitle": "Submit solution",
+      "submitDescription": "Follow these steps to submit your solution:",
+      "submitSteps": [
+        "Navigate to the challenge you want to participate in.",
+        "Click the 'Participate in the Challenge' button.",
+        "Fill out the form with the title and description of your solution.",
+        "Attach the necessary files.",
+        "Click 'Submit solution' to complete the process."
+      ],
+      "uploadTitle": "Upload files",
+      "uploadDescription": "You can upload files as part of your solution.",
+      "uploadSteps": [
+        "Click 'Select files' to choose files from your device.",
+        "Make sure the files do not exceed the maximum allowed size.",
+        "Wait for the files to fully upload before submitting your solution."
+      ],
+      "troubleshootingTitle": "Troubleshooting",
+      "troubleshootingDescription": "If you encounter any issues while participating in a challenge:",
+      "troubleshootingSteps": [
+        "Make sure you have a stable internet connection.",
+        "Try refreshing the page if you encounter any errors.",
+        "Contact support if the issue persists."
+      ]
+    },
+    "evaluateChallenge": {
+      "title": "Evaluate a challenge",
+      "description": "Here you will find information on how to evaluate the solutions of a challenge.",
+      "importantInfoTitle": "Important Information",
+      "importantInfoDescription": "To evaluate a challenge, it must be in the evaluation phase.",
+      "stepsTitle": "Steps to evaluate",
+      "companyEvaluationTitle": "Evaluation by companies",
+      "companyEvaluationDescription": "Companies can view all solutions and assign a score from 1 to 100.",
+      "companyEvaluationSteps": [
+        "Navigate to the challenge you want to evaluate.",
+        "If the challenge is in the evaluation phase, you will see an alert indicating that you can evaluate.",
+        "Click 'Participate' to start the evaluation.",
+        "Review each solution and assign a score from 1 to 100."
+      ],
+      "participantEvaluationTitle": "Evaluation by participants",
+      "participantEvaluationDescription": "Participants can view all solutions of the challenge they participated in and give 'likes' to the ones they like.",
+      "participantEvaluationSteps": [
+        "Navigate to the challenge you participated in.",
+        "If the challenge is in the evaluation phase, you will see an alert indicating that you can evaluate.",
+        "Click 'Participate' to start the evaluation.",
+        "Review each solution and give 'likes' to the ones you like."
+      ]
+    },
+    "viewMySolutions": {
+      "title": "View My Solutions",
+      "description": "Here you will find information on how to view and manage your solutions.",
+      "requirementsTitle": "Requirements",
+      "requirement1": "You must be registered on the platform.",
+      "requirement2": "You must be logged in.",
+      "stepsTitle": "Steps to View Solutions",
+      "accessingTitle": "Accessing My Solutions",
+      "accessingDescription": "Follow these steps to access your solutions:",
+      "accessingSteps": [
+        "Navigate to the profile menu.",
+        "Select 'My Solutions' from the dropdown menu."
+      ],
+      "managingTitle": "Managing Solutions",
+      "managingDescription": "Once you are on the My Solutions page, you can:",
+      "managingSteps": [
+        "View the list of solutions you have submitted.",
+        "Filter solutions by status.",
+        "Search for specific solutions using the search bar.",
+        "Toggle the public status of your solutions.",
+        "Download attachments associated with your solutions."
+      ],
+      "troubleshootingTitle": "Troubleshooting",
+      "troubleshootingDescription": "If you encounter any issues while viewing your solutions:",
+      "troubleshootingSteps": [
+        "Ensure you have a stable internet connection.",
+        "Try refreshing the page if you encounter any errors.",
+        "Contact support if the issue persists."
+      ]
+    },
+    "changeSolutionPrivacy": {
+      "title": "Change Solution Privacy",
+      "description": "Here you will find information on how to change the privacy of your solutions.",
+      "requirementsTitle": "Requirements",
+      "requirement1": "You must be registered on the platform.",
+      "requirement2": "You must be logged in.",
+      "stepsTitle": "Steps to Change Solution Privacy",
+      "accessingTitle": "Accessing My Solutions",
+      "accessingDescription": "Follow these steps to access your solutions:",
+      "accessingSteps": [
+        "Navigate to the profile menu.",
+        "Select 'My Solutions' from the dropdown menu."
+      ],
+      "managingTitle": "Managing Solution Privacy",
+      "managingDescription": "Once you are on the My Solutions page, you can:",
+      "managingSteps": [
+        "Select the solution whose privacy you want to change.",
+        "Click the privacy button to toggle between public and private.",
+        "Confirm the privacy change."
+      ],
+      "troubleshootingTitle": "Troubleshooting",
+      "troubleshootingDescription": "If you encounter any issues while changing the privacy of your solutions:",
+      "troubleshootingSteps": [
+        "Ensure you have a stable internet connection.",
+        "Try refreshing the page if you encounter any errors.",
+        "Contact support if the issue persists."
+      ]
+    },
+    "createCompanyUser": {
+      "title": "Create Company User",
+      "description": "Here you will find information on how to create a company user account.",
+      "requirementsTitle": "Requirements",
+      "requirement1": "You must have a valid email address.",
+      "requirement2": "You must provide accurate information about your company.",
+      "stepsTitle": "Steps to Create Company User",
+      "signUpTitle": "Sign Up",
+      "signUpDescription": "Follow these steps to sign up:",
+      "signUpSteps": [
+        "Navigate to the registration page.",
+        "Enter your username, email, and password.",
+        "Click 'Create Account' to complete the registration."
+      ],
+      "roleSelectionTitle": "Role Selection",
+      "roleSelectionDescription": "After signing up, select the company role:",
+      "roleSelectionSteps": [
+        "Log in to your account.",
+        "Select 'Company' as your role.",
+        "Click 'Next' to continue."
+      ],
+      "completeSignUpTitle": "Complete Sign Up",
+      "completeSignUpDescription": "Provide your company information:",
+      "completeSignUpSteps": [
+        "Enter your company name, phone, and website.",
+        "Select the sector and company size.",
+        "Enter the company address and description.",
+        "Click 'Register' to complete the process."
+      ],
+      "verificationPendingTitle": "Verification Pending",
+      "verificationPendingDescription": "Your company account is under verification. You will receive an email notification once the verification is complete.",
+      "troubleshootingTitle": "Troubleshooting",
+      "troubleshootingDescription": "If you encounter any issues while creating your company user account:",
+      "troubleshootingSteps": [
+        "Ensure you have a stable internet connection.",
+        "Try refreshing the page if you encounter any errors.",
+        "Contact support if the issue persists."
+      ]
+    },
+    "createParticipantUser": {
+      "title": "Create Participant User",
+      "description": "Here you will find information on how to create a participant user account.",
+      "requirementsTitle": "Requirements",
+      "requirement1": "You must have a valid email address.",
+      "requirement2": "You must provide accurate information about yourself.",
+      "stepsTitle": "Steps to Create Participant User",
+      "signUpTitle": "Sign Up",
+      "signUpDescription": "Follow these steps to sign up:",
+      "signUpSteps": [
+        "Navigate to the registration page.",
+        "Enter your username, email, and password.",
+        "Click 'Create Account' to complete the registration."
+      ],
+      "roleSelectionTitle": "Role Selection",
+      "roleSelectionDescription": "After signing up, select the participant role:",
+      "roleSelectionSteps": [
+        "Log in to your account.",
+        "Select 'Participant' as your role.",
+        "Click 'Next' to continue."
+      ],
+      "completeSignUpTitle": "Complete Sign Up",
+      "completeSignUpDescription": "Provide your personal information:",
+      "completeSignUpSteps": [
+        "Enter your first name, last name, and date of birth.",
+        "Enter your phone number and a personal description.",
+        "Select your education level.",
+        "Click 'Register' to complete the process."
+      ],
+      "troubleshootingTitle": "Troubleshooting",
+      "troubleshootingDescription": "If you encounter any issues while creating your participant user account:",
+      "troubleshootingSteps": [
+        "Ensure you have a stable internet connection.",
+        "Try refreshing the page if you encounter any errors.",
+        "Contact support if the issue persists."
+      ]
+    },
+    "editMyProfile": {
+      "title": "Edit My Profile",
+      "description": "Here you will find information on how to edit your profile.",
+      "requirementsTitle": "Requirements",
+      "requirement1": "You must be registered on the platform.",
+      "requirement2": "You must be logged in.",
+      "stepsTitle": "Steps to Edit Profile",
+      "accessProfileTitle": "Access Profile",
+      "accessProfileDescription": "Follow these steps to access your profile:",
+      "accessProfileSteps": [
+        "Navigate to the profile menu.",
+        "Select 'My Profile' from the dropdown menu."
+      ],
+      "updateInfoTitle": "Update Information",
+      "updateInfoDescription": "Once you are on the My Profile page, you can update the following information:",
+      "updateInfoSteps": [
+        "First Name",
+        "Last Name",
+        "Email",
+        "Phone Number",
+        "Personal Description",
+        "Education Level",
+        "Profile Picture"
+      ],
+      "saveChangesTitle": "Save Changes",
+      "saveChangesDescription": "After updating your information, follow these steps to save the changes:",
+      "saveChangesSteps": [
+        "Click the 'Save Changes' button.",
+        "Wait for the confirmation message."
+      ],
+      "troubleshootingTitle": "Troubleshooting",
+      "troubleshootingDescription": "If you encounter any issues while editing your profile:",
+      "troubleshootingSteps": [
+        "Ensure you have a stable internet connection.",
+        "Try refreshing the page if you encounter any errors.",
+        "Contact support if the issue persists."
+      ]
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "description": "Here you will find information on how to reset your password.",
+      "requirementsTitle": "Requirements",
+      "requirement1": "You must have access to the email associated with your account.",
+      "requirement2": "You must follow the instructions sent to your email.",
+      "stepsTitle": "Steps to Reset Password",
+      "accessForgotPasswordTitle": "Access Forgot Password",
+      "accessForgotPasswordDescription": "Follow these steps to access the forgot password page:",
+      "accessForgotPasswordSteps": [
+        "Navigate to the login page.",
+        "Click on 'Forgot Password' link."
+      ],
+      "enterEmailTitle": "Enter Email",
+      "enterEmailDescription": "Enter the email address associated with your account:",
+      "enterEmailSteps": [
+        "Type your email address in the provided field.",
+        "Click on 'Reset Password' button."
+      ],
+      "enterCodeTitle": "Enter Code",
+      "enterCodeDescription": "Check your email for the verification code and enter it:",
+      "enterCodeSteps": [
+        "Open the email from CrowdSolve.",
+        "Copy the verification code.",
+        "Paste the code in the provided field on the reset password page."
+      ],
+      "setNewPasswordTitle": "Set New Password",
+      "setNewPasswordDescription": "Enter your new password and confirm it:",
+      "setNewPasswordSteps": [
+        "Type your new password in the 'New Password' field.",
+        "Type your new password again in the 'Confirm New Password' field.",
+        "Click on 'Set New Password' button."
+      ],
+      "troubleshootingTitle": "Troubleshooting",
+      "troubleshootingDescription": "If you encounter any issues while resetting your password:",
+      "troubleshootingSteps": [
+        "Ensure you have a stable internet connection.",
+        "Check your spam/junk folder if you don't see the email.",
+        "Contact support if the issue persists."
+      ]
+    },
+    "sendMessage": {
+      "title": "Send Message",
+      "description": "Here you will find information on how to contact the CrowdSolve administration.",
+      "requirementsTitle": "Requirements",
+      "requirement1": "You must have a valid email address.",
+      "requirement2": "You must provide accurate information in the contact form.",
+      "stepsTitle": "Steps to Contact Us",
+      "accessContactUsTitle": "Access Contact Us",
+      "accessContactUsDescription": "Follow these steps to access the contact form:",
+      "accessContactUsSteps": [
+        "Navigate to the 'Contact Us' page from the main menu.",
+        "Click on the 'Contact Us' link."
+      ],
+      "fillFormTitle": "Fill Out the Form",
+      "fillFormDescription": "Provide the necessary information in the contact form:",
+      "fillFormSteps": [
+        "Enter the subject of your message.",
+        "Enter your first name and last name.",
+        "Enter your email address.",
+        "Type your message in the provided field."
+      ],
+      "submitFormTitle": "Submit the Form",
+      "submitFormDescription": "Follow these steps to submit the contact form:",
+      "submitFormSteps": [
+        "Ensure all required fields are filled out.",
+        "Click on the 'Submit Form' button.",
+        "Wait for the confirmation message."
+      ],
+      "responseTitle": "Response",
+      "responseDescription": "After submitting the form, you will receive a response via email:",
+      "responseSteps": [
+        "Check your email for a confirmation message.",
+        "Our support team will review your message.",
+        "You will receive a response within 24-48 hours."
+      ]
+    }
   }
 }
