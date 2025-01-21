@@ -31,5 +31,9 @@ namespace CrowdSolve.Server.Models
         public int ? idEstatusProceso { get; set; }
 
         public string? EstatusProcesoNombre { get; set; }
+
+        public string? Severidad { get; set; }
+
+        public string? ClaseProcesoIcono { get; set; }
     }
 }
