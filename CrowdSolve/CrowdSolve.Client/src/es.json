@@ -158,17 +158,10 @@
         "title": "Soluciones para desafíos complejos"
       }
     },
-    "design": {
-      "innovative_design": {
-        "text": "Innovación sin límites",
-        "gradient": "bg-gradient-to-br from-[#9F5638] to-[#F98E2E]",
-        "icon": "InnovationIcon"
-      },
-      "creative_solution": {
-        "text": "Soluciones creativas",
-        "gradient": "bg-gradient-to-br from-[#1F3B73] to-[#00A9F1]",
-        "icon": "CreativeSolutionIcon"
-      }
+    "designs": {
+      "innovation": "Innovación",
+      "global_community": "Comunidad global",
+      "collaboration": "Colaboración"
     }
   },
 

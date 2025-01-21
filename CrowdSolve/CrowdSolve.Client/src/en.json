@@ -33,16 +33,15 @@
         "title": "Driving Global Innovation",
         "description": "We connect a diverse network of global participants, enabling the most innovative ideas to emerge from different perspectives and experiences."
       }
-      
     ],
 
     "stats_title": "CrowdSolve Stats",
     "stats": {
-        "users": "Users",
-        "projects": "Projects",
-        "uptime":  "Up Time",
-        "support": "Support"
-      }
+      "users": "Users",
+      "projects": "Projects",
+      "uptime": "Up Time",
+      "support": "Support"
+    }
   },
   "MeetOurteam": {
     "title": "Meet Our Team"
@@ -171,6 +170,11 @@
       "solutions": {
         "title": "Solutions for Complex Challenges"
       }
+    },
+    "designs": {
+      "innovation": "Innovation",
+      "global_community": "Global Community",
+      "collaboration": "Collaboration"
     }
   },
   "TrustedBysection": {
@@ -1492,18 +1496,36 @@
       "howToUseTitle": "How to Use",
       "searchingTitle": "Searching",
       "searchingSteps": "Steps to search for challenges:",
-      "searchSteps": ["Use the search bar at the top of the catalog to search for challenges by title or company name."],
+      "searchSteps": [
+        "Use the search bar at the top of the catalog to search for challenges by title or company name."
+      ],
       "filteringTitle": "Filtering",
       "filteringSteps": "Steps to filter challenges:",
-      "filterSteps": ["On desktop: Use the sidebar on the left to filter challenges by category and status.", "On mobile: Click the 'Filter' button to open the filter sheet, then select your desired filters."],
+      "filterSteps": [
+        "On desktop: Use the sidebar on the left to filter challenges by category and status.",
+        "On mobile: Click the 'Filter' button to open the filter sheet, then select your desired filters."
+      ],
       "sortingTitle": "Sorting",
       "sortingDescription": "Use the dropdown menu next to the search bar to sort challenges by recency, popularity, or closing date.",
       "challengeCardTitle": "Challenge Card",
       "challengeCardDescription": "Each challenge card in the catalog displays the following information:",
-      "challengeCardInfo": ["Challenge title", "Company name and logo", "Challenge status", "Categories", "Time since posting", "Time remaining until deadline", "Number of solutions submitted"],
+      "challengeCardInfo": [
+        "Challenge title",
+        "Company name and logo",
+        "Challenge status",
+        "Categories",
+        "Time since posting",
+        "Time remaining until deadline",
+        "Number of solutions submitted"
+      ],
       "troubleshootingTitle": "Troubleshooting",
       "troubleshootingDescription": "If you encounter any issues while using the Challenge Catalog:",
-      "troubleshootingSteps": ["Ensure you have a stable internet connection, as the catalog fetches data from the server.", "Try refreshing the page if the challenge list doesn't load or appears outdated.", "Clear your browser cache if you're experiencing persistent issues.", "If problems persist, please contact our support team for assistance."]
+      "troubleshootingSteps": [
+        "Ensure you have a stable internet connection, as the catalog fetches data from the server.",
+        "Try refreshing the page if the challenge list doesn't load or appears outdated.",
+        "Clear your browser cache if you're experiencing persistent issues.",
+        "If problems persist, please contact our support team for assistance."
+      ]
     },
     "participateInChallenge": {
       "title": "Participate in the challenge",
