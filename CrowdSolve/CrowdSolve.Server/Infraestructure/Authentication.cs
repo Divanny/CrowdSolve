@@ -289,6 +289,21 @@ namespace CrowdSolve.Server.Infraestructure
                                 idEstatusUsuario = (int)EstatusUsuariosEnum.Incompleto,
                                 AvatarURL = logoUrl
                             });
+
+                            string mailBody = $@"
+                                <h1>¡Bienvenido a CrowdSolve!</h1>
+                                <p>Estamos encantados de informarte que tu registro en nuestra plataforma ha sido exitoso.</p>
+                                <p>A continuación, los detalles de tu cuenta:</p>
+                                <ul>
+                                    <li><b>Nombre:</b> {usuario.NombreUsuario}</li>
+                                    <li><b>Correo electrónico:</b> {usuario.CorreoElectronico}</li>
+                                </ul>
+                                <p>Ahora puedes acceder a nuestra plataforma y comenzar a disfrutar de todas las herramientas y recursos que hemos preparado para ti.</p>
+                                <p>Si tienes alguna pregunta o necesitas ayuda para comenzar, no dudes en contactarnos respondiendo a este correo.</p>
+                                <p>¡Gracias por unirte a CrowdSolve!</p>
+                            ";
+
+                            _mailingService.SendMail([usuario.CorreoElectronico], "¡Bienvenido a CrowdSolve!", mailBody, MailingUsers.noreply);
                         }
 
                         var nuevaCredencial = _credencialesAutenticacionRepo.Add(new CredencialesAutenticacionModel()
@@ -310,21 +325,6 @@ namespace CrowdSolve.Server.Infraestructure
                     };
 
                     trx.Commit();
-
-                    string mailBody = $@"
-                        <h1>¡Bienvenido a CrowdSolve!</h1>
-                        <p>Estamos encantados de informarte que tu registro en nuestra plataforma ha sido exitoso.</p>
-                        <p>A continuación, los detalles de tu cuenta:</p>
-                        <ul>
-                            <li><b>Nombre:</b> {usuario.NombreUsuario}</li>
-                            <li><b>Correo electrónico:</b> {usuario.CorreoElectronico}</li>
-                        </ul>
-                        <p>Ahora puedes acceder a nuestra plataforma y comenzar a disfrutar de todas las herramientas y recursos que hemos preparado para ti.</p>
-                        <p>Si tienes alguna pregunta o necesitas ayuda para comenzar, no dudes en contactarnos respondiendo a este correo.</p>
-                        <p>¡Gracias por unirte a CrowdSolve!</p>
-                    ";
-
-                    _mailingService.SendMail([usuario.CorreoElectronico], "¡Bienvenido a CrowdSolve!", mailBody, MailingUsers.noreply);
 
                     return new OperationResult(true, "Inicio de sesión exitoso con Google", data, token);
                 }

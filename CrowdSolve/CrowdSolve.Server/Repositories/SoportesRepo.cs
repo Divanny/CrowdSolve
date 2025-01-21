@@ -51,7 +51,9 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             NombreAsignado = p != null ? DB.Set<Usuarios>().Where(x => x.idUsuario == p.idUsuarioAsignado).Select(x => x.NombreUsuario).FirstOrDefault() : null,
                             AsignadoAMi = idUsuarioEnLinea == (p != null ? p.idUsuarioAsignado : null),
                             idEstatusProceso = p != null ? p.idEstatusProceso : null,
-                            EstatusProcesoNombre=p!=null? ep.Descripcion:null,
+                            EstatusProcesoNombre=p!=null? ep.Nombre:null,
+                            Severidad= p != null ? ep.Severidad : null,
+                            ClaseProcesoIcono=p!=null?ep.ClaseIcono : null,
 
                         })
                         .OrderBy(p => p.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_Enviada ? 0 

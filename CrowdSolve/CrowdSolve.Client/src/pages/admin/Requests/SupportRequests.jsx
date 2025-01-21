@@ -42,6 +42,9 @@ import {
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import Icon from "@/components/ui/icon";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupportDialog } from "../../../components/admin/Requests/SupportRequestDialog";
 import EstatusProcesoEnum from "@/enums/EstatusProcesoEnum";
 
@@ -182,9 +185,18 @@ export default function SupportRequests() {
       }
     },
     {
-      accessorKey: "idEstatusProceso",
-      header: "Estatus Solicitud",
-      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+      accessorKey: "estatusProcesoNombre",
+      header: "Estatus",
+      cell: ({ row }) => {
+        return (
+          <Badge variant={row.original.severidad}>
+            <div className="flex items-center space-x-1 w-auto">
+              <Icon name={row.original.claseProcesoIcono} size={16} />
+              <span>{row.getValue("estatusProcesoNombre")}</span>
+            </div>
+          </Badge>
+        );
+      },
     },
     {
       id: "actions",
@@ -248,7 +260,7 @@ export default function SupportRequests() {
                   }}
                 >
                   <FileX className="mr-2 h-4 w-4" />
-                  Descargar Solicitud
+                  Declinar Solicitud
                 </DropdownMenuItem>
               )}
 
@@ -268,7 +280,7 @@ export default function SupportRequests() {
           }),
         ]);
 
-
+        console.log(supportRequestsResponse.data);
       setData(supportRequestsResponse.data);
       setUsuariosAdmin(relationalObjectsResponse.data.usuariosAdmin);
       setEstatusProcesos(relationalObjectsResponse.data.estatusProcesos);
@@ -440,7 +452,7 @@ export default function SupportRequests() {
         </DropdownMenu>
 
 
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
               Estatus Solicitud
@@ -483,7 +495,31 @@ export default function SupportRequests() {
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
+
+<Select
+      value={estatusProcesoFilter}
+      onValueChange={(value) => {
+        setEstatusProcesoFilter(value)
+        table.getColumn("estatusProcesoNombre")?.setFilterValue(value)
+      }}
+    >
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Filtrar por estatus" />
+      </SelectTrigger>
+      <SelectContent>
+        {filteredEstatusProceso.map((estatus) => (
+          <SelectItem key={estatus.idEstatusProceso} value={estatus.nombre}>
+            <Badge variant={estatus.severidad}>
+              <div className="flex items-center space-x-1 w-auto">
+                <Icon name={estatus.claseIcono} size={16} />
+                <span>{estatus.nombre}</span>
+              </div>
+            </Badge>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
 
 
         <Button
@@ -497,14 +533,14 @@ export default function SupportRequests() {
         </Button>
 
         <div className="flex items-center border rounded-md p-2 shadow-sm">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-15">
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-[#FFD3A6] mr-2"></div>
-              <span className="text-sm font-bold">Recientes</span>
+              <div className="w-2 h-2 rounded-full bg-[#FFD3A6] mr-2"></div>
+              <span className="text-xs w-20 font-bold">Recientes</span>
             </div>
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-[#FFC7B0] mr-2"></div>
-              <span className="text-sm font-bold">En Proceso</span>
+              <div className="w-2 h-2 rounded-full bg-[#FFC7B0] mr-2"></div>
+              <span className="text-xs w-20 font-bold">En Proceso</span>
             </div>
           </div>
         </div>
