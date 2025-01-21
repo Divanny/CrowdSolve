@@ -417,6 +417,7 @@ namespace CrowdSolve.Server.Controllers
                 if (solucion.idUsuario != _idUsuarioOnline) return new OperationResult(false, "No tiene permiso para editar esta solución");
 
                 solucion.Publica = !(solucion.Publica ?? false);
+                solucion.Adjuntos = null;
                 _solucionesRepo.Edit(solucion);
                 _logger.LogHttpRequest(solucion);
                 return new OperationResult(true, "Se ha publicado la solución exitosamente", solucion);
