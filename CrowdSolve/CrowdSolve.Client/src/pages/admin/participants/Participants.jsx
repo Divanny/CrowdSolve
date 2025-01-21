@@ -131,14 +131,16 @@ export default function Participants() {
       accessorKey: "estatusUsuario",
       header: t('Participants.estatus_usuario'),
       cell: ({ row }) => (
+
         <Badge
-          variant={`${row.getValue("estatusUsuario") === "Activo"
+          variant={`${row.getValue("estatusUsuario") === 'Activo' || row.getValue("estatusUsuario") === 'Asset'
             ? "success"
-            : row.getValue("estatusUsuario") === "Inactivo"
+            : row.getValue("estatusUsuario") === 'Empresa rechazada' || row.getValue("estatusUsuario") === 'Company rejected'
               ? "destructive"
               : "warning"
             }`}
         >
+
           {row.getValue("estatusUsuario")}
         </Badge>
       ),
@@ -198,8 +200,8 @@ export default function Participants() {
           api.get("/api/Participantes/GetRelationalObjects", {
             requireLoading: false,
           }),
-        ]);
 
+        ]);
       setData(participantesResponse.data);
       setNivelesEducativos(relationalObjectsResponse.data.nivelesEducativos);
       setEstatusUsuarios(relationalObjectsResponse.data.estatusUsuarios);
@@ -232,8 +234,8 @@ export default function Participants() {
       const value = row.getValue(columnId);
       return value != null
         ? String(value)
-            .toLowerCase()
-            .includes(String(filterValue).toLowerCase())
+          .toLowerCase()
+          .includes(String(filterValue).toLowerCase())
         : false;
     },
     state: {
@@ -283,14 +285,14 @@ export default function Participants() {
               const value = event.target.value;
               setGlobalFilter(value);
               table.setGlobalFilter(value);
-          }}
+            }}
             className="pl-8"
           />
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-            {t('Participants.nivel_educativo')}
+              {t('Participants.nivel_educativo')}
               {nivelEducativoFilter ? `: ${nivelEducativoFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -334,7 +336,7 @@ export default function Participants() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-            {t('Participants.filtro_estatus_usuario')}
+              {t('Participants.filtro_estatus_usuario')}
               {estatusUsuarioFilter ? `: ${estatusUsuarioFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -387,7 +389,7 @@ export default function Participants() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-            {t('Participants.columna')} <ChevronDown className="ml-2 h-4 w-4" />
+              {t('Participants.columna')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

@@ -1,5 +1,6 @@
 using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Infraestructure;
+using CrowdSolve.Server.Services;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -117,6 +118,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<Authentication>();
 builder.Services.AddScoped<Mailing>();
 builder.Services.AddScoped<FirebaseStorageService>();
+builder.Services.AddScoped<FirebaseTranslationService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddHostedService<Worker>();

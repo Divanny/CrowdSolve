@@ -4,6 +4,7 @@ using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly ProcesosRepo _procesosRepo;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly Mailing _mailingService;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
 
         /// <summary>
         /// Constructor de la clase SoportesController.
@@ -28,15 +31,17 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
         /// <param name="mailing"></param>
-        public SoportesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing)
+        public SoportesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            _soportesRepo = new SoportesRepo(crowdSolveContext, _idUsuarioOnline);
-            _procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Soporte, crowdSolveContext, _idUsuarioOnline);
-            _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _mailingService = mailing;
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Soporte, crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _soportesRepo = new SoportesRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _usuariosRepo = new UsuariosRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>
@@ -48,6 +53,11 @@ namespace CrowdSolve.Server.Controllers
         public List<SoportesModel> Get()
         {
             List<SoportesModel> soportes = _soportesRepo.Get().ToList();
+
+            soportes.ForEach(x =>
+            {
+                x.EstatusProcesoNombre = _translationService.Traducir(x.EstatusProcesoNombre, _idioma);
+            });
             return soportes;
         }
 
@@ -368,8 +378,15 @@ namespace CrowdSolve.Server.Controllers
         [HttpGet("GetRelationalObjects")]
         public object GetRelationalObjects()
         {
-            var estatus = _crowdSolveContext.Set<EstatusProceso>().Where(u=>u.idClaseProceso==(int)ClasesProcesoEnum.Soporte);
+            var estatus = _crowdSolveContext.Set<EstatusProceso>().Where(u=>u.idClaseProceso==(int)ClasesProcesoEnum.Soporte)
+                .Select(s => new EstatusProceso
+                {
+                    Nombre = _translationService.Traducir(s.Nombre, _idioma)
+                })
+                .ToList(); ;
+
             var usuarios = _crowdSolveContext.Set<Usuarios>().Where(u=>u.idPerfil==(int)PerfilesEnum.Administrador);
+
 
             return new
             {

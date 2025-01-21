@@ -87,7 +87,7 @@ const AppRoutes = () => (
     <Route path="/forgot-password" element={<LazyComponent component={ForgotPassword} />} />
     <Route path="/access-denied" element={<LazyComponent component={AccessDenied} />} />
     <Route path="/404" element={<LazyComponent component={NotFound} />} />
-    <Route path="help-center*" element={<HelpCenterLayout />} >
+    <Route path="help-center" element={<HelpCenterLayout />} >
       <Route index element={<LazyComponent component={NotFound} />} />
       <Route path="challenges/post-new-challenge" element={<LazyComponent component={PostNewChallenge} />} />
       <Route path="challenges/view-challenge-catalog" element={<LazyComponent component={ViewChallengeCatalog} />} />

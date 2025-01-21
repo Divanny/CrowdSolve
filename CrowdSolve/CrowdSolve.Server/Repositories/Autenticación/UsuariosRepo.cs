@@ -1,13 +1,17 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
 {
     public class UsuariosRepo : Repository<Usuarios, UsuariosModel>
     {
-        public UsuariosRepo(DbContext dbContext) : base
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
+
+        public UsuariosRepo(DbContext dbContext, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (
             dbContext,
             new ObjectsMapper<UsuariosModel, Usuarios>(u => new Usuarios()
@@ -48,7 +52,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
         )
         {
-
+            _translationService = translationService;
+            _idioma = idioma;
         }
 
         public UsuariosModel GetByUsername(string nombreUsuario)
@@ -72,6 +77,17 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
             return null;
         }
+
+        public override IEnumerable<UsuariosModel> Get(Func<Usuarios, bool> filter = null)
+        {
+            var usuarios = base.Get(filter).ToList();
+            foreach (var usuario in usuarios)
+            {
+                usuario.NombreEstatusUsuario = _translationService.Traducir(usuario.NombreEstatusUsuario, _idioma);
+            }
+            return usuarios;
+        }
+
         public override Usuarios Add(UsuariosModel model)
         {
             try
