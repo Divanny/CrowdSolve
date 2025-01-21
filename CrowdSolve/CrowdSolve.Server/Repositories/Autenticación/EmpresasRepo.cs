@@ -9,10 +9,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 {
     public class EmpresasRepo : Repository<Empresas, EmpresasModel>
     {
-
         private readonly FirebaseTranslationService _translationService;
         private readonly string _idioma;
-
 
         public EmpresasRepo(DbContext dbContext, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (

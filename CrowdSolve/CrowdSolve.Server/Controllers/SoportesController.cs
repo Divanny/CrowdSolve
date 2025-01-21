@@ -56,7 +56,6 @@ namespace CrowdSolve.Server.Controllers
 
             soportes.ForEach(x =>
             {
-
                 x.EstatusProcesoNombre = _translationService.Traducir(x.EstatusProcesoNombre, _idioma);
             });
             return soportes;

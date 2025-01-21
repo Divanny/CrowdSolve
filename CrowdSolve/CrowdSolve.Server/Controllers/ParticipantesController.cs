@@ -37,7 +37,6 @@ namespace CrowdSolve.Server.Controllers
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            //_empresasRepo = new EmpresasRepo(crowdSolveContext);
             _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
             _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
             _firebaseStorageService = firebaseStorageService;
@@ -60,7 +59,6 @@ namespace CrowdSolve.Server.Controllers
 
             Participantes.ForEach(x =>
             {
-                
                 x.NivelEducativo = _translationService.Traducir(x.NivelEducativo, _idioma);
                 x.EstatusUsuario= _translationService.Traducir(x.EstatusUsuario, _idioma);
             });
@@ -284,7 +282,6 @@ namespace CrowdSolve.Server.Controllers
         [Authorize]
         public object GetRelationalObjects()
         {
-
             var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>()
             .Select(te => new NivelesEducativo
             {
@@ -300,6 +297,8 @@ namespace CrowdSolve.Server.Controllers
                 Nombre = _translationService.Traducir(e.Nombre, _idioma)
             })
             .ToList();
+
+            var perfilesUsuarios = _usuariosRepo.GetPerfilesUsuarios();
 
             return new
             {

@@ -55,10 +55,8 @@ namespace CrowdSolve.Server.Controllers
 
             foreach (var usuario in usuarios)
             {
-                // Remover la contraseña por seguridad
                 usuario.ContraseñaHashed = null;
 
-                // Traducir el estatus del usuario
                 if (usuario.NombreEstatusUsuario != null)
                 {
                     usuario.NombreEstatusUsuario = _translationService.Traducir(usuario.NombreEstatusUsuario, _idioma);
@@ -67,7 +65,6 @@ namespace CrowdSolve.Server.Controllers
 
             return usuarios;
         }
-
 
         /// <summary>
         /// Obtiene un usuario por su ID.

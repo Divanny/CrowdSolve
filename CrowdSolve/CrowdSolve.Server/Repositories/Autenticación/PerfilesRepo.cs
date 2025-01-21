@@ -61,7 +61,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         {
             var vistas = dbContext.Set<Vistas>().ToList();
 
-            // Traducir el nombre de cada vista antes de devolverlas
             foreach (var vista in vistas)
             {
                 vista.Nombre = _translationService.Traducir(vista.Nombre, _idioma);
@@ -229,7 +228,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         }
         public IEnumerable<Vistas> GetVistas()
         {
-            return dbContext.Set<Vistas>()/*.OrderBy(x => x.Orden)*/;
+            return dbContext.Set<Vistas>();
         }
         public int GetPerfilDefault()
         {

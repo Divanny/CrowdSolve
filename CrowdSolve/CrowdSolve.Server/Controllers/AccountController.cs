@@ -134,8 +134,6 @@ namespace CrowdSolve.Server.Controllers
 
             if (result.Success)
             {
-
-
                 return Ok(new
                 {
                     success = true,

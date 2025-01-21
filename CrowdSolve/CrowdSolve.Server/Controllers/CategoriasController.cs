@@ -42,7 +42,6 @@ namespace CrowdSolve.Server.Controllers
         /// </summary>
         /// <returns>Lista de Categorias.</returns>
         [HttpGet(Name = "GetCategorias")]
-        // [Authorize]
         public List<CategoriasModel> Get()
         {
             List<CategoriasModel> categorias = _categoriasRepo.Get().ToList();
@@ -55,7 +54,6 @@ namespace CrowdSolve.Server.Controllers
 
             return categorias;
         }
-
 
         /// <summary>
         /// Obtiene una categoría por su ID.

@@ -8,7 +8,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 {
     public class UsuariosRepo : Repository<Usuarios, UsuariosModel>
     {
-
         private readonly FirebaseTranslationService _translationService;
         private readonly string _idioma;
 
@@ -88,7 +87,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
             return usuarios;
         }
-
 
         public override Usuarios Add(UsuariosModel model)
         {

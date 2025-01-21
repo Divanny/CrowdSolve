@@ -58,26 +58,6 @@ namespace CrowdSolve.Server.Controllers
             _usuariosRepo = new UsuariosRepo(crowdSolveContext, _translationService, _idioma);
         }
 
-        /// <summary>
-        /// Obtiene todos los desafíos.
-        /// </summary>
-        /// <returns>Lista de desafíos.</returns>
-        /// 
-        //[HttpGet(Name = "GetDesafios")]
-        //[Authorize]
-        //public List<DesafiosModel> Get()
-        //{
-        //    List<DesafiosModel> desafios = _desafiosRepo.Get().ToList();
-        //    desafios.ForEach(desafio =>
-        //    {
-        //        desafio.Categorias = _crowdSolveContext.Set<DesafiosCategoria>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
-        //        desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
-        //        desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
-        //    });
-
-        //    return desafios;
-        //}
-
         [HttpGet(Name = "GetDesafios")]
         [Authorize]
         public List<DesafiosModel> Get()
@@ -96,26 +76,19 @@ namespace CrowdSolve.Server.Controllers
                     .Where(x => x.idDesafio == desafio.idDesafio)
                     .ToList();
 
-                
-                desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
 
-                
-                
+                desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
                 desafio.EstatusDesafio = _translationService.Traducir(desafio.EstatusDesafio, _idioma);
-                
 
                 // Traducir los estatus en las soluciones, si es necesario
                 desafio.Soluciones.ForEach(solucion =>
                 {
-                    
-                        solucion.EstatusProceso = _translationService.Traducir(solucion.EstatusProceso, _idioma);
-                    
+                    solucion.EstatusProceso = _translationService.Traducir(solucion.EstatusProceso, _idioma);
                 });
             });
 
             return desafios;
         }
-
 
         /// <summary>
         /// Obtiene un desafío por su ID desde la vista de administrador.
@@ -140,7 +113,7 @@ namespace CrowdSolve.Server.Controllers
 
             return Ok(desafio);
         }
-        
+
         /// <summary>
         /// Obtiene todos los desafíos validados.
         /// </summary>
@@ -192,16 +165,10 @@ namespace CrowdSolve.Server.Controllers
             desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
             desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
 
-
-
             desafio.Soluciones.ForEach(solucion =>
             {
-
                 solucion.EstatusProceso = _translationService.Traducir(solucion.EstatusProceso, _idioma);
-
             });
-
-
 
             return Ok(desafio);
         }
@@ -724,7 +691,8 @@ namespace CrowdSolve.Server.Controllers
 
                 string mensajeCambioEstatus = $"El estatus del desafío <b>{desafio.Titulo}</b> ha sido cambiado a <b>{estatus.Nombre}</b>";
 
-                if (estatus.RequiereMotivo) {
+                if (estatus.RequiereMotivo)
+                {
                     mensajeCambioEstatus = $"El estatus del desafío <b>{desafio.Titulo}</b> ha sido cambiado a <b>{estatus.Nombre}</b> por el siguiente motivo:<br/>{cambioEstatusModel.MotivoCambioEstatus}";
                 }
 
@@ -827,45 +795,6 @@ namespace CrowdSolve.Server.Controllers
 
             return desafio;
         }
-
-        //[HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
-        //public object GetRelationalObjects(bool allEstatuses = false)
-        //{
-        //    List<int> estatusProcesoEnums = new List<int>();
-
-        //    if (!allEstatuses)
-        //    {
-        //        estatusProcesoEnums = new List<int>
-        //        {
-        //            (int)EstatusProcesoEnum.Desafío_En_progreso,
-        //            (int)EstatusProcesoEnum.Desafío_En_evaluación,
-        //            (int)EstatusProcesoEnum.Desafío_En_espera_de_entrega_de_premios,
-        //            (int)EstatusProcesoEnum.Desafío_Finalizado
-        //        };
-        //    }
-
-        //    var categorias = _desafiosRepo.GetCategorias();
-        //    foreach (var categoria in categorias)
-        //    {
-        //        categoria.Nombre = _translationService.Traducir(categoria.Nombre, _idioma);
-        //        categoria.Descripcion = _translationService.Traducir(categoria.Descripcion, _idioma);
-        //    }
-
-        //    var tiposEvaluaciones = _desafiosRepo.GetTiposEvaluacion();
-        //    foreach (var tipoEvaluacion in tiposEvaluaciones)
-        //    {
-        //        tipoEvaluacion.Nombre = _translationService.Traducir(tipoEvaluacion.Nombre, _idioma);
-        //    }
-
-        //    return new
-        //    {
-        //        DiasDespuesFechaFinalizacion = _desafiosRepo.diasDespuesFechaFinalizacion,
-        //        Categorias = categorias,
-        //        TiposEvaluacion = tiposEvaluaciones,
-        //        EstatusDesafios = (allEstatuses) ? _desafiosRepo.GetEstatusDesafios() : _desafiosRepo.GetEstatusDesafios().Where(x => estatusProcesoEnums.Contains(x.idEstatusProceso)),
-        //        EstatusProcesoEvaluacion = _crowdSolveContext.Set<EstatusProceso>().Where(x => x.idClaseProceso == (int)ClasesProcesoEnum.Proceso_de_Evaluación).ToList()
-        //    };
-        //}
 
         [HttpGet("GetRelationalObjects", Name = "GetRelationalObjects")]
         public object GetRelationalObjects(bool allEstatuses = false)

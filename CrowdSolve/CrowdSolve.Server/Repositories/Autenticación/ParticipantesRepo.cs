@@ -53,14 +53,13 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
         )
         {
-            
             _translationService = translationService;
             _idioma = idioma;
             usuariosRepo = new UsuariosRepo(dbContext, _translationService, _idioma);
         }
-     
 
-    public ParticipantesModel GetByUserId(int idUsuario)
+
+        public ParticipantesModel GetByUserId(int idUsuario)
         {
             var participanteModel = this.Get(x => x.idUsuario == idUsuario).FirstOrDefault();
 

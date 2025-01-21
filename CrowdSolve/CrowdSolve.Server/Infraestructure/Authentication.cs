@@ -52,7 +52,6 @@ namespace CrowdSolve.Server.Infraestructure
                 { "empresa", "Pruebas2024" }
             };
             _passwordHasher = passwordHasher;
-            //_perfilesRepo = new PerfilesRepo(CrowdSolveContext);
             _credencialesAutenticacionRepo = new CredencialesAutenticacionRepo(CrowdSolveContext);
             _mailingService = mailingService;
             _firebaseStorage = firebaseStorageService;

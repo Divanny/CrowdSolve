@@ -54,7 +54,6 @@ namespace CrowdSolve.Server.Repositories
                             }
         )
         {
-           
             historialCambioEstatusRepo = new HistorialCambioEstatusRepo(this.dbContext);
             this.claseProceso = ClaseProceso;
             this.idUsuarioOnline = idUsuarioOnline;
@@ -90,7 +89,6 @@ namespace CrowdSolve.Server.Repositories
             foreach (var proceso in procesos)
             {
                 proceso.EstatusProceso = _translationService.Traducir(proceso.EstatusProceso, _idioma);
-                //proceso.TamañoEmpresa = _translationService.Traducir(proceso.TamañoEmpresa, _idioma);
             }
             return procesos;
         }
