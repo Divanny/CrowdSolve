@@ -302,7 +302,7 @@ namespace CrowdSolve.Server.Controllers
                 _mailingService.SendMail([soporte.CorreoElectronico], "Gracias por contactarnos - Hemos recibido tu mensaje", mailBodySolucionada, MailingUsers.noreply);
 
                 _logger.LogHttpRequest(idSoporte);
-                return new OperationResult(true, "Se ha asignado la solicitud exitosamente", Proceso);
+                return new OperationResult(true, "Se ha Finalizado la Solicitud exitosamente", Proceso);
             }
             catch (Exception ex)
             {
@@ -362,7 +362,7 @@ namespace CrowdSolve.Server.Controllers
                 _mailingService.SendMail([soporte.CorreoElectronico], "Gracias por contactarnos - Hemos recibido tu mensaje", mailBodyDescartada, MailingUsers.noreply);
 
                 _logger.LogHttpRequest(idSoporte);
-                return new OperationResult(true, "Se ha asignado la solicitud exitosamente", Proceso);
+                return new OperationResult(true, "Se ha declinado la solicitud exitosamente", Proceso);
             }
             catch (Exception ex)
             {
@@ -381,7 +381,9 @@ namespace CrowdSolve.Server.Controllers
             var estatus = _crowdSolveContext.Set<EstatusProceso>().Where(u=>u.idClaseProceso==(int)ClasesProcesoEnum.Soporte)
                 .Select(s => new EstatusProceso
                 {
-                    Nombre = _translationService.Traducir(s.Nombre, _idioma)
+                    Nombre = _translationService.Traducir(s.Nombre, _idioma),
+                    Severidad=s.Severidad,
+                    ClaseIcono=s.ClaseIcono,
                 })
                 .ToList(); ;
 
