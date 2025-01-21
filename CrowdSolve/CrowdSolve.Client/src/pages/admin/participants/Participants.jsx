@@ -150,14 +150,16 @@ export default function Participants() {
       accessorKey: "estatusUsuario",
       header: t('Participants.estatus_usuario'),
       cell: ({ row }) => (
+        
         <Badge
-          variant={`${row.getValue("estatusUsuario") === "Activo"
-            ? "success"
-            : row.getValue("estatusUsuario") === "Inactivo"
+          variant={`${row.getValue("estatusUsuario") === 'Activo' || row.getValue("estatusUsuario") === 'Asset'    
+            ? "success" 
+            : row.getValue("estatusUsuario") === 'Empresa rechazada' || row.getValue("estatusUsuario") === 'Company rejected'
               ? "destructive"
               : "warning"
             }`}
         >
+          
           {row.getValue("estatusUsuario")}
         </Badge>
       ),
@@ -217,8 +219,9 @@ export default function Participants() {
           api.get("/api/Participantes/GetRelationalObjects", {
             requireLoading: false,
           }),
+          
         ]);
-
+        console.log(participantesResponse.data);
       setData(participantesResponse.data);
       setNivelesEducativos(relationalObjectsResponse.data.nivelesEducativos);
       setEstatusUsuarios(relationalObjectsResponse.data.estatusUsuarios);

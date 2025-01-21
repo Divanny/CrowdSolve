@@ -3,6 +3,7 @@ using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,9 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly PerfilesRepo _perfilesRepo;
+        private readonly FirebaseStorageService _firebaseStorageService;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
 
         /// <summary>
         /// Constructor de la clase PerfilesController.
@@ -23,12 +27,17 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
-        public PerfilesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger)
+        /// /// <param name="firebaseStorageService"></param>
+        public PerfilesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseStorageService firebaseStorageService, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            _perfilesRepo = new PerfilesRepo(crowdSolveContext);
+            //_perfilesRepo = new PerfilesRepo(crowdSolveContext);
+            _firebaseStorageService = firebaseStorageService;
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _perfilesRepo = new PerfilesRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>
@@ -41,10 +50,21 @@ namespace CrowdSolve.Server.Controllers
         {
             List<PerfilesModel> perfiles = _perfilesRepo.Get().ToList();
 
-            perfiles.ForEach(x => x.Vistas = _perfilesRepo.GetPermisos(x.idPerfil).ToList());
-            
+            perfiles.ForEach(x =>
+            {
+                x.Nombre = _translationService.Traducir(x.Nombre, _idioma);
+
+                // Obtener las vistas asociadas y traducir el nombre de cada vista
+                var vistas = _perfilesRepo.GetPermisos(x.idPerfil).ToList();
+                vistas.ForEach(v => v.Nombre = _translationService.Traducir(v.Nombre, _idioma));
+
+                x.Vistas = vistas;  // Asignar las vistas traducidas al perfil
+            });
+
             return perfiles;
         }
+
+
 
         /// <summary>
         /// Obtiene un perfil por su ID.

@@ -3,7 +3,9 @@ using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrowdSolve.Server.Controllers
@@ -21,18 +23,22 @@ namespace CrowdSolve.Server.Controllers
         private readonly DesafiosRepo _desafiosRepo;
         private readonly FirebaseStorageService _firebaseStorageService;
         private readonly Mailing _mailingService;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
 
-        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger, FirebaseStorageService firebaseStorageService, Mailing mailing)
+        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger, FirebaseStorageService firebaseStorageService, Mailing mailing, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _authentication = authentication;
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
-            _usuariosRepo = new UsuariosRepo(crowdSolveContext);
-            _perfilesRepo = new PerfilesRepo(crowdSolveContext);
-            _soportesRepo = new SoportesRepo(crowdSolveContext, _idUsuarioOnline);
-            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
             _firebaseStorageService = firebaseStorageService;
             _mailingService = mailing;
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _perfilesRepo = new PerfilesRepo(crowdSolveContext, _translationService, _idioma);
+            _soportesRepo = new SoportesRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _usuariosRepo = new UsuariosRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>
@@ -81,20 +87,6 @@ namespace CrowdSolve.Server.Controllers
                 OperationResult result = _authentication.SignUp(credentials);
                 _logger.LogHttpRequest(result.Data);
 
-                string mailBody = $@"
-                    <h1>¡Bienvenido a CrowdSolve!</h1>
-                    <p>Estamos encantados de informarte que tu registro en nuestra plataforma ha sido exitoso.</p>
-                    <p>A continuación, los detalles de tu cuenta:</p>
-                    <ul>
-                        <li><b>Nombre:</b> {credentials.Username}</li>
-                        <li><b>Correo electrónico:</b> {credentials.Email}</li>
-                    </ul>
-                    <p>Ahora puedes acceder a nuestra plataforma y comenzar a disfrutar de todas las herramientas y recursos que hemos preparado para ti.</p>
-                    <p>Si tienes alguna pregunta o necesitas ayuda para comenzar, no dudes en contactarnos respondiendo a este correo.</p>
-                    <p>¡Gracias por unirte a CrowdSolve!</p>
-                ";
-
-                _mailingService.SendMail([credentials.Email], "¡Bienvenido a CrowdSolve!", mailBody, MailingUsers.noreply);
 
                 return result;
             }
@@ -142,6 +134,8 @@ namespace CrowdSolve.Server.Controllers
 
             if (result.Success)
             {
+
+
                 return Ok(new
                 {
                     success = true,

@@ -1,13 +1,17 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
 {
     public class PerfilesRepo : Repository<Perfiles, PerfilesModel>
     {
-        public PerfilesRepo(DbContext dbContext) : base
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
+
+        public PerfilesRepo(DbContext dbContext, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (
             dbContext,
             new ObjectsMapper<PerfilesModel, Perfiles>(p => new Perfiles()
@@ -27,12 +31,23 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                                      })
         )
         {
+            _translationService = translationService;
+            _idioma = idioma;
         }
 
         public PerfilesModel Get(int Id)
         {
             var model = base.Get(p => p.idPerfil == Id).FirstOrDefault();
             return model;
+        }
+        public override IEnumerable<PerfilesModel> Get(Func<Perfiles, bool> filter = null)
+        {
+            var perfiles = base.Get(filter).ToList();
+            foreach (var perfil in perfiles)
+            {
+                perfil.Nombre = _translationService.Traducir(perfil.Nombre, _idioma);
+            }
+            return perfiles;
         }
         public IEnumerable<Vistas> GetPermisos(int idPerfil)
         {
@@ -44,12 +59,19 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         }
         public IEnumerable<Vistas> GetPermisos()
         {
-            var vistas = dbContext.Set<Vistas>();
+            var vistas = dbContext.Set<Vistas>().ToList();
+
+            // Traducir el nombre de cada vista antes de devolverlas
+            foreach (var vista in vistas)
+            {
+                vista.Nombre = _translationService.Traducir(vista.Nombre, _idioma);
+            }
+
             return vistas;
         }
         public IEnumerable<UsuariosModel> GetUsuarios(int idPerfil)
         {
-            UsuariosRepo usuariosRepo = new UsuariosRepo(dbContext);
+            UsuariosRepo usuariosRepo = new UsuariosRepo(dbContext, _translationService, _idioma);
             var listUsuarios = usuariosRepo.Get(x => x.idPerfil == idPerfil);
             return listUsuarios;
         }

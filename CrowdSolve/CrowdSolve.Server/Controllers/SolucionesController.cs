@@ -5,6 +5,7 @@ using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Google.Apis.Requests.Parameters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly FirebaseStorageService _firebaseStorageService;
         private readonly Scanner _scanner;
         private readonly string _filesTempDir;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
 
         /// <summary>
         /// Constructor de la clase SoportesController.
@@ -38,20 +41,22 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="logger"></param>
         /// <param name="mailing"></param>.
         /// <param name="firebaseStorageService"></param>
-        public SolucionesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing, FirebaseStorageService firebaseStorageService)
+        public SolucionesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing, FirebaseStorageService firebaseStorageService, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
             _adjuntosRepo = new AdjuntosRepo(crowdSolveContext);
-            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
-            _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _notificacionesRepo = new NotificacionesRepo(crowdSolveContext);
             _filesTempDir = Path.Combine(Directory.GetCurrentDirectory(), "Temp", "Soluciones");
             _scanner = new Scanner();
             _mailingService = mailing;
             _firebaseStorageService = firebaseStorageService;
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _usuariosRepo = new UsuariosRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>

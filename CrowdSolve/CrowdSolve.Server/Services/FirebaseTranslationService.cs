@@ -25,10 +25,11 @@ namespace CrowdSolve.Server.Services
         /// <returns></returns>
         public string Traducir(string texto, string idiomaDestino)
         {
-            if (IsDevelopmentEnvironment())
-            {
-                return texto;
-            }
+            //if (IsDevelopmentEnvironment())
+            //{
+            //    return texto;
+            //}
+
             var response = _client.TranslateText(texto, idiomaDestino);
             return response.TranslatedText;
         }

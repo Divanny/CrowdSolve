@@ -3,6 +3,7 @@ using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrowdSolve.Server.Repositories
@@ -11,9 +12,11 @@ namespace CrowdSolve.Server.Repositories
     {
         UsuariosRepo usuariosRepo;
         HistorialCambioEstatusRepo historialCambioEstatusRepo;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
         public ClasesProcesoEnum claseProceso { get; set; }
         public int idUsuarioOnline { get; set; }
-        public ProcesosRepo(ClasesProcesoEnum ClaseProceso, DbContext dbContext = null, int idUsuarioOnline = 0) : base
+        public ProcesosRepo(ClasesProcesoEnum ClaseProceso, DbContext dbContext = null, int idUsuarioOnline = 0, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (
             dbContext,
             new ObjectsMapper<ProcesosModel, Procesos>(x => new Procesos()
@@ -51,10 +54,13 @@ namespace CrowdSolve.Server.Repositories
                             }
         )
         {
-            usuariosRepo = new UsuariosRepo(this.dbContext);
+           
             historialCambioEstatusRepo = new HistorialCambioEstatusRepo(this.dbContext);
             this.claseProceso = ClaseProceso;
             this.idUsuarioOnline = idUsuarioOnline;
+            _translationService = translationService;
+            _idioma = idioma;
+            usuariosRepo = new UsuariosRepo(this.dbContext, _translationService, _idioma);
         }
         public override Procesos Add(ProcesosModel model)
         {
@@ -76,6 +82,17 @@ namespace CrowdSolve.Server.Repositories
             historialCambioEstatusRepo.Add(modelHistEstatus);
 
             return creado;
+        }
+
+        public override IEnumerable<ProcesosModel> Get(Func<Procesos, bool> filter = null)
+        {
+            var procesos = base.Get(filter).ToList();
+            foreach (var proceso in procesos)
+            {
+                proceso.EstatusProceso = _translationService.Traducir(proceso.EstatusProceso, _idioma);
+                //proceso.TamañoEmpresa = _translationService.Traducir(proceso.TamañoEmpresa, _idioma);
+            }
+            return procesos;
         }
 
         public IEnumerable<ClasesProceso> GetClasesProcesos()

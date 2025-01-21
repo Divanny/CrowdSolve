@@ -3,6 +3,7 @@ using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly SolucionesRepo _solucionesRepo;
         private readonly DesafiosRepo _desafiosRepo;
         private readonly FirebaseStorageService _firebaseStorageService;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
 
         /// <summary>
         /// Constructor de la clase ParticipantesController.
@@ -29,17 +32,20 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
         /// <param name="firebaseStorageService"></param>
-        public ParticipantesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseStorageService firebaseStorageService)
+        public ParticipantesController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseStorageService firebaseStorageService, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            _participantesRepo = new ParticipantesRepo(crowdSolveContext);
-            _empresasRepo = new EmpresasRepo(crowdSolveContext);
-            _usuariosRepo = new UsuariosRepo(crowdSolveContext);
-            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
-            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
+            //_empresasRepo = new EmpresasRepo(crowdSolveContext);
+            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
             _firebaseStorageService = firebaseStorageService;
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _participantesRepo = new ParticipantesRepo(crowdSolveContext, _translationService, _idioma);
+            _empresasRepo = new EmpresasRepo(crowdSolveContext, _translationService, _idioma);
+            _usuariosRepo = new UsuariosRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>
@@ -51,6 +57,14 @@ namespace CrowdSolve.Server.Controllers
         public List<ParticipantesModel> Get()
         {
             List<ParticipantesModel> Participantes = _participantesRepo.Get().ToList();
+
+            Participantes.ForEach(x =>
+            {
+                
+                x.NivelEducativo = _translationService.Traducir(x.NivelEducativo, _idioma);
+                x.EstatusUsuario= _translationService.Traducir(x.EstatusUsuario, _idioma);
+            });
+
             return Participantes;
         }
 
@@ -269,8 +283,22 @@ namespace CrowdSolve.Server.Controllers
         [Authorize]
         public object GetRelationalObjects()
         {
-            var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>();
-            var estatusUsuarios = _usuariosRepo.GetEstatusUsuarios();
+
+            var nivelesEducativos = _crowdSolveContext.Set<NivelesEducativo>()
+            .Select(te => new NivelesEducativo
+            {
+                idNivelEducativo = te.idNivelEducativo,
+                Nombre = _translationService.Traducir(te.Nombre, _idioma)
+            })
+            .ToList();
+
+            var estatusUsuarios = _usuariosRepo.GetEstatusUsuarios()
+            .Select(e => new EstatusUsuarios
+            {
+                idEstatusUsuario = e.idEstatusUsuario,
+                Nombre = _translationService.Traducir(e.Nombre, _idioma)
+            })
+            .ToList();
 
             return new
             {

@@ -3,10 +3,12 @@ using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories;
+using CrowdSolve.Server.Services;
 using CrowdSolve.Server.Repositories.Autenticación;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace CrowdSolve.Server.Controllers
 {
@@ -25,6 +27,9 @@ namespace CrowdSolve.Server.Controllers
         private readonly AdjuntosRepo _adjuntosRepo;
         private readonly NotificacionesRepo _notificacionesRepo;
         private readonly FirebaseStorageService _firebaseStorageService;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
+
 
         /// <summary>
         /// Constructor de la clase EmpresasController.
@@ -33,19 +38,22 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
         /// <param name="firebaseStorageService"></param>
-        public EmpresasController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseStorageService firebaseStorageService)
+        public EmpresasController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, FirebaseStorageService firebaseStorageService, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            _empresasRepo = new EmpresasRepo(crowdSolveContext);
-            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline);
-            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline);
-            _participantesRepo = new ParticipantesRepo(crowdSolveContext);
+            //_empresasRepo = new EmpresasRepo(crowdSolveContext);
             _adjuntosRepo = new AdjuntosRepo(crowdSolveContext);
             _notificacionesRepo = new NotificacionesRepo(crowdSolveContext);
-            _usuariosRepo = new UsuariosRepo(crowdSolveContext);
             _firebaseStorageService = firebaseStorageService;
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _empresasRepo = new EmpresasRepo(crowdSolveContext, _translationService, _idioma);
+            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _solucionesRepo = new SolucionesRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _participantesRepo = new ParticipantesRepo(crowdSolveContext, _translationService, _idioma);
+            _usuariosRepo = new UsuariosRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>
@@ -54,12 +62,25 @@ namespace CrowdSolve.Server.Controllers
         /// <returns>Lista de Empresas.</returns>
         [HttpGet(Name = "GetEmpresas")]
         [Authorize]
-        //[AuthorizeByPermission(PermisosEnum.Ver_Empresas)]
+        // [AuthorizeByPermission(PermisosEnum.Ver_Empresas)]
         public List<EmpresasModel> Get()
         {
             List<EmpresasModel> Empresas = _empresasRepo.Get().ToList();
+
+            Empresas.ForEach(x =>
+            {
+                x.Sector = _translationService.Traducir(x.Sector, _idioma);
+                x.TamañoEmpresa = _translationService.Traducir(x.TamañoEmpresa, _idioma);
+
+                
+                x.EstatusUsuario = _translationService.Traducir(x.EstatusUsuario, _idioma);
+
+                
+            });
+
             return Empresas;
         }
+
 
         /// <summary>
         /// Obtiene un Empresa por su ID.
@@ -177,12 +198,26 @@ namespace CrowdSolve.Server.Controllers
         /// <returns> Lista de empresas pendientes de validar.</returns>
         [HttpGet("GetEmpresasPendientesValidar")]
         [Authorize]
-        //[AuthorizeByPermission(PermisosEnum.Solicitudes_Validar_Empresa)]
+        // [AuthorizeByPermission(PermisosEnum.Solicitudes_Validar_Empresa)]
         public List<EmpresasModel> GetEmpresasPendientesValidar()
         {
-            var empresas = _empresasRepo.Get().Where(x => x.idEstatusUsuario == (int)EstatusUsuariosEnum.Pendiente_de_validar).ToList();
+            var empresas = _empresasRepo.Get()
+                .Where(x => x.idEstatusUsuario == (int)EstatusUsuariosEnum.Pendiente_de_validar)
+                .ToList();
+
+            empresas.ForEach(x =>
+            {
+                x.Sector = _translationService.Traducir(x.Sector, _idioma);
+                x.TamañoEmpresa = _translationService.Traducir(x.TamañoEmpresa, _idioma);
+
+                x.EstatusUsuario = _translationService.Traducir(x.EstatusUsuario, _idioma);
+              
+                
+            });
+
             return empresas;
         }
+
 
         /// <summary>
         /// Obtiene todas las empresas rechazadas.
@@ -342,6 +377,7 @@ namespace CrowdSolve.Server.Controllers
                 var resultado = _desafiosRepo.ValidarUsuarioPuedeEvaluar(desafio.idDesafio, _idUsuarioOnline);
                 desafio.PuedoEvaluar = resultado.Success;
                 desafio.EvidenciaRecompensa = _adjuntosRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
+                desafio.EstatusDesafio = _translationService.Traducir(desafio.EstatusDesafio, _idioma);
             }
 
             return new
@@ -361,13 +397,29 @@ namespace CrowdSolve.Server.Controllers
         [HttpGet("GetRelationalObjects")]
         public object GetRelationalObjects()
         {
-            var tamañosEmpresa = _crowdSolveContext.Set<TamañosEmpresa>();
-            var sectores = _crowdSolveContext.Set<Sectores>();
+        
+
+            var tamañosEmpresa = _crowdSolveContext.Set<TamañosEmpresa>()
+                .Select(te => new TamañosEmpresa
+                {
+                    idTamañoEmpresa = te.idTamañoEmpresa,
+                    Nombre = _translationService.Traducir(te.Nombre, _idioma)
+                })
+                .ToList();
+
+            var sectores = _crowdSolveContext.Set<Sectores>()
+                .Select(s => new Sectores
+                {
+                    idSector = s.idSector,
+                    Nombre = _translationService.Traducir(s.Nombre, _idioma)
+                })
+                .ToList();
+
 
             return new
             {
-                tamañosEmpresa,
-                sectores
+                TamañosEmpresa = tamañosEmpresa,
+                Sectores = sectores
             };
         }
     }
