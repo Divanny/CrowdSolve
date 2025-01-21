@@ -21,7 +21,6 @@ import {
   FilterX
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -70,25 +69,6 @@ export default function Participants() {
   const [isSolutionsDialogOpen, setIsSolutionsDialogOpen] = useState(false);
 
   const columns = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label={t('Participants.select_all')}
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label={t('Participants.select_row')}
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
     {
       accessorKey: "nombreUsuario",
       header: () => t('Participants.nombre_usuario'),
@@ -484,10 +464,6 @@ export default function Participants() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} {t('Participants.of')}{" "}
-          {table.getFilteredRowModel().rows.length} {t('Participants.row')}(s) {t('Participants.selected')}(s).
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"

@@ -21,7 +21,6 @@ import {
     FilterX
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -67,32 +66,13 @@ export default function Companies() {
 
     const columns = [
         {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={table.getIsAllPageRowsSelected()}
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label= {t('CompaniesPage.selectAll')}
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label={t('CompaniesPage.selectRow')}
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
             accessorKey: "nombre",
             header: "Nombre",
             cell: ({ row }) => (
                 <div className="flex items-center space-x-2">
                     <Avatar>
                         <AvatarImage
-                            src={`/api/Account/GetAvatar/${row.getValue("idUsuario")}`}
+                            src={`/api/Account/GetAvatar/${row.original.idUsuario}`}
                             alt={row.getValue("nombre")}
                         />
                         <AvatarFallback>
@@ -102,14 +82,6 @@ export default function Companies() {
                     <span>{row.getValue("nombre")}</span>
                 </div>
             ),
-        },
-        {
-            accessorKey: "descripcion",
-            header: t('CompaniesPage.descripcion'),
-        },
-        {
-            accessorKey: "direccion",
-            header: t('CompaniesPage.direccion'),
         },
         {
             accessorKey: "telefono",
@@ -142,21 +114,6 @@ export default function Companies() {
                 );
               },
         },
-        {
-            accessorKey: "cantidadSoluciones",
-            header: ({ column }) => {
-                return (
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start text-left font-normal"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                  >
-                    {t('CompaniesPage.cantidadSoluciones')}
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                  </Button>
-                );
-              },
-        },     
         {
             accessorKey: "estatusUsuario",
             header: t('CompaniesPage.estatusUsuario'),
@@ -487,10 +444,6 @@ export default function Companies() {
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} {t('CompaniesPage.preposicionDe')}{" "}
-                    {table.getFilteredRowModel().rows.length} {t('CompaniesPage.rows')}(s) {t('CompaniesPage.selected')}(s).
-                </div>
                 <div className="space-x-2">
                     <Button
                         variant="outline"

@@ -27,6 +27,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                                          Nombre = p.Nombre,
                                          Descripcion = p.Descripcion,
                                          CantidadDesafios = dbContext.Set<DesafiosCategoria>().Count(x => x.idCategoria == p.idCategoria),
+                                         Icono = p.ClaseIcono
                                      })
         )
         {

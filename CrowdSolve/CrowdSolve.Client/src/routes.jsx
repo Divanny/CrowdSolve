@@ -38,7 +38,7 @@ const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 const CompanyDashboard = lazy(() => import('@/pages/company/CompanyDashboard'));
 const CompanyChallenge = lazy(() => import('@/pages/company/CompanyChallenge'));
 const MySolutions = lazy(() => import('@/pages/participant/MySolutions'));
-const ChallengeRequest = lazy(() => import('@/pages/admin/challenges-requests/ChallengeRequests'));
+const ChallengeRequest = lazy(() => import('@/pages/admin/Requests/ChallengeRequests'));
 const MyProfile = lazy(() => import('@/pages/participant/MyProfile'));
 const PublicProfile = lazy(() => import('@/pages/participant/PublicProfile'));
 const Notifications = lazy(() => import('@/pages/Notifications'));
@@ -87,7 +87,7 @@ const AppRoutes = () => (
     <Route path="/forgot-password" element={<LazyComponent component={ForgotPassword} />} />
     <Route path="/access-denied" element={<LazyComponent component={AccessDenied} />} />
     <Route path="/404" element={<LazyComponent component={NotFound} />} />
-    <Route path="help-center*" element={<HelpCenterLayout />} >
+    <Route path="help-center" element={<HelpCenterLayout />} >
       <Route index element={<LazyComponent component={NotFound} />} />
       <Route path="challenges/post-new-challenge" element={<LazyComponent component={PostNewChallenge} />} />
       <Route path="challenges/view-challenge-catalog" element={<LazyComponent component={ViewChallengeCatalog} />} />

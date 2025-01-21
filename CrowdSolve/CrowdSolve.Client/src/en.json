@@ -365,7 +365,8 @@
         "previous": "Previous",
         "next": "Next",
         "clearFilters": "Clear filters",
-        "columns": "Columns"
+        "columns": "Columns",
+        "create": "New Category"
       },
       "pagination": {
         "selected": "Selected",
