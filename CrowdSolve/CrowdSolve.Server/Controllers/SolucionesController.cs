@@ -111,7 +111,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns></returns>
         [HttpPost("SubirArchivos/{guid?}", Name = "SubirArchivos")]
         [AuthorizeByPermission(PermisosEnum.Ver_Desafio)]
-        public OperationResult Subir([FromForm] IFormFile filePart, string? guid = null)
+        public OperationResult Subir(IFormFile filePart, string? guid = null)
         {
             var tempDir = Path.Combine(_filesTempDir, _idUsuarioOnline.ToString());
 
@@ -422,6 +422,7 @@ namespace CrowdSolve.Server.Controllers
                 if (solucion.idUsuario != _idUsuarioOnline) return new OperationResult(false, "No tiene permiso para editar esta solución");
 
                 solucion.Publica = !(solucion.Publica ?? false);
+                solucion.Adjuntos = null;
                 _solucionesRepo.Edit(solucion);
                 _logger.LogHttpRequest(solucion);
                 return new OperationResult(true, "Se ha publicado la solución exitosamente", solucion);

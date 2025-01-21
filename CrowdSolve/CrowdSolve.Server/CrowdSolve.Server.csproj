@@ -37,6 +37,7 @@
     <PackageReference Include="MimeMapping" Version="3.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +56,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="appsettings.development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="crowdsolve-e4ade-firebase-adminsdk-4q77k-452ab49a66.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\MailTemplates\forgot-password-email.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -108,6 +108,8 @@
     "phone_label": "Teléfono",
     "education_level_label": "Nivel de educación",
     "education_level_placeholder": "Seleccione un nivel de educación",
+    "user_profile_label": "Perfil de Usuario",
+    "user_profile_placeholder": "Seleccione un perfil",
     "select": "Seleccionar",
     "user_status_label": "Estatus del usuario",
     "user_status_placeholder": "Seleccione un estatus",
@@ -191,9 +193,9 @@
       "product": {
         "title": "Producto",
         "links": {
-          "howItWorks": "Cómo funciona",
           "challenges": "Desafíos",
-          "registeredCompanies": "Empresas Registradas"
+          "registeredCompanies": "Empresas Registradas",
+          "helpCenter": "Centro de Ayuda"
         }
       },
       "company": {
@@ -1284,5 +1286,417 @@
     "eliminarProceso": "Eliminar Proceso",
     "contenidoDesafio": "Contenido del Desafío",
     "placeholderContenido": "Ingrese el contenido del desafío"
+  },
+
+  "HelpCenterLayout": {
+    "title": "Centro de Ayuda",
+    "categories": {
+      "Challenges": "Desafíos",
+      "User": "Usuario",
+      "Solutions": "Soluciones",
+      "ContactUs": "Contáctanos",
+      "Legal": "Legal",
+      "UserManual": "Manual de Usuario"
+    },
+    "items": {
+      "PostNewChallenge": "Publicar nuevo desafío",
+      "ViewChallengeCatalog": "Ver catálogo de desafíos",
+      "ParticipateInChallenge": "Participar en el desafío",
+      "EvaluateChallenge": "Evaluar desafío",
+      "CreateCompanyUser": "Creación de usuario empresa",
+      "CreateParticipantUser": "Creación de usuario participantes",
+      "EditMyProfile": "Editar mi perfil",
+      "ForgotPassword": "Olvidar contraseña",
+      "ViewMySolutions": "Ver mis soluciones",
+      "ChangeSolutionPrivacy": "Cambiar privacidad de solución",
+      "SendMessage": "Enviar mensaje",
+      "TermsAndConditions": "Términos y condiciones",
+      "PrivacyPolicy": "Privacidad",
+      "UserManual": "Manual de Usuario",
+      "UsagePolicy": "Política de Uso",
+      "backToAdmin": "Volver al Admin"
+    }
+  },
+  "helpCenter": {
+    "postNewChallenge": {
+      "title": "Publicar nuevo desafío",
+      "description": "Aquí encontrarás información sobre cómo funcionan los desafíos y sus diferentes estatus.",
+      "statusesTitle": "Estatus de los Desafíos",
+      "importantInfoTitle": "Información importante",
+      "importantInfoDescription": "Asegúrate de seguir todas las instrucciones y cumplir con los requisitos del desafío para evitar descalificaciones.",
+      "faqTitle": "Preguntas frecuentes sobre la publicación de desafíos",
+      "howToPostTitle": "¿Cómo puedo publicar un nuevo desafío?",
+      "howToPostSteps": "Para publicar un nuevo desafío, sigue estos pasos:",
+      "steps": [
+        "Navega al Dashboard de tu empresa.",
+        "Haz clic en \"Publicar Nuevo Desafío\".",
+        "Rellena el formulario del desafío con los detalles requeridos, incluyendo:",
+        "Haz clic en \"Enviar\" para publicar tu desafío."
+      ],
+      "details": [
+        "Título: Proporciona un título descriptivo para tu desafío.",
+        "Contenido: Describe el desafío en detalle.",
+        "Fecha de Inicio: Selecciona la fecha en que comenzará el desafío.",
+        "Fecha Límite: Selecciona la fecha límite para el desafío.",
+        "Categorías: Elige las categorías relevantes para el desafío.",
+        "Proceso de Evaluación: Define los criterios y el proceso de evaluación."
+      ],
+      "problemsTitle": "¿Qué debo hacer si encuentro problemas?",
+      "problemsDescription": "Si encuentras algún problema, por favor contacta al soporte."
+    },
+    "viewChallengeCatalog": {
+      "title": "Catálogo de Desafíos",
+      "description": "Aquí puedes ver todos los desafíos disponibles.",
+      "featuresTitle": "Características",
+      "feature1": "Funcionalidad de búsqueda",
+      "feature2": "Filtrado",
+      "feature3": "Ordenar",
+      "feature4": "Diseño adaptable",
+      "feature5": "Interfaz animada",
+      "statusesTitle": "Estatus de los Desafíos",
+      "statusColumn": "Estatus",
+      "descriptionColumn": "Descripción",
+      "statusInProgress": "Desafío en progreso",
+      "statusInProgressDescription": "El desafío está actualmente en curso.",
+      "statusUnderEvaluation": "Desafío en evaluación",
+      "statusUnderEvaluationDescription": "El desafío está siendo evaluado.",
+      "statusAwaitingPrizes": "Desafío en espera de entrega de premios",
+      "statusAwaitingPrizesDescription": "El desafío está esperando la entrega de premios.",
+      "statusCompleted": "Desafío finalizado",
+      "statusCompletedDescription": "El desafío ha finalizado.",
+      "statusCancelled": "Desafío cancelado",
+      "statusCancelledDescription": "El desafío ha sido cancelado.",
+      "statusUnvalidated": "Desafío sin validar",
+      "statusUnvalidatedDescription": "El desafío aún no ha sido validado por la administración.",
+      "statusRejected": "Desafío rechazado",
+      "statusRejectedDescription": "El desafío ha sido rechazado.",
+      "statusDiscarded": "Desafío descartado",
+      "statusDiscardedDescription": "El desafío ha sido descartado.",
+      "statusSolutionValidation": "Desafío en validación de soluciones",
+      "statusSolutionValidationDescription": "El desafío está en proceso de validación de soluciones.",
+      "importantInfoTitle": "Información importante",
+      "importantInfoDescription": "Asegúrate de seguir todas las instrucciones y cumplir con los requisitos del desafío para evitar descalificaciones.",
+      "howToUseTitle": "Cómo usar",
+      "searchingTitle": "Buscar",
+      "searchingSteps": "Pasos para buscar desafíos:",
+      "searchSteps": ["Usa la barra de búsqueda en la parte superior del catálogo para buscar desafíos por título o nombre de la empresa."],
+      "filteringTitle": "Filtrar",
+      "filteringSteps": "Pasos para filtrar desafíos:",
+      "filterSteps": ["En el escritorio: Usa la barra lateral a la izquierda para filtrar desafíos por categoría y estatus.", "En el móvil: Haz clic en el botón 'Filtrar' para abrir la hoja de filtros, luego selecciona los filtros deseados."],
+      "sortingTitle": "Ordenar",
+      "sortingDescription": "Usa el menú desplegable junto a la barra de búsqueda para ordenar desafíos por recencia, popularidad o fecha de cierre.",
+      "challengeCardTitle": "Tarjeta de Desafío",
+      "challengeCardDescription": "Cada tarjeta de desafío en el catálogo muestra la siguiente información:",
+      "challengeCardInfo": ["Título del desafío", "Nombre y logo de la empresa", "Estatus del desafío", "Categorías", "Tiempo desde la publicación", "Tiempo restante hasta la fecha límite", "Número de soluciones enviadas"],
+      "troubleshootingTitle": "Solución de problemas",
+      "troubleshootingDescription": "Si encuentras algún problema mientras usas el Catálogo de Desafíos:",
+      "troubleshootingSteps": ["Asegúrate de tener una conexión a internet estable, ya que el catálogo obtiene datos del servidor.", "Intenta actualizar la página si la lista de desafíos no se carga o parece desactualizada.", "Limpia la caché de tu navegador si experimentas problemas persistentes.", "Si los problemas persisten, por favor contacta a nuestro equipo de soporte para asistencia."]
+    },
+    "participateInChallenge": {
+      "title": "Participar en el desafío",
+      "description": "Aquí encontrarás información sobre cómo participar en los desafíos.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes estar registrado en la plataforma.",
+      "requirement2": "Debes haber iniciado sesión.",
+      "requirement3": "Debes cumplir con los requisitos específicos del desafío.",
+      "stepsTitle": "Pasos para participar",
+      "loginTitle": "Iniciar sesión",
+      "loginDescription": "Asegúrate de haber iniciado sesión en tu cuenta.",
+      "submitTitle": "Enviar solución",
+      "submitDescription": "Sigue estos pasos para enviar tu solución:",
+      "submitSteps": [
+        "Navega al desafío en el que deseas participar.",
+        "Haz clic en el botón 'Participar en el Desafío'.",
+        "Rellena el formulario con el título y la descripción de tu solución.",
+        "Adjunta los archivos necesarios.",
+        "Haz clic en 'Enviar solución' para completar el proceso."
+      ],
+      "uploadTitle": "Subir archivos",
+      "uploadDescription": "Puedes subir archivos como parte de tu solución.",
+      "uploadSteps": [
+        "Haz clic en 'Seleccionar archivos' para elegir los archivos desde tu dispositivo.",
+        "Asegúrate de que los archivos no excedan el tamaño máximo permitido.",
+        "Espera a que los archivos se carguen completamente antes de enviar tu solución."
+      ],
+      "troubleshootingTitle": "Solución de problemas",
+      "troubleshootingDescription": "Si encuentras algún problema mientras participas en un desafío:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "evaluateChallenge": {
+      "title": "Evaluar un desafío",
+      "description": "Aquí encontrarás información sobre cómo evaluar las soluciones de un desafío.",
+      "importantInfoTitle": "Información importante",
+      "importantInfoDescription": "Para poder evaluar un desafío, el mismo debe estar en fase de evaluación.",
+      "stepsTitle": "Pasos para evaluar",
+      "companyEvaluationTitle": "Evaluación por empresas",
+      "companyEvaluationDescription": "Las empresas pueden ver todas las soluciones y asignar una puntuación del 1 al 100.",
+      "companyEvaluationSteps": [
+        "Navega al desafío que deseas evaluar.",
+        "Si el desafío está en fase de evaluación, verás una alerta indicando que puedes evaluar.",
+        "Haz clic en 'Participar' para comenzar la evaluación.",
+        "Revisa cada solución y asigna una puntuación del 1 al 100."
+      ],
+      "participantEvaluationTitle": "Evaluación por participantes",
+      "participantEvaluationDescription": "Los participantes pueden ver todas las soluciones del desafío en el que participaron y dar 'me gusta' a las que les gusten.",
+      "participantEvaluationSteps": [
+        "Navega al desafío en el que participaste.",
+        "Si el desafío está en fase de evaluación, verás una alerta indicando que puedes evaluar.",
+        "Haz clic en 'Participar' para comenzar la evaluación.",
+        "Revisa cada solución y da 'me gusta' a las que te gusten."
+      ]
+    },
+    "viewMySolutions": {
+      "title": "Ver Mis Soluciones",
+      "description": "Aquí encontrarás información sobre cómo ver y gestionar tus soluciones.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes estar registrado en la plataforma.",
+      "requirement2": "Debes haber iniciado sesión.",
+      "stepsTitle": "Pasos para Ver Soluciones",
+      "accessingTitle": "Accediendo a Mis Soluciones",
+      "accessingDescription": "Sigue estos pasos para acceder a tus soluciones:",
+      "accessingSteps": [
+        "Navega al menú de perfil.",
+        "Selecciona 'Mis Soluciones' del menú desplegable."
+      ],
+      "managingTitle": "Gestionando Soluciones",
+      "managingDescription": "Una vez que estés en la página de Mis Soluciones, puedes:",
+      "managingSteps": [
+        "Ver la lista de soluciones que has enviado.",
+        "Filtrar soluciones por estado.",
+        "Buscar soluciones específicas usando la barra de búsqueda.",
+        "Cambiar el estado público de tus soluciones.",
+        "Descargar archivos adjuntos asociados con tus soluciones."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al ver tus soluciones:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "changeSolutionPrivacy": {
+      "title": "Cambiar Privacidad de la Solución",
+      "description": "Aquí encontrarás información sobre cómo cambiar la privacidad de tus soluciones.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes estar registrado en la plataforma.",
+      "requirement2": "Debes haber iniciado sesión.",
+      "stepsTitle": "Pasos para Cambiar la Privacidad de la Solución",
+      "accessingTitle": "Accediendo a Mis Soluciones",
+      "accessingDescription": "Sigue estos pasos para acceder a tus soluciones:",
+      "accessingSteps": [
+        "Navega al menú de perfil.",
+        "Selecciona 'Mis Soluciones' del menú desplegable."
+      ],
+      "managingTitle": "Gestionando la Privacidad de las Soluciones",
+      "managingDescription": "Una vez que estés en la página de Mis Soluciones, puedes:",
+      "managingSteps": [
+        "Seleccionar la solución cuya privacidad deseas cambiar.",
+        "Hacer clic en el botón de privacidad para alternar entre pública y privada.",
+        "Confirmar el cambio de privacidad."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al cambiar la privacidad de tus soluciones:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "createCompanyUser": {
+      "title": "Crear Usuario Empresa",
+      "description": "Aquí encontrarás información sobre cómo crear una cuenta de usuario empresa.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes tener una dirección de correo electrónico válida.",
+      "requirement2": "Debes proporcionar información precisa sobre tu empresa.",
+      "stepsTitle": "Pasos para Crear Usuario Empresa",
+      "signUpTitle": "Registrarse",
+      "signUpDescription": "Sigue estos pasos para registrarte:",
+      "signUpSteps": [
+        "Navega a la página de registro.",
+        "Introduce tu nombre de usuario, correo electrónico y contraseña.",
+        "Haz clic en 'Crear cuenta' para completar el registro."
+      ],
+      "roleSelectionTitle": "Selección de Rol",
+      "roleSelectionDescription": "Después de registrarte, selecciona el rol de empresa:",
+      "roleSelectionSteps": [
+        "Inicia sesión en tu cuenta.",
+        "Selecciona 'Empresa' como tu rol.",
+        "Haz clic en 'Siguiente' para continuar."
+      ],
+      "completeSignUpTitle": "Completar Registro",
+      "completeSignUpDescription": "Proporciona la información de tu empresa:",
+      "completeSignUpSteps": [
+        "Introduce el nombre de tu empresa, teléfono y página web.",
+        "Selecciona el sector y tamaño de la empresa.",
+        "Introduce la dirección y descripción de la empresa.",
+        "Haz clic en 'Registrar' para completar el proceso."
+      ],
+      "verificationPendingTitle": "Verificación Pendiente",
+      "verificationPendingDescription": "Tu cuenta empresarial está en proceso de verificación. Recibirás una notificación por correo electrónico una vez que la verificación esté completa.",
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al crear tu cuenta de usuario empresa:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "createParticipantUser": {
+      "title": "Crear Usuario Participante",
+      "description": "Aquí encontrarás información sobre cómo crear una cuenta de usuario participante.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes tener una dirección de correo electrónico válida.",
+      "requirement2": "Debes proporcionar información precisa sobre ti mismo.",
+      "stepsTitle": "Pasos para Crear Usuario Participante",
+      "signUpTitle": "Registrarse",
+      "signUpDescription": "Sigue estos pasos para registrarte:",
+      "signUpSteps": [
+        "Navega a la página de registro.",
+        "Introduce tu nombre de usuario, correo electrónico y contraseña.",
+        "Haz clic en 'Crear cuenta' para completar el registro."
+      ],
+      "roleSelectionTitle": "Selección de Rol",
+      "roleSelectionDescription": "Después de registrarte, selecciona el rol de participante:",
+      "roleSelectionSteps": [
+        "Inicia sesión en tu cuenta.",
+        "Selecciona 'Participante' como tu rol.",
+        "Haz clic en 'Siguiente' para continuar."
+      ],
+      "completeSignUpTitle": "Completar Registro",
+      "completeSignUpDescription": "Proporciona tu información personal:",
+      "completeSignUpSteps": [
+        "Introduce tu nombre, apellidos y fecha de nacimiento.",
+        "Introduce tu número de teléfono y una descripción personal.",
+        "Selecciona tu nivel educativo.",
+        "Haz clic en 'Registrarse' para completar el proceso."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al crear tu cuenta de usuario participante:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "editMyProfile": {
+      "title": "Editar Mi Perfil",
+      "description": "Aquí encontrarás información sobre cómo editar tu perfil.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes estar registrado en la plataforma.",
+      "requirement2": "Debes haber iniciado sesión.",
+      "stepsTitle": "Pasos para Editar Perfil",
+      "accessProfileTitle": "Acceder al Perfil",
+      "accessProfileDescription": "Sigue estos pasos para acceder a tu perfil:",
+      "accessProfileSteps": [
+        "Navega al menú de perfil.",
+        "Selecciona 'Mi Perfil' del menú desplegable."
+      ],
+      "updateInfoTitle": "Actualizar Información",
+      "updateInfoDescription": "Una vez que estés en la página de Mi Perfil, puedes actualizar la siguiente información:",
+      "updateInfoSteps": [
+        "Nombres",
+        "Apellidos",
+        "Correo Electrónico",
+        "Número de Teléfono",
+        "Descripción Personal",
+        "Nivel Educativo",
+        "Foto de Perfil"
+      ],
+      "saveChangesTitle": "Guardar Cambios",
+      "saveChangesDescription": "Después de actualizar tu información, sigue estos pasos para guardar los cambios:",
+      "saveChangesSteps": [
+        "Haz clic en el botón 'Guardar Cambios'.",
+        "Espera el mensaje de confirmación."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al editar tu perfil:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "forgotPassword": {
+      "title": "Olvidé mi Contraseña",
+      "description": "Aquí encontrarás información sobre cómo restablecer tu contraseña.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes tener acceso al correo electrónico asociado con tu cuenta.",
+      "requirement2": "Debes seguir las instrucciones enviadas a tu correo electrónico.",
+      "stepsTitle": "Pasos para Restablecer la Contraseña",
+      "accessForgotPasswordTitle": "Acceder a Olvidé mi Contraseña",
+      "accessForgotPasswordDescription": "Sigue estos pasos para acceder a la página de olvidé mi contraseña:",
+      "accessForgotPasswordSteps": [
+        "Navega a la página de inicio de sesión.",
+        "Haz clic en el enlace 'Olvidé mi Contraseña'."
+      ],
+      "enterEmailTitle": "Ingresar Correo Electrónico",
+      "enterEmailDescription": "Ingresa la dirección de correo electrónico asociada con tu cuenta:",
+      "enterEmailSteps": [
+        "Escribe tu dirección de correo electrónico en el campo proporcionado.",
+        "Haz clic en el botón 'Restablecer Contraseña'."
+      ],
+      "enterCodeTitle": "Ingresar Código",
+      "enterCodeDescription": "Revisa tu correo electrónico para obtener el código de verificación e ingrésalo:",
+      "enterCodeSteps": [
+        "Abre el correo electrónico de CrowdSolve.",
+        "Copia el código de verificación.",
+        "Pega el código en el campo proporcionado en la página de restablecer contraseña."
+      ],
+      "setNewPasswordTitle": "Establecer Nueva Contraseña",
+      "setNewPasswordDescription": "Ingresa tu nueva contraseña y confírmala:",
+      "setNewPasswordSteps": [
+        "Escribe tu nueva contraseña en el campo 'Nueva Contraseña'.",
+        "Escribe tu nueva contraseña nuevamente en el campo 'Confirmar Nueva Contraseña'.",
+        "Haz clic en el botón 'Establecer Nueva Contraseña'."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al restablecer tu contraseña:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Revisa tu carpeta de spam/correo no deseado si no ves el correo.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "sendMessage": {
+      "title": "Enviar Mensaje",
+      "description": "Aquí encontrarás información sobre cómo contactar a la administración de CrowdSolve.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes tener una dirección de correo electrónico válida.",
+      "requirement2": "Debes proporcionar información precisa en el formulario de contacto.",
+      "stepsTitle": "Pasos para Contactarnos",
+      "accessContactUsTitle": "Acceder a Contáctanos",
+      "accessContactUsDescription": "Sigue estos pasos para acceder al formulario de contacto:",
+      "accessContactUsSteps": [
+        "Navega a la página de 'Contáctanos' desde el menú principal.",
+        "Haz clic en el enlace 'Contáctanos'."
+      ],
+      "fillFormTitle": "Rellenar el Formulario",
+      "fillFormDescription": "Proporciona la información necesaria en el formulario de contacto:",
+      "fillFormSteps": [
+        "Introduce el asunto de tu mensaje.",
+        "Introduce tu nombre y apellido.",
+        "Introduce tu dirección de correo electrónico.",
+        "Escribe tu mensaje en el campo proporcionado."
+      ],
+      "submitFormTitle": "Enviar el Formulario",
+      "submitFormDescription": "Sigue estos pasos para enviar el formulario de contacto:",
+      "submitFormSteps": [
+        "Asegúrate de que todos los campos obligatorios estén completos.",
+        "Haz clic en el botón 'Enviar Formulario'.",
+        "Espera el mensaje de confirmación."
+      ],
+      "responseTitle": "Respuesta",
+      "responseDescription": "Después de enviar el formulario, recibirás una respuesta por correo electrónico:",
+      "responseSteps": [
+        "Revisa tu correo electrónico para un mensaje de confirmación.",
+        "Nuestro equipo de soporte revisará tu mensaje.",
+        "Recibirás una respuesta dentro de 24-48 horas."
+      ]
+    }
   }
 }

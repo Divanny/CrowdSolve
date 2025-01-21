@@ -487,7 +487,7 @@ namespace CrowdSolve.Server.Controllers
         /// <returns></returns>
         [HttpPost("CargarEvidencia/{idDesafio}", Name = "CargarEvidencia")]
         [AuthorizeByPermission(PermisosEnum.Empresa_Dashboard)]
-        public async Task<OperationResult> CargarEvidencia([FromForm] IFormFile filePart, string idDesafio)
+        public async Task<OperationResult> CargarEvidencia(IFormFile filePart, string idDesafio)
         {
             var tempDir = Path.Combine(Directory.GetCurrentDirectory(), "Temp", "Evidencia Desafios", _idUsuarioOnline.ToString());
 
