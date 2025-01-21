@@ -301,6 +301,8 @@ namespace CrowdSolve.Server.Controllers
             })
             .ToList();
 
+            var perfilesUsuarios = _usuariosRepo.GetPerfilesUsuarios();
+
             return new
             {
                 nivelesEducativos = nivelesEducativos,
