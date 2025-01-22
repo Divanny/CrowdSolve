@@ -55,7 +55,6 @@ const MyProfile = () => {
     }
 
     fetchMyProfile()
-
     // eslint-disable-next-line
   }, [])
 
@@ -81,8 +80,10 @@ const MyProfile = () => {
       if (response.data.success) {
         setUser(() => ({
           ...updatedUser,
-          avatar: URL.createObjectURL(updatedUser.avatar)
-        }))
+          avatar: updatedUser.avatar instanceof File || updatedUser.avatar instanceof Blob 
+            ? URL.createObjectURL(updatedUser.avatar) 
+            : updatedUser.avatar,
+        }));
         setIsEditing(false)
         toast.success("Operación exitosa", {
           description: response.data.message,

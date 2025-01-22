@@ -372,7 +372,17 @@ export default function Participants() {
                   table.getColumn("estatusUsuario")?.setFilterValue(estatus.nombre);
                 }}
               >
-                {estatus.nombre}
+                <Badge variant={`${estatus.nombre === 'Activo' || estatus.nombre === 'Asset'
+                    ? "success"
+                    : estatus.nombre === 'Empresa rechazada' || estatus.nombre === 'Company rejected'  
+                    || estatus.nombre=== 'Bloqueada permanentemente' || estatus.nombre==='Permanently blocked' 
+                      ? "destructive"
+                      : "warning"
+                    }`}>
+                  <div className="flex items-center space-x-1 w-auto">
+                    <span>{estatus.nombre}</span>
+                  </div>
+                </Badge>
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>

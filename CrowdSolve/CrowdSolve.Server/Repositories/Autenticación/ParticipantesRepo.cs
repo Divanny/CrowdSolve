@@ -96,7 +96,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 participante.idNivelEducativo = model.idNivelEducativo;
                 participante.DescripcionPersonal = model.DescripcionPersonal;
 
-                base.Edit(participante, participante.idParticipante);
+                base.Edit(participante);
             }
             catch (Exception)
             {

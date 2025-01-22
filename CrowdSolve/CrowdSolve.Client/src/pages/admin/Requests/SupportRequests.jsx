@@ -129,7 +129,7 @@ export default function SupportRequests() {
       },
       cell: ({ getValue }) => {
         return (
-          <div className="w-20 text-center">
+          <div className="w-30 text-center">
             {getValue()}
           </div>
         );
@@ -151,7 +151,7 @@ export default function SupportRequests() {
       },
       cell: ({ getValue }) => {
         return (
-          <div className="w-20 text-center">
+          <div className="w-30 text-center">
             {getValue()}
           </div>
         );
@@ -186,7 +186,18 @@ export default function SupportRequests() {
     },
     {
       accessorKey: "estatusProcesoNombre",
-      header: "Estatus",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Estatus
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
       cell: ({ row }) => {
         return (
           <Badge variant={row.original.severidad}>

@@ -41,6 +41,7 @@ import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdministratorFormDialog } from "../../../components/admin/administrators/AdministratorFormDialog";
 import { useTranslation } from 'react-i18next';
+import { Badge } from "@/components/ui/badge";
 
 export default function Companies() {
     const { t } = useTranslation();
@@ -107,20 +108,20 @@ export default function Companies() {
               new Date(row.getValue("fechaRegistro")).toLocaleDateString(),
         },
         {
-            accessorKey: "nombreEstatusUsuario",
+            accessorKey: "estatusUsuario",
             header: t('Administrators.columns.nombreEstatusUsuario.status'),
             cell: ({ row }) => (
-                <span
-                    className={`px-2 py-1 rounded-full text-xs font-semibold ${row.getValue("nombreEstatusUsuario") === t('Administrators.columns.nombreEstatusUsuario.Activo')
-                        ? "bg-green-100 text-green-800"
-                        : row.getValue("nombreEstatusUsuario") === t('Administrators.columns.nombreEstatusUsuario.Inactivo')
-                            ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
+                <Badge
+                  variant={`${row.getValue("estatusUsuario") === 'Activo' || row.getValue("estatusUsuario") === 'Asset'
+                    ? "success"
+                    : row.getValue("estatusUsuario") === 'Empresa rechazada' || row.getValue("estatusUsuario") === 'Company rejected'
+                      ? "destructive"
+                      : "warning"
+                    }`}
                 >
-                    {row.getValue("nombreEstatusUsuario")}
-                </span>
-            ),
+                  {row.getValue("estatusUsuario")}
+                </Badge>
+              ),
         },
         {
             id: "actions",
@@ -201,7 +202,15 @@ export default function Companies() {
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
-        globalFilterFn,
+        onGlobalFilterChange: setGlobalFilter,
+        globalFilterFn: (row, columnId, filterValue) => {
+            const value = row.getValue(columnId);
+            return value != null
+              ? String(value)
+                .toLowerCase()
+                .includes(String(filterValue).toLowerCase())
+              : false;
+          },
         state: {
             sorting,
             columnFilters,
@@ -236,7 +245,11 @@ export default function Companies() {
                         type="text"
                         placeholder={t('Administrators.placeholders.search')}
                         value={globalFilter ?? ""}
-                        onChange={(event) => setGlobalFilter(event.target.value)}
+                        onChange={(event) => {
+                            const value = event.target.value;
+                            setGlobalFilter(value);
+                            table.setGlobalFilter(value);
+                          }}
                         className="pl-8"
                     />
                 </div>

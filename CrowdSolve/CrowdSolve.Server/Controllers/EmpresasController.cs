@@ -398,10 +398,19 @@ namespace CrowdSolve.Server.Controllers
                 })
                 .ToList();
 
+            var estatusUsuarios = _usuariosRepo.GetEstatusUsuarios()
+            .Select(e => new EstatusUsuarios
+            {
+                idEstatusUsuario = e.idEstatusUsuario,
+                Nombre = _translationService.Traducir(e.Nombre, _idioma)
+            })
+            .ToList();
+
             return new
             {
                 TamañosEmpresa = tamañosEmpresa,
-                Sectores = sectores
+                Sectores = sectores,
+                estatusUsuarios = estatusUsuarios,
             };
         }
     }
