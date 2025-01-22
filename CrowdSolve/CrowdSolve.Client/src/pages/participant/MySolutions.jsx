@@ -16,6 +16,7 @@ import { toast } from 'sonner'
 import Icon from '@/components/ui/icon'
 import { Link } from 'react-router-dom'
 import * as FileSaver from 'file-saver'
+import { useTranslation } from 'react-i18next';
 
 const IconoArchivo = ({ tipo }) => {
     switch (tipo) {
@@ -42,6 +43,7 @@ const formatearTamaño = (bytes) => {
 }
 
 export default function MySolutions() {
+    const { t } = useTranslation();
     const { api } = useAxios()
     const [solutions, setSolutions] = useState([])
     const [loading, setLoading] = useState(true)
@@ -71,7 +73,7 @@ export default function MySolutions() {
                 solution.idSolucion === solutionId ? { ...solution, publica: (currentStatus == null ? false : !currentStatus) } : solution
             ))
         } catch (error) {
-            toast.error('Ocurrió un error al cambiar la visibilidad de la solución', { description: error.response?.data?.message })
+            toast.error(t('mySolutions.messages.changeVisibilityError'), { description: error.response?.data?.message })
         }
     }
 
@@ -80,9 +82,9 @@ export default function MySolutions() {
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
             FileSaver.saveAs(response.data, adjunto.nombre)
         } catch (error) {
-            toast.error('Operación fallida',
+            toast.error(t('mySolutions.messages.downloadError'),
                 {
-                    description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
+                    description: error.response?.data?.message || t('mySolutions.messages.downloadErrorMessage')
                 }
             )
         }
@@ -117,14 +119,14 @@ export default function MySolutions() {
         <div className="container mx-auto py-6">
             <h1 className="text-3xl font-bold mb-6 flex items-center">
                 <Send className="w-6 h-6 mr-2" />
-                Mis Soluciones
+                {t('mySolutions.titles.mySolutions')}
             </h1>
             <div className="flex justify-between items-center flex-col sm:flex-row mb-4 gap-2">
                 <div className="relative w-full sm:w-64">
                     <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4" />
                     <Input
                         type="text"
-                        placeholder="Buscar soluciones..."
+                        placeholder={t('mySolutions.filters.searchPlaceholder')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10"
@@ -135,9 +137,9 @@ export default function MySolutions() {
                         <SelectValue placeholder="Filtrar por estado" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="all">Todas</SelectItem>
-                        <SelectItem value="public">Públicas</SelectItem>
-                        <SelectItem value="private">Privadas</SelectItem>
+                        <SelectItem value="all">{t('mySolutions.filters.statusOptions.all')}</SelectItem>
+                        <SelectItem value="public">{t('mySolutions.filters.statusOptions.public')}</SelectItem>
+                        <SelectItem value="private">{t('mySolutions.filters.statusOptions.private')}</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -168,22 +170,22 @@ export default function MySolutions() {
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 w-full">
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Empresa</p>
+                                    <p className="text-xs text-muted-foreground">{t('mySolutions.company')}</p>
                                     <p className="text-sm font-medium truncate">{solution.desafio.empresa}</p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-muted-foreground">Fecha de envío</p>
+                                    <p className="text-xs text-muted-foreground">{t('mySolutions.submissionDate')}</p>
                                     <p className="text-sm">{new Date(solution.fechaRegistro).toLocaleDateString()}</p>
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-2 mb-4">
                                 <Badge variant="outline">
                                     <FileIcon className="w-4 h-4 mr-1" />
-                                    {solution.adjuntos.length} adjuntos
+                                    {solution.adjuntos.length} {t('mySolutions.attachmentLabel')}
                                 </Badge>
                                 <Badge variant="outline">
                                     <ThumbsUpIcon className="w-4 h-4 mr-1" />
-                                    {solution.cantidadVotos} votos
+                                    {solution.cantidadVotos} {t('mySolutions.votesLabel')}
                                 </Badge>
                             </div>
                             <div className="flex flex-col sm:flex-row justify-between items-center">
@@ -197,18 +199,18 @@ export default function MySolutions() {
                                         htmlFor={`public-${solution.idSolucion}`}
                                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                     >
-                                        {(solution.publica ?? false) ? 'Pública' : 'Privada'}
+                                        {(solution.publica ?? false) ? t('mySolutions.filters.statusOptions.public') : t('mySolutions.filters.statusOptions.private')}
                                     </label>
                                 </div>
                                 <div className="flex items-center space-x-2">
                                     <Button variant="ghost">
                                         <Link to={`/challenge/${solution.desafio.idDesafio}`} className="flex items-center space-x-1">
-                                            Ver desafío
+                                        {t('mySolutions.buttons2.viewChallenge')}
                                         </Link>
                                     </Button>
                                     <Dialog>
                                         <DialogTrigger asChild>
-                                            <Button variant="outline">Ver detalles</Button>
+                                            <Button variant="outline">{t('mySolutions.buttons2.viewDetails')}</Button>
                                         </DialogTrigger>
                                         <DialogContent className="sm:max-w-[425px]">
                                             <DialogHeader>
@@ -216,11 +218,11 @@ export default function MySolutions() {
                                             </DialogHeader>
                                             <div className="grid gap-4 py-4">
                                                 <div className="grid grid-cols-4 items-center gap-4">
-                                                    <p className="text-sm font-medium col-span-4">Descripción:</p>
+                                                    <p className="text-sm font-medium col-span-4">{t('mySolutions.dialog.descriptionLabel')}</p>
                                                     <p className="text-sm text-muted-foreground col-span-4">{solution.descripcion}</p>
                                                 </div>
                                                 <div className="grid grid-cols-4 items-center gap-4">
-                                                    <p className="text-sm font-medium col-span-4">Adjuntos:</p>
+                                                    <p className="text-sm font-medium col-span-4">{t('mySolutions.dialog.attachmentsLabel')}</p>
                                                     <div className="col-span-4 space-y-2">
                                                         {solution.adjuntos.map((adjunto) => (
                                                             <Button

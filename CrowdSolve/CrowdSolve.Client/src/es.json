@@ -46,12 +46,38 @@
     },
 
   "MeetOurteam": {
-    "title": "Conoce a nuestro equipo"
+    "title": "Conoce a nuestro equipo",
+    "description":"Conoce a los talentosos individuos detrás de nuestro éxito."
   },
 
   "authAdminLayout": {
     "signIn": "Iniciar sesión",
     "signUp": "Registrarse"
+  },
+
+
+  "AdminLayout": {
+    "sideBarAdm": {
+      "AdmUser": "Administración de usuarios",
+      "Participants": "Participantes",
+      "Companies": "Empresas",
+      "Admins": "Administradores",
+      "RolesPermissions": "Roles y permisos",
+      "AdmChallenges": "Gestión de desafíos",
+      "Challenges": "Desafíos",
+      "Solutions": "Soluciones",
+      "Categories": "Categorías",
+      "CompanyRequests": "Solicitudes de empresas",
+      "SupportRequests": "Solicitudes de soporte",
+      "ChallengesRequests": "Solicitudes de desafíos",
+      "Requests": "Solicitudes",
+      "Settings": "Configuraciones",
+      "UserManual": "Manual de usuario"
+    },
+    "authAdminLayout": {
+      "signIn": "Iniciar sesión",
+      "signUp": "Registrarse"
+    }
   },
 
   "CategoryFormdialog": {
@@ -141,6 +167,12 @@
   },
 
   "Herosection": {
+    "designs":{
+    
+      "globalCommunity": "Comunidad Global",
+  "innovation": "Innovación",
+  "collaboration": "Colaboración"
+    },
     "title": "Desbloquea soluciones creativas con CrowdSolve",
     "description": "CrowdSolve es una poderosa plataforma de crowdsourcing que conecta empresas con una comunidad global para resolver desafíos complejos. Publique su desafío, involucre a la multitud y colabore en soluciones innovadoras.",
     "buttons": {
@@ -557,22 +589,59 @@
   },
 
   "ChallengeCatalog": {
-    "pageTitle": "Encuentra tu próximo",
-    "pageTitle2": "desafío innovador",
-    "searchPlaceholder": "Buscar desafíos...",
-    "pagedescription": "Explora los últimos desafíos de innovación y demuestra tu talento en nuestra plataforma líder.",
-    "itemSelect": {
-      "recent": "Más recientes",
-      "popular": "Más populares",
-      "closeSoon": "Próximos a cerrar"
-    },
-    "categories": {
-      "label": "Categoría",
-      "status": "Estatus",
-      "company": "Empresa:",
-      "endDate": "Fecha fin:"
-    }
+  "pageTitle": "Encuentra tu próximo",
+  "pageTitle2": "desafío innovador",
+  "searchPlaceholder": "Buscar desafíos..",
+  "pagedescription": "Explora los últimos desafíos de innovación y muestra tu talento en nuestra plataforma líder.",
+  "filter": "Filtros",
+  "searchPreferences": "Ajusta tus preferencias de búsqueda",
+  "itemSelect": {
+    "recent": "Más recientes",
+    "popular": "Más populares",
+    "closeSoon": "Cerrando pronto"
   },
+  "filters": {
+    "all": "Todos",
+    "design": "Diseño",
+    "software": "Software",
+    "data": "Datos",
+    "ai": "IA",
+    "cybersecurity": "Ciberseguridad"
+  },
+  "categories": {
+    "label": "Categoría",
+    "status": "Estado",
+    "company": "Compañía:",
+    "endDate": "Fecha de finalización:"
+  },
+  "noResults": {
+    "title": "No encontrado",
+    "imageAlt": "No encontrado"
+  },
+  "pagination": {
+    "page": "Página",
+    "of": "de"
+  },
+  "buttons": {
+    "viewMore": "Ver más",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  },
+  "timeAgo": {
+    "since": "",
+    "1dayAgo": "hace 1 día",
+    "?daysAgo": "hace días",
+    "week": "hace una semana",
+    "weeks": "hace semanas",
+    "month": "hace un mes",
+    "months": "hace meses",
+    "close": "Cerrado",
+    "closeToday": "Cerrar hoy",
+    "dayRemaining": "1 día restante",
+    "daysremaining": "días restantes"
+  },
+  "solutions": "Soluciones"
+},
 
   "CompanyListing": {
     "general": {
@@ -1017,6 +1086,10 @@
   },
 
   "challengetimelineSteps": {
+    "operations": {
+  "success": "Operación exitosa",
+  "failure": "Operación fallida"
+  },
     "Desafio_Sin_validar": {
       "label": "Sin validar"
     },
@@ -1042,18 +1115,23 @@
       "startDate": "Fecha de inicio",
       "deadline": "Fecha límite",
       "daysRemaining": "Días restantes"
-    }
+    },
+    "challengenoValidated":"El desafío aún no ha sido validado por la administración."
   },
 
   "solutionRanking": {
+    "error": {
+      "title": "Operación fallida",
+      "descriptionFallback": "Ocurrió un error al descargar el archivo"
+    },
     "Nohaysolucionesparamostrar": "No hay soluciones para mostrar",
     "Elrankingaúnnoestádisponible": "El ranking aún no está disponible",
     "Posición": "Posición",
     "Usuario": "Usuario",
     "Título": "Título",
     "Puntuación": "Puntuación",
-    "VotosComunidad": "Votos Comunidad",
-    "VotosParticipantes": "Votos Participantes",
+    "VotosComunidad": "Votos de la comunidad",
+    "VotosParticipantes": "Votos de los participantes",
     "Puntuaciónfinal": "Puntuación final",
     "Acciones": "Acciones",
     "Verdetalles": "Ver detalles",
@@ -1069,7 +1147,8 @@
     "Votosdelosparticipantes": "Votos de los participantes",
     "Accionesdelasolución": "Acciones de la solución",
     "Fechaderegistro": "Fecha de registro",
-    "Nombredelusuario": "Nombre del usuario"
+    "Nombredelusuario": "Nombre de usuario",
+    "attachments": "Archivos adjuntos"
   },
 
   "userVoting": {
@@ -1283,6 +1362,734 @@
     "noNombreProceso": "Proceso sin nombre",
     "eliminarProceso": "Eliminar Proceso",
     "contenidoDesafio": "Contenido del Desafío",
-    "placeholderContenido": "Ingrese el contenido del desafío"
+    "placeholderContenido": "Ingrese el contenido del desafío",
+    "iniciaraDia":"Iniciara el dia"
+  },
+
+  "prizeEvidenceDialog": {
+  "confirmBeforeFinalizing": "Debe confirmar antes de finalizar el desafío",
+  "challengeFinalizedSuccess": "Desafío finalizado exitosamente",
+  "errorFinalizingChallenge": "Error al finalizar el desafío",
+  "errorDownloadingEvidence": "Error al descargar la evidencia",
+  "downloadEvidence": "Descarga las evidencias de los premios y finaliza el desafío",
+  "confirmFinalization": "Confirmar finalización",
+  "confirmCheckbox": "Confirmar finalización",
+  "finalizeChallenge": "Finalizar Desafío",
+  "cancel": "Cancelar",
+  "confirmationDialogTitle": "Confirmar Finalización",
+  "confirmationDialogDescription": "¿Está seguro de que desea finalizar el desafío? Esta acción no se puede deshacer.",
+  "prizeEvidenceTitle": "Evidencia de Premios",
+  "placeholders": {
+    "downloadTooltip": "Descargar"
+  },
+  "labels": {
+    "fileSize": "Tamaño",
+    "fileName": "Nombre"
+  },
+  "buttons": {
+    "finalize": "Finalizar",
+    "cancel": "Cancelar"
   }
+},
+
+"validateChallengeDialog": {
+  "successOperation": "Operación exitosa",
+  "failedOperation": "Operación fallida",
+  "errorOperation": "Hubo un error al realizar la operación",
+  "validationWarning": "el desafío no se podrá recuperar a menos que se solicite nuevamente.",
+  "rejectReasonLabel": "Motivo del rechazo",
+  "enterReasonWarning": "Por favor, ingrese un motivo antes de rechazar el desafío.",
+  "desafio": "Desafío",
+  "unaves": "Una vez",
+  "validado": "validado",
+  "rechazado": "rechazado",
+  "validate": "Validar",
+  "reject": "Rechazar",
+  "buttons": {
+    "validate": "Validar Desafío",
+    "reject": "Rechazar Desafío",
+    "close": "Cerrar"
+  },
+  "titles": {
+    "validateDialog": "Validar Desafío",
+    "rejectDialog": "Rechazar Desafío"
+  },
+  "placeholders": {
+    "reasonInput": "Ingrese el motivo del rechazo"
+  }
+},
+"ParticipantSolutionsDialog": {
+    "title": "Soluciones de ",
+    "searchPlaceholder": "Buscar soluciones...",
+    "filterByStatus": "Filtrar por estado",
+    "statusOptions": {
+      "all": "Todas",
+      "public": "Públicas",
+      "private": "Privadas"
+    },
+    "noSolutions": "No hay soluciones disponibles.",
+    "downloadError": {
+      "title": "Operación fallida",
+      "description": "Ocurrió un error al descargar el archivo"
+    },
+    "solutionDetails": {
+      "attachments": "{count} adjuntos",
+      "votes": "votos",
+      "company": "Empresa",
+      "submissionDate": "Fecha de envío",
+      "description": "Descripción",
+      "attachmentsLabel": "Adjuntos"
+    },
+    "viewChallenge": "Ver desafío",
+    "viewDetails": "Ver detalles",
+    "publicLabel": "Pública",
+    "privateLabel": "Privada",
+    "switchPublicPrivate": "Cambiar a {status}",
+    "fileSize": "{size} MB",
+    "dialog": {
+      "detailsTitle": "{solution.title}",
+      "descriptionTitle": "Descripción:",
+      "attachmentsTitle": "Adjuntos:"
+    },
+    "loadingSkeleton": {
+      "lines": [
+        "Espacio para el título",
+        "Espacio para el subtítulo",
+        "Espacio para el contenido"
+      ]
+    }
+  },
+
+  "overview": {
+    "title": "Visión general",
+    "description": "Filtrar datos por año",
+    "selectYear": "Seleccionar año",
+    "showingData": "Mostrando datos del año seleccionado"
+  },
+  "chart": {
+    "selectPlaceholder": "Seleccionar año",
+    "noData": "No hay datos disponibles"
+  },
+
+  "pieChartChallenge": {
+    "title": "Cantidad Desafíos",
+    "description": "Creados",
+    "selectFilter": "Seleccionar un filtro",
+    "filterOptions": {
+      "total": "Total",
+      "categories": "Categoría",
+      "companies": "Empresas"
+    },
+    "totalChallenges": "Total Desafíos",
+    "showingData": "Mostrando el total de Desafíos en sus diferentes ámbitos",
+    "tooltip": {
+    "companies": "Empresas"
+  }
+  },
+
+  "pieChartCompany": {
+  "title": "Cantidad de Empresas",
+  "description": "Registradas",
+  "selectFilter": "Seleccionar un filtro",
+  "filterOptions": {
+    "total": "Total",
+    "size": "Tamaño",
+    "sector": "Sectores"
+  },
+  "totalCompanies": "Total de Empresas",
+  "showingData": "Mostrando el total de Empresas en sus diferentes áreas",
+  "tooltip": {
+    "companies": "Empresas"
+  }
+},
+
+
+  "adminChallengeDetails": {
+    "errorLoadingChallenge": "No se pudo cargar el desafío.",
+    "errorValidateChallenge": "Error al validar el desafío",
+    "successOperation": "Operación exitosa",
+    "errorRejectChallenge": "Error al rechazar el desafío",
+    "successRejectChallenge": "Operación exitosa, desafío rechazado",
+    "successValidateChallenge": "Operación exitosa, desafío validado",
+    "backButton": "Volver",
+    "challengeNotFound": "Desafío no encontrado",
+    "challengeNotFoundMessage": "El desafío que buscas no existe o no tienes permiso para verlo.",
+    "challengeInfo": "Información del desafío",
+    "start": "Inicio",
+    "end": "Fin",
+    "submittedSolutions": "soluciones enviadas",
+    "registered": "Registrados",
+    "viewPrizeEvidence": "Ver evidencia del premio",
+    "validateChallenge": "Validar desafío",
+    "rejectChallenge": "Rechazar desafío",
+    "areYouSureToValidate": "¿Estás seguro de que deseas validar este desafío?",
+    "areYouSureToReject": "¿Estás seguro de que deseas rechazar este desafío?",
+    "rejectionReason": "Razón del rechazo",
+    "cancel": "Cancelar",
+    "validate": "Validar",
+    "reject": "Rechazar",
+    "viewRankingOfSolutions": "Ver ranking de soluciones",
+    "solutionRanking": "Ranking de soluciones",
+    "evaluationProcess": "Proceso de evaluación",
+    "evaluationType": "Tipo de evaluación",
+    "evaluationStatus": "Estado",
+    "evaluationTime": "Tiempo"
+  },
+
+  "adminChallenges": {
+    "columns": {
+      "titulo": "Título",
+      "empresa": "Empresa",
+      "estatusDesafio": "Estatus",
+      "fechaRegistro": "Fecha de Registro",
+      "fechaInicio": "Fecha de Inicio",
+      "fechaLimite": "Fecha Límite",
+      "actions": {
+        "menuLabel": "Acciones",
+        "viewDetails": "Ver Detalles",
+        "openMenu": "Abrir menú"
+      }
+    },
+    "search": {
+      "placeholder": "Buscar por Título del Desafío o Empresa",
+      "clearFiltersTooltip": "Limpiar filtros"
+    },
+    "filters": {
+      "statusPlaceholder": "Filtrar por estatus",
+      "noResults": "No se encontraron resultados."
+    },
+    "table": {
+      "rowsSelected": "{selected} de {total} fila(s) seleccionada(s).",
+      "of": "de",
+      "row": "fila",
+      "selected": "Seleccionada",
+      "previousPage": "Anterior",
+      "nextPage": "Siguiente"
+    }
+  },
+
+
+  "challengeRequests": {
+    "columns": {
+      "select": {
+        "header": "Seleccionar todo",
+        "cell": "Seleccionar fila",
+        "ariaLabelSelectAll": "Seleccionar todo",
+        "ariaLabelSelectRow": "Seleccionar fila"
+      },
+      "titulo": "Título",
+      "empresa": {
+        "header": "Empresa",
+        "avatarAltText": "Avatar de la Empresa",
+        "fallbackText": "Nombre de la Empresa"
+      },
+      "fechaRegistro": "Fecha de Registro",
+      "fechaInicio": "Fecha de Inicio",
+      "fechaLimite": "Fecha Límite",
+      "actions": {
+        "menuLabel": "Acciones",
+        "viewDetails": "Ver Detalles",
+        "validateChallenge": "Validar Desafío",
+        "declineChallenge": "Rechazar Desafío",
+        "openMenu": "Abrir Menú"
+      },
+      "sort": {
+        "ascending": "Orden Ascendente",
+        "descending": "Orden Descendente"
+      }
+    },
+    "searchPlaceholder": "Buscar por Título de Desafío o Empresa",
+    "tooltipClearFilters": "Limpiar filtros",
+    "columnsDropdownLabel": "Columnas",
+    "columnsDropdownToggle": "Columnas",
+    "noResults": "No se encontraron resultados.",
+    "of": "de",
+    "row": "fila",
+    "selected": "Seleccionada",
+    "selectedRows": "{selectedRows} de {totalRows} fila(s) seleccionada(s).",
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "validateChallengeDialog": {
+      "title": "Validar Desafío",
+      "closeButton": "Cerrar",
+      "saveButton": "Guardar"
+    }
+  },
+
+  "companyRequest": {
+    "select": {
+      "header": "Seleccionar Todo",
+      "cell": "Seleccionar Fila",
+      "ariaLabelSelectAll": "Seleccionar Todo",
+      "ariaLabelSelectRow": "Seleccionar Fila"
+    },
+    "nombre": "Nombre de la Empresa",
+    "descripcion": "Descripción",
+    "telefono": "Teléfono",
+    "paginaWeb": "Sitio Web",
+    "tamañoEmpresa": "Tamaño",
+    "sector": "Sector",
+    "direccion": "Dirección",
+    "avatar": "Avatar",
+    "cantidadDesafios": "Cantidad de Desafíos",
+    "cantidadSoluciones": "Cantidad de Soluciones",
+    "estatusUsuario": "Estado de la Empresa",
+    "actions": {
+      "menuLabel": "Acciones",
+      "validateCompany": "Validar Empresa",
+      "declineCompany": "Rechazar Empresa",
+      "openMenu": "Abrir menú"
+    },
+    "searchPlaceholder": "Buscar por Nombre de la Empresa",
+    "sectorLabel": "Sector",
+    "search": "Buscar...",
+    "clearFilter": "Limpiar filtro",
+    "companySizeLabel": "Tamaño de la Empresa",
+    "searchSize": "Buscar tamaño...",
+    "columnsLabel": "Columnas",
+    "clearFiltersTooltip": "Limpiar filtros",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "noResultsFound": "No se encontraron resultados.",
+    "of": "de",
+    "row": "fila",
+    "selected": "Seleccionado",
+    "selectedRowsText": "{selected} de {total} fila(s) seleccionada(s).",
+    "validateCompany": "Validar Empresa",
+    "declineCompany": "Rechazar Empresa"
+  },
+
+
+  "supportRequest": {
+  "select": "Seleccionar Todo",
+  "cell": "Seleccionar Fila",
+  "nombreUsuario": "Usuario Afectado",
+  "titulo": "Título",
+  "mensaje": "Mensaje",
+  "fecha": "Fecha de Soporte",
+  "nombres": "Nombre",
+  "apellidos": "Apellido",
+  "correoElectronico": "Correo Electrónico",
+  "nombreAsignado": "Usuario Asignado",
+  "idEstatusProceso": "Estatus de Solicitud",
+  "openMenu": "Abrir menú",
+  "actions": "Acciones",
+  "viewDetails": "Ver Detalles",
+  "assignRequest": "Asignarme Solicitud",
+  "closeRequest": "Cerrar Solicitud",
+  "downloadRequest": "Descargar Solicitud",
+  "successToast": {
+    "title": "Operación Exitosa",
+    "description": "response.data.message"
+  },
+  "failureToast": {
+    "title": "Operación Fallida",
+    "description": "response.data.message"
+  },
+  "errorToast": {
+    "title": "Ocurrió un error al realizar la operación"
+  },
+  "searchPlaceholder": "Buscar Soporte",
+  "assignedUsersButton": "Usuarios Asignados",
+  "clearFilter": "Limpiar filtro",
+  "clearFilterButton": "Limpiar filtros",
+  "statusRequestButton": "Estatus de Solicitud",
+  "search": "Buscar...",
+  "statusProcessSearchPlaceholder": "Buscar tamaño...",
+  "recentLabel": "Recientes",
+  "inProcessLabel": "En Proceso",
+  "columnsButton": "Columnas",
+  "columnsHeader": "Columnas",
+  "noResultsFound": "No se encontraron resultados.",
+  "of": "de",
+  "row": "fila",
+  "selected": "Seleccionado",
+  "selectedRowsText": "{count} de {total} fila(s) seleccionada(s).",
+  "previousButton": "Anterior",
+  "nextButton": "Siguiente"
+},
+"adminDashbord":{
+"dashboard": "Tablero",
+  "download": "Descargar",
+  "totalUsers": "Total de Usuarios",
+  "participatingUsers": "Usuarios Participantes",
+  "companyUsers": "Usuarios Empresas",
+  "sentSolutions": "Soluciones Enviadas",
+  "top10CompaniesChallenges": "Top 10 Empresas con Más Desafíos"
+},
+
+  "companyChallenge": {
+  "operationFailed": "Operación fallida",
+  "back": "Volver",
+  "edit": "Editar",
+  "unvalidatedChallenge": "Desafío sin validar",
+  "unvalidatedChallengeDescription": "El desafío aún no ha sido validado por la administración.",
+  "rejectedChallenge": "Desafío rechazado",
+  "rejectedChallengeDescription": "El desafío fue rechazado por la administración.",
+  "discardedChallenge": "Desafío descartado",
+  "discardedChallengeDescription": "El desafío fue descartado.",
+  "solutions": "Soluciones",
+  "evaluatingChallenge": "Desafío en evaluación",
+  "completedChallenge": "Desafío finalizado",
+  "waitingForPrizeDelivery": "En espera de entrega de premios"
+},
+
+"companyDashboard": {
+  "challenges": {
+    "loadError": "Error al cargar los desafíos, por favor intenta nuevamente",
+    "uploadEvidenceError": "Error al subir la evidencia",
+    "uploadEvidenceSuccess": "Evidencia subida con éxito",
+    "uploadEvidenceDescription": "La evidencia de la entrega del premio se ha subido con éxito",
+    "cancelChallengeSuccess": "Desafío cancelado con éxito",
+    "successToast": "Operación exitosa",
+    "cancelChallengeError": "Error en la operación",
+    "cancelChallengeDescription": "El desafío se ha cancelado con éxito",
+    "deleteEvidenceSuccess": "Evidencia eliminada con éxito",
+    "deleteEvidenceError": "Error al eliminar la evidencia",
+    "downloadEvidenceError": "Error al descargar el archivo"
+  },
+  "buttons": {
+    "back": "Volver",
+    "edit": "Editar",
+    "submitEvidence": "Enviar evidencia",
+    "cancelChallenge": "Cancelar desafío",
+    "deleteEvidence": "Eliminar evidencia",
+    "downloadEvidence": "Descargar evidencia"
+  },
+  "progress": {
+    "uploading": "Subiendo evidencia...",
+    "loading": "Cargando desafíos..."
+  },
+  "loading": "Cargando información del panel...",
+  "totalChallenges": "Total de desafíos",
+  "totalParticipations": "Total de participaciones",
+  "unevaluatedSolutions": "Soluciones no evaluadas",
+  "unvalidatedChallenges": "Desafíos no validados",
+  "challenge": "Desafíos",
+  "newChallenge": "Nuevo desafío",
+  "title": "Título",
+  "startDate": "Fecha de inicio",
+  "deadline": "Fecha límite",
+  "status": "Estado",
+  "participations": "Participaciones",
+  "pending": "Pendiente",
+  "actions": "Acciones",
+  "uploadEvidence": "Subir evidencia de entrega",
+  "evaluateSolutions": "Evaluar soluciones",
+  "cancelChallenge": "Cancelar desafío",
+  "editChallenge": "Editar desafío",
+  "viewDetails": "Ver detalles",
+  "cancelDialog": {
+    "title": "¿Estás seguro de que quieres cancelar este desafío?",
+    "description": "Esta acción no se puede deshacer. Por favor, proporciona un motivo para la cancelación.",
+    "placeholder": "Motivo de cancelación",
+    "cancelButton": "Cancelar",
+    "confirmButton": "Confirmar"
+  },
+  "prizeDialog": {
+    "title": "Subir evidencia de entrega del premio",
+    "description": "Por favor, sube la evidencia de la entrega del premio.",
+    "previousEvidences": {
+      "label": "Evidencias previas",
+      "note": "Estas evidencias están pendientes de validación por un administrador."
+    },
+    "actions": {
+      "deleteConfirmation": {
+        "title": "¿Estás seguro de que quieres eliminar esta evidencia?",
+        "description": "Esta acción no se puede deshacer.",
+        "cancelButton": "Cancelar",
+        "confirmButton": "Confirmar"
+      },
+      "deleteTooltip": "Eliminar",
+      "downloadTooltip": "Descargar"
+    },
+    "submitButton": "Confirmar",
+    "cancelButton": "Cancelar"
+  },
+  "downloadFile": "Descargar archivo",
+  "deleteFile": "Eliminar archivo"
+},
+
+
+"verificationPending":{
+"successCard": {
+    "header": {
+      "iconAltText": "Éxito",
+      "title": "Cuenta Creada con Éxito",
+      "description": "Su cuenta empresarial está en proceso de verificación"
+    },
+    "content": {
+      "verificationTime": {
+        "iconAltText": "Reloj",
+        "text": "Tiempo estimado de verificación: 1-3 días hábiles"
+      },
+      "thankYouMessage": "Gracias por crear su cuenta empresarial. Nuestro equipo está revisando la información proporcionada para asegurar que todo esté en orden.",
+      "emailNotification": "Le notificaremos por correo electrónico una vez que la verificación esté completa y su cuenta esté totalmente activada."
+    },
+    "footer": {
+      "backButton": "Volver al Inicio",
+      "supportButton": "Contactar Soporte"
+    }
+  }
+},
+
+"myProfile": {
+    "fetch": {
+      "success": "Operación exitosa",
+      "error": "Operación fallida",
+      "profileErrorDescription": "No se pudo cargar la información de tu perfil",
+      "relationalObjectsErrorDescription": "No se pudieron cargar los objetos relacionados"
+    },
+    "edit": {
+      "startEditing": "Editar perfil",
+      "saveSuccess": "Operación exitosa",
+      "saveError": "Operación fallida",
+      "saveErrorDescription": "No se pudo actualizar la información de tu perfil",
+      "saveWarningDescription": "Operación fallida"
+    },
+    "messages": {
+      "updatedSuccessfully": "Tu información de perfil ha sido actualizada con éxito",
+      "updateFailed": "Tu actualización de perfil falló"
+    },
+    "profile": {
+      "title": "Editar perfil",
+      "tabs": {
+        "solutions": "Soluciones",
+        "stats": "Estadísticas"
+      },
+      "profileInfo": "Información del perfil",
+      "editButton": "Editar perfil",
+      "cancelButton": "Cancelar"
+    },
+    "dialog": {
+      "open": "Editar perfil",
+      "close": "Cerrar"
+    },
+    "form": {
+      "avatarPicker": {
+        "label": "Elegir avatar",
+        "changeAvatar": "Cambiar avatar"
+      },
+      "fields": {
+        "firstName": {
+          "label": "Nombre",
+          "placeholder": "Ingresa tu nombre"
+        },
+        "lastName": {
+          "label": "Apellido",
+          "placeholder": "Ingresa tu apellido"
+        },
+        "birthDate": {
+          "label": "Fecha de nacimiento",
+          "placeholder": "Selecciona una fecha"
+        },
+        "phone": {
+          "label": "Teléfono",
+          "placeholder": "Ingresa tu número de teléfono"
+        },
+        "educationLevel": {
+          "label": "Nivel educativo",
+          "placeholder": "Selecciona un nivel educativo"
+        },
+        "personalDescription": {
+          "label": "Descripción personal",
+          "placeholder": "Ingresa una descripción personal"
+        }
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Guardar"
+      }
+    }
+  },
+  
+  "notification": {
+    "functions": {
+      "markAsRead": {
+        "error": "Operación fallida",
+        "success": "Notificaciones marcadas como leídas con éxito",
+        "warning": "Hubo un error al marcar las notificaciones como leídas"
+      },
+      "markAsUnread": {
+        "error": "Operación fallida",
+        "success": "Notificaciones marcadas como no leídas con éxito",
+        "warning": "Hubo un error al marcar las notificaciones como no leídas"
+      },
+      "deleteNotification": {
+        "error": "Operación fallida",
+        "success": "Notificación eliminada",
+        "warning": "Hubo un error al eliminar la notificación"
+      }
+    },
+    "interface": {
+      "notifications": "Notificaciones",
+      "unreadCount": "no leídas",
+      "search": {
+        "placeholder": "Buscar notificaciones..."
+      },
+      "tabs": {
+        "all": "Todas",
+        "unread": "No leídas",
+        "read": "Leídas"
+      }
+    },
+    "labels": {
+      "selectedCount": "seleccionadas",
+      "markAsRead": "Marcar como leída",
+      "markAsUnread": "Marcar como no leída",
+      "noNotifications": "No hay notificaciones."
+    },
+    "buttons": {
+      "markAsRead": "Marcar como leída",
+      "markAsUnread": "Marcar como no leída",
+      "delete": "Eliminar"
+    },
+    "notification": {
+      "timeAgo": "Hace {time}",
+      "deleteNotification": "Eliminar notificación"
+    },
+    "checkbox": {
+      "selectAll": "Seleccionar todo"
+    },
+    "status": {
+      "unread": "No leída",
+      "read": "Leída"
+    }
+  },
+  
+  "mySolutions": {
+    "messages": {
+      "changeVisibilityError": "Ocurrió un error al cambiar la visibilidad de la solución",
+      "downloadError": "Operación fallida",
+      "downloadErrorMessage": "Ocurrió un error al descargar el archivo"
+    },
+    "buttons": {
+      "markAsPublished": "Publicar",
+      "markAsPrivate": "Hacer privada",
+      "downloadAttachment": "Descargar adjunto"
+    },
+    "filters": {
+      "searchPlaceholder": "Buscar soluciones...",
+      "statusFilterPlaceholder": "Filtrar por estado",
+      "statusOptions": {
+        "all": "Todas",
+        "public": "Pública",
+        "private": "Privada"
+      }
+    },
+    "titles": {
+      "mySolutions": "Mis soluciones"
+    },
+    "company": "Empresa",
+    "submissionDate": "Fecha de presentación",
+    "attachmentLabel": "Adjuntos",
+    "votesLabel": "Votos",
+    "buttons2": {
+      "viewChallenge": "Ver desafío",
+      "viewDetails": "Ver detalles",
+      "downloadAttachment": "Descargar adjunto"
+    },
+    "dialog": {
+      "descriptionLabel": "Descripción:",
+      "attachmentsLabel": "Adjuntos"
+    },
+    "file": {
+      "sizeLabel": "Tamaño"
+    }
+  },
+  
+  "publicProfile": {
+    "errors": {
+      "failedOperation": "Operación fallida",
+      "profileLoadError": "No se pudo cargar la información del perfil público"
+    }
+  },
+
+
+  "challenge": {
+    "errorMessages": {
+      "challengeLoadError": "No se pudo cargar el desafío."
+    },
+    "messages": {
+      "uploadError": "Error al subir el archivo",
+      "solutionSubmissionError": "Error al enviar la solución",
+      "solutionSubmissionSuccess": "Operación exitosa",
+      "solutionSubmitted": "La solución ha sido enviada exitosamente.",
+      "solutionSendingError": "Error al enviar la solución",
+      "solutionSendingErrorDescription": "No se pudo enviar la solución"
+    },
+    "progress": {
+      "loading": "Cargando...",
+      "uploadProgress": "Subiendo {progress}%"
+    },
+    "buttons": {
+      "goBack": "Volver",
+      "submitSolution": "Enviar solución",
+      "participateInEvaluation": "Participar"
+    },
+    "alerts": {
+      "challengeNotFound": "Desafío no encontrado",
+      "challengePermissionError": "El desafío que buscas no existe o no tienes permiso para verlo",
+      "challengeInEvaluation": "Desafío en evaluación",
+      "participateInEvaluationAlert": "Este desafío está actualmente en proceso de evaluación. ¡Participa en la evaluación!"
+    },
+    "info": {
+      "challengeInfo": "Información del desafío",
+      "daysRemaining": " días restantes"
+    },
+    "labels": {
+      "category": "Categoría",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de finalización",
+      "solutionsSent": "soluciones enviadas",
+      "registeredDate": "Registrado en"
+    },
+    "file": {
+      "sizeLabel": "Tamaño"
+    },
+    "buttons1": {
+      "viewSolutions": "Ver soluciones",
+      "signInToParticipate": "Iniciar sesión para participar",
+      "viewMySolutionStatus": "Ver estado de mi solución",
+      "participateInChallenge": "Participar en el desafío",
+      "cancel": "Cancelar",
+      "submitSolution": "Enviar solución"
+    },
+    "dialogs": {
+      "participateInChallenge": {
+        "title": "Participar en el desafío",
+        "description": "Complete el formulario para participar en el desafío."
+      }
+    },
+    "alerts1": {
+      "challengeNotInProgress": "El desafío no está en progreso."
+    },
+    "form": {
+      "solutionTitle": {
+        "label": "Título de la solución"
+      },
+      "solutionDescription": {
+        "label": "Descripción"
+      },
+      "files": {
+        "label": "Archivos"
+      },
+      "termsAndConditions": {
+        "text": "Al participar en este desafío, acepta que su solución pueda ser utilizada por la empresa organizadora y que ha leído y comprendido los términos y condiciones."
+      }
+    },
+    "fileUploader": {
+      "maxSize": "Tamaño máximo del archivo: 1GB",
+      "multiple": "Puede subir múltiples archivos."
+    },
+    "messages1": {
+      "challengeNotFound": "Desafío no encontrado",
+      "challengePermissionError": "El desafío que buscas no existe o no tienes permiso para verlo"
+    }
+  }
+
+
+
 }

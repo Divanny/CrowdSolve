@@ -8,10 +8,12 @@ import { toast } from 'sonner';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/redux/slices/loadingSlice';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useTranslation } from 'react-i18next'
 
 import * as FileSaver from 'file-saver';
 
 const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) => {
+    const { t } = useTranslation();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
     const { api } = useAxios();
@@ -20,17 +22,17 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
 
     const finalizeChallenge = async () => {
         if (!isConfirmed) {
-            toast.error('Debe confirmar antes de finalizar el desafío');
+            toast.error(t('confirmBeforeFinalizing.confirmBeforeFinalizing'));
             return;
         }
         try {
             await api.put(`/api/Desafios/Finalizar/${challengeId}`);
-            toast.success('Desafío finalizado exitosamente');
+            toast.success(t('confirmBeforeFinalizing.challengeFinalizedSuccess'));
             if (onFinalized) onFinalized();
             setIsConfirmDialogOpen(false);
             setIsDialogOpen(false);
         } catch (error) {
-            toast.error('Error al finalizar el desafío', {
+            toast.error(t('confirmBeforeFinalizing.errorFinalizingChallenge'), {
                 description: error.response?.data?.message ?? error.message,
             });
         }
@@ -42,7 +44,7 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${evidence.idAdjunto}`, { responseType: 'blob' })
             FileSaver.saveAs(response.data, evidence.nombre);
         } catch (error) {
-            toast.error('Error al descargar la evidencia', {
+            toast.error(t('confirmBeforeFinalizing.errorDownloadingEvidence'), {
                 description: error.response?.data?.message ?? error.message,
             });
         }
@@ -56,9 +58,9 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
             </DialogTrigger>
             <DialogContent className="sm:max-w-[625px]" onOpenAutoFocus={(event) => event.preventDefault()}>
                 <DialogHeader>
-                    <DialogTitle>Evidencia de Premios</DialogTitle>
+                    <DialogTitle>{t('CategoryFormdialog.prizeEvidenceTitle')}</DialogTitle>
                     <DialogDescription>
-                        Descarga las evidencias de los premios y finaliza el desafío.
+                    {t('CategoryFormdialog.downloadEvidence')}
                     </DialogDescription>
                 </DialogHeader>
                 {evidence?.length > 0 && (
@@ -67,7 +69,7 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
                             <Button
                                 type="button"
                                 variant="outline"
-                                tooltip="Descargar"
+                                tooltip={t('CategoryFormdialog.placeholders.downloadTooltip')}
                                 onClick={() => downloadEvidence(evidencia)}
                                 className='h-auto'
                                 key={index}
@@ -86,10 +88,10 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
                 <DialogFooter className="flex flex-col items-start gap-4">
                     <div className="flex items-center">
                         <Checkbox id="confirm-checkbox" checked={isConfirmed} onCheckedChange={setIsConfirmed} />
-                        <label htmlFor="confirm-checkbox" className="ml-2 text-sm">Confirmar finalización</label>
+                        <label htmlFor="confirm-checkbox" className="ml-2 text-sm">{t('CategoryFormdialog.confirmationDialogTitle')}</label>
                     </div>
                     <Button onClick={() => setIsConfirmDialogOpen(true)} disabled={!isConfirmed} className="self-stretch">
-                        Finalizar Desafío
+                    {t('CategoryFormdialog.finalizeChallenge')}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -97,17 +99,17 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
             <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Confirmar Finalización</DialogTitle>
+                        <DialogTitle>{t('CategoryFormdialog.confirmCheckbox')}</DialogTitle>
                     </DialogHeader>
                     <DialogDescription>
-                        ¿Está seguro de que desea finalizar el desafío? Esta acción no se puede deshacer.
+                    {t('CategoryFormdialog.confirmationDialogDescription')}
                     </DialogDescription>
                     <DialogFooter>
                         <Button variant="secondary" onClick={() => setIsConfirmDialogOpen(false)}>
-                            Cancelar
+                        {t('CategoryFormdialog.cancel')}
                         </Button>
                         <Button variant="destructive" onClick={finalizeChallenge}>
-                            Finalizar
+                        {t('CategoryFormdialog.finalize')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

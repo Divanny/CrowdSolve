@@ -24,17 +24,17 @@ const HeroSection = () => {
     const designs = [
         {
             icon: Globe,
-            text: 'Comunidad Global',
+            text: t('Herosection.designs.globalCommunity'),
             gradient: 'from-[#9F5638] to-[#EF8535]',
         },
         {
             icon: Sparkles,
-            text: 'Innovación',
+            text: t('Herosection.designs.innovation'),
             gradient: 'from-[#9F5638] to-[#EF8535]',
         },
         {
             icon: Users,
-            text: 'Colaboración',
+            text: t('Herosection.designs.collaboration'),
             gradient: 'from-[#9F5638] to-[#EF8535]',
         },
     ]

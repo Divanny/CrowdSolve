@@ -14,10 +14,12 @@ import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 import SolutionsValidation from '@/components/admin/companies/SolutionsValidation';
 import ChallengeTimeline from '@/components/challenge/ChallengeTimeline';
 import SolutionRanking from '@/components/challenge/SolutionRanking';
+import { useTranslation } from 'react-i18next';
 
 const editor = createEditorToConvertToHtml();
 
 const CompanyChallenge = () => {
+    const { t } = useTranslation();
     const { challengeId } = useParams();
     const { api } = useAxios();
     const navigate = useNavigate();
@@ -54,7 +56,7 @@ const CompanyChallenge = () => {
             setChallenge(challengeResponse.data)
             setRelationalObjects(relationalObjectsResponse.data)
         } catch (error) {
-            toast.error("Operación fallida", {
+            toast.error(t('companyChallenge.operationFailed'), {
                 description: error.response?.data?.message ?? error.message,
             });
             navigate(-1);
@@ -88,12 +90,12 @@ const CompanyChallenge = () => {
                             <div className="flex justify-between items-center">
                                 <Button onClick={() => navigate(-1)} variant="ghost">
                                     <ArrowLeft className='me-1' size={16} />
-                                    Volver
+                                    {t('companyChallenge.back')}
                                 </Button>
                                 {challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar && (
                                     <Button onClick={() => navigate(`/company/challenge/${challenge.idDesafio}/edit`)}>
                                         <Edit className='me-1' size={16} />
-                                        Editar
+                                        {t('companyChallenge.edit')}
                                     </Button>
                                 )}
                             </div>
@@ -109,30 +111,30 @@ const CompanyChallenge = () => {
                                     <div className='w-full'>
                                         <div className="flex flex-col items-center gap-2 my-4">
                                             <AlertCircle className="text-warning" size={24} />
-                                            <span className="text-lg font-semibold">Desafío sin validar</span>
-                                            <span className="text-muted-foreground">El desafío aún no ha sido validado por la administración.</span>
+                                            <span className="text-lg font-semibold">{t('companyChallenge.unvalidatedChallenge')}</span>
+                                            <span className="text-muted-foreground">{t('companyChallenge.unvalidatedChallengeDescription')}</span>
                                         </div>
                                     </div>
                                 ) : challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Rechazado ? (
                                     <div className='w-full'>
                                         <div className="flex flex-col items-center gap-2 my-4">
                                             <XCircle className="text-destructive" size={24} />
-                                            <span className="text-lg font-semibold">Desafío rechazado</span>
-                                            <span className="text-muted-foreground">El desafío fue rechazado por la administración.</span>
+                                            <span className="text-lg font-semibold">{t('companyChallenge.rejectedChallenge')}</span>
+                                            <span className="text-muted-foreground">{t('companyChallenge.rejectedChallengeDescription')}</span>
                                         </div>
                                     </div>
                                 ) : challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_Descartado ? (
                                     <div className='w-full'>
                                         <div className="flex flex-col items-center gap-2 my-4">
                                             <Slash className="text-destructive" size={24} />
-                                            <span className="text-lg font-semibold">Desafío descartado</span>
-                                            <span className="text-muted-foreground">El desafío fue descartado.</span>
+                                            <span className="text-lg font-semibold">{t('companyChallenge.discardedChallenge')}</span>
+                                            <span className="text-muted-foreground">{t('companyChallenge.discardedChallengeDescription')}</span>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="space-y-4">
                                         <div className="flex justify-between items-center">
-                                            <h2 className="text-2xl font-bold">Soluciones</h2>
+                                            <h2 className="text-2xl font-bold">{t('companyChallenge.solutions')}</h2>
                                         </div>
                                         {
                                             (challenge.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion ||
