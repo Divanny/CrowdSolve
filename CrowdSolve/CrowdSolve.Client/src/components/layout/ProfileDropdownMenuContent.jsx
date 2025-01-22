@@ -91,7 +91,7 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
                 {canAccessCompany && (
                     <DropdownMenuItem onSelect={() => navigate('/company')}>
                         <Building className="mr-2" size={16} />
-                        Mi empresa
+                        {t('ProfileDropdownMenuContent.miEmpresa')}
                     </DropdownMenuItem>
                 )}
                 {canAccessProfile && (

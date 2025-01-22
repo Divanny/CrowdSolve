@@ -15,6 +15,7 @@ import { FileIcon, ThumbsUpIcon, ImageIcon, FileTextIcon, FileArchiveIcon as Fil
 import { toast } from "sonner";
 import * as FileSaver from 'file-saver'
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useTranslation } from 'react-i18next'
 
 const IconoArchivo = ({ tipo }) => {
     switch (tipo) {
@@ -41,6 +42,7 @@ const formatearTamaño = (bytes) => {
 }
 
 export function ParticipantSolutionsDialog({ isOpen, onClose, participant }) {
+    const { t } = useTranslation();
     const { api } = useAxios();
     const [loading, setLoading] = useState(true);
     const [solutions, setSolutions] = useState([]);
@@ -72,9 +74,9 @@ export function ParticipantSolutionsDialog({ isOpen, onClose, participant }) {
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
             FileSaver.saveAs(response.data, adjunto.nombre)
         } catch (error) {
-            toast.error('Operación fallida',
+            toast.error(t('ParticipantSolutionsDialog.downloadError.title'),
                 {
-                    description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
+                    description: error.response?.data?.message || t('ParticipantSolutionsDialog.downloadError.description')
                 }
             )
         }
@@ -93,14 +95,14 @@ export function ParticipantSolutionsDialog({ isOpen, onClose, participant }) {
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-fit" aria-describedby={undefined}>
                 <DialogHeader>
-                    <DialogTitle>Soluciones de {participant.nombreUsuario}</DialogTitle>
+                    <DialogTitle>{t('ParticipantSolutionsDialog.title')} {participant.nombreUsuario}</DialogTitle>
                 </DialogHeader>
                 <div className="flex justify-between items-center flex-col sm:flex-row gap-2">
                     <div className="relative w-full sm:w-64">
                         <SearchIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4" />
                         <Input
                             type="text"
-                            placeholder="Buscar soluciones..."
+                            placeholder={t('ParticipantSolutionsDialog.searchPlaceholder')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="pl-10"
@@ -111,9 +113,9 @@ export function ParticipantSolutionsDialog({ isOpen, onClose, participant }) {
                             <SelectValue placeholder="Filtrar por estado" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="all">Todas</SelectItem>
-                            <SelectItem value="public">Públicas</SelectItem>
-                            <SelectItem value="private">Privadas</SelectItem>
+                            <SelectItem value="all">{t('ParticipantSolutionsDialog.statusOptions.all')}</SelectItem>
+                            <SelectItem value="public">{t('ParticipantSolutionsDialog.statusOptions.public')}</SelectItem>
+                            <SelectItem value="private">{t('ParticipantSolutionsDialog.statusOptions.private')}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -134,7 +136,7 @@ export function ParticipantSolutionsDialog({ isOpen, onClose, participant }) {
                         <>
                             {!loading && filteredSolutions.length === 0 && (
                                 <div className="text-center text-muted-foreground">
-                                    No hay soluciones disponibles.
+                                    {t('ParticipantSolutionsDialog.noSolutions')}
                                 </div>
                             )}
                             {!loading && filteredSolutions.length > 0 && (
@@ -165,22 +167,22 @@ export function ParticipantSolutionsDialog({ isOpen, onClose, participant }) {
                                                 </div>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 w-full">
                                                     <div>
-                                                        <p className="text-xs text-muted-foreground">Empresa</p>
+                                                        <p className="text-xs text-muted-foreground">{t('ParticipantSolutionsDialog.solutionDetails.company')}</p>
                                                         <p className="text-sm font-medium truncate">{solution.desafio.empresa}</p>
                                                     </div>
                                                     <div>
-                                                        <p className="text-xs text-muted-foreground">Fecha de envío</p>
+                                                        <p className="text-xs text-muted-foreground">{t('ParticipantSolutionsDialog.solutionDetails.submissionDate')}</p>
                                                         <p className="text-sm">{new Date(solution.fechaRegistro).toLocaleDateString()}</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-wrap gap-2 mb-4">
                                                     <Badge variant="outline">
                                                         <FileIcon className="w-4 h-4 mr-1" />
-                                                        {solution.adjuntos.length} adjuntos
+                                                        {solution.adjuntos.length} {t('ParticipantSolutionsDialog.solutionDetails.submissionDate')}
                                                     </Badge>
                                                     <Badge variant="outline">
                                                         <ThumbsUpIcon className="w-4 h-4 mr-1" />
-                                                        {solution.cantidadVotos} votos
+                                                        {solution.cantidadVotos} {t('ParticipantSolutionsDialog.solutionDetails.votes')}
                                                     </Badge>
                                                 </div>
                                                 <div className="flex flex-col sm:flex-row justify-between items-center">
@@ -193,18 +195,18 @@ export function ParticipantSolutionsDialog({ isOpen, onClose, participant }) {
                                                             htmlFor={`public-${solution.idSolucion}`}
                                                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                         >
-                                                            {(solution.publica ?? false) ? 'Pública' : 'Privada'}
+                                                            {(solution.publica ?? false) ? t('ParticipantSolutionsDialog.publicLabel') : t('ParticipantSolutionsDialog.privateLabel')}
                                                         </label>
                                                     </div>
                                                     <div className="flex items-center space-x-2">
                                                         <Button variant="ghost">
                                                             <Link to={`/challenge/${solution.desafio.idDesafio}`} className="flex items-center space-x-1">
-                                                                Ver desafío
+                                                            {t('ParticipantSolutionsDialog.viewChallenge')}
                                                             </Link>
                                                         </Button>
                                                         <Dialog>
                                                             <DialogTrigger asChild>
-                                                                <Button variant="outline">Ver detalles</Button>
+                                                                <Button variant="outline">{t('ParticipantSolutionsDialog.viewDetails')}</Button>
                                                             </DialogTrigger>
                                                             <DialogContent className="sm:max-w-[425px]">
                                                                 <DialogHeader>
@@ -212,11 +214,11 @@ export function ParticipantSolutionsDialog({ isOpen, onClose, participant }) {
                                                                 </DialogHeader>
                                                                 <div className="grid gap-4 py-4">
                                                                     <div className="grid grid-cols-4 items-center gap-4">
-                                                                        <p className="text-sm font-medium col-span-4">Descripción:</p>
+                                                                        <p className="text-sm font-medium col-span-4">{t('ParticipantSolutionsDialog.dialog.descriptionTitle')}</p>
                                                                         <p className="text-sm text-muted-foreground col-span-4">{solution.descripcion}</p>
                                                                     </div>
                                                                     <div className="grid grid-cols-4 items-center gap-4">
-                                                                        <p className="text-sm font-medium col-span-4">Adjuntos:</p>
+                                                                        <p className="text-sm font-medium col-span-4">{t('ParticipantSolutionsDialog.dialog.attachmentsTitle')}</p>
                                                                         <div className="col-span-4 space-y-2">
                                                                             {solution.adjuntos.map((adjunto) => (
                                                                                 <Button

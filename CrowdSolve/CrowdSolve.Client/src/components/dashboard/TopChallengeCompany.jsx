@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   Avatar,
   AvatarFallback,
@@ -6,6 +7,7 @@ import {
 } from "@/components/ui/avatar";
 
 export function RecentSales() {
+  
   const { api } = useAxios();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

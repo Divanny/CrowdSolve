@@ -47,8 +47,10 @@ import Icon from "@/components/ui/icon";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupportDialog } from "../../../components/admin/Requests/SupportRequestDialog";
 import EstatusProcesoEnum from "@/enums/EstatusProcesoEnum";
+import { useTranslation } from 'react-i18next';
 
 export default function SupportRequests() {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [data, setData] = useState([]);
   const [usuariosAdmin, setUsuariosAdmin] = useState([]);
@@ -78,7 +80,7 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Usuario Afectado
+            {t('supportRequest.nombreUsuario')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -93,7 +95,7 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Titulo
+            {t('supportRequest.titulo')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -101,12 +103,12 @@ export default function SupportRequests() {
     },
     {
       accessorKey: "mensaje",
-      header: "Mensaje",
+      header: t('supportRequest.mensaje'),
       /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
     },
     {
       accessorKey: "fecha",
-      header: "Fecha Soporte",
+      header: t('supportRequest.fecha'),
       cell: ({ row }) => `${new Date(row.original.fecha).toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
@@ -122,7 +124,7 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Nombres
+            {t('supportRequest.nombres')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -144,7 +146,7 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Apellidos
+            {t('supportRequest.apellidos')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -159,7 +161,7 @@ export default function SupportRequests() {
     },
     {
       accessorKey: "correoElectronico",
-      header: "Correo Electronico",
+      header: t('supportRequest.correoElectronico'),
       /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
     },
     {
@@ -171,7 +173,7 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Usuario Asignado
+            {t('supportRequest.nombreAsignado')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -215,12 +217,12 @@ export default function SupportRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menú</span>
+              <span className="sr-only">{t('supportRequest.openMenu')}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('supportRequest.actions')}</DropdownMenuLabel>
 
             <DropdownMenuItem
               onClick={() => {
@@ -230,7 +232,7 @@ export default function SupportRequests() {
               }}
             >
               <Eye className="mr-2 h-4 w-4" />
-              Ver Detalle
+              {t('supportRequest.viewDetails')}
             </DropdownMenuItem>
 
             {row.original.idUsuarioAsignado === null && (
@@ -241,7 +243,7 @@ export default function SupportRequests() {
                 }}
               >
                 <UserPen className="mr-2 h-4 w-4" />
-                Asignarme Solicitud
+                {t('supportRequest.assignRequest')}
               </DropdownMenuItem>
             )}
 
@@ -255,7 +257,7 @@ export default function SupportRequests() {
                   }}
                 >
                   <FileCheck className="mr-2 h-4 w-4" />
-                  Finalizar Solicitud
+                  {t('supportRequest.closeRequest')}
                 </DropdownMenuItem>
               )}
 
@@ -318,18 +320,18 @@ export default function SupportRequests() {
 
       // Check if the response was successful
       if (response.data.success) {
-        toast.success("Operación exitosa", {
+        toast.success(t('supportRequest.successToast.title'), {
           description: response.data.message,
         });
 
         fetchData();
       } else {
-        toast.warning("Operación fallida", {
+        toast.warning(t('supportRequest.failureToast.title'), {
           description: response.data.message,
         });
       }
     } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
+      toast.error(t('supportRequest.errorToast.title'));
       console.error('Error:', error);
     }
   }
@@ -402,7 +404,7 @@ export default function SupportRequests() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar Soporte"
+            placeholder={t('supportRequest.searchPlaceholder')}
             value={globalFilter ?? ""}
             onChange={(event) => {
               const value = event.target.value;
@@ -417,7 +419,7 @@ export default function SupportRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Usuarios Asignados
+              {t('supportRequest.assignedUsersButton')}
               {usuarioAdminFilter ? `: ${usuarioAdminFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -428,7 +430,7 @@ export default function SupportRequests() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Buscar..."
+                  placeholder={t('supportRequest.search')}
                   value={usuarioAdminSearch}
                   onChange={(e) => setUsuarioAdminSearch(e.target.value)}
                   className="pl-8"
@@ -442,7 +444,7 @@ export default function SupportRequests() {
                   table.getColumn("nombreAsignado")?.setFilterValue(undefined);
                 }}
               >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                <X className="mr-2 h-4 w-4" /> {t('supportRequest.clearFilterButton')}
               </DropdownMenuItem>
             )}
             {filteredUsuariosAdmin.map((usuario) => (
@@ -503,13 +505,13 @@ export default function SupportRequests() {
               <div className="w-2 h-2 rounded-full bg-[#FFC7B0] mr-2"></div>
               <span className="text-xs w-20 font-bold">En Proceso</span>
             </div>
-          </div>
-        </div>
+          </div >
+        </div >
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columnas <ChevronDown className="ml-2 h-4 w-4" />
+              {t('supportRequest.columnsButton')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -532,7 +534,7 @@ export default function SupportRequests() {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div >
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -581,7 +583,7 @@ export default function SupportRequests() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No se encontraron resultados.
+                  {t('supportRequest.noResultsFound')}
                 </TableCell>
               </TableRow>
             )}
@@ -596,7 +598,7 @@ export default function SupportRequests() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Anterior
+            {t('supportRequest.previousButton')}
           </Button>
           <Button
             variant="outline"
@@ -604,10 +606,10 @@ export default function SupportRequests() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Siguiente
+            {t('supportRequest.nextButton')}
           </Button>
         </div>
-      </div>
+      </div >
 
       {selectedSupportRequest && (
         <SupportDialog
@@ -620,7 +622,8 @@ export default function SupportRequests() {
           support={selectedSupportRequest}
           mode={dialogMode}
         />
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }

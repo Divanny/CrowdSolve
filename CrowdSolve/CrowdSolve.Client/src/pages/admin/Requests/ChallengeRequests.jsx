@@ -43,8 +43,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { ValidateChallengeDialog } from "@/components/admin/challenges-requests/ValidateChallengeDialog";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 
 export default function CompanyRequests() {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -61,11 +63,11 @@ export default function CompanyRequests() {
   const columns = [
     {
       accessorKey: "titulo",
-      header: "Título"
+      header: t('challengeRequests.columns.titulo')
     },
     {
       accessorKey: "empresa",
-      header: "Empresa",
+      header: t('challengeRequests.empresa.header'),
       cell: ({ row }) => {
         const idUsuarioEmpresa = row.original.idUsuarioEmpresa;
         return (
@@ -88,7 +90,7 @@ export default function CompanyRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Fecha Registro
+            {t('challengeRequests.columns.fechaRegistro')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -105,7 +107,7 @@ export default function CompanyRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Fecha Inicio
+            {t('challengeRequests.columns.fechaInicio')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -122,7 +124,7 @@ export default function CompanyRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Fecha Límite
+            {t('challengeRequests.columns.fechaLimite')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -136,19 +138,19 @@ export default function CompanyRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menú</span>
+              <span className="sr-only">{t('challengeRequests.columns.actions.openMenu')}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('challengeRequests.columns.actions.menuLabel')}</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
                 navigate(`/admin/challenge/${row.original.idDesafio}`);
               }}
             >
               <Eye className="mr-2 h-4 w-4" />
-              Ver detalles
+              {t('challengeRequests.columns.actions.viewDetails')}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -158,7 +160,7 @@ export default function CompanyRequests() {
               }}
             >
               <CircleCheck className="mr-2 h-4 w-4" />
-              Validar Desafío
+              {t('challengeRequests.columns.actions.validateChallenge')}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -168,7 +170,7 @@ export default function CompanyRequests() {
               }}
             >
               <Ban className="mr-2 h-4 w-4" />
-              Rechazar Desafío
+              {t('challengeRequests.columns.actions.declineChallenge')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu >
@@ -245,7 +247,7 @@ export default function CompanyRequests() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por titulo de Desafío o Empresa"
+            placeholder={t('challengeRequests.searchPlaceholder')}
             value={globalFilter ?? ""}
             onChange={(event) => {
               const value = event.target.value;
@@ -261,14 +263,14 @@ export default function CompanyRequests() {
           onClick={clearFilters}
           disabled={!globalFilter}
           size="icon"
-          tooltip="Limpiar filtros"
+          tooltip={t('challengeRequests.tooltipClearFilters')}
         >
           <FilterX className="h-4 w-4" />
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columnas <ChevronDown className="ml-2 h-4 w-4" />
+            {t('challengeRequests.columnsDropdownLabel')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -335,7 +337,7 @@ export default function CompanyRequests() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No se encontraron resultados.
+                  {t('challengeRequests.noResults')}
                 </TableCell>
               </TableRow>
             )}
@@ -350,7 +352,7 @@ export default function CompanyRequests() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Anterior
+            {t('challengeRequests.pagination.previous')}
           </Button>
           <Button
             variant="outline"
@@ -358,7 +360,7 @@ export default function CompanyRequests() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Siguiente
+            {t('challengeRequests.pagination.next')}
           </Button>
         </div>
       </div>

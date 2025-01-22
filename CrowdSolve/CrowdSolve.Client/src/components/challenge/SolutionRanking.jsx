@@ -46,9 +46,9 @@ const SolutionRanking = ({ idDesafio }) => {
             const response = await api.get(`/api/Soluciones/DescargarAdjunto/${adjunto.idAdjunto}`, { responseType: 'blob' })
             FileSaver.saveAs(response.data, adjunto.nombre);
         } catch (error) {
-            toast.error('Operación fallida',
+            toast.error(t('solutionRanking.error.title'),
                 {
-                    description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo'
+                    description: error.response?.data?.message || t('solutionRanking.error.descriptionFallback')
                 }
             )
         }
@@ -187,7 +187,7 @@ const SolutionRanking = ({ idDesafio }) => {
                                                     </ScrollArea>
                                                 </div>
                                                 <div>
-                                                    <Label className="text-lg font-semibold">Archivos adjuntos</Label>
+                                                    <Label className="text-lg font-semibold">{t('solutionRanking.attachments')}</Label>
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
                                                         {solucionSeleccionada?.adjuntos.map((adjunto) => (
                                                             <Button

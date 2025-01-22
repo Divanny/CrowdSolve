@@ -115,7 +115,7 @@ const ChallengeTimeline = ({ currentStatus }) => {
                             <AlertCircle className="w-5 h-5 text-warning-foreground" />
                         </div>
                         <span className="text-sm font-medium text-warning">
-                            El desafío aún no ha sido validado por la administración.
+                        {t('challengetimelineSteps.challengenoValidated')}
                         </span>
                     </div>
                 </div>

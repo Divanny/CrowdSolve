@@ -7,8 +7,10 @@ import ProfileInfo from '@/components/participants/ProfileInfo'
 import ProfileSkeleton from '@/components/participants/ProfileSkeleton'
 import SolutionsOverview from '@/components/participants/SolutionsOverview'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next';
 
 const PublicProfile = () => {
+    const { t } = useTranslation();
     const [user, setUser] = useState(null)
     const { api } = useAxios()
     const { userName } = useParams()
@@ -20,8 +22,8 @@ const PublicProfile = () => {
                 const response = await api.get(`/api/Participantes/PerfilPublico/${userName}`)
                 setUser(response.data)
             } catch {
-                toast.error("Operación fallida", {
-                    description: "No se pudo cargar la información del perfil público",
+                toast.error(t('publicProfile.errors.failedOperation'), {
+                    description: t('publicProfile.errors.profileLoadError'),
                 })
                 navigate(-1)
             }

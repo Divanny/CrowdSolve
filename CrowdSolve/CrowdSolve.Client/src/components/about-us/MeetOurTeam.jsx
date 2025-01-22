@@ -40,7 +40,7 @@ const MeetOurTeam = () => {
             {t('MeetOurteam.title')}
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Meet the talented individuals behind our success.
+          {t('MeetOurteam.description')}
           </p>
         </div>
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">

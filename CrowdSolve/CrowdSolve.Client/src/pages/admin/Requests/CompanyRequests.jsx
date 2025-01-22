@@ -41,8 +41,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ValidateCompanyDialog } from "../../../components/admin/Requests/ValidateCompanyDialog";
+import { useTranslation } from 'react-i18next';
 
 export default function CompanyRequests() {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [data, setData] = useState([]);
   const [sectores, setSectores] = useState([]);
@@ -82,7 +84,7 @@ export default function CompanyRequests() {
   },
     {
       accessorKey: "descripcion",
-      header: "Descripcion",
+      header: t('companyRequest.descripcion'),
       /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
       cell: ({ getValue }) => {
         return (
@@ -94,11 +96,11 @@ export default function CompanyRequests() {
     },
     {
       accessorKey: "telefono",
-      header: "Telefono"
+      header: t('companyRequest.telefono'),
     },
     {
       accessorKey: "paginaWeb",
-      header: "Pagina Web"
+      header: t('companyRequest.paginaWeb'),
     },
     {
       accessorKey: "tamañoEmpresa",
@@ -109,7 +111,7 @@ export default function CompanyRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Tamaño
+            {t('companyRequest.tamañoEmpresa')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -131,7 +133,7 @@ export default function CompanyRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Sector
+            {t('companyRequest.sector')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -154,12 +156,12 @@ export default function CompanyRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menú</span>
+              <span className="sr-only">{t('companyRequest.actions.openMenu')}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('companyRequest.actions.menuLabel')}</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
                 setSelectedCompanyRequest(row.original.idEmpresa)
@@ -168,7 +170,7 @@ export default function CompanyRequests() {
               }}
             >
               <CircleCheckBig className="mr-2 h-4 w-4" />
-              Validar Empresa
+              {t('companyRequest.actions.validateCompany')}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -178,7 +180,7 @@ export default function CompanyRequests() {
               }}
             >
               <CircleSlash2 className="mr-2 h-4 w-4" />
-              Rechazar Empresa
+              {t('companyRequest.actions.declineCompany')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -276,7 +278,7 @@ export default function CompanyRequests() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por nombre de Empresa"
+            placeholder={t('companyRequest.searchPlaceholder')}
             value={globalFilter ?? ""}
             onChange={(event) => {
               const value = event.target.value;
@@ -291,7 +293,7 @@ export default function CompanyRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Sector
+            {t('companyRequest.sectorLabel')}
               {sectorFilter ? `: ${sectorFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -302,7 +304,7 @@ export default function CompanyRequests() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Buscar..."
+                  placeholder={t('companyRequest.search')}
                   value={sectorSearch}
                   onChange={(e) => setSectorSearch(e.target.value)}
                   className="pl-8"
@@ -316,7 +318,7 @@ export default function CompanyRequests() {
                   table.getColumn("sector")?.setFilterValue(undefined);
                 }}
               >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                <X className="mr-2 h-4 w-4" /> {t('companyRequest.clearFilter')}
               </DropdownMenuItem>
             )}
             {filteredSectores.map((sector) => (
@@ -337,7 +339,7 @@ export default function CompanyRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Tamaño Empresa
+            {t('companyRequest.companySizeLabel')}
               {tamañoEmpresaFilter ? `: ${tamañoEmpresaFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -348,7 +350,7 @@ export default function CompanyRequests() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Buscar tamaño..."
+                  placeholder={t('companyRequest.searchSize')}
                   value={tamañoEmpresaSearch}
                   onChange={(e) => setTamañoEmpresaSearch(e.target.value)}
                   className="pl-8"
@@ -362,7 +364,7 @@ export default function CompanyRequests() {
                   table.getColumn("tamañoEmpresa")?.setFilterValue(undefined);
                 }}
               >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                <X className="mr-2 h-4 w-4" /> {t('companyRequest.clearFilter')}
               </DropdownMenuItem>
             )}
             {filteredTamañoEmpresa.map((tamaño) => (
@@ -392,7 +394,7 @@ export default function CompanyRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columnas <ChevronDown className="ml-2 h-4 w-4" />
+            {t('companyRequest.columnsLabel')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -459,7 +461,7 @@ export default function CompanyRequests() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No se encontraron resultados.
+                  {t('companyRequest.noResultsFound')}
                 </TableCell>
               </TableRow>
             )}
@@ -474,7 +476,7 @@ export default function CompanyRequests() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Anterior
+            {t('companyRequest.previous')}
           </Button>
           <Button
             variant="outline"
@@ -482,7 +484,7 @@ export default function CompanyRequests() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Siguiente
+            {t('companyRequest.next')}
           </Button>
         </div>
       </div>
