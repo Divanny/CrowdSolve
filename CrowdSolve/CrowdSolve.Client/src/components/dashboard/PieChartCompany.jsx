@@ -1,7 +1,6 @@
 "use client"
 
-import React, { useMemo } from "react"
-import { TrendingUp } from 'lucide-react'
+import { useMemo, useState, useEffect } from "react"
 import { Label, Pie, PieChart } from "recharts"
 
 import {
@@ -38,7 +37,6 @@ export function PieChartCompany() {
   
     const fetchData = async () => {
       try {
-        console.log(filter);
 
         const [categoriasResponse, relationalObjectsResponse] =
           await Promise.all([
@@ -50,8 +48,6 @@ export function PieChartCompany() {
             const chartData = [
                 { nombre: "Total Empresas ", cantidadEmpresas:0 , fill: "var(--color-chrome)" },
               ] 
-
-              console.log(categoriasResponse.data.cantidadEmpresa);
                 chartData[0].cantidadEmpresas=categoriasResponse.data.cantidadEmpresa;
 
             setDataCategoria(chartData);
@@ -81,8 +77,6 @@ export function PieChartCompany() {
   
   const totalCategories = useMemo(() => {
     const categories = dataCategorias;
-
-    console.log(categories); // Aquí puedes verificar la estructura de chartData
     if(filter=="total")
     {
         return categories.reduce((acc, curr) => acc + curr.cantidadEmpresas, 0);
@@ -134,7 +128,7 @@ export function PieChartCompany() {
       <CardContent className="flex-1 pb-0">
 
       <div className="flex justify-end mb-4">
-          <Select value={filter} onValueChange={(value) =>{ setFilter(value);console.log(value);}}>
+          <Select value={filter} onValueChange={(value) =>{ setFilter(value)}}>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="Select a filter" />
             </SelectTrigger>

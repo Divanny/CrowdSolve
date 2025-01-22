@@ -60,7 +60,6 @@ export function CategoryFormDialog({ isOpen, onClose, onSaved, mode, category  }
       toast.warning(t('CategoryFormdialog.operations.failure'), {
         description: response.data.message,
       });
-      console.log(response);
     }
   }
 

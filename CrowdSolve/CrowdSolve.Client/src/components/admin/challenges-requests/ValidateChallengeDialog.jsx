@@ -18,14 +18,12 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
   const [reason, setReason] = useState(""); // Estado para almacenar el motivo
 
   useEffect(() => {
-    console.log(estatusId);
     setValidateChallenge(estatusId)
   }, [estatusId])
 
   const validarDesafio = async () => {
     try {
       const response = await api.put(`api/Desafios/Validar/${validateChallenge}`);
-      console.log(validateChallenge);
 
       if (response.data.success) {
         toast.success("Operación exitosa", {
@@ -38,7 +36,6 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
         toast.warning("Operación fallida", {
           description: response.data.message,
         });
-        console.log(response.data);
       }
     } catch (error) {
       toast.error('Hubo un error al realizar la operación');
@@ -62,7 +59,6 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
           },
         }
       );
-      console.log(validateChallenge);
 
       if (response.data.success) {
         toast.success("Operación exitosa", {
@@ -75,7 +71,6 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
         toast.warning("Operación fallida", {
           description: response.data.message,
         });
-        console.log(response.data);
       }
     } catch (error) {
       toast.error('Hubo un error al realizar la operación');

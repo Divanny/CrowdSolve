@@ -18,7 +18,6 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
   const [validateCompany, setValidateCompany] = useState(estatusId)
 
   useEffect(() => {
-    console.log(estatusId);
     setValidateCompany(estatusId)
   }, [estatusId])
 
@@ -30,7 +29,6 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
           'Content-Type': 'application/json',
         },
       });
-      console.log(validateCompany);
   
        // Check if the response was successful
     if (response.data.success) {
@@ -45,7 +43,6 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
       toast.warning(t('validateCompanyDialog.operations.failure'), {
         description: response.data.message,
       });
-      console.log(response.data);
     }
     } catch (error) {
       toast.error(t('validateCompanyDialog.operations.error'));
@@ -62,7 +59,6 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
           'Content-Type': 'application/json',
         },
       });
-      console.log(validateCompany);
   
        // Check if the response was successful
     if (response.data.success) {
@@ -77,7 +73,6 @@ export function ValidateCompanyDialog({ isOpen, onClose, onSaved, estatusId, mod
       toast.warning(t('validateCompanyDialog.operations.failure'), {
         description: response.data.message,
       });
-      console.log(response.data);
     }
     } catch (error) {
       toast.error(t('validateCompanyDialog.operations.error'));

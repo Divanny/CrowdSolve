@@ -40,7 +40,6 @@ const Dashboard = () => {
       const [dataResponse] = await Promise.all([
         api.get("/api/Usuarios/GetCantidadUsuarios", { requireLoading: false }),
       ]);
-      console.log(dataResponse.data);
       setData(dataResponse.data);
 
       const [dataSolResponse] = await Promise.all([
