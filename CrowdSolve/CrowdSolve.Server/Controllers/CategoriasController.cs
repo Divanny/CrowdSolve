@@ -3,8 +3,10 @@ using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace CrowdSolve.Server.Controllers
 {
@@ -16,6 +18,8 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly CrowdSolveContext _crowdSolveContext;
         private readonly CategoriasRepo _categoriasRepo;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
 
         /// <summary>
         /// Constructor de la clase CategoriasController.
@@ -23,12 +27,14 @@ namespace CrowdSolve.Server.Controllers
         /// <param name="userAccessor"></param>
         /// <param name="crowdSolveContext"></param>
         /// <param name="logger"></param>
-        public CategoriasController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing)
+        public CategoriasController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Logger logger, Mailing mailing, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
             _crowdSolveContext = crowdSolveContext;
-            _categoriasRepo = new CategoriasRepo(crowdSolveContext);
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _categoriasRepo = new CategoriasRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>
@@ -36,10 +42,16 @@ namespace CrowdSolve.Server.Controllers
         /// </summary>
         /// <returns>Lista de Categorias.</returns>
         [HttpGet(Name = "GetCategorias")]
-        //[Authorize]
         public List<CategoriasModel> Get()
         {
             List<CategoriasModel> categorias = _categoriasRepo.Get().ToList();
+
+            foreach (var categoria in categorias)
+            {
+                categoria.Nombre = _translationService.Traducir(categoria.Nombre, _idioma);
+                categoria.Descripcion = _translationService.Traducir(categoria.Descripcion, _idioma);
+            }
+
             return categorias;
         }
 

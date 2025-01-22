@@ -22,8 +22,10 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/u
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Label } from '@/components/ui/label'
 import ProfileSkeleton from '@/components/participants/ProfileSkeleton'
+import { useTranslation } from 'react-i18next';
 
 const MyProfile = () => {
+  const { t } = useTranslation();
   const [user, setUser] = useState(null)
   const [relationalObjects, setRelationalObjects] = useState(null)
   const [isEditing, setIsEditing] = useState(false)
@@ -37,8 +39,8 @@ const MyProfile = () => {
         setUser(response.data)
         await fetchRelationalObjects()
       } catch {
-        toast.error("Operación fallida", {
-          description: "No se pudo cargar la información de tu perfil",
+        toast.error(t('myProfile.fetch.error'), {
+          description: t('myProfile.fetch.profileErrorDescription'),
         })
       }
     }
@@ -48,14 +50,13 @@ const MyProfile = () => {
         const response = await api.get('/api/Participantes/GetRelationalObjects')
         setRelationalObjects(response.data)
       } catch {
-        toast.error("Operación fallida", {
-          description: "No se pudieron cargar los objetos relacionales",
+        toast.error(t('myProfile.fetch.error'), {
+          description: t('myProfile.fetch.relationalObjectsErrorDescription'),
         })
       }
     }
 
     fetchMyProfile()
-
     // eslint-disable-next-line
   }, [])
 
@@ -81,20 +82,22 @@ const MyProfile = () => {
       if (response.data.success) {
         setUser(() => ({
           ...updatedUser,
-          avatar: URL.createObjectURL(updatedUser.avatar)
-        }))
+          avatar: updatedUser.avatar instanceof File || updatedUser.avatar instanceof Blob 
+            ? URL.createObjectURL(updatedUser.avatar) 
+            : updatedUser.avatar,
+        }));
         setIsEditing(false)
-        toast.success("Operación exitosa", {
+        toast.success(t('myProfile.fetch.success'), {
           description: response.data.message,
         })
       } else {
-        toast.warning("Operación fallida", {
+        toast.warning(t('myProfile.fetch.saveError'), {
           description: response.data.message,
         })
       }
     } catch {
-      toast.error("Operación errónea", {
-        description: "No se pudo actualizar la información de tu perfil",
+      toast.error(t('myProfile.fetch.saveError'), {
+        description: t('myProfile.fetch.saveErrorDescription'),
       })
     }
   }
@@ -115,8 +118,8 @@ const MyProfile = () => {
               <CardContent className="p-6">
                 <Tabs defaultValue="solutions" className="w-full">
                   <TabsList className="mb-4">
-                    <TabsTrigger value="solutions">Soluciones</TabsTrigger>
-                    <TabsTrigger value="stats">Estadísticas</TabsTrigger>
+                    <TabsTrigger value="solutions">{t('myProfile.profile.tabs.solutions')}</TabsTrigger>
+                    <TabsTrigger value="stats">{t('myProfile.profile.tabs.stats')}</TabsTrigger>
                   </TabsList>
                   <TabsContent value="solutions">
                     <SolutionsOverview solutions={user.soluciones} myProfile={true}/>
@@ -134,7 +137,7 @@ const MyProfile = () => {
         <Dialog open={isEditing} onOpenChange={setIsEditing}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Editar Perfil</DialogTitle>
+              <DialogTitle>{t('myProfile.profile.editButton')}</DialogTitle>
             </DialogHeader>
             <EditProfileForm
               user={user}
@@ -148,7 +151,7 @@ const MyProfile = () => {
         <Drawer open={isEditing} onOpenChange={setIsEditing}>
           <DrawerContent>
             <DrawerHeader>
-              <DrawerTitle>Editar Perfil</DrawerTitle>
+              <DrawerTitle>{t('myProfile.profile.editButton')}</DrawerTitle>
             </DrawerHeader>
             <EditProfileForm
               user={user}
@@ -191,22 +194,22 @@ const EditProfileForm = ({ user, relationalObjects, onSave, onCancel }) => {
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="nombres">Nombres</Label>
+          <Label htmlFor="nombres">{t('myProfile.form.fields.firstName.label')}</Label>
           <Input
             id="nombres"
             name="nombres"
-            placeholder="Ingrese sus nombres"
+            placeholder={t('myProfile.form.fields.firstName.placeholder')}
             value={formData.nombres}
             onChange={handleChange}
             required
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="apellidos">Apellidos</Label>
+          <Label htmlFor="apellidos">{t('myProfile.form.fields.lastName.label')}</Label>
           <Input
             id="apellidos"
             name="apellidos"
-            placeholder="Ingrese sus apellidos"
+            placeholder={t('myProfile.form.fields.lastName.placeholder')}
             value={formData.apellidos}
             onChange={handleChange}
             required
@@ -215,7 +218,7 @@ const EditProfileForm = ({ user, relationalObjects, onSave, onCancel }) => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="fechaNacimiento">Fecha de Nacimiento</Label>
+          <Label htmlFor="fechaNacimiento">{t('myProfile.form.fields.birthDate.label')}</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -225,7 +228,7 @@ const EditProfileForm = ({ user, relationalObjects, onSave, onCancel }) => {
                 className="w-full justify-start text-left font-normal"
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {formData.fechaNacimiento ? format(formData.fechaNacimiento, "PPP") : "Seleccione una fecha"}
+                {formData.fechaNacimiento ? format(formData.fechaNacimiento, "PPP") : t('myProfile.form.fields.birthDate.placeholder')}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -241,11 +244,11 @@ const EditProfileForm = ({ user, relationalObjects, onSave, onCancel }) => {
           </Popover>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="telefono">Teléfono</Label>
+          <Label htmlFor="telefono">{t('myProfile.form.fields.phone.label')}</Label>
           <Input
             id="telefono"
             name="telefono"
-            placeholder="Ingrese su teléfono"
+            placeholder={t('myProfile.form.fields.phone.placeholder')}
             value={formData.telefono}
             onChange={handleChange}
             required
@@ -253,14 +256,14 @@ const EditProfileForm = ({ user, relationalObjects, onSave, onCancel }) => {
         </div>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="idNivelEducativo">Nivel Educativo</Label>
+        <Label htmlFor="idNivelEducativo">{t('myProfile.form.fields.educationLevel.label')}</Label>
         <Select
           onValueChange={(value) => handleSelectChange("idNivelEducativo", value)}
           value={formData.idNivelEducativo}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Seleccione un nivel educativo">
-              {formData.idNivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == formData.idNivelEducativo).nombre : "Seleccione un nivel educativo"}
+            <SelectValue placeholder={t('myProfile.form.fields.educationLevel.placeholder')}>
+              {formData.idNivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == formData.idNivelEducativo).nombre : t('myProfile.form.fields.educationLevel.placeholder')}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
@@ -273,11 +276,11 @@ const EditProfileForm = ({ user, relationalObjects, onSave, onCancel }) => {
         </Select>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="descripcionPersonal">Descripción Personal</Label>
+        <Label htmlFor="descripcionPersonal">{t('myProfile.form.fields.personalDescription.label')}</Label>
         <Textarea
           id="descripcionPersonal"
           name="descripcionPersonal"
-          placeholder="Ingrese una descripción personal"
+          placeholder={t('myProfile.form.fields.personalDescription.placeholder')}
           value={formData.descripcionPersonal}
           onChange={handleChange}
           rows={4}
@@ -285,8 +288,8 @@ const EditProfileForm = ({ user, relationalObjects, onSave, onCancel }) => {
         />
       </div>
       <div className="flex justify-end space-x-2">
-        <Button type="button" variant="outline" onClick={onCancel}>Cancelar</Button>
-        <Button type="submit">Guardar</Button>
+        <Button type="button" variant="outline" onClick={onCancel}>{t('myProfile.form.buttons.cancel')}</Button>
+        <Button type="submit">{t('myProfile.form.buttons.save')}</Button>
       </div>
     </form>
   )

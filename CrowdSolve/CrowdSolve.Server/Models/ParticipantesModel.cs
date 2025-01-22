@@ -1,5 +1,6 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
 namespace CrowdSolve.Server.Models
@@ -42,6 +43,9 @@ namespace CrowdSolve.Server.Models
         public IFormFile? Avatar { get; set; }
         public int? idEstatusUsuario { get; set; }
         public string? EstatusUsuario { get; set; }
+        [SwaggerIgnore]
         public List<SolucionesModel>? Soluciones { get; set; }
+
+        public int idPerfil { get; set; }
     }
 }

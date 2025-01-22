@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../redux/slices/loadingSlice';
 import { clearUser } from '../redux/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { store } from '../redux/store';
 const useAxios = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const language = useSelector((state) => state.language.language);
 
     const api = axios.create({
         baseURL: import.meta.env.BASE_URL
@@ -27,6 +28,7 @@ const useAxios = () => {
             config.headers.Authorization = `Bearer ${token}`;
         }
 
+        config.headers["Accept-Language"] = language;
         return config;
     });
 

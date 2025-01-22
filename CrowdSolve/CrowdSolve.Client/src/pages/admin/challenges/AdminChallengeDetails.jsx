@@ -25,10 +25,12 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import SolutionRanking from '@/components/challenge/SolutionRanking';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useTranslation } from 'react-i18next';
 
 const editor = createEditorToConvertToHtml();
 
 const AdminChallengeDetails = () => {
+    const { t } = useTranslation();
     const { challengeId } = useParams();
     const { api } = useAxios();
     const navigate = useNavigate();
@@ -57,7 +59,7 @@ const AdminChallengeDetails = () => {
                 setDesafio(desafioResponse.data);
                 setRelationalObjects(relationalObjectsResponse.data);
             } catch (error) {
-                toast.error("No se pudo cargar el desafío.");
+                toast.error(t('adminChallengeDetails.errorLoadingChallenge'));
                 console.error(error);
             }
             setLoadingSkeleton(false);
@@ -72,14 +74,14 @@ const AdminChallengeDetails = () => {
         try {
             const response = await api.put(`/api/Desafios/Validar/${challengeId}`);
             if (response.data.success) {
-                toast.success('Operación exitosa', response.data.message);
+                toast.success(t('adminChallengeDetails.successOperation'), response.data.message);
                 navigate('/admin/challenges');
             }
             else {
-                toast.error('Error al validar el desafío', response.data.message);
+                toast.error(t('adminChallengeDetails.errorValidateChallenge'), response.data.message);
             }
         } catch (error) {
-            toast.error('Error al validar el desafío', {
+            toast.error(t('adminChallengeDetails.errorValidateChallenge'), {
                 description: error.response?.data?.message ?? error.message,
             });
         }
@@ -91,14 +93,14 @@ const AdminChallengeDetails = () => {
                 params: { motivo: rejectionReason }
             });
             if (response.data.success) {
-                toast.success('Operación exitosa', response.data.message);
+                toast.success(t('adminChallengeDetails.successOperation'), response.data.message);
                 navigate('/admin/challenges');
             }
             else {
-                toast.error('Error al rechazar el desafío', response.data.message);
+                toast.error(t('adminChallengeDetails.errorRejectChallenge'), response.data.message);
             }
         } catch (error) {
-            toast.error('Error al rechazar el desafío', {
+            toast.error(t('adminChallengeDetails.errorRejectChallenge'), {
                 description: error.response?.data?.message ?? error.message,
             });
         }
@@ -128,11 +130,11 @@ const AdminChallengeDetails = () => {
         const endDate = new Date(procesoEvaluacion.fechaFinalizacion);
 
         if (today < startDate) {
-            return relationalObjects.estatusProcesoEvaluacion.find(status => status.nombre === "No iniciado");
+            return relationalObjects.estatusProcesoEvaluacion.find(status => status.idEstatusProceso === EstatusProcesoEnum.Proceso_de_Evaluacion_No_iniciado);
         } else if (today >= startDate && today <= endDate) {
-            return relationalObjects.estatusProcesoEvaluacion.find(status => status.nombre === "En progreso");
+            return relationalObjects.estatusProcesoEvaluacion.find(status => status.idEstatusProceso === EstatusProcesoEnum.Proceso_de_Evaluacion_En_progreso);
         } else {
-            return relationalObjects.estatusProcesoEvaluacion.find(status => status.nombre === "Finalizado");
+            return relationalObjects.estatusProcesoEvaluacion.find(status => status.idEstatusProceso === EstatusProcesoEnum.Proceso_de_Evaluacion_Finalizado);
         }
     };
 
@@ -152,12 +154,12 @@ const AdminChallengeDetails = () => {
                 onClick={() => navigate(-1)}
                 className="mb-4 text-muted-foreground hover:text-foreground"
             >
-                <ArrowLeft className="mr-2 h-4 w-4" /> Volver
+                <ArrowLeft className="mr-2 h-4 w-4" /> {t('pieChartCompany.backButton')}
             </Button>
             {!desafio || !htmlContent ? (
                 <div className='w-full flex flex-col items-center justify-center gap-4 p-8'>
-                    <h1 className="text-2xl font-semibold text-center">Desafío no encontrado</h1>
-                    <p className="text-muted-foreground text-center">El desafío que buscas no existe o no tienes permisos para verlo.</p>
+                    <h1 className="text-2xl font-semibold text-center">{t('pieChartCompany.challengeNotFound')}</h1>
+                    <p className="text-muted-foreground text-center">{t('pieChartCompany.challengeNotFoundMessage')}</p>
                 </div>
             ) : (
                 <div className="flex flex-col xl:flex-row gap-8">
@@ -169,7 +171,7 @@ const AdminChallengeDetails = () => {
                     <div className='w-full xl:w-1/3 order-1 xl:order-2'>
                         <Card className="bg-card text-card-foreground p-6 sticky top-8">
                             <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-between sm:items-center mb-4">
-                                <h2 className="text-xl font-semibold">Información del Desafío</h2>
+                                <h2 className="text-xl font-semibold">{t('pieChartCompany.challengeInfo')}</h2>
                                 <Badge variant={desafio.severidadEstatusDesafio}>
                                     <Icon name={desafio.iconoEstatusDesafio} className="mr-2 h-4 w-4" />
                                     {desafio.estatusDesafio}
@@ -179,19 +181,19 @@ const AdminChallengeDetails = () => {
                                 <div className="bg-background rounded-lg p-4 space-y-3">
                                     <div className="flex items-center text-muted-foreground">
                                         <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm"><span className='font-semibold'>Inicio:</span> {formatDate(desafio.fechaInicio)}</span>
+                                        <span className="text-sm"><span className='font-semibold'>{t('pieChartCompany.start')}</span> {formatDate(desafio.fechaInicio)}</span>
                                     </div>
                                     <div className="flex items-center text-muted-foreground">
                                         <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm"><span className='font-semibold'>Cierre:</span> {formatDate(desafio.fechaLimite)}</span>
+                                        <span className="text-sm"><span className='font-semibold'>{t('pieChartCompany.end')}</span> {formatDate(desafio.fechaLimite)}</span>
                                     </div>
                                     <div className="flex items-center text-muted-foreground">
                                         <Users className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} soluciones enviadas</span>
+                                        <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} {t('pieChartCompany.submittedSolutions')}</span>
                                     </div>
                                     <div className="flex items-center text-muted-foreground">
                                         <Clock className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm"><span className='font-semibold'>Registrado:</span> {formatDate(desafio.fechaRegistro)}</span>
+                                        <span className="text-sm"><span className='font-semibold'>{t('pieChartCompany.registered')}</span> {formatDate(desafio.fechaRegistro)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -199,7 +201,7 @@ const AdminChallengeDetails = () => {
                             {desafio.idEstatusDesafio == EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios && (
                                 <PrizeEvidenceDialog evidence={desafio.evidenciaRecompensa} challengeId={desafio.idDesafio}>
                                     <Button className="w-full mt-6" variant="outline">
-                                        <Eye className="mr-2 h-4 w-4" /> Ver evidencia de premios
+                                        <Eye className="mr-2 h-4 w-4" /> {t('pieChartCompany.viewPrizeEvidence')}
                                     </Button>
                                 </PrizeEvidenceDialog>
                             )}
@@ -210,20 +212,20 @@ const AdminChallengeDetails = () => {
                                         <PopoverTrigger asChild>
                                             <Button className="w-full order-1 sm:order-2" size="sm">
                                                 <CircleCheck className="h-4 w-4" />
-                                                Validar Desafío
+                                                {t('pieChartCompany.validateChallenge')}
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-80">
                                             <div className='flex gap-2 items-center'>
                                                 <CircleAlert className="text-primary" />
-                                                <span className='text-sm'>¿Estás seguro de que deseas validar este desafío?</span>
+                                                <span className='text-sm'>{t('pieChartCompany.areYouSureToValidate')}</span>
                                             </div>
                                             <div className='flex gap-2 mt-4 justify-end'>
                                                 <Button size="sm" variant="outline">
-                                                    Cancelar
+                                                {t('pieChartCompany.cancel')}
                                                 </Button>
                                                 <Button size="sm" onClick={validateChallenge}>
-                                                    Validar
+                                                {t('pieChartCompany.validate')}
                                                 </Button>
                                             </div>
                                         </PopoverContent>
@@ -232,13 +234,13 @@ const AdminChallengeDetails = () => {
                                         <PopoverTrigger asChild>
                                             <Button className="w-full order-2 sm:order-1" size="sm" variant="ghostDestructive">
                                                 <Ban className="h-4 w-4" />
-                                                Rechazar Desafío
+                                                {t('pieChartCompany.rejectChallenge')}
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-80">
                                             <div className='flex gap-2 items-center'>
                                                 <CircleAlert className="text-primary" />
-                                                <span className='text-sm'>¿Estás seguro de que deseas rechazar este desafío?</span>
+                                                <span className='text-sm'>{t('pieChartCompany.areYouSureToReject')}</span>
                                             </div>
                                             <Textarea
                                                 className="w-full mt-2 p-2"
@@ -248,10 +250,10 @@ const AdminChallengeDetails = () => {
                                             />
                                             <div className='flex gap-2 mt-4 justify-end'>
                                                 <Button size="sm" variant="outline">
-                                                    Cancelar
+                                                {t('pieChartCompany.cancel')}
                                                 </Button>
                                                 <Button size="sm" onClick={rejectChallenge}>
-                                                    Rechazar
+                                                {t('pieChartCompany.reject')}
                                                 </Button>
                                             </div>
                                         </PopoverContent>
@@ -266,12 +268,12 @@ const AdminChallengeDetails = () => {
                                     <Dialog open={isRankingDialogOpen} onOpenChange={setIsRankingDialogOpen}>
                                         <DialogTrigger asChild>
                                             <Button className="w-full mt-6" variant="outline">
-                                                Ver Ranking de Soluciones
+                                            {t('pieChartCompany.viewRankingOfSolutions')}
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent className="sm:max-w-[625px]">
                                             <DialogHeader>
-                                                <DialogTitle>Ranking de Soluciones</DialogTitle>
+                                                <DialogTitle>{t('pieChartCompany.solutionRanking')}</DialogTitle>
                                             </DialogHeader>
                                             <SolutionRanking idDesafio={desafio.idDesafio} />
                                         </DialogContent>
@@ -281,7 +283,7 @@ const AdminChallengeDetails = () => {
                         </Card>
 
                         <Card className="bg-card text-card-foreground p-6 mt-6">
-                            <h2 className="text-xl font-semibold mb-4">Proceso de evaluación</h2>
+                            <h2 className="text-xl font-semibold mb-4">{t('pieChartCompany.evaluationProcess')}</h2>
                             <Timeline>
                                 {desafio.procesoEvaluacion.map((proceso, index) => {
                                     const status = getEvaluationStatus(proceso);

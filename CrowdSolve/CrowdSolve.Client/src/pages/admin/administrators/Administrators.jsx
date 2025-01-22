@@ -19,7 +19,6 @@ import {
     FilterX
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -42,6 +41,7 @@ import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdministratorFormDialog } from "../../../components/admin/administrators/AdministratorFormDialog";
 import { useTranslation } from 'react-i18next';
+import { Badge } from "@/components/ui/badge";
 
 export default function Companies() {
     const { t } = useTranslation();
@@ -60,32 +60,13 @@ export default function Companies() {
 
     const columns = [
         {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={table.getIsAllPageRowsSelected()}
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label={t('Administrators.columns.select.ariaLabelAll')}
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                    aria-label={t('Administrators.columns.select.ariaLabelRow')}
-                />
-            ),
-            enableSorting: false,
-            enableHiding: false,
-        },
-        {
             accessorKey: "nombreUsuario",
             header: t('Administrators.columns.nombreUsuario'),
             cell: ({ row }) => (
                 <div className="flex items-center space-x-2">
                     <Avatar>
                         <AvatarImage
-                            src={`/api/Account/GetAvatar/${row.getValue("idUsuario")}`}
+                            src={`/api/Account/GetAvatar/${row.original.idUsuario}`}
                             alt={row.getValue("nombreUsuario")}
                         />
                         <AvatarFallback>
@@ -112,26 +93,35 @@ export default function Companies() {
             },
         },
         {
+            accessorKey: "nombreCompleto",
+            header: () => t('Participants.nombre_completo'),
+            cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`,
+          },
+          {
+            accessorKey: "telefono",
+            header: () => t('Participants.telefono'),
+          },
+        {
             accessorKey: "fechaRegistro",
             header: t('Administrators.columns.fechaRegistro'),
             cell: ({ row }) =>
               new Date(row.getValue("fechaRegistro")).toLocaleDateString(),
         },
         {
-            accessorKey: "nombreEstatusUsuario",
+            accessorKey: "estatusUsuario",
             header: t('Administrators.columns.nombreEstatusUsuario.status'),
             cell: ({ row }) => (
-                <span
-                    className={`px-2 py-1 rounded-full text-xs font-semibold ${row.getValue("nombreEstatusUsuario") === t('Administrators.columns.nombreEstatusUsuario.Activo')
-                        ? "bg-green-100 text-green-800"
-                        : row.getValue("nombreEstatusUsuario") === t('Administrators.columns.nombreEstatusUsuario.Inactivo')
-                            ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
+                <Badge
+                  variant={`${row.getValue("estatusUsuario") === 'Activo' || row.getValue("estatusUsuario") === 'Asset'
+                    ? "success"
+                    : row.getValue("estatusUsuario") === 'Empresa rechazada' || row.getValue("estatusUsuario") === 'Company rejected'
+                      ? "destructive"
+                      : "warning"
+                    }`}
                 >
-                    {row.getValue("nombreEstatusUsuario")}
-                </span>
-            ),
+                  {row.getValue("estatusUsuario")}
+                </Badge>
+              ),
         },
         {
             id: "actions",
@@ -175,12 +165,10 @@ export default function Companies() {
         try {
             const usuariosResponse =
                 await Promise.all([
-                    api.get("/api/Usuarios", { requireLoading: false })
+                    api.get("/api/Usuarios/GetAdministrators", { requireLoading: false })
                     
                 ]);
-            console.log(usuariosResponse);
-            const allUsers = usuariosResponse[0].data
-            const administrators = allUsers.filter(user => user.idPerfil === 1)
+            const administrators = usuariosResponse[0].data
             setData(administrators);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -214,7 +202,15 @@ export default function Companies() {
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
-        globalFilterFn,
+        onGlobalFilterChange: setGlobalFilter,
+        globalFilterFn: (row, columnId, filterValue) => {
+            const value = row.getValue(columnId);
+            return value != null
+              ? String(value)
+                .toLowerCase()
+                .includes(String(filterValue).toLowerCase())
+              : false;
+          },
         state: {
             sorting,
             columnFilters,
@@ -249,7 +245,11 @@ export default function Companies() {
                         type="text"
                         placeholder={t('Administrators.placeholders.search')}
                         value={globalFilter ?? ""}
-                        onChange={(event) => setGlobalFilter(event.target.value)}
+                        onChange={(event) => {
+                            const value = event.target.value;
+                            setGlobalFilter(value);
+                            table.setGlobalFilter(value);
+                          }}
                         className="pl-8"
                     />
                 </div>
@@ -340,10 +340,6 @@ export default function Companies() {
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} {t('Administrators.status.of')}{" "}
-                    {table.getFilteredRowModel().rows.length} {t('Administrators.status.row')}(s) {t('Administrators.status.selected')}(s).
-                </div>
                 <div className="space-x-2">
                     <Button
                         variant="outline"

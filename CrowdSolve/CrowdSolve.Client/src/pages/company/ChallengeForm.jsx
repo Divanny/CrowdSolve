@@ -353,7 +353,7 @@ export default function ChallengeForm() {
                                             <div className="flex items-center gap-2">
                                                 {t('challengeForm.procesosEvaluacion')}
                                                 <span className="text-muted-foreground text-sm">
-                                                    Iniciará el día {format(addDays(form.getValues('fechaLimite'), diasDespuesFechaFinalizacion), "PPP", { locale: es })}
+                                                {t('challengeForm.iniciaraDia')} {format(addDays(form.getValues('fechaLimite'), diasDespuesFechaFinalizacion), "PPP", { locale: es })}
                                                 </span>
                                             </div>
                                         </FormLabel>

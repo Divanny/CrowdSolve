@@ -2,6 +2,7 @@
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Services;
 using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,9 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         public ProcesosRepo procesosRepo;
         public AdjuntosRepo adjuntosRepo;
         public int _idUsuarioEnLinea;
-        public SolucionesRepo(DbContext dbContext, int idUsuarioEnLinea) : base
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
+        public SolucionesRepo(DbContext dbContext, int idUsuarioEnLinea, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (
             dbContext,
             new ObjectsMapper<SolucionesModel, Soluciones>(s => new Soluciones()
@@ -68,9 +71,12 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
         )
         {
-            procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Solución, dbContext, idUsuarioEnLinea);
+            _translationService = translationService;
+            _idioma = idioma;
+            procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Solución, dbContext, idUsuarioEnLinea, _translationService, _idioma);
             adjuntosRepo = new AdjuntosRepo(dbContext);
             _idUsuarioEnLinea = idUsuarioEnLinea;
+
         }
         public override Soluciones Add(SolucionesModel model)
         {

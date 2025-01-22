@@ -14,14 +14,11 @@ import {
   ChevronDown,
   Edit,
   Eye,
-  FileText,
   MoreHorizontal,
-  X,
   Search,
   FilterX
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -39,11 +36,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CategoryFormDialog } from "../../../components/admin/categories/CategoryFormDialog";
 import { useTranslation } from 'react-i18next';
+import Icon from "@/components/ui/icon";
 
 export default function Categories() {
   const { api } = useAxios();
@@ -62,82 +59,55 @@ export default function Categories() {
 
   const columns = [
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label={t('Categories.table.selectAll')}
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label={t('Categories.table.selectRow')}
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
+      accessorKey: "nombre",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {t('Categories.table.columns.nombre')}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
     },
     {
-        accessorKey: "nombre",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              {t('Categories.table.columns.nombre')}
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-      },
+      accessorKey: "icono",
+      header: t('Categories.table.columns.icono'),
+      cell: ({ row }) => (
+        <div className="flex justify-center items-center space-x-2 rounded-full bg-primary/10 p-2">
+          <Icon name={row.original.icono} className="h-4 w-4 text-primary" />
+        </div>
+      ),
+    },
     {
       accessorKey: "descripcion",
       header: t('Categories.table.columns.descripcion'),
-      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
     },
     {
-        accessorKey: "icono",
-        header: t('Categories.table.columns.icono'),
-        cell: ({ row }) => (
-            <div className="flex items-center space-x-2">
-              <Avatar>
-                <AvatarImage
-                  src={`/placeholder.svg?height=40&width=40`}
-                  alt={row.getValue("icono")}
-                />
-                <AvatarFallback>{row.getValue("icono")}</AvatarFallback>
-              </Avatar>
-              <span>{row.getValue("icono")}</span>
-            </div>
-          ),
-    },
-      {
-        accessorKey: "cantidadDesafios",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              {t('Categories.table.columns.cantidadDesafios')}
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell:({getValue})=>{
-            return(
-            <div className="text-center">
-                {getValue()}
-              </div>
-            );
-        }
+      accessorKey: "cantidadDesafios",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            {t('Categories.table.columns.cantidadDesafios')}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
       },
+      cell: ({ getValue }) => {
+        return (
+          <div className="text-center">
+            {getValue()}
+          </div>
+        );
+      }
+    },
     {
       id: "actions",
       cell: ({ row }) => (
@@ -178,17 +148,8 @@ export default function Categories() {
 
   const fetchData = async () => {
     try {
-      const [categoriasResponse, relationalObjectsResponse] =
-        await Promise.all([
-          api.get("/api/Categorias", { requireLoading: false }),
-          /* api.get("/api/Participantes/GetRelationalObjects", {
-            requireLoading: false,
-          }), */
-        ]);
-
+      const categoriasResponse = await api.get("/api/Categorias", { requireLoading: false });
       setData(categoriasResponse.data);
-      /* setNivelesEducativos(relationalObjectsResponse.data.nivelesEducativos);
-      setEstatusUsuarios(relationalObjectsResponse.data.estatusUsuarios); */
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -215,13 +176,13 @@ export default function Categories() {
     onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
     globalFilterFn: (row, columnId, filterValue) => {
-        const value = row.getValue(columnId);
-        return value != null
-          ? String(value)
-              .toLowerCase()
-              .includes(String(filterValue).toLowerCase())
-          : false;
-      },
+      const value = row.getValue(columnId);
+      return value != null
+        ? String(value)
+          .toLowerCase()
+          .includes(String(filterValue).toLowerCase())
+        : false;
+    },
     state: {
       sorting,
       columnFilters,
@@ -234,8 +195,6 @@ export default function Categories() {
   const clearFilters = () => {
     setGlobalFilter("");
     setColumnFilters([]);
-    setNivelEducativoFilter("");
-    setEstatusUsuarioFilter("");
     table.setGlobalFilter("");
   };
 
@@ -258,11 +217,11 @@ export default function Categories() {
             placeholder={t('Categories.table.searchPlaceholder')}
             value={globalFilter ?? ""}
             onChange={(event) => {
-                const value = event.target.value;
-                setGlobalFilter(value);
-                table.setGlobalFilter(value);
-                console.log("Filtro global:", globalFilter);
-                console.log("Filas visibles:", table.getRowModel().rows);
+              const value = event.target.value;
+              setGlobalFilter(value);
+              table.setGlobalFilter(value);
+              console.log("Filtro global:", globalFilter);
+              console.log("Filas visibles:", table.getRowModel().rows);
             }}
             className="pl-8"
           />
@@ -276,10 +235,21 @@ export default function Categories() {
         >
           <FilterX className="h-4 w-4" />
         </Button>
+        <div className="flex-1 flex items-center justify-end space-x-2">
+          <Button
+            onClick={() => {
+              setIsDialogOpen(true)
+              setDialogMode("create")
+              setSelectedCategory(null)
+            }}
+          >
+            {t('Categories.table.buttons.create')}
+          </Button>
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-            {t('Categories.table.buttons.columns')} <ChevronDown className="ml-2 h-4 w-4" />
+              {t('Categories.table.buttons.columns')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -354,10 +324,6 @@ export default function Categories() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} {t('Categories.table.de')}{" "}
-          {table.getFilteredRowModel().rows.length} {t('Categories.table.rowsSelected')}.
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -378,19 +344,16 @@ export default function Categories() {
         </div>
       </div>
 
-      {selectedCategory && (
-        <CategoryFormDialog
-          isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)}
-          onSaved={() => {
-            setIsDialogOpen(false);
-            fetchData();
-          }}
-          category={selectedCategory}
-          mode={dialogMode}
-          /* relationalObjects={{ nivelesEducativos, estatusUsuarios }} */
-        />
-      )}
+      <CategoryFormDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onSaved={() => {
+          setIsDialogOpen(false);
+          fetchData();
+        }}
+        mode={dialogMode}
+        category={selectedCategory}
+      />
     </div>
   );
 }

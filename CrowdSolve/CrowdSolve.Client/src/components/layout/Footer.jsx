@@ -48,9 +48,9 @@ export default function Footer() {
                     <div>
                         <h3 className="font-semibold mb-4">{t('footer.sections.product.title')}</h3>
                         <ul className="space-y-2">
-                            <li><Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.howItWorks')}</Link></li>
                             <li><Link to="/challenges" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.challenges')}</Link></li>
                             <li><Link to="/companies" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.registeredCompanies')}</Link></li>
+                            <li><Link to="/help-center" className="text-sm text-muted-foreground hover:text-primary transition-colors">{t('footer.sections.product.links.helpCenter')}</Link></li>
                         </ul>
                     </div>
                     <div>

@@ -22,9 +22,10 @@ import { RecentSales } from "../../components/dashboard/TopChallengeCompany";
 import { PieChartWithNumber } from "../../components/dashboard/PieChartChallenge";
 import { PieChartCompany } from "../../components/dashboard/PieChartCompany";
 import useAxios from "@/hooks/use-axios";
+import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
-
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [data, setData] = useState([]);
   const [dataSoluciones, setDataSoluciones] = useState([]);
@@ -65,10 +66,10 @@ const Dashboard = () => {
       <div className="flex-1 space-y-4 p-4 sm:p-6 md:p-8">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            Dashboard
+          {t('adminDashbord.dashboard')}
           </h2>
           <div className="flex items-center space-x-2">
-          <Button onClick={handlePrintAndDownload}>Descargar</Button>
+          <Button onClick={handlePrintAndDownload}>{t('adminDashbord.download')}</Button>
           </div>
         </div>
         <Tabs defaultValue="overview" className="space-y-4">
@@ -78,7 +79,7 @@ const Dashboard = () => {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Total Usuarios
+                  {t('adminDashbord.totalUsers')}
                   </CardTitle>
                   <Users className="ml-2 h-4 w-4" />
                 </CardHeader>
@@ -89,7 +90,7 @@ const Dashboard = () => {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Usuarios Participantes
+                  {t('adminDashbord.participatingUsers')}
                   </CardTitle>
                   <UserMinus className="ml-2 h-4 w-4" />
                 </CardHeader>
@@ -100,7 +101,7 @@ const Dashboard = () => {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Usuarios Empresas
+                  {t('adminDashbord.companyUsers')}
                   </CardTitle>
                   <Building className="ml-2 h-4 w-4" />
                 </CardHeader>
@@ -111,7 +112,7 @@ const Dashboard = () => {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Soluciones Enviadas
+                  {t('adminDashbord.sentSolutions')}
                   </CardTitle>
                   <NotebookText className="ml-2 h-4 w-4" />
                 </CardHeader>
@@ -142,7 +143,7 @@ const Dashboard = () => {
 
               <Card className="sm:col-span-1 md:col-span-2 lg:col-span-3">
                 <CardHeader>
-                  <CardTitle>Top 10 Empresas con más Desafios</CardTitle>
+                  <CardTitle>{t('adminDashbord.top10CompaniesChallenges')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <RecentSales />

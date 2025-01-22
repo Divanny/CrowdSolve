@@ -51,13 +51,15 @@ export function CompanyFormDialog({
   const handleSave = async (e) => {
     e.preventDefault();
 
+    editedCompany.cantidadSoluciones=0;
     const formDataToSend = new FormData();
     Object.keys(editedCompany).forEach((key) => {
       formDataToSend.append(key, editedCompany[key]);
     });
 
+    
     const response = await api.put(
-      `/api/Empresas/${editedCompany.idEmpresa}`,
+      `/api/Empresas`,
       formDataToSend,
       {
         headers: {

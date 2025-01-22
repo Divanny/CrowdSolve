@@ -20,7 +20,6 @@ import {
   FilterX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -40,11 +39,12 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAxios from "@/hooks/use-axios";
-import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ValidateCompanyDialog } from "../../../components/admin/Requests/ValidateCompanyDialog";
+import { useTranslation } from 'react-i18next';
 
 export default function CompanyRequests() {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [data, setData] = useState([]);
   const [sectores, setSectores] = useState([]);
@@ -65,60 +65,42 @@ export default function CompanyRequests() {
 
   const columns = [
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Seleccionar todo"
-        />
-      ),
+      accessorKey: "nombre",
+      header: "Nombre",
       cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Seleccionar fila"
-        />
+          <div className="flex items-center space-x-2">
+              <Avatar>
+                  <AvatarImage
+                      src={`/api/Account/GetAvatar/${row.original.idUsuario}`}
+                      alt={row.getValue("nombre")}
+                  />
+                  <AvatarFallback>
+                      {row.getValue("nombre").slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+              </Avatar>
+              <span>{row.getValue("nombre")}</span>
+          </div>
       ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-        accessorKey: "nombre",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Nombre Empresa
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-      },
+  },
     {
       accessorKey: "descripcion",
-      header: "Descripcion",
+      header: t('companyRequest.descripcion'),
       /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
-      cell:({getValue})=>{
-        return(
-        <div className="w-80">
+      cell: ({ getValue }) => {
+        return (
+          <div className="w-80">
             {getValue()}
           </div>
         );
-    }
+      }
     },
     {
       accessorKey: "telefono",
-      header: "Telefono",
-      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+      header: t('companyRequest.telefono'),
     },
     {
       accessorKey: "paginaWeb",
-      header: "Pagina Web",
-      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+      header: t('companyRequest.paginaWeb'),
     },
     {
       accessorKey: "tamañoEmpresa",
@@ -129,18 +111,18 @@ export default function CompanyRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Tamaño
+            {t('companyRequest.tamañoEmpresa')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      cell:({getValue})=>{
-        return(
-        <div className="w-20 text-center">
+      cell: ({ getValue }) => {
+        return (
+          <div className="w-20 text-center">
             {getValue()}
           </div>
         );
-    }
+      }
     },
     {
       accessorKey: "sector",
@@ -151,111 +133,35 @@ export default function CompanyRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Sector
+            {t('companyRequest.sector')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      cell:({getValue})=>{
-        return(
-        <div className="w-20 text-center">
+      cell: ({ getValue }) => {
+        return (
+          <div className="w-40 text-center">
             {getValue()}
           </div>
         );
-    }
+      }
     },
     {
-      accessorKey: "direccion",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-left font-normal"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Dirección
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      accessorKey: "estatusUsuario",
+      header: "Estatus Empresa"
     },
-    {
-        accessorKey: "avatar",
-        header: "Avatar",
-        cell: ({ row }) => (
-            <div className="flex items-center space-x-2">
-              <Avatar>
-                <AvatarImage
-                  src={`/api/Account/GetAvatar/${row.getValue("idUsuario")}`}
-                  alt={row.getValue("avatar")}
-                />
-                <AvatarFallback>{row.getValue("avatar")}</AvatarFallback>
-              </Avatar>
-              <span>{row.getValue("avatar")}</span>
-            </div>
-          ),
-    },
-      {
-        accessorKey: "cantidadDesafios",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Cant. Desafios
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell:({getValue})=>{
-            return(
-            <div className="text-center">
-                {getValue()}
-              </div>
-            );
-        }
-      },
-      {
-        accessorKey: "cantidadSoluciones",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-left font-normal"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Cant. Soluciones
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell:({getValue})=>{
-            return(
-            <div  style={{ width: "80px", textAlign: "center" }}>
-                {getValue()}
-              </div>
-            );
-        }
-      },
-      {
-        accessorKey: "estatusUsuario",
-        header: "Estatus Empresa",
-        /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
-      },
     {
       id: "actions",
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menú</span>
+              <span className="sr-only">{t('companyRequest.actions.openMenu')}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('companyRequest.actions.menuLabel')}</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
                 setSelectedCompanyRequest(row.original.idEmpresa)
@@ -264,7 +170,7 @@ export default function CompanyRequests() {
               }}
             >
               <CircleCheckBig className="mr-2 h-4 w-4" />
-              Validar Empresa
+              {t('companyRequest.actions.validateCompany')}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -274,7 +180,7 @@ export default function CompanyRequests() {
               }}
             >
               <CircleSlash2 className="mr-2 h-4 w-4" />
-              Rechazar Empresa
+              {t('companyRequest.actions.declineCompany')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -322,13 +228,13 @@ export default function CompanyRequests() {
     onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: setRowSelection,
     globalFilterFn: (row, columnId, filterValue) => {
-        const value = row.getValue(columnId);
-        return value != null
-          ? String(value)
-              .toLowerCase()
-              .includes(String(filterValue).toLowerCase())
-          : false;
-      },
+      const value = row.getValue(columnId);
+      return value != null
+        ? String(value)
+          .toLowerCase()
+          .includes(String(filterValue).toLowerCase())
+        : false;
+    },
     state: {
       sorting,
       columnFilters,
@@ -363,7 +269,7 @@ export default function CompanyRequests() {
     );
   }
 
-  
+
 
   return (
     <div className="w-full">
@@ -372,12 +278,12 @@ export default function CompanyRequests() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por nombre de Empresa"
+            placeholder={t('companyRequest.searchPlaceholder')}
             value={globalFilter ?? ""}
             onChange={(event) => {
-                const value = event.target.value;
-                setGlobalFilter(value);
-                table.setGlobalFilter(value);
+              const value = event.target.value;
+              setGlobalFilter(value);
+              table.setGlobalFilter(value);
             }}
             className="pl-8"
           />
@@ -387,7 +293,7 @@ export default function CompanyRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Sector
+            {t('companyRequest.sectorLabel')}
               {sectorFilter ? `: ${sectorFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -398,7 +304,7 @@ export default function CompanyRequests() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Buscar..."
+                  placeholder={t('companyRequest.search')}
                   value={sectorSearch}
                   onChange={(e) => setSectorSearch(e.target.value)}
                   className="pl-8"
@@ -412,7 +318,7 @@ export default function CompanyRequests() {
                   table.getColumn("sector")?.setFilterValue(undefined);
                 }}
               >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                <X className="mr-2 h-4 w-4" /> {t('companyRequest.clearFilter')}
               </DropdownMenuItem>
             )}
             {filteredSectores.map((sector) => (
@@ -433,7 +339,7 @@ export default function CompanyRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Tamaño Empresa
+            {t('companyRequest.companySizeLabel')}
               {tamañoEmpresaFilter ? `: ${tamañoEmpresaFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -444,7 +350,7 @@ export default function CompanyRequests() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Buscar tamaño..."
+                  placeholder={t('companyRequest.searchSize')}
                   value={tamañoEmpresaSearch}
                   onChange={(e) => setTamañoEmpresaSearch(e.target.value)}
                   className="pl-8"
@@ -458,7 +364,7 @@ export default function CompanyRequests() {
                   table.getColumn("tamañoEmpresa")?.setFilterValue(undefined);
                 }}
               >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                <X className="mr-2 h-4 w-4" /> {t('companyRequest.clearFilter')}
               </DropdownMenuItem>
             )}
             {filteredTamañoEmpresa.map((tamaño) => (
@@ -474,7 +380,7 @@ export default function CompanyRequests() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        
+
 
         <Button
           variant="outline"
@@ -488,7 +394,7 @@ export default function CompanyRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columnas <ChevronDown className="ml-2 h-4 w-4" />
+            {t('companyRequest.columnsLabel')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -555,7 +461,7 @@ export default function CompanyRequests() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No se encontraron resultados.
+                  {t('companyRequest.noResultsFound')}
                 </TableCell>
               </TableRow>
             )}
@@ -563,10 +469,6 @@ export default function CompanyRequests() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} de{" "}
-          {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -574,7 +476,7 @@ export default function CompanyRequests() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Anterior
+            {t('companyRequest.previous')}
           </Button>
           <Button
             variant="outline"
@@ -582,7 +484,7 @@ export default function CompanyRequests() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Siguiente
+            {t('companyRequest.next')}
           </Button>
         </div>
       </div>
@@ -597,7 +499,7 @@ export default function CompanyRequests() {
           }}
           estatusId={selectedCompanyRequest}
           mode={dialogMode}
-          /* relationalObjects={{ nivelesEducativos, estatusUsuarios }} */
+        /* relationalObjects={{ nivelesEducativos, estatusUsuarios }} */
         />
       )}
     </div>

@@ -22,7 +22,6 @@ import {
   FilterX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -43,10 +42,15 @@ import {
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import Icon from "@/components/ui/icon";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupportDialog } from "../../../components/admin/Requests/SupportRequestDialog";
 import EstatusProcesoEnum from "@/enums/EstatusProcesoEnum";
+import { useTranslation } from 'react-i18next';
 
 export default function SupportRequests() {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [data, setData] = useState([]);
   const [usuariosAdmin, setUsuariosAdmin] = useState([]);
@@ -68,25 +72,6 @@ export default function SupportRequests() {
 
   const columns = [
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Seleccionar todo"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Seleccionar fila"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
       accessorKey: "nombreUsuario",
       header: ({ column }) => {
         return (
@@ -95,7 +80,7 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Usuario Afectado
+            {t('supportRequest.nombreUsuario')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -110,7 +95,7 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Titulo
+            {t('supportRequest.titulo')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -118,12 +103,12 @@ export default function SupportRequests() {
     },
     {
       accessorKey: "mensaje",
-      header: "Mensaje",
+      header: t('supportRequest.mensaje'),
       /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
     },
     {
       accessorKey: "fecha",
-      header: "Fecha Soporte",
+      header: t('supportRequest.fecha'),
       cell: ({ row }) => `${new Date(row.original.fecha).toLocaleDateString('es-ES', {
         year: 'numeric',
         month: 'long',
@@ -139,14 +124,14 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Nombres
+            {t('supportRequest.nombres')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ getValue }) => {
         return (
-          <div className="w-20 text-center">
+          <div className="w-30 text-center">
             {getValue()}
           </div>
         );
@@ -161,14 +146,14 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Apellidos
+            {t('supportRequest.apellidos')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ getValue }) => {
         return (
-          <div className="w-20 text-center">
+          <div className="w-30 text-center">
             {getValue()}
           </div>
         );
@@ -176,7 +161,7 @@ export default function SupportRequests() {
     },
     {
       accessorKey: "correoElectronico",
-      header: "Correo Electronico",
+      header: t('supportRequest.correoElectronico'),
       /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
     },
     {
@@ -188,7 +173,7 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Usuario Asignado
+            {t('supportRequest.nombreAsignado')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -202,9 +187,29 @@ export default function SupportRequests() {
       }
     },
     {
-      accessorKey: "idEstatusProceso",
-      header: "Estatus Solicitud",
-      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+      accessorKey: "estatusProcesoNombre",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Estatus
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <Badge variant={row.original.severidad}>
+            <div className="flex items-center space-x-1 w-auto">
+              <Icon name={row.original.claseProcesoIcono} size={16} />
+              <span>{row.getValue("estatusProcesoNombre")}</span>
+            </div>
+          </Badge>
+        );
+      },
     },
     {
       id: "actions",
@@ -212,23 +217,22 @@ export default function SupportRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menú</span>
+              <span className="sr-only">{t('supportRequest.openMenu')}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('supportRequest.actions')}</DropdownMenuLabel>
 
             <DropdownMenuItem
               onClick={() => {
-                console.log(row.original);
                 setSelectedSupportRequest(row.original)
                 setDialogMode("view")
                 setIsDialogOpen(true)
               }}
             >
               <Eye className="mr-2 h-4 w-4" />
-              Ver Detalle
+              {t('supportRequest.viewDetails')}
             </DropdownMenuItem>
 
             {row.original.idUsuarioAsignado === null && (
@@ -239,7 +243,7 @@ export default function SupportRequests() {
                 }}
               >
                 <UserPen className="mr-2 h-4 w-4" />
-                Asignarme Solicitud
+                {t('supportRequest.assignRequest')}
               </DropdownMenuItem>
             )}
 
@@ -253,7 +257,7 @@ export default function SupportRequests() {
                   }}
                 >
                   <FileCheck className="mr-2 h-4 w-4" />
-                  Finalizar Solicitud
+                  {t('supportRequest.closeRequest')}
                 </DropdownMenuItem>
               )}
 
@@ -268,7 +272,7 @@ export default function SupportRequests() {
                   }}
                 >
                   <FileX className="mr-2 h-4 w-4" />
-                  Descargar Solicitud
+                  Declinar Solicitud
                 </DropdownMenuItem>
               )}
 
@@ -287,7 +291,6 @@ export default function SupportRequests() {
             requireLoading: false,
           }),
         ]);
-
 
       setData(supportRequestsResponse.data);
       setUsuariosAdmin(relationalObjectsResponse.data.usuariosAdmin);
@@ -317,19 +320,18 @@ export default function SupportRequests() {
 
       // Check if the response was successful
       if (response.data.success) {
-        toast.success("Operación exitosa", {
+        toast.success(t('supportRequest.successToast.title'), {
           description: response.data.message,
         });
 
         fetchData();
       } else {
-        toast.warning("Operación fallida", {
+        toast.warning(t('supportRequest.failureToast.title'), {
           description: response.data.message,
         });
-        console.log(response.data);
       }
     } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
+      toast.error(t('supportRequest.errorToast.title'));
       console.error('Error:', error);
     }
   }
@@ -402,7 +404,7 @@ export default function SupportRequests() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar Soporte"
+            placeholder={t('supportRequest.searchPlaceholder')}
             value={globalFilter ?? ""}
             onChange={(event) => {
               const value = event.target.value;
@@ -417,7 +419,7 @@ export default function SupportRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-              Usuarios Asignados
+              {t('supportRequest.assignedUsersButton')}
               {usuarioAdminFilter ? `: ${usuarioAdminFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -428,7 +430,7 @@ export default function SupportRequests() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="Buscar..."
+                  placeholder={t('supportRequest.search')}
                   value={usuarioAdminSearch}
                   onChange={(e) => setUsuarioAdminSearch(e.target.value)}
                   className="pl-8"
@@ -442,7 +444,7 @@ export default function SupportRequests() {
                   table.getColumn("nombreAsignado")?.setFilterValue(undefined);
                 }}
               >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
+                <X className="mr-2 h-4 w-4" /> {t('supportRequest.clearFilterButton')}
               </DropdownMenuItem>
             )}
             {filteredUsuariosAdmin.map((usuario) => (
@@ -458,52 +460,29 @@ export default function SupportRequests() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Estatus Solicitud
-              {estatusProcesoFilter ? `: ${estatusProcesoFilter}` : ""}
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <div className="flex items-center px-2 py-1.5">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Buscar tamaño..."
-                  value={estatusProcesoSearch}
-                  onChange={(e) => setEstatusProcesoSearch(e.target.value)}
-                  className="pl-8"
-                />
-              </div>
-            </div>
-            {estatusProcesoFilter && (
-              <DropdownMenuItem
-                onSelect={() => {
-                  setEstatusProcesoFilter("");
-                  table.getColumn("idEstatusProceso")?.setFilterValue(undefined);
-                }}
-              >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
-              </DropdownMenuItem>
-            )}
+        <Select
+          value={estatusProcesoFilter}
+          onValueChange={(value) => {
+            setEstatusProcesoFilter(value)
+            table.getColumn("estatusProcesoNombre")?.setFilterValue(value)
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filtrar por estatus" />
+          </SelectTrigger>
+          <SelectContent>
             {filteredEstatusProceso.map((estatus) => (
-              <DropdownMenuItem
-                key={estatus.idEstatusProceso}
-                onSelect={() => {
-                  setEstatusProcesoFilter(estatus.idEstatusProceso);
-                  table.getColumn("idEstatusProceso")?.setFilterValue(estatus.idEstatusProceso);
-                }}
-              >
-                {estatus.nombre}
-              </DropdownMenuItem>
+              <SelectItem key={estatus.idEstatusProceso} value={estatus.nombre}>
+                <Badge variant={estatus.severidad}>
+                  <div className="flex items-center space-x-1 w-auto">
+                    <Icon name={estatus.claseIcono} size={16} />
+                    <span>{estatus.nombre}</span>
+                  </div>
+                </Badge>
+              </SelectItem>
             ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </SelectContent>
+        </Select>
 
 
         <Button
@@ -517,22 +496,22 @@ export default function SupportRequests() {
         </Button>
 
         <div className="flex items-center border rounded-md p-2 shadow-sm">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-15">
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-[#FFD3A6] mr-2"></div>
-              <span className="text-sm font-bold">Recientes</span>
+              <div className="w-2 h-2 rounded-full bg-[#FFD3A6] mr-2"></div>
+              <span className="text-xs w-20 font-bold">Recientes</span>
             </div>
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-[#FFC7B0] mr-2"></div>
-              <span className="text-sm font-bold">En Proceso</span>
+              <div className="w-2 h-2 rounded-full bg-[#FFC7B0] mr-2"></div>
+              <span className="text-xs w-20 font-bold">En Proceso</span>
             </div>
-          </div>
-        </div>
+          </div >
+        </div >
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columnas <ChevronDown className="ml-2 h-4 w-4" />
+              {t('supportRequest.columnsButton')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -555,7 +534,7 @@ export default function SupportRequests() {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div >
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -604,7 +583,7 @@ export default function SupportRequests() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No se encontraron resultados.
+                  {t('supportRequest.noResultsFound')}
                 </TableCell>
               </TableRow>
             )}
@@ -612,10 +591,6 @@ export default function SupportRequests() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} de{" "}
-          {table.getFilteredRowModel().rows.length} fila(s) seleccionada(s).
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -623,7 +598,7 @@ export default function SupportRequests() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Anterior
+            {t('supportRequest.previousButton')}
           </Button>
           <Button
             variant="outline"
@@ -631,10 +606,10 @@ export default function SupportRequests() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Siguiente
+            {t('supportRequest.nextButton')}
           </Button>
         </div>
-      </div>
+      </div >
 
       {selectedSupportRequest && (
         <SupportDialog
@@ -647,7 +622,8 @@ export default function SupportRequests() {
           support={selectedSupportRequest}
           mode={dialogMode}
         />
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }

@@ -3,6 +3,7 @@
 import React, { useMemo } from "react"
 import { TrendingUp } from 'lucide-react'
 import { Label, Pie, PieChart } from "recharts"
+import { useTranslation } from 'react-i18next';
 
 import {
   Card,
@@ -31,6 +32,7 @@ import {
   //Para armar un arreglo de colores
 
 export function PieChartCompany() {
+  const { t } = useTranslation();
   
   const [filter, setFilter] = useState("total");
     const { api } = useAxios();
@@ -126,8 +128,8 @@ export function PieChartCompany() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Cantidad Empresas</CardTitle>
-        <CardDescription>Registradas</CardDescription>
+        <CardTitle>{t('pieChartCompany.title')}</CardTitle>
+        <CardDescription>{t('pieChartCompany.description')}</CardDescription>
       </CardHeader>
 
 
@@ -139,9 +141,9 @@ export function PieChartCompany() {
               <SelectValue placeholder="Select a filter" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="total">Total</SelectItem>
-              <SelectItem value="tamaño">Tamaño</SelectItem>
-              <SelectItem value="sector">Sectores</SelectItem>
+              <SelectItem value="total">{t('pieChartCompany.filterOptions.total')}</SelectItem>
+              <SelectItem value="tamaño">{t('pieChartCompany.filterOptions.size')}</SelectItem>
+              <SelectItem value="sector">{t('pieChartCompany.filterOptions.sector')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -185,7 +187,7 @@ export function PieChartCompany() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Empresas
+                          {t('pieChartCompany.tooltip.companies')}
                         </tspan>
                       </text>
                     )
@@ -198,7 +200,7 @@ export function PieChartCompany() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="leading-none text-muted-foreground">
-          Mostrando el total de Empresas en sus diferentes ambitos.
+        {t('pieChartCompany.showingData')}
         </div>
       </CardFooter>
     </Card>

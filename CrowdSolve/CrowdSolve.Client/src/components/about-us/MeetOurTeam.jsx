@@ -1,4 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useTranslation } from 'react-i18next';
 
 const people = [
@@ -32,26 +33,32 @@ const MeetOurTeam = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-12">
-      <div className="container flex flex-col items-center text-center">
-        <h2 className="my-6 text-pretty text-2xl font-bold lg:text-4xl">
-          {t('MeetOurteam.title')}
-        </h2>
-      </div>
-      <div className="container mt-16 grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-4">
-        {people.map((person) => (
-          <div key={person.id} className="flex flex-col items-center">
-            <Avatar className="mb-4 size-20 border md:mb-5 lg:size-24">
-              <AvatarImage src={person.avatar} />
-              <AvatarFallback>{person.name}</AvatarFallback>
-            </Avatar>
-            <p className="text-center font-medium">{person.name}</p>
-            <p className="text-center text-muted-foreground">{person.role}</p>
-          </div>
-        ))}
+    <section className="py-24 bg-secondary/30">
+      <div className="container mx-auto px-4">
+        <div className="mb-16 text-center">
+          <h2 className="mb-4 text-3xl font-bold sm:text-4xl">
+            {t('MeetOurteam.title')}
+          </h2>
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+          {t('MeetOurteam.description')}
+          </p>
+        </div>
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          {people.map((person) => (
+            <div key={person.id} className="flex flex-col items-center">
+              <Avatar className="mb-6 h-32 w-32 border-4 border-primary">
+                <AvatarImage src={person.avatar} alt={person.name} />
+                <AvatarFallback>{person.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+              </Avatar>
+              <h3 className="mb-2 text-xl font-semibold">{person.name}</h3>
+              <p className="text-center text-muted-foreground">{person.role}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
 export default MeetOurTeam;
+

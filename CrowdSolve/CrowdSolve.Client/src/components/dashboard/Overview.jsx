@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import {
   Card,
@@ -39,6 +40,7 @@ const chartConfig = {
 };
 
 export function Overview() {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [chartData, setChartData] = useState([]);
   const [years, setYears] = useState([]);
@@ -77,7 +79,7 @@ export function Overview() {
       <CardHeader>
         <CardTitle className="text-lg md:text-xl">Overview</CardTitle>
         <CardDescription className="text-sm md:text-base">
-          Filtrar datos por año
+        {t('overview.description')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -87,7 +89,7 @@ export function Overview() {
             onValueChange={(value) => setSelectedYear(value)}
           >
             <SelectTrigger className="w-full md:w-[200px]">
-              <SelectValue placeholder="Seleccionar año" />
+              <SelectValue placeholder={t('overview.selectYear')} />
             </SelectTrigger>
             <SelectContent>
               {years.map((year) => (
@@ -138,7 +140,7 @@ export function Overview() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="leading-none text-muted-foreground">
-          Mostrando datos del año seleccionado
+        {t('overview.showingData')}
         </div>
       </CardFooter>
     </Card>

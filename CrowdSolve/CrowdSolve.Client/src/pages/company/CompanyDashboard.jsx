@@ -36,11 +36,12 @@ import { FileUploader } from '@/components/FileUploader';
 import PageLoader from '@/components/PageLoader';
 import { formatBytes } from "@/lib/utils"
 import * as FileSaver from 'file-saver';
+import { useTranslation } from 'react-i18next';
 
 const CompanyDashboard = () => {
     const { api } = useAxios();
     const navigate = useNavigate();
-
+    const { t } = useTranslation();
     const [data, setData] = useState({
         empresaInfo: {},
         totalDesafios: 0,
@@ -68,7 +69,7 @@ const CompanyDashboard = () => {
             const response = await api.get('/api/Empresas/GetDashboardData');
             setData(response.data);
         } catch (error) {
-            toast.error('Error al cargar los desafíos, intente nuevamente', {
+            toast.error(t('companyDashboard.challenges.loadError'), {
                 description: error.message,
             });
             navigate(-1);
@@ -120,7 +121,7 @@ const CompanyDashboard = () => {
                     });
 
                     if (!response.data.success) {
-                        toast.error('Error al cargar las evidencias', {
+                        toast.error(t('companyDashboard.challenges.uploadEvidenceError'), {
                             description: response.data.message,
                         });
                         return;
@@ -133,8 +134,8 @@ const CompanyDashboard = () => {
                 }
             }
 
-            toast.success('Evidencias cargadas exitosamente',
-                { description: 'Las evidencias de entrega del premio han sido cargadas exitosamente' }
+            toast.success(t('companyDashboard.challenges.uploadEvidenceSuccess'),
+                { description: t('companyDashboard.challenges.uploadEvidenceDescription') }
             );
 
             setPrizeDialogOpen(false);
@@ -142,7 +143,7 @@ const CompanyDashboard = () => {
             setPrizeEvidences([]);
         }
         catch (error) {
-            toast.error('Error al cargar las evidencias', {
+            toast.error(t('companyDashboard.challenges.uploadEvidenceError'), {
                 description: error.message,
             });
         }
@@ -161,18 +162,18 @@ const CompanyDashboard = () => {
             });
 
             if (response.data.success) {
-                toast.success("Operación exitosa", {
-                    description: "El desafío ha sido cancelado exitosamente",
+                toast.success(t('companyDashboard.challenges.successToast'), {
+                    description: t('companyDashboard.challenges.cancelChallengeSuccess'),
                 });
 
                 await fetchChallenges();
             } else {
-                toast.error("Operación fallida", {
+                toast.error(t('companyDashboard.challenges.cancelChallengeError'), {
                     description: response.data.message,
                 });
             }
         } catch (error) {
-            toast.error("Operación fallida", {
+            toast.error(t('companyDashboard.challenges.cancelChallengeError'), {
                 description: error.response?.data?.message ?? error.message,
             });
         } finally {
@@ -186,16 +187,16 @@ const CompanyDashboard = () => {
         try {
             const response = await api.delete(`/api/Desafios/EliminarEvidencia/${evidencia.idAdjunto}`);
             if (response.data.success) {
-                toast.success("Evidencia eliminada exitosamente");
+                toast.success(t('companyDashboard.challenges.deleteEvidenceSuccess'));
                 fetchChallenges();
                 setPrizeDialogOpen(false);
             } else {
-                toast.error("Error al eliminar la evidencia", {
+                toast.error(t('companyDashboard.challenges.deleteEvidenceError'), {
                     description: response.data.message,
                 });
             }
         } catch (error) {
-            toast.error("Error al eliminar la evidencia", {
+            toast.error(t('companyDashboard.challenges.deleteEvidenceError'), {
                 description: error.response?.data?.message ?? error.message,
             });
         }
@@ -206,8 +207,8 @@ const CompanyDashboard = () => {
             const response = await api.get(`/api/Desafios/DescargarEvidencia/${evidencia.idAdjunto}`, { responseType: 'blob' });
             FileSaver.saveAs(response.data, evidencia.nombre);
         } catch (error) {
-            toast.error('Operación fallida', {
-                description: error.response?.data?.message || 'Ocurrió un error al descargar el archivo',
+            toast.error(t('companyDashboard.challenges.cancelChallengeError'), {
+                description: error.response?.data?.message || t('companyDashboard.challenges.downloadEvidenceError'),
             });
         }
     };
@@ -244,7 +245,7 @@ const CompanyDashboard = () => {
             {loading ? (
                 <Card>
                     <CardHeader>
-                        <CardTitle>Cargando información del dashboard...</CardTitle>
+                        <CardTitle>{t('companyDashboard.loading')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-2">
@@ -270,22 +271,22 @@ const CompanyDashboard = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                         <StatCard
                             icon={<BarChart3 className="h-4 w-4 text-blue-500" />}
-                            title="Total desafíos"
+                            title={t('companyDashboard.totalChallenges')}
                             value={data.totalDesafios}
                         />
                         <StatCard
                             icon={<Users className="h-4 w-4 text-green-500" />}
-                            title="Total participaciones"
+                            title={t('companyDashboard.totalParticipations')}
                             value={data.totalParticipaciones}
                         />
                         <StatCard
                             icon={<ClipboardCheck className="h-4 w-4 text-yellow-500" />}
-                            title="Soluciones sin evaluar"
+                            title={t('companyDashboard.unevaluatedSolutions')}
                             value={data.totalSolucionesSinEvaluar}
                         />
                         <StatCard
                             icon={<AlertCircle className="h-4 w-4 text-red-500" />}
-                            title="Desafíos sin validar"
+                            title={t('companyDashboard.unvalidatedChallenges')}
                             value={data.totalDesafiosSinValidar}
                         />
                     </div>
@@ -296,11 +297,11 @@ const CompanyDashboard = () => {
                             <div className="flex items-center justify-between">
                                 <CardTitle className="text-xl font-bold flex items-center text-foreground">
                                     <BarChart3 className="mr-2 h-5 w-5" />
-                                    Desafíos
+                                    {t('companyDashboard.unvalidatedChallenges')}
                                 </CardTitle>
                                 <Button onClick={() => navigate('/company/challenge/new')} className="flex items-center">
                                     <Plus className="mr-2 h-4 w-4" />
-                                    Nuevo desafío
+                                    {t('companyDashboard.newChallenge')}
                                 </Button>
                             </div>
                         </CardHeader>
@@ -308,13 +309,13 @@ const CompanyDashboard = () => {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead className="w-[35%]">Título</TableHead>
-                                        <TableHead>Fecha Inicio</TableHead>
-                                        <TableHead>Fecha Límite</TableHead>
-                                        <TableHead>Estatus</TableHead>
-                                        <TableHead>Participaciones</TableHead>
-                                        <TableHead>Pendientes</TableHead>
-                                        <TableHead className="text-right">Acciones</TableHead>
+                                        <TableHead className="w-[35%]">{t('companyDashboard.title')}</TableHead>
+                                        <TableHead>{t('companyDashboard.startDate')}</TableHead>
+                                        <TableHead>{t('companyDashboard.deadline')}</TableHead>
+                                        <TableHead>{t('companyDashboard.status')}</TableHead>
+                                        <TableHead>{t('companyDashboard.participations')}</TableHead>
+                                        <TableHead>{t('companyDashboard.pending')}</TableHead>
+                                        <TableHead className="text-right">{t('companyDashboard.actions')}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -355,27 +356,27 @@ const CompanyDashboard = () => {
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end space-x-2">
                                                     {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios && (
-                                                        <Button variant="ghost" size="sm" tooltip="Cargar evidencias de entrega" className="flex items-center" onClick={() => handlePrizeClick(desafio)}>
+                                                        <Button variant="ghost" size="sm" tooltip={t('companyDashboard.uploadEvidence')} className="flex items-center" onClick={() => handlePrizeClick(desafio)}>
                                                             <Upload className="h-4 w-4" />
                                                         </Button>
                                                     )}
                                                     {(desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_En_evaluacion && desafio.puedoEvaluar) && (
-                                                        <Button variant="ghostWarning" size="sm" tooltip="Evaluar soluciones" className="flex items-center" onClick={() => navigate(`/challenge/${desafio.idDesafio}/evaluate`)}>
+                                                        <Button variant="ghostWarning" size="sm" tooltip={t('companyDashboard.evaluateSolutions')} className="flex items-center" onClick={() => navigate(`/challenge/${desafio.idDesafio}/evaluate`)}>
                                                             <ClipboardCheck className="h-4 w-4" />
                                                         </Button>
                                                     )}
                                                     {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar && (
-                                                        <Button variant="ghostDestructive" size="sm" tooltip="Cancelar desafío" className="flex items-center" onClick={() => handleCancelClick(desafio)}>
+                                                        <Button variant="ghostDestructive" size="sm" tooltip={t('companyDashboard.cancelChallenge')} className="flex items-center" onClick={() => handleCancelClick(desafio)}>
                                                             <Trash2 className="h-4 w-4" />
                                                         </Button>
                                                     )}
                                                     {desafio.idEstatusDesafio === EstatusProcesoEnum.Desafio_Sin_validar && (
-                                                        <Button variant="ghost" size="sm" tooltip="Editar desafío" className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}/edit`)}>
+                                                        <Button variant="ghost" size="sm" tooltip={t('companyDashboard.editChallenge')} className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}/edit`)}>
                                                             <Edit className="h-4 w-4" />
                                                         </Button>
                                                     )}
                                                     {desafio.idEstatusDesafio !== EstatusProcesoEnum.Desafio_Sin_validar && (
-                                                        <Button variant="ghost" size="sm" tooltip="Ver detalles" className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}`)}>
+                                                        <Button variant="ghost" size="sm" tooltip={t('companyDashboard.viewDetails')} className="flex items-center" onClick={() => navigate(`/company/challenge/${desafio.idDesafio}`)}>
                                                             <Eye className="h-4 w-4" />
                                                         </Button>
                                                     )}
@@ -419,21 +420,21 @@ const CompanyDashboard = () => {
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>
-                                    ¿Estás seguro de que quieres cancelar este desafío?
+                                {t('companyDashboard.cancelDialog.title')}
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Esta acción no se puede deshacer. Por favor, proporciona un motivo para la cancelación.
+                                {t('companyDashboard.cancelDialog.description')}
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <Textarea
-                                placeholder="Motivo de cancelación"
+                                placeholder={t('companyDashboard.cancelDialog.placeholder')}
                                 value={cancelReason}
                                 onChange={(e) => setCancelReason(e.target.value)}
                             />
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogCancel>{t('companyDashboard.cancelDialog.cancelButton')}</AlertDialogCancel>
                                 <AlertDialogAction onClick={cancelChallenge} disabled={!cancelReason.trim()}>
-                                    Confirmar
+                                {t('companyDashboard.cancelDialog.confirmButton')}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
@@ -444,18 +445,18 @@ const CompanyDashboard = () => {
                                 <AlertDialogTitle>
                                     <div className="flex items-center gap-2">
                                         <Gift className="h-6 w-6 text-primary" />
-                                        Cargar evidencias de entrega del premio
+                                        {t('companyDashboard.prizeDialog.title')}
                                     </div>
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Por favor, sube las evidencias de la entrega del premio.
+                                {t('companyDashboard.prizeDialog.description')}
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <FileUploader value={prizeEvidences} onValueChange={setPrizeEvidences} multiple={true} maxFileCount={Infinity} maxSize={1024 * (1024 * 5)} />
                             {challengeToPrize?.evidenciaRecompensa?.length > 0 && (
                                 <div className="mt-2">
-                                    <Label className="text-sm font-medium text-foreground">Evidencias previas</Label>
-                                    <p className="text-xs text-muted-foreground">Estas evidencias están pendientes de validación por un administrador.</p>
+                                    <Label className="text-sm font-medium text-foreground">{t('companyDashboard.prizeDialog.previousEvidences.label')}</Label>
+                                    <p className="text-xs text-muted-foreground">{t('companyDashboard.prizeDialog.previousEvidences.note')}</p>
                                     <div className="grid grid-cols-1 gap-2 mt-4">
                                         {challengeToPrize.evidenciaRecompensa.map((evidencia, index) => (
                                             <div className="relative flex items-center gap-2.5" key={index}>
@@ -480,20 +481,20 @@ const CompanyDashboard = () => {
                                                                 variant="outlineDestructive"
                                                                 size="icon"
                                                                 className="size-7"
-                                                                tooltip="Eliminar"
+                                                                tooltip={t('companyDashboard.prizeDialog.actions.deleteTooltip')}
                                                             >
                                                                 <Trash2 className="size-4" aria-hidden="true" />
-                                                                <span className="sr-only">Eliminar archivo</span>
+                                                                <span className="sr-only">{t('companyDashboard.deleteFile')}</span>
                                                             </Button>
                                                         </AlertDialogTrigger>
                                                         <AlertDialogContent>
                                                             <AlertDialogHeader>
-                                                                <AlertDialogTitle>¿Estás seguro de que quieres eliminar esta evidencia?</AlertDialogTitle>
-                                                                <AlertDialogDescription>Esta acción no se puede deshacer.</AlertDialogDescription>
+                                                                <AlertDialogTitle>{t('companyDashboard.prizeDialog.actions.deleteConfirmation.title')}</AlertDialogTitle>
+                                                                <AlertDialogDescription>{t('companyDashboard.prizeDialog.actions.deleteConfirmation.description')}</AlertDialogDescription>
                                                             </AlertDialogHeader>
                                                             <AlertDialogFooter>
-                                                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                                                <AlertDialogAction onClick={() => handleDeleteEvidence(evidencia)}>Confirmar</AlertDialogAction>
+                                                                <AlertDialogCancel>{t('companyDashboard.prizeDialog.actions.deleteConfirmation.cancelButton')}</AlertDialogCancel>
+                                                                <AlertDialogAction onClick={() => handleDeleteEvidence(evidencia)}>{t('companyDashboard.prizeDialog.actions.deleteConfirmation.confirmButton')}</AlertDialogAction>
                                                             </AlertDialogFooter>
                                                         </AlertDialogContent>
                                                     </AlertDialog>
@@ -502,11 +503,11 @@ const CompanyDashboard = () => {
                                                         variant="outline"
                                                         size="icon"
                                                         className="size-7"
-                                                        tooltip="Descargar"
+                                                        tooltip={t('companyDashboard.prizeDialog.actions.downloadTooltip')}
                                                         onClick={() => downloadEvidence(evidencia)}
                                                     >
                                                         <Download className="size-4" aria-hidden="true" />
-                                                        <span className="sr-only">Descargar archivo</span>
+                                                        <span className="sr-only">{t('companyDashboard.downloadFile')}</span>
                                                     </Button>
                                                 </div>
                                             </div>
@@ -515,9 +516,9 @@ const CompanyDashboard = () => {
                                 </div>
                             )}
                             <AlertDialogFooter>
-                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogCancel>{t('companyDashboard.prizeDialog.cancelButton')}</AlertDialogCancel>
                                 <AlertDialogAction disabled={!prizeEvidences.length > 0} onClick={() => handleSubmitEvidence()}>
-                                    Confirmar
+                                {t('companyDashboard.prizeDialog.submitButton')}
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
