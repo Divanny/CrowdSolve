@@ -37,7 +37,6 @@ export function PieChartWithNumber() {
 
   const fetchData = async () => {
     try {
-      console.log(filter)
 
       if (filter == "total") {
         const [categoriasResponse] = await Promise.all([api.get(`/api/Desafios/DesafioDashboardData`, { requireLoading: false })]);
@@ -69,8 +68,6 @@ export function PieChartWithNumber() {
 
   const totalCategories = useMemo(() => {
     const categories = dataCategorias;
-
-    console.log(categories); // Aquí puedes verificar la estructura de chartData
     return categories.reduce((acc, curr) => acc + curr.cantidadDesafios, 0);
   }, [dataCategorias]);
 
@@ -100,7 +97,7 @@ export function PieChartWithNumber() {
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <div className="flex justify-end mb-4">
-          <Select value={filter} onValueChange={(value) => { setFilter(value); console.log(value); }}>
+          <Select value={filter} onValueChange={(value) => { setFilter(value)}}>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder={t('pieChartChallenge.selectFilter')} />
             </SelectTrigger>

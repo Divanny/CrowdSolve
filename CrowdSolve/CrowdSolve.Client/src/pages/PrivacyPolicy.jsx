@@ -43,7 +43,6 @@ function PrivacyPolicy() {
                       <li>{t('privacyPolicy.sections.informationUsage.list.infoUsage2')}</li>
                       <li>{t('privacyPolicy.sections.informationUsage.list.infoUsage3')}</li>
                       <li>{t('privacyPolicy.sections.informationUsage.list.infoUsage4')}</li>
-                      <li>{t('privacyPolicy.sections.informationUsage.list.infoUsage5')}</li>
                   </ul>
               </div>
 

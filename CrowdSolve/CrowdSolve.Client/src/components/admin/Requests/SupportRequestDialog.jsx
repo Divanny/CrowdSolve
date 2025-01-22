@@ -24,9 +24,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
 
 
   useEffect(() => {
-    console.log(support);
     setSupportRequest(support)
-    console.log(supportRequest);
   }, [support])
 
 
@@ -37,7 +35,6 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
           'Content-Type': 'application/json',
         },
       });
-      console.log(supportRequest);
   
        // Check if the response was successful
     if (response.data.success) {
@@ -52,7 +49,6 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
       toast.warning(t('SupportRequestDialog.failedOperation'), {
         description: response.data.message,
       });
-      console.log(response.data);
     }
     } catch (error) {
       toast.error(t('SupportRequestDialog.operationError'));
@@ -69,7 +65,6 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
           'Content-Type': 'application/json',
         },
       });
-      console.log(supportRequest);
   
        // Check if the response was successful
     if (response.data.success) {
@@ -84,7 +79,6 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
       toast.warning(t('SupportRequestDialog.failedOperation'), {
         description: response.data.message,
       });
-      console.log(response.data);
     }
     } catch (error) {
       toast.error(t('SupportRequestDialog.operationError'));
