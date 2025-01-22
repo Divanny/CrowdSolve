@@ -46,6 +46,7 @@ const AdminChallenges = lazy(() => import('@/pages/admin/challenges/AdminChallen
 const AdminChallengeDetails = lazy(() => import('@/pages/admin/challenges/AdminChallengeDetails'));
 const UserManual = lazy(() => import('@/pages/admin/UserManual'));
 
+const HelpCenter = lazy(() => import('@/pages/help-center/HelpCenter'));
 const PostNewChallenge = lazy(() => import('@/pages/help-center/challenges/PostNewChallenge'));
 const ViewChallengeCatalog = lazy(() => import('@/pages/help-center/challenges/ViewChallengeCatalog'));
 const ParticipateInChallenge = lazy(() => import('@/pages/help-center/challenges/ParticipateInChallenge'));
@@ -88,7 +89,7 @@ const AppRoutes = () => (
     <Route path="/access-denied" element={<LazyComponent component={AccessDenied} />} />
     <Route path="/404" element={<LazyComponent component={NotFound} />} />
     <Route path="help-center" element={<HelpCenterLayout />} >
-      <Route index element={<LazyComponent component={NotFound} />} />
+      <Route index element={<LazyComponent component={HelpCenter} />} />
       <Route path="challenges/post-new-challenge" element={<LazyComponent component={PostNewChallenge} />} />
       <Route path="challenges/view-challenge-catalog" element={<LazyComponent component={ViewChallengeCatalog} />} />
       <Route path="challenges/participate-in-challenge" element={<LazyComponent component={ParticipateInChallenge} />} />

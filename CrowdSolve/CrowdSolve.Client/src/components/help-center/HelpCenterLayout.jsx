@@ -44,51 +44,51 @@ export default function HelpCenterLayout() {
             title: t('HelpCenterLayout.categories.Challenges'),
             icon: "Puzzle",
             items: [
-                { title: t('HelpCenterLayout.items.PostNewChallenge'), url: "/help-center/challenges/post-new-challenge" },
-                { title: t('HelpCenterLayout.items.ViewChallengeCatalog'), url: "/help-center/challenges/view-challenge-catalog" },
-                { title: t('HelpCenterLayout.items.ParticipateInChallenge'), url: "/help-center/challenges/participate-in-challenge" },
-                { title: t('HelpCenterLayout.items.EvaluateChallenge'), url: "/help-center/challenges/evaluate-challenge" },
+                { title: t('HelpCenterLayout.items.PostNewChallenge'), url: "/help-center/challenges/post-new-challenge", isActive: location.pathname == "/help-center/challenges/post-new-challenge" },
+                { title: t('HelpCenterLayout.items.ViewChallengeCatalog'), url: "/help-center/challenges/view-challenge-catalog", isActive: location.pathname == "/help-center/challenges/view-challenge-catalog" },
+                { title: t('HelpCenterLayout.items.ParticipateInChallenge'), url: "/help-center/challenges/participate-in-challenge", isActive: location.pathname == "/help-center/challenges/participate-in-challenge" },
+                { title: t('HelpCenterLayout.items.EvaluateChallenge'), url: "/help-center/challenges/evaluate-challenge", isActive: location.pathname == "/help-center/challenges/evaluate-challenge" },
             ],
         },
         {
             title: t('HelpCenterLayout.categories.Solutions'),
             icon: "Send",
             items: [
-                { title: t('HelpCenterLayout.items.ViewMySolutions'), url: "/help-center/solutions/view-my-solutions" },
-                { title: t('HelpCenterLayout.items.ChangeSolutionPrivacy'), url: "/help-center/solutions/change-solution-privacy" },
+                { title: t('HelpCenterLayout.items.ViewMySolutions'), url: "/help-center/solutions/view-my-solutions", isActive: location.pathname == "/help-center/solutions/view-my-solutions" },
+                { title: t('HelpCenterLayout.items.ChangeSolutionPrivacy'), url: "/help-center/solutions/change-solution-privacy", isActive: location.pathname == "/help-center/solutions/change-solution-privacy" },
             ],
         },
         {
             title: t('HelpCenterLayout.categories.User'),
             icon: "User",
             items: [
-                { title: t('HelpCenterLayout.items.CreateCompanyUser'), url: "/help-center/user/create-company-user" },
-                { title: t('HelpCenterLayout.items.CreateParticipantUser'), url: "/help-center/user/create-participant-user" },
-                { title: t('HelpCenterLayout.items.EditMyProfile'), url: "/help-center/user/edit-my-profile" },
-                { title: t('HelpCenterLayout.items.ForgotPassword'), url: "/help-center/user/forgot-password" },
+                { title: t('HelpCenterLayout.items.CreateCompanyUser'), url: "/help-center/user/create-company-user", isActive: location.pathname == "/help-center/user/create-company-user" },
+                { title: t('HelpCenterLayout.items.CreateParticipantUser'), url: "/help-center/user/create-participant-user", isActive: location.pathname == "/help-center/user/create-participant-user" },
+                { title: t('HelpCenterLayout.items.EditMyProfile'), url: "/help-center/user/edit-my-profile", isActive: location.pathname == "/help-center/user/edit-my-profile" },
+                { title: t('HelpCenterLayout.items.ForgotPassword'), url: "/help-center/user/forgot-password", isActive: location.pathname == "/help-center/user/forgot-password" },
             ],
         },
         {
             title: t('HelpCenterLayout.categories.ContactUs'),
             icon: "Mail",
             items: [
-                { title: t('HelpCenterLayout.items.SendMessage'), url: "/help-center/contact-us/send-message" },
+                { title: t('HelpCenterLayout.items.SendMessage'), url: "/help-center/contact-us/send-message", isActive: location.pathname == "/help-center/contact-us/send-message" },
             ],
         },
         {
             title: t('HelpCenterLayout.categories.Legal'),
             icon: "Shield",
             items: [
-                { title: t('HelpCenterLayout.items.TermsAndConditions'), url: "/help-center/legal/terms-and-conditions" },
-                { title: t('HelpCenterLayout.items.PrivacyPolicy'), url: "/help-center/legal/privacy-policy" },
-                { title: t('HelpCenterLayout.items.UsagePolicy'), url: "/help-center/legal/usage-policy" },
+                { title: t('HelpCenterLayout.items.TermsAndConditions'), url: "/help-center/legal/terms-and-conditions", isActive: location.pathname == "/help-center/legal/terms-and-conditions" },
+                { title: t('HelpCenterLayout.items.PrivacyPolicy'), url: "/help-center/legal/privacy-policy", isActive: location.pathname == "/help-center/legal/privacy-policy" },
+                { title: t('HelpCenterLayout.items.UsagePolicy'), url: "/help-center/legal/usage-policy", isActive: location.pathname == "/help-center/legal/usage-policy" },
             ],
         },
         {
             title: t('HelpCenterLayout.categories.UserManual'),
             icon: "FileText",
             items: [
-                { title: t('HelpCenterLayout.items.UserManual'), url: "/help-center/user-manual" },
+                { title: t('HelpCenterLayout.items.UserManual'), url: "/help-center/user-manual", isActive: location.pathname == "/help-center/user-manual" },
             ],
         },
     ];
@@ -132,8 +132,8 @@ export default function HelpCenterLayout() {
                                                 <SidebarMenuSub>
                                                     {item.items?.map((subItem) => (
                                                         <SidebarMenuSubItem key={subItem.title}>
-                                                            <SidebarMenuSubButton isActive={location.pathname == subItem.url} asChild>
-                                                                <Link variant="secondary" to={subItem.url}>
+                                                            <SidebarMenuSubButton asChild isActive={subItem.isActive} variant={subItem.isActive ? "primary" : undefined}>
+                                                                <Link to={subItem.url} className={`flex items-center gap-2 ${subItem.isActive ? 'bg-primary text-primary-foreground' : ''}`}>
                                                                     <span>{subItem.title}</span>
                                                                 </Link>
                                                             </SidebarMenuSubButton>

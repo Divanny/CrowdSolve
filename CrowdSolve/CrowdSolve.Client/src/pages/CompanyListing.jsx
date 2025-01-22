@@ -130,7 +130,7 @@ export default function CompanyListing() {
                                 ) : (
                                     relationalObjects.tamañosEmpresa?.map((tamaño) => (
                                         <SelectItem key={tamaño.idTamañoEmpresa} value={tamaño.idTamañoEmpresa.toString()}>
-                                            {tamaño.nombre}
+                                            {tamaño.descripcion}
                                         </SelectItem>
                                     ))
                                 )}

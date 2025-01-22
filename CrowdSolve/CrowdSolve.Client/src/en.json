@@ -136,6 +136,7 @@
   },
   "faq_section": {
     "title": "Frequently Asked Questions about CrowdSolve",
+    "noFaqsFound": "No FAQs found.",
     "faqs": [
       {
         "question": "What is CrowdSolve?",
@@ -587,7 +588,7 @@
       "close": "Closed",
       "closeToday": "Close Today",
       "dayRemaining": "1 day remaining",
-      "daysremaining": "days remaining"
+      "daysRemaining": "days remaining"
     },
     "solutions": "Solutions"
   },
@@ -1832,6 +1833,39 @@
         "Our support team will review your message.",
         "You will receive a response within 24-48 hours."
       ]
+    }
+  },
+  "HelpCenter": {
+    "title": "Help Center",
+    "description": "Find all the information you need about CrowdSolve.",
+    "searchPlaceholder": "Search articles or guides...",
+    "searchButton": "Search",
+    "noSectionsFound": "No sections found.",
+    "sections": {
+      "challenges": {
+        "title": "Challenges",
+        "description": "Explore challenges, create a new one, participate or evaluate challenges easily."
+      },
+      "solutions": {
+        "title": "Solutions",
+        "description": "Review your solutions and adjust their privacy as needed."
+      },
+      "user": {
+        "title": "User",
+        "description": "Manage your profile, create users or recover your password."
+      },
+      "contact": {
+        "title": "Contact Us",
+        "description": "Have questions? Send us a message, we are here to help you."
+      },
+      "legal": {
+        "title": "Legal",
+        "description": "Check the terms, conditions, and privacy policy."
+      },
+      "userManual": {
+        "title": "User Manual",
+        "description": "Find the complete guide to using CrowdSolve effectively."
+      }
     }
   }
 }

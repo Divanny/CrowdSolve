@@ -213,7 +213,6 @@ export default function SupportRequests() {
 
             <DropdownMenuItem
               onClick={() => {
-                console.log(row.original);
                 setSelectedSupportRequest(row.original)
                 setDialogMode("view")
                 setIsDialogOpen(true)
@@ -280,7 +279,6 @@ export default function SupportRequests() {
           }),
         ]);
 
-        console.log(supportRequestsResponse.data);
       setData(supportRequestsResponse.data);
       setUsuariosAdmin(relationalObjectsResponse.data.usuariosAdmin);
       setEstatusProcesos(relationalObjectsResponse.data.estatusProcesos);
@@ -318,7 +316,6 @@ export default function SupportRequests() {
         toast.warning("Operación fallida", {
           description: response.data.message,
         });
-        console.log(response.data);
       }
     } catch (error) {
       toast.error('Hubo un error al realizar la operación');
@@ -450,76 +447,29 @@ export default function SupportRequests() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-
-
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Estatus Solicitud
-              {estatusProcesoFilter ? `: ${estatusProcesoFilter}` : ""}
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <div className="flex items-center px-2 py-1.5">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Buscar tamaño..."
-                  value={estatusProcesoSearch}
-                  onChange={(e) => setEstatusProcesoSearch(e.target.value)}
-                  className="pl-8"
-                />
-              </div>
-            </div>
-            {estatusProcesoFilter && (
-              <DropdownMenuItem
-                onSelect={() => {
-                  setEstatusProcesoFilter("");
-                  table.getColumn("idEstatusProceso")?.setFilterValue(undefined);
-                }}
-              >
-                <X className="mr-2 h-4 w-4" /> Limpiar filtro
-              </DropdownMenuItem>
-            )}
+        <Select
+          value={estatusProcesoFilter}
+          onValueChange={(value) => {
+            setEstatusProcesoFilter(value)
+            table.getColumn("estatusProcesoNombre")?.setFilterValue(value)
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filtrar por estatus" />
+          </SelectTrigger>
+          <SelectContent>
             {filteredEstatusProceso.map((estatus) => (
-              <DropdownMenuItem
-                key={estatus.idEstatusProceso}
-                onSelect={() => {
-                  setEstatusProcesoFilter(estatus.idEstatusProceso);
-                  table.getColumn("idEstatusProceso")?.setFilterValue(estatus.idEstatusProceso);
-                }}
-              >
-                {estatus.nombre}
-              </DropdownMenuItem>
+              <SelectItem key={estatus.idEstatusProceso} value={estatus.nombre}>
+                <Badge variant={estatus.severidad}>
+                  <div className="flex items-center space-x-1 w-auto">
+                    <Icon name={estatus.claseIcono} size={16} />
+                    <span>{estatus.nombre}</span>
+                  </div>
+                </Badge>
+              </SelectItem>
             ))}
-          </DropdownMenuContent>
-        </DropdownMenu> */}
-
-<Select
-      value={estatusProcesoFilter}
-      onValueChange={(value) => {
-        setEstatusProcesoFilter(value)
-        table.getColumn("estatusProcesoNombre")?.setFilterValue(value)
-      }}
-    >
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Filtrar por estatus" />
-      </SelectTrigger>
-      <SelectContent>
-        {filteredEstatusProceso.map((estatus) => (
-          <SelectItem key={estatus.idEstatusProceso} value={estatus.nombre}>
-            <Badge variant={estatus.severidad}>
-              <div className="flex items-center space-x-1 w-auto">
-                <Icon name={estatus.claseIcono} size={16} />
-                <span>{estatus.nombre}</span>
-              </div>
-            </Badge>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+          </SelectContent>
+        </Select>
 
 
         <Button

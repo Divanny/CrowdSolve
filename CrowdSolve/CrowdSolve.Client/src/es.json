@@ -122,6 +122,7 @@
   },
   "faq_section": {
     "title": "Preguntas frecuentes sobre CrowdSolve",
+    "noFaqsFound": "No se encontraron preguntas frecuentes.",
     "faqs": [
       {
         "question": "¿Qué es CrowdSolve?",
@@ -1691,6 +1692,39 @@
         "Nuestro equipo de soporte revisará tu mensaje.",
         "Recibirás una respuesta dentro de 24-48 horas."
       ]
+    }
+  },
+  "HelpCenter": {
+    "title": "Centro de Ayuda",
+    "description": "Encuentra toda la información que necesitas sobre CrowdSolve.",
+    "searchPlaceholder": "Busca artículos o guías...",
+    "searchButton": "Buscar",
+    "noSectionsFound": "No se encontraron secciones.",
+    "sections": {
+      "challenges": {
+        "title": "Desafíos",
+        "description": "Explora desafíos, crea uno nuevo, participa o evalúa desafíos fácilmente."
+      },
+      "solutions": {
+        "title": "Soluciones",
+        "description": "Revisa tus soluciones y ajusta su privacidad según tus necesidades."
+      },
+      "user": {
+        "title": "Usuario",
+        "description": "Gestiona tu perfil, crea usuarios o recupera tu contraseña."
+      },
+      "contact": {
+        "title": "Contáctanos",
+        "description": "¿Tienes preguntas? Envíanos un mensaje, estamos aquí para ayudarte."
+      },
+      "legal": {
+        "title": "Legal",
+        "description": "Consulta los términos, condiciones, y la política de privacidad."
+      },
+      "userManual": {
+        "title": "Manual de Usuario",
+        "description": "Encuentra la guía completa para usar CrowdSolve de forma efectiva."
+      }
     }
   }
 }
