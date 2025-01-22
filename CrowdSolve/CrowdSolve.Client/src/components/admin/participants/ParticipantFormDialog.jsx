@@ -64,8 +64,7 @@ export function ParticipantFormDialog({
     e.preventDefault();
 
     editedParticipant.fechaNacimiento = format(editedParticipant.fechaNacimiento, "yyyy-MM-dd");
-
-
+    
     const formDataToSend = new FormData();
     Object.keys(editedParticipant).forEach((key) => {
       formDataToSend.append(key, editedParticipant[key]);

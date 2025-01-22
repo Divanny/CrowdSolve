@@ -372,7 +372,6 @@ export default function Participants() {
                   table.getColumn("estatusUsuario")?.setFilterValue(estatus.nombre);
                 }}
               >
-              
                 <Badge variant={`${estatus.nombre === 'Activo' || estatus.nombre === 'Asset'
                     ? "success"
                     : estatus.nombre === 'Empresa rechazada' || estatus.nombre === 'Company rejected'  

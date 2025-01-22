@@ -111,7 +111,6 @@ export default function Companies() {
             accessorKey: "estatusUsuario",
             header: t('Administrators.columns.nombreEstatusUsuario.status'),
             cell: ({ row }) => (
-
                 <Badge
                   variant={`${row.getValue("estatusUsuario") === 'Activo' || row.getValue("estatusUsuario") === 'Asset'
                     ? "success"
@@ -120,7 +119,6 @@ export default function Companies() {
                       : "warning"
                     }`}
                 >
-        
                   {row.getValue("estatusUsuario")}
                 </Badge>
               ),

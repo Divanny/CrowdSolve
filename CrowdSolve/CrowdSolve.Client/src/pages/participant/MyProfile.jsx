@@ -47,7 +47,6 @@ const MyProfile = () => {
       try {
         const response = await api.get('/api/Participantes/GetRelationalObjects')
         setRelationalObjects(response.data)
-        console.log(response.data)
       } catch {
         toast.error("Operación fallida", {
           description: "No se pudieron cargar los objetos relacionales",
@@ -55,9 +54,7 @@ const MyProfile = () => {
       }
     }
 
-
     fetchMyProfile()
-    
     // eslint-disable-next-line
   }, [])
 

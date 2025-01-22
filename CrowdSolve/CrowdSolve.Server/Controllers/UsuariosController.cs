@@ -165,7 +165,6 @@ namespace CrowdSolve.Server.Controllers
 
             foreach (var participante in Participantes)
             {
-
                 if (participante.EstatusUsuario != null)
                 {
                     participante.EstatusUsuario = _translationService.Traducir(participante.EstatusUsuario, _idioma);

@@ -129,7 +129,6 @@ export default function Companies() {
             accessorKey: "estatusUsuario",
             header: t('CompaniesPage.estatusUsuario'),
             cell: ({ row }) => (
-
                 <Badge
                   variant={`${row.getValue("estatusUsuario") === 'Activo' || row.getValue("estatusUsuario") === 'Asset'
                     ? "success"
@@ -293,7 +292,6 @@ export default function Companies() {
                         placeholder={t('CompaniesPage.buscarPorNombre')}
                         value={globalFilter ?? ""}
                         onChange={(event) => setGlobalFilter(event.target.value)}
-                        
                         className="pl-8"
                     />
                 </div>
@@ -357,7 +355,6 @@ export default function Companies() {
                                     type="text"
                                     placeholder="Buscar..."
                                     value={sectoresSearch}
-                                    
                                     onChange={(event) => {
                                         const value = event.target.value;
                                         setGlobalFilter(value);
