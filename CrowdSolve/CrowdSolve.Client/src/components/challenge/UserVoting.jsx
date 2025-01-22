@@ -6,13 +6,7 @@ import useAxios from '@/hooks/use-axios'
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { FileIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, ThumbsUp, MoreVertical, Loader2 } from 'lucide-react'
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { FileIcon, ImageIcon, FileTextIcon, FileArchiveIcon as FileZipIcon, ThumbsUp, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next';
 import ProfileHover from "@/components/participants/ProfileHover"
 import { useNavigate } from 'react-router-dom'
@@ -117,30 +111,19 @@ const UserVoting = ({ initialSolutions }) => {
                 <Card key={solution.idSolucion} className="p-4 sm:p-6">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
                         <ProfileHover userName={solution.nombreUsuario}>
-                            <Button variant="link" className="flex items-center gap-3 mb-4 sm:mb-0 text-normal" onClick={() => navigate(`/profile/${solution.nombreUsuario}`)}>
+                            <Button variant="link" className="flex items-center gap-3 mb-4 sm:mb-0 text-normal px-0" onClick={() => navigate(`/profile/${solution.nombreUsuario}`)}>
                                 <Avatar className="h-10 w-10">
                                     <AvatarImage src={`/api/Account/GetAvatar/${solution.idUsuario}`} alt={solution.nombreUsuario} />
                                     <AvatarFallback>{solution.nombreUsuario.charAt(0)}</AvatarFallback>
                                 </Avatar>
-                                <div className="flex flex-col">
-                                    <span className="font-semibold">{solution.nombreUsuario}</span>
+                                <div className="flex flex-col justify-start">
+                                    <span className="font-semibold text-left">{solution.nombreUsuario}</span>
                                     <span className="text-sm text-muted-foreground">
                                         {formatearFecha(solution.fechaRegistro)}
                                     </span>
                                 </div>
                             </Button>
                         </ProfileHover>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-8 w-8">
-                                    <MoreVertical className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem>{t('userVoting.copiarEnlace')}</DropdownMenuItem>
-                                <DropdownMenuItem>{t('userVoting.reportar')}</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
                     </div>
 
                     <div className="mt-4">

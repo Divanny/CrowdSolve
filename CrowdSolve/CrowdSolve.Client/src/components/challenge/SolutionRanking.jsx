@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import ProfileHover from '@/components/participants/ProfileHover'
 import { useNavigate } from 'react-router-dom'
 import * as FileSaver from 'file-saver';
+import { Skeleton } from '@/components/ui/skeleton'
 
 const SolutionRanking = ({ idDesafio }) => {
     const { t } = useTranslation();
@@ -22,6 +23,7 @@ const SolutionRanking = ({ idDesafio }) => {
     const navigate = useNavigate()
     const [solutions, setSolutions] = useState([])
     const [detalleSolucionDialog, setDetalleSolucionDialog] = useState(false)
+    const [loading, setLoading]  = useState(false)
     const [solucionSeleccionada, setSolucionSeleccionada] = useState(null)
 
     useEffect(() => {
@@ -31,6 +33,7 @@ const SolutionRanking = ({ idDesafio }) => {
     }, [idDesafio])
 
     const fetchRanking = async () => {
+        setLoading(true)
         try {
             const response = await api.get(`/api/Desafios/GetRanking/${idDesafio}`)
             setSolutions(response.data)
@@ -39,6 +42,7 @@ const SolutionRanking = ({ idDesafio }) => {
                 description: error.response?.data?.message ?? error.message,
             })
         }
+        setLoading(false)
     }
 
     const downloadAdjunto = async (adjunto) => {
@@ -115,7 +119,17 @@ const SolutionRanking = ({ idDesafio }) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {solutions.length === 0 && (
+                    {loading && (
+                        <TableRow>
+                            <TableCell colSpan={7}>
+                                <div className="flex flex-col items-center gap-2 my-4">
+                                    <Skeleton className="h-6 w-24" />
+                                    <Skeleton className="h-4 w-48" />
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    )}
+                    {(solutions.length === 0 && !loading) && (
                         <TableRow>
                             <TableCell colSpan={7}>
                                 <div className="flex flex-col items-center gap-2 my-4">

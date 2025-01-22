@@ -114,10 +114,10 @@ export default function NotificationsPage() {
     <div className="container mx-auto py-6 space-y-4 px-4 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold">{t('myProfile.interface.notifications')}</h1>
+          <h1 className="text-2xl font-bold">{t('notification.interface.notifications')}</h1>
           {unreadCount > 0 && (
             <Badge variant="secondary">
-              {unreadCount} {t('myProfile.interface.unreadCount')}
+              {unreadCount} {t('notification.interface.unreadCount')}
             </Badge>
           )}
         </div>
@@ -127,7 +127,7 @@ export default function NotificationsPage() {
         <div className="flex-1 relative w-full sm:w-auto">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder={t('myProfile.interface.search.placeholder')}
+            placeholder={t('notification.interface.search.placeholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-8 w-full sm:max-w-sm"
@@ -135,9 +135,9 @@ export default function NotificationsPage() {
         </div>
         <Tabs value={filterStatus} onValueChange={setFilterStatus} className="w-full sm:w-[400px]">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="all">{t('myProfile.interface.tabs.all')}</TabsTrigger>
-            <TabsTrigger value="unread">{t('myProfile.interface.tabs.unread')}</TabsTrigger>
-            <TabsTrigger value="read">{t('myProfile.interface.tabs.read')}</TabsTrigger>
+            <TabsTrigger value="all">{t('notification.interface.tabs.all')}</TabsTrigger>
+            <TabsTrigger value="unread">{t('notification.interface.tabs.unread')}</TabsTrigger>
+            <TabsTrigger value="read">{t('notification.interface.tabs.read')}</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
@@ -160,17 +160,17 @@ export default function NotificationsPage() {
                   onCheckedChange={toggleSelectAll}
                 />
                 <Label htmlFor='select-all' className="text-sm text-muted-foreground">
-                  {selectedIds.length} {t('myProfile.labels.selectedCount')}
+                  {selectedIds.length} {t('notification.labels.selectedCount')}
                 </Label>
               </div>
               {selectedIds.length > 0 && (
                 <div className="flex gap-2 flex-wrap">
                   <Button variant="outline" onClick={() => markAsRead(selectedIds)} size="sm" className="flex items-center gap-2 w-full sm:w-auto">
                     <Check className="h-4 w-4" />
-                    <span>{t('myProfile.labels.markAsRead')}</span>
+                    <span>{t('notification.labels.markAsRead')}</span>
                   </Button>
                   <Button variant="outline" onClick={() => markAsUnread(selectedIds)} size="sm" className="flex items-center gap-2 w-full sm:w-auto">
-                    <span>{t('myProfile.labels.markAsUnread')}</span>
+                    <span>{t('notification.labels.markAsUnread')}</span>
                   </Button>
                 </div>
               )}
@@ -178,7 +178,7 @@ export default function NotificationsPage() {
             {filteredNotifications.length === 0 ? (
               <div className='h-100 flex items-center justify-center'>
                 <div className="p-4 text-center text-muted-foreground">
-                {t('myProfile.labels.noNotifications')}
+                {t('notification.labels.noNotifications')}
                 </div>
               </div>
             ) : (

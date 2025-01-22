@@ -154,12 +154,12 @@ const AdminChallengeDetails = () => {
                 onClick={() => navigate(-1)}
                 className="mb-4 text-muted-foreground hover:text-foreground"
             >
-                <ArrowLeft className="mr-2 h-4 w-4" /> {t('pieChartCompany.backButton')}
+                <ArrowLeft className="mr-2 h-4 w-4" /> {t('adminChallengeDetails.backButton')}
             </Button>
             {!desafio || !htmlContent ? (
                 <div className='w-full flex flex-col items-center justify-center gap-4 p-8'>
-                    <h1 className="text-2xl font-semibold text-center">{t('pieChartCompany.challengeNotFound')}</h1>
-                    <p className="text-muted-foreground text-center">{t('pieChartCompany.challengeNotFoundMessage')}</p>
+                    <h1 className="text-2xl font-semibold text-center">{t('adminChallengeDetails.challengeNotFound')}</h1>
+                    <p className="text-muted-foreground text-center">{t('adminChallengeDetails.challengeNotFoundMessage')}</p>
                 </div>
             ) : (
                 <div className="flex flex-col xl:flex-row gap-8">
@@ -171,7 +171,7 @@ const AdminChallengeDetails = () => {
                     <div className='w-full xl:w-1/3 order-1 xl:order-2'>
                         <Card className="bg-card text-card-foreground p-6 sticky top-8">
                             <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-between sm:items-center mb-4">
-                                <h2 className="text-xl font-semibold">{t('pieChartCompany.challengeInfo')}</h2>
+                                <h2 className="text-xl font-semibold">{t('adminChallengeDetails.challengeInfo')}</h2>
                                 <Badge variant={desafio.severidadEstatusDesafio}>
                                     <Icon name={desafio.iconoEstatusDesafio} className="mr-2 h-4 w-4" />
                                     {desafio.estatusDesafio}
@@ -181,19 +181,19 @@ const AdminChallengeDetails = () => {
                                 <div className="bg-background rounded-lg p-4 space-y-3">
                                     <div className="flex items-center text-muted-foreground">
                                         <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm"><span className='font-semibold'>{t('pieChartCompany.start')}</span> {formatDate(desafio.fechaInicio)}</span>
+                                        <span className="text-sm"><span className='font-semibold'>{t('adminChallengeDetails.start')}</span> {formatDate(desafio.fechaInicio)}</span>
                                     </div>
                                     <div className="flex items-center text-muted-foreground">
                                         <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm"><span className='font-semibold'>{t('pieChartCompany.end')}</span> {formatDate(desafio.fechaLimite)}</span>
+                                        <span className="text-sm"><span className='font-semibold'>{t('adminChallengeDetails.end')}</span> {formatDate(desafio.fechaLimite)}</span>
                                     </div>
                                     <div className="flex items-center text-muted-foreground">
                                         <Users className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} {t('pieChartCompany.submittedSolutions')}</span>
+                                        <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} {t('adminChallengeDetails.submittedSolutions')}</span>
                                     </div>
                                     <div className="flex items-center text-muted-foreground">
                                         <Clock className="mr-2 h-5 w-5 text-primary" />
-                                        <span className="text-sm"><span className='font-semibold'>{t('pieChartCompany.registered')}</span> {formatDate(desafio.fechaRegistro)}</span>
+                                        <span className="text-sm"><span className='font-semibold'>{t('adminChallengeDetails.registered')}</span> {formatDate(desafio.fechaRegistro)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -201,7 +201,7 @@ const AdminChallengeDetails = () => {
                             {desafio.idEstatusDesafio == EstatusProcesoEnum.Desafio_En_espera_de_entrega_de_premios && (
                                 <PrizeEvidenceDialog evidence={desafio.evidenciaRecompensa} challengeId={desafio.idDesafio}>
                                     <Button className="w-full mt-6" variant="outline">
-                                        <Eye className="mr-2 h-4 w-4" /> {t('pieChartCompany.viewPrizeEvidence')}
+                                        <Eye className="mr-2 h-4 w-4" /> {t('adminChallengeDetails.viewPrizeEvidence')}
                                     </Button>
                                 </PrizeEvidenceDialog>
                             )}
@@ -212,20 +212,20 @@ const AdminChallengeDetails = () => {
                                         <PopoverTrigger asChild>
                                             <Button className="w-full order-1 sm:order-2" size="sm">
                                                 <CircleCheck className="h-4 w-4" />
-                                                {t('pieChartCompany.validateChallenge')}
+                                                {t('adminChallengeDetails.validateChallenge')}
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-80">
                                             <div className='flex gap-2 items-center'>
                                                 <CircleAlert className="text-primary" />
-                                                <span className='text-sm'>{t('pieChartCompany.areYouSureToValidate')}</span>
+                                                <span className='text-sm'>{t('adminChallengeDetails.areYouSureToValidate')}</span>
                                             </div>
                                             <div className='flex gap-2 mt-4 justify-end'>
                                                 <Button size="sm" variant="outline">
-                                                {t('pieChartCompany.cancel')}
+                                                {t('adminChallengeDetails.cancel')}
                                                 </Button>
                                                 <Button size="sm" onClick={validateChallenge}>
-                                                {t('pieChartCompany.validate')}
+                                                {t('adminChallengeDetails.validate')}
                                                 </Button>
                                             </div>
                                         </PopoverContent>
@@ -234,13 +234,13 @@ const AdminChallengeDetails = () => {
                                         <PopoverTrigger asChild>
                                             <Button className="w-full order-2 sm:order-1" size="sm" variant="ghostDestructive">
                                                 <Ban className="h-4 w-4" />
-                                                {t('pieChartCompany.rejectChallenge')}
+                                                {t('adminChallengeDetails.rejectChallenge')}
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-80">
                                             <div className='flex gap-2 items-center'>
                                                 <CircleAlert className="text-primary" />
-                                                <span className='text-sm'>{t('pieChartCompany.areYouSureToReject')}</span>
+                                                <span className='text-sm'>{t('adminChallengeDetails.areYouSureToReject')}</span>
                                             </div>
                                             <Textarea
                                                 className="w-full mt-2 p-2"
@@ -250,10 +250,10 @@ const AdminChallengeDetails = () => {
                                             />
                                             <div className='flex gap-2 mt-4 justify-end'>
                                                 <Button size="sm" variant="outline">
-                                                {t('pieChartCompany.cancel')}
+                                                {t('adminChallengeDetails.cancel')}
                                                 </Button>
                                                 <Button size="sm" onClick={rejectChallenge}>
-                                                {t('pieChartCompany.reject')}
+                                                {t('adminChallengeDetails.reject')}
                                                 </Button>
                                             </div>
                                         </PopoverContent>
@@ -268,12 +268,12 @@ const AdminChallengeDetails = () => {
                                     <Dialog open={isRankingDialogOpen} onOpenChange={setIsRankingDialogOpen}>
                                         <DialogTrigger asChild>
                                             <Button className="w-full mt-6" variant="outline">
-                                            {t('pieChartCompany.viewRankingOfSolutions')}
+                                            {t('adminChallengeDetails.viewRankingOfSolutions')}
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent className="sm:max-w-[625px]">
                                             <DialogHeader>
-                                                <DialogTitle>{t('pieChartCompany.solutionRanking')}</DialogTitle>
+                                                <DialogTitle>{t('adminChallengeDetails.solutionRanking')}</DialogTitle>
                                             </DialogHeader>
                                             <SolutionRanking idDesafio={desafio.idDesafio} />
                                         </DialogContent>
@@ -283,7 +283,7 @@ const AdminChallengeDetails = () => {
                         </Card>
 
                         <Card className="bg-card text-card-foreground p-6 mt-6">
-                            <h2 className="text-xl font-semibold mb-4">{t('pieChartCompany.evaluationProcess')}</h2>
+                            <h2 className="text-xl font-semibold mb-4">{t('adminChallengeDetails.evaluationProcess')}</h2>
                             <Timeline>
                                 {desafio.procesoEvaluacion.map((proceso, index) => {
                                     const status = getEvaluationStatus(proceso);
