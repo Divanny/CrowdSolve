@@ -1,6 +1,8 @@
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Mail, Phone, Calendar, Building2, Edit } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const ProfileInfo = ({ user, onEdit }) => (
   <div className="sticky top-8 space-y-6">
@@ -21,11 +23,7 @@ const ProfileInfo = ({ user, onEdit }) => (
         <InfoItem icon={Phone} text={user.telefono} />
         <InfoItem 
           icon={Calendar} 
-          text={new Date(user.fechaNacimiento).toLocaleDateString('es-ES', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          })} 
+          text={format(new Date(user.fechaNacimiento + 'T00:00:00'), 'd \'de\' MMMM \'de\' yyyy', { locale: es })} 
         />
       </div>
       {onEdit && (
