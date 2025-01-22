@@ -355,7 +355,7 @@ namespace CrowdSolve.Server.Controllers
 
             var desafios = _desafiosRepo.Get(x => x.idEmpresa == empresaInfo.idEmpresa).ToList();
             var idsDesafios = desafios.Select(x => x.idDesafio).ToList();
-
+            
             foreach (var desafio in desafios)
             {
                 desafio.SolucionesPendientes = _desafiosRepo.GetCantidadSolucionesPendientesDesafio(desafio.idDesafio);
@@ -363,7 +363,10 @@ namespace CrowdSolve.Server.Controllers
                 desafio.PuedoEvaluar = resultado.Success;
                 desafio.EvidenciaRecompensa = _adjuntosRepo.Get(x => x.idProceso == desafio.idProceso).ToList();
                 desafio.EstatusDesafio = _translationService.Traducir(desafio.EstatusDesafio, _idioma);
+                
             }
+
+            
 
             return new
             {

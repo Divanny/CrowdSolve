@@ -640,6 +640,11 @@ namespace CrowdSolve.Server.Controllers
             desafio.ProcesoEvaluacion = _crowdSolveContext.Set<ProcesoEvaluacion>().Where(x => x.idDesafio == desafio.idDesafio).ToList();
             desafio.Soluciones = _solucionesRepo.Get(x => x.idDesafio == desafio.idDesafio).ToList();
 
+            desafio.Soluciones.ForEach(solucion =>
+            {
+                solucion.EstatusProceso = _translationService.Traducir(solucion.EstatusProceso, _idioma);
+            });
+
             return Ok(desafio);
         }
 
