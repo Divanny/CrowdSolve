@@ -47,6 +47,7 @@ const MyProfile = () => {
       try {
         const response = await api.get('/api/Participantes/GetRelationalObjects')
         setRelationalObjects(response.data)
+        console.log(response.data)
       } catch {
         toast.error("Operación fallida", {
           description: "No se pudieron cargar los objetos relacionales",
@@ -54,8 +55,9 @@ const MyProfile = () => {
       }
     }
 
-    fetchMyProfile()
 
+    fetchMyProfile()
+    
     // eslint-disable-next-line
   }, [])
 
@@ -81,8 +83,10 @@ const MyProfile = () => {
       if (response.data.success) {
         setUser(() => ({
           ...updatedUser,
-          avatar: URL.createObjectURL(updatedUser.avatar)
-        }))
+          avatar: updatedUser.avatar instanceof File || updatedUser.avatar instanceof Blob 
+            ? URL.createObjectURL(updatedUser.avatar) 
+            : updatedUser.avatar,
+        }));
         setIsEditing(false)
         toast.success("Operación exitosa", {
           description: response.data.message,

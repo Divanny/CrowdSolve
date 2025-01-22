@@ -31,16 +31,7 @@ export function AdministratorFormDialog({ isOpen, onClose, onSaved, admin, mode 
   const handleSave = async (e) => {
     e.preventDefault()
 
-    const formDataToSend = new FormData();
-    Object.keys(editedAdmin).forEach(key => {
-      formDataToSend.append(key, editedAdmin[key]);
-    });
-
-    const response = await api.put(`/api/Usuarios/${editedAdmin.idUsuario}`, formDataToSend, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+    const response = await api.put(`/api/Usuarios`, editedAdmin);
 
     if (response.data.success) {
       toast.success(t('adminFormDialog.operations.success'), {

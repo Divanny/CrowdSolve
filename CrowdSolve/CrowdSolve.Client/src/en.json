@@ -1055,12 +1055,12 @@
       "failure": "Operation failed"
     },
     "dialog": {
-      "participant": "Participant",
+      "participant": "Administrator",
       "edit": "Edit",
       "view": "View",
       "title": {
-        "edit": "Edit Participant",
-        "view": "View Participant"
+        "edit": "Edit Administrator",
+        "view": "View Administrator"
       },
       "fields": {
         "username": "Username",
