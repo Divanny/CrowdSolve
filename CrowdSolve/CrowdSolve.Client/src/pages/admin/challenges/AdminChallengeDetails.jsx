@@ -130,11 +130,11 @@ const AdminChallengeDetails = () => {
         const endDate = new Date(procesoEvaluacion.fechaFinalizacion);
 
         if (today < startDate) {
-            return relationalObjects.estatusProcesoEvaluacion.find(status => status.nombre === "No iniciado");
+            return relationalObjects.estatusProcesoEvaluacion.find(status => status.idEstatusProceso === EstatusProcesoEnum.Proceso_de_Evaluacion_No_iniciado);
         } else if (today >= startDate && today <= endDate) {
-            return relationalObjects.estatusProcesoEvaluacion.find(status => status.nombre === "En progreso");
+            return relationalObjects.estatusProcesoEvaluacion.find(status => status.idEstatusProceso === EstatusProcesoEnum.Proceso_de_Evaluacion_En_progreso);
         } else {
-            return relationalObjects.estatusProcesoEvaluacion.find(status => status.nombre === "Finalizado");
+            return relationalObjects.estatusProcesoEvaluacion.find(status => status.idEstatusProceso === EstatusProcesoEnum.Proceso_de_Evaluacion_Finalizado);
         }
     };
 

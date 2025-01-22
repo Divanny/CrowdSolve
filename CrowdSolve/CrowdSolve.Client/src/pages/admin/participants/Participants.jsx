@@ -21,7 +21,6 @@ import {
   FilterX
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -53,6 +52,7 @@ export default function Participants() {
   const [data, setData] = useState([]);
   const [nivelesEducativos, setNivelesEducativos] = useState([]);
   const [estatusUsuarios, setEstatusUsuarios] = useState([]);
+  const [perfilesUsuarios, setPerfilesUsuarios] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
@@ -69,25 +69,6 @@ export default function Participants() {
   const [isSolutionsDialogOpen, setIsSolutionsDialogOpen] = useState(false);
 
   const columns = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label={t('Participants.select_all')}
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label={t('Participants.select_row')}
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
     {
       accessorKey: "nombreUsuario",
       header: () => t('Participants.nombre_usuario'),
@@ -150,14 +131,16 @@ export default function Participants() {
       accessorKey: "estatusUsuario",
       header: t('Participants.estatus_usuario'),
       cell: ({ row }) => (
+
         <Badge
-          variant={`${row.getValue("estatusUsuario") === "Activo"
+          variant={`${row.getValue("estatusUsuario") === 'Activo' || row.getValue("estatusUsuario") === 'Asset'
             ? "success"
-            : row.getValue("estatusUsuario") === "Inactivo"
+            : row.getValue("estatusUsuario") === 'Empresa rechazada' || row.getValue("estatusUsuario") === 'Company rejected'
               ? "destructive"
               : "warning"
             }`}
         >
+
           {row.getValue("estatusUsuario")}
         </Badge>
       ),
@@ -217,11 +200,13 @@ export default function Participants() {
           api.get("/api/Participantes/GetRelationalObjects", {
             requireLoading: false,
           }),
-        ]);
 
+        ]);
       setData(participantesResponse.data);
       setNivelesEducativos(relationalObjectsResponse.data.nivelesEducativos);
       setEstatusUsuarios(relationalObjectsResponse.data.estatusUsuarios);
+      setPerfilesUsuarios(relationalObjectsResponse.data.perfilesUsuarios);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -249,8 +234,8 @@ export default function Participants() {
       const value = row.getValue(columnId);
       return value != null
         ? String(value)
-            .toLowerCase()
-            .includes(String(filterValue).toLowerCase())
+          .toLowerCase()
+          .includes(String(filterValue).toLowerCase())
         : false;
     },
     state: {
@@ -300,14 +285,14 @@ export default function Participants() {
               const value = event.target.value;
               setGlobalFilter(value);
               table.setGlobalFilter(value);
-          }}
+            }}
             className="pl-8"
           />
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-            {t('Participants.nivel_educativo')}
+              {t('Participants.nivel_educativo')}
               {nivelEducativoFilter ? `: ${nivelEducativoFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -351,7 +336,7 @@ export default function Participants() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-            {t('Participants.filtro_estatus_usuario')}
+              {t('Participants.filtro_estatus_usuario')}
               {estatusUsuarioFilter ? `: ${estatusUsuarioFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -387,7 +372,17 @@ export default function Participants() {
                   table.getColumn("estatusUsuario")?.setFilterValue(estatus.nombre);
                 }}
               >
-                {estatus.nombre}
+                <Badge variant={`${estatus.nombre === 'Activo' || estatus.nombre === 'Asset'
+                    ? "success"
+                    : estatus.nombre === 'Empresa rechazada' || estatus.nombre === 'Company rejected'  
+                    || estatus.nombre=== 'Bloqueada permanentemente' || estatus.nombre==='Permanently blocked' 
+                      ? "destructive"
+                      : "warning"
+                    }`}>
+                  <div className="flex items-center space-x-1 w-auto">
+                    <span>{estatus.nombre}</span>
+                  </div>
+                </Badge>
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
@@ -404,7 +399,7 @@ export default function Participants() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-            {t('Participants.columna')} <ChevronDown className="ml-2 h-4 w-4" />
+              {t('Participants.columna')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -479,10 +474,6 @@ export default function Participants() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} {t('Participants.of')}{" "}
-          {table.getFilteredRowModel().rows.length} {t('Participants.row')}(s) {t('Participants.selected')}(s).
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -513,7 +504,7 @@ export default function Participants() {
           }}
           participant={selectedParticipant}
           mode={dialogMode}
-          relationalObjects={{ nivelesEducativos, estatusUsuarios }}
+          relationalObjects={{ nivelesEducativos, estatusUsuarios, perfilesUsuarios }}
         />
       )}
       {selectedParticipant && (

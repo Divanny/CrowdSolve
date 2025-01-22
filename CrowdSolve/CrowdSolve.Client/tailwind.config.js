@@ -1,6 +1,5 @@
-import svgToDataUri from "mini-svg-data-uri";
-import colors from "tailwindcss/colors";
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
+const svgToDataUri = require("mini-svg-data-uri");
 
 /** @type {import('tailwindcss').Config} */
 export const darkMode = ["class"];

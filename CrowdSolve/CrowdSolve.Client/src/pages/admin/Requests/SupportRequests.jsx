@@ -22,7 +22,6 @@ import {
   FilterX,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -43,6 +42,9 @@ import {
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import Icon from "@/components/ui/icon";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupportDialog } from "../../../components/admin/Requests/SupportRequestDialog";
 import EstatusProcesoEnum from "@/enums/EstatusProcesoEnum";
 import { useTranslation } from 'react-i18next';
@@ -69,25 +71,6 @@ export default function SupportRequests() {
 
 
   const columns = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label={t('supportRequest.select')}
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label={t('supportRequest.cell')}
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
     {
       accessorKey: "nombreUsuario",
       header: ({ column }) => {
@@ -148,7 +131,7 @@ export default function SupportRequests() {
       },
       cell: ({ getValue }) => {
         return (
-          <div className="w-20 text-center">
+          <div className="w-30 text-center">
             {getValue()}
           </div>
         );
@@ -163,14 +146,14 @@ export default function SupportRequests() {
             className="w-full justify-start text-left font-normal"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-             {t('supportRequest.apellidos')}
+            {t('supportRequest.apellidos')}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ getValue }) => {
         return (
-          <div className="w-20 text-center">
+          <div className="w-30 text-center">
             {getValue()}
           </div>
         );
@@ -204,9 +187,29 @@ export default function SupportRequests() {
       }
     },
     {
-      accessorKey: "idEstatusProceso",
-      header: t('supportRequest.idEstatusProceso'),
-      /* cell: ({ row }) => `${row.original.nombres} ${row.original.apellidos}`, */
+      accessorKey: "estatusProcesoNombre",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-left font-normal"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Estatus
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        return (
+          <Badge variant={row.original.severidad}>
+            <div className="flex items-center space-x-1 w-auto">
+              <Icon name={row.original.claseProcesoIcono} size={16} />
+              <span>{row.getValue("estatusProcesoNombre")}</span>
+            </div>
+          </Badge>
+        );
+      },
     },
     {
       id: "actions",
@@ -223,7 +226,6 @@ export default function SupportRequests() {
 
             <DropdownMenuItem
               onClick={() => {
-                console.log(row.original);
                 setSelectedSupportRequest(row.original)
                 setDialogMode("view")
                 setIsDialogOpen(true)
@@ -270,7 +272,7 @@ export default function SupportRequests() {
                   }}
                 >
                   <FileX className="mr-2 h-4 w-4" />
-                  {t('supportRequest.downloadRequest')}
+                  Declinar Solicitud
                 </DropdownMenuItem>
               )}
 
@@ -289,7 +291,6 @@ export default function SupportRequests() {
             requireLoading: false,
           }),
         ]);
-
 
       setData(supportRequestsResponse.data);
       setUsuariosAdmin(relationalObjectsResponse.data.usuariosAdmin);
@@ -328,7 +329,6 @@ export default function SupportRequests() {
         toast.warning(t('supportRequest.failureToast.title'), {
           description: response.data.message,
         });
-        console.log(response.data);
       }
     } catch (error) {
       toast.error(t('supportRequest.errorToast.title'));
@@ -419,7 +419,7 @@ export default function SupportRequests() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
-            {t('supportRequest.assignedUsersButton')}
+              {t('supportRequest.assignedUsersButton')}
               {usuarioAdminFilter ? `: ${usuarioAdminFilter}` : ""}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -460,52 +460,29 @@ export default function SupportRequests() {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-            {t('supportRequest.statusRequestButton')}
-              {estatusProcesoFilter ? `: ${estatusProcesoFilter}` : ""}
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <div className="flex items-center px-2 py-1.5">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder={t('supportRequest.statusProcessSearchPlaceholder')}
-                  value={estatusProcesoSearch}
-                  onChange={(e) => setEstatusProcesoSearch(e.target.value)}
-                  className="pl-8"
-                />
-              </div>
-            </div>
-            {estatusProcesoFilter && (
-              <DropdownMenuItem
-                onSelect={() => {
-                  setEstatusProcesoFilter("");
-                  table.getColumn("idEstatusProceso")?.setFilterValue(undefined);
-                }}
-              >
-                <X className="mr-2 h-4 w-4" /> {t('supportRequest.clearFilterButton')}
-              </DropdownMenuItem>
-            )}
+        <Select
+          value={estatusProcesoFilter}
+          onValueChange={(value) => {
+            setEstatusProcesoFilter(value)
+            table.getColumn("estatusProcesoNombre")?.setFilterValue(value)
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filtrar por estatus" />
+          </SelectTrigger>
+          <SelectContent>
             {filteredEstatusProceso.map((estatus) => (
-              <DropdownMenuItem
-                key={estatus.idEstatusProceso}
-                onSelect={() => {
-                  setEstatusProcesoFilter(estatus.idEstatusProceso);
-                  table.getColumn("idEstatusProceso")?.setFilterValue(estatus.idEstatusProceso);
-                }}
-              >
-                {estatus.nombre}
-              </DropdownMenuItem>
+              <SelectItem key={estatus.idEstatusProceso} value={estatus.nombre}>
+                <Badge variant={estatus.severidad}>
+                  <div className="flex items-center space-x-1 w-auto">
+                    <Icon name={estatus.claseIcono} size={16} />
+                    <span>{estatus.nombre}</span>
+                  </div>
+                </Badge>
+              </SelectItem>
             ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </SelectContent>
+        </Select>
 
 
         <Button
@@ -519,22 +496,22 @@ export default function SupportRequests() {
         </Button>
 
         <div className="flex items-center border rounded-md p-2 shadow-sm">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-15">
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-[#FFD3A6] mr-2"></div>
-              <span className="text-sm font-bold">{t('supportRequest.recentLabel')}</span>
+              <div className="w-2 h-2 rounded-full bg-[#FFD3A6] mr-2"></div>
+              <span className="text-xs w-20 font-bold">Recientes</span>
             </div>
             <div className="flex items-center">
-              <div className="w-3 h-3 rounded-full bg-[#FFC7B0] mr-2"></div>
-              <span className="text-sm font-bold">{t('supportRequest.inProcessLabel')}</span>
+              <div className="w-2 h-2 rounded-full bg-[#FFC7B0] mr-2"></div>
+              <span className="text-xs w-20 font-bold">En Proceso</span>
             </div>
-          </div>
-        </div>
+          </div >
+        </div >
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-            {t('supportRequest.columnsButton')} <ChevronDown className="ml-2 h-4 w-4" />
+              {t('supportRequest.columnsButton')} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -557,7 +534,7 @@ export default function SupportRequests() {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div >
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -606,7 +583,7 @@ export default function SupportRequests() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  {t('supportRequest.noResultsFound')} 
+                  {t('supportRequest.noResultsFound')}
                 </TableCell>
               </TableRow>
             )}
@@ -614,10 +591,6 @@ export default function SupportRequests() {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} {t('supportRequest.of')} {" "}
-          {table.getFilteredRowModel().rows.length} {t('supportRequest.row')}(s) {t('supportRequest.selected')}(s).
-        </div>
         <div className="space-x-2">
           <Button
             variant="outline"
@@ -636,7 +609,7 @@ export default function SupportRequests() {
             {t('supportRequest.nextButton')}
           </Button>
         </div>
-      </div>
+      </div >
 
       {selectedSupportRequest && (
         <SupportDialog
@@ -649,7 +622,8 @@ export default function SupportRequests() {
           support={selectedSupportRequest}
           mode={dialogMode}
         />
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }

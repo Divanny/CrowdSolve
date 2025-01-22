@@ -68,7 +68,7 @@ const SolutionCard = ({ solution }) => (
           </div>
         </div>
         <Badge variant="secondary" className="ml-2">
-          {solution.puntuacion} pts
+          {solution.puntuacion ? `${solution.puntuacion} pts` : 'No evaluado'}
         </Badge>
       </div>
     </CardContent>

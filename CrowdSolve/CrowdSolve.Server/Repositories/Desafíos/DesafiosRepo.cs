@@ -3,6 +3,7 @@ using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Numerics;
@@ -16,7 +17,10 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         public UsuariosRepo usuariosRepo;
         public int _idUsuarioEnLinea;
         public readonly int diasDespuesFechaFinalizacion = 5;
-        public DesafiosRepo(DbContext dbContext, int idUsuarioEnLinea) : base
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
+
+        public DesafiosRepo(DbContext dbContext, int idUsuarioEnLinea, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (
             dbContext,
             new ObjectsMapper<DesafiosModel, Desafios>(d => new Desafios()
@@ -59,10 +63,13 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
         )
         {
-            procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Desafío, dbContext, idUsuarioEnLinea);
+            _translationService = translationService;
+            _idioma = idioma;
+            procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Desafío, dbContext, idUsuarioEnLinea, _translationService, _idioma);
             procesosRepoProcesoEvaluacion = new ProcesosRepo(ClasesProcesoEnum.Proceso_de_Evaluación, dbContext, idUsuarioEnLinea);
-            usuariosRepo = new UsuariosRepo(dbContext);
+            usuariosRepo = new UsuariosRepo(dbContext, _translationService, _idioma);
             _idUsuarioEnLinea = idUsuarioEnLinea;
+           
         }
         public override Desafios Add(DesafiosModel model)
         {
@@ -268,7 +275,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             var procesoEvaluacion = this.GetProcesoEvaluacionDesafio(idDesafio);
             if (procesoEvaluacion == null || procesoEvaluacion.Count == 0) return new List<SolucionesModel>();
 
-            SolucionesRepo solucionesRepo = new SolucionesRepo(dbContext, _idUsuarioEnLinea);
+            SolucionesRepo solucionesRepo = new SolucionesRepo(dbContext, _idUsuarioEnLinea, _translationService, _idioma);
             var solucionesDesafio = solucionesRepo.Get(x => x.idDesafio == idDesafio).ToList();
             List<int> idsUsuariosParticipantesDesafio = solucionesDesafio.Select(x => x.idUsuario).ToList();
 

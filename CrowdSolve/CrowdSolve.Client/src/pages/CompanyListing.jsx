@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, Globe, Mail, Building, Users, ChevronDown, Bell, Trophy, FilterX } from 'lucide-react'
+import { Search, Globe, Mail, Users, Bell, Trophy, FilterX } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -19,13 +19,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import useAxios from '@/hooks/use-axios'
@@ -86,10 +79,10 @@ export default function CompanyListing() {
                         {t('CompanyListing.header.badge.message')}
                     </Badge>
                     <h1 className="mb-6 text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-                    {t('CompanyListing.header.title')}
+                        {t('CompanyListing.header.title')}
                     </h1>
                     <p className="max-w-[42rem] text-muted-foreground sm:text-xl sm:leading-8">
-                    {t('CompanyListing.header.description')}
+                        {t('CompanyListing.header.description')}
                     </p>
                 </div>
             </section>
@@ -216,24 +209,10 @@ export default function CompanyListing() {
                                             <Globe className="mr-2 h-4 w-4" /> {t('CompanyListing.general.website')}
                                         </a>
                                     </Button>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="outline" className="w-full sm:w-auto">
-                                                <ChevronDown className="mr-2 h-4 w-4" /> {t('CompanyListing.general.moreOptions')}
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>{t('CompanyListing.general.actions')}</DropdownMenuLabel>
-                                            <DropdownMenuItem onSelect={() => window.location.href = `mailto:${company.correo}`}>
-                                                <Mail className="mr-2 h-4 w-4" />
-                                                <span>{t('CompanyListing.general.contact')}</span>
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                <Building className="mr-2 h-4 w-4" />
-                                                <span>{t('CompanyListing.general.viewChallenges')}</span>
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                    <Button variant="outline" className="w-full sm:w-auto" onClick={() => window.location.href = `mailto:${company.correo}`}>
+                                        <Mail className="mr-2 h-4 w-4" />
+                                        <span>{t('CompanyListing.general.contact')}</span>
+                                    </Button>
                                 </CardFooter>
                             </Card>
                         ))}
@@ -242,6 +221,6 @@ export default function CompanyListing() {
                     <p className='text-center text-muted-foreground'>{t('CompanyListing.general.notFoundMessage')}</p>
                 )}
             </div>
-        </div>
+        </div >
     )
 }

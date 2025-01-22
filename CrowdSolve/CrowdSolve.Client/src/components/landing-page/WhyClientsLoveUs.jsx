@@ -24,10 +24,10 @@ const reviews = [
     img: "https://i.imgur.com/3nyMUgM.png",
   },
   {
-    name: "Jane",
-    username: "@jane",
+    name: "Sebastian Peralta",
+    username: "@PopularStick",
     body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/jane",
+    img: "https://i.imgur.com/4V07GqG.png",
   },
   {
     name: "Jorge Cruz",
@@ -36,10 +36,10 @@ const reviews = [
     img: "https://i.imgur.com/n0DUW83.png",
   },
   {
-    name: "James",
-    username: "@james",
+    name: "Wilbert León",
+    username: "@klk4aqui5wibu",
     body: "I'm at a loss for words. This is amazing. I love it.",
-    img: "https://avatar.vercel.sh/james",
+    img: "https://i.imgur.com/vrDgQ42.jpeg",
   },
 ];
 

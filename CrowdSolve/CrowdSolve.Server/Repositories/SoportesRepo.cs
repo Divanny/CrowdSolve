@@ -2,6 +2,7 @@
 using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
@@ -10,7 +11,9 @@ namespace CrowdSolve.Server.Repositories.Autenticación
     public class SoportesRepo : Repository<Soportes, SoportesModel>
     {
         public ProcesosRepo procesosRepo;
-        public SoportesRepo(DbContext dbContext, int idUsuarioEnLinea) : base
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
+        public SoportesRepo(DbContext dbContext, int idUsuarioEnLinea, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (
             dbContext,
             new ObjectsMapper<SoportesModel, Soportes>(s => new Soportes()
@@ -48,7 +51,9 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             NombreAsignado = p != null ? DB.Set<Usuarios>().Where(x => x.idUsuario == p.idUsuarioAsignado).Select(x => x.NombreUsuario).FirstOrDefault() : null,
                             AsignadoAMi = idUsuarioEnLinea == (p != null ? p.idUsuarioAsignado : null),
                             idEstatusProceso = p != null ? p.idEstatusProceso : null,
-                            EstatusProcesoNombre=p!=null? ep.Descripcion:null,
+                            EstatusProcesoNombre=p!=null? ep.Nombre:null,
+                            Severidad= p != null ? ep.Severidad : null,
+                            ClaseProcesoIcono=p!=null?ep.ClaseIcono : null,
 
                         })
                         .OrderBy(p => p.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_Enviada ? 0 
@@ -59,7 +64,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             }
         )
         {
-            procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Soporte, dbContext, idUsuarioEnLinea);
+            procesosRepo = new ProcesosRepo(ClasesProcesoEnum.Soporte, dbContext, idUsuarioEnLinea, _translationService, _idioma);
         }
         public override Soportes Add(SoportesModel model)
         {

@@ -64,7 +64,7 @@ export function SupportDialog({ isOpen, onClose, onSaved, support, mode  }) {
 
   const DescartarSoporte = async () => {
     try {
-      const response = await api.put(`api/Soportes/Finalizar/${supportRequest}`,null, {
+      const response = await api.put(`api/Soportes/Descartar/${supportRequest}`,null, {
         headers: {
           'Content-Type': 'application/json',
         },

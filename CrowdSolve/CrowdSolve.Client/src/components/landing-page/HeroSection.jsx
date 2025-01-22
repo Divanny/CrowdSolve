@@ -134,9 +134,9 @@ const HeroSection = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
                         transition={{ duration: 0.5 }}
-                        className={`absolute right-[12%] top-[20%] flex aspect-square w-1/5 flex-col items-center justify-center rounded-lg border border-[#9F5638] bg-gradient-to-br ${designs[currentDesign].gradient} p-2 text-center text-white shadow-lg`}
+                        className={`absolute right-[12%] top-[20%] flex aspect-square w-2/6 sm:w-1/5 flex-col items-center justify-center rounded-lg border border-[#9F5638] bg-gradient-to-br ${designs[currentDesign].gradient} p-2 text-center text-white shadow-lg`}
                     >
-                        {React.createElement(designs[currentDesign].icon, { className: "mb-1 size-8" })}
+                        {React.createElement(designs[currentDesign].icon, { className: "mb-1 size-4 sm:size-8" })}
                         <span className="text-xs font-semibold">{designs[currentDesign].text}</span>
                     </motion.div>
                 </AnimatePresence>

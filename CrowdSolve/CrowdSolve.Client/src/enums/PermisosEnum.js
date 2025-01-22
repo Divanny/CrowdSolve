@@ -24,5 +24,6 @@ export default {
 	Solicitudes_Desafíos: 2021,
 	Notificaciones: 3021,
 	Administrar_Desafíos: 4022,
-	Administrador_Ver_Desafíos: 5021
+	Administrador_Ver_Desafíos: 5021,
+	Administrador_Manual_Usuario: 6021
 };
