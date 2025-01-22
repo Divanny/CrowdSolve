@@ -43,12 +43,14 @@ import useAxios from "@/hooks/use-axios";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CompanyFormDialog } from "../../../components/admin/companies/CompanyFormDialog";
 import { useTranslation } from 'react-i18next';
+import { Badge } from "@/components/ui/badge";
 
 export default function Companies() {
     const { t } = useTranslation();
     const { api } = useAxios();
     const [data, setData] = useState([]);
     const [tamanosEmpresas, setTamanosEmpresas] = useState([]);
+    const [estatusUsuarios, setEstatusUsuarios] = useState([]);
     const [sectores, setSectores] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [sorting, setSorting] = useState([]);
@@ -58,6 +60,8 @@ export default function Companies() {
     const [globalFilter, setGlobalFilter] = useState("");
     const [tamanosEmpresaFilter, setTamanosEmpresaFilter] = useState("");
     const [sectoresFilter, setSectoresFilter] = useState("");
+    const [estatusUsuarioFilter, setEstatusUsuarioFilter] = useState("");
+    const [estatusUsuarioSearch, setEstatusUsuarioSearch] = useState("");
     const [tamanosEmpresaSearch, setTamanosEmpresaSearch] = useState("");
     const [sectoresSearch, setSectoresSearch] = useState("");
     const [selectedCompany, setSelectedCompany] = useState(null)
@@ -113,22 +117,31 @@ export default function Companies() {
                   </Button>
                 );
               },
+            cell: ({ getValue }) => {
+            return (
+                <div className="text-center">
+                {getValue()}
+                </div>
+            );
+            }
         },
         {
             accessorKey: "estatusUsuario",
             header: t('CompaniesPage.estatusUsuario'),
             cell: ({ row }) => (
-                <span
-                    className={`px-2 py-1 rounded-full text-xs font-semibold ${row.getValue("estatusUsuario") === "Activo"
-                        ? "bg-green-100 text-green-800"
-                        : row.getValue("estatusUsuario") === "Inactivo"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
+
+                <Badge
+                  variant={`${row.getValue("estatusUsuario") === 'Activo' || row.getValue("estatusUsuario") === 'Asset'
+                    ? "success"
+                    : row.getValue("estatusUsuario") === 'Empresa rechazada' || row.getValue("estatusUsuario") === 'Company rejected'
+                      ? "destructive"
+                      : "warning"
+                    }`}
                 >
-                    {row.getValue("estatusUsuario")}
-                </span>
-            ),
+        
+                  {row.getValue("estatusUsuario")}
+                </Badge>
+              ),
         },
         {
             id: "actions",
@@ -184,10 +197,12 @@ export default function Companies() {
                     api.get("/api/Empresas/GetRelationalObjects", {
                         requireLoading: false,
                     }),
+
                 ]);
             setData(empresasResponse.data);
             setTamanosEmpresas(relationalObjectsResponse.data.tamañosEmpresa);
             setSectores(relationalObjectsResponse.data.sectores);
+            setEstatusUsuarios(relationalObjectsResponse.data.estatusUsuarios);
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -220,7 +235,15 @@ export default function Companies() {
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
-        globalFilterFn,
+        onGlobalFilterChange: setGlobalFilter,
+        globalFilterFn: (row, columnId, filterValue) => {
+            const value = row.getValue(columnId);
+            return value != null
+              ? String(value)
+                .toLowerCase()
+                .includes(String(filterValue).toLowerCase())
+              : false;
+          },
         state: {
             sorting,
             columnFilters,
@@ -246,6 +269,10 @@ export default function Companies() {
         sector.nombre.toLowerCase().includes(sectoresSearch.toLowerCase())
     );
 
+    const filteredEstatusUsuarios = estatusUsuarios.filter((estatus) =>
+        estatus.nombre.toLowerCase().includes(estatusUsuarioSearch.toLowerCase())
+      );
+
     if (isLoading) {
         return (
             <div className="w-full space-y-4">
@@ -266,6 +293,7 @@ export default function Companies() {
                         placeholder={t('CompaniesPage.buscarPorNombre')}
                         value={globalFilter ?? ""}
                         onChange={(event) => setGlobalFilter(event.target.value)}
+                        
                         className="pl-8"
                     />
                 </div>
@@ -305,7 +333,7 @@ export default function Companies() {
                                 key={tamano.idTamañoEmpresa}
                                 onSelect={() => {
                                     setTamanosEmpresaFilter(tamano.nombre);
-                                    table.getColumn("tamañoEmpresa")?.setFilterValue(tamano.idTamañoEmpresa);
+                                    table.getColumn("tamañoEmpresa")?.setFilterValue(tamano.nombre);
                                 }}
                             >
                                 {tamano.nombre}
@@ -329,7 +357,12 @@ export default function Companies() {
                                     type="text"
                                     placeholder="Buscar..."
                                     value={sectoresSearch}
-                                    onChange={(e) => setSectoresSearch(e.target.value)}
+                                    
+                                    onChange={(event) => {
+                                        const value = event.target.value;
+                                        setGlobalFilter(value);
+                                        table.setGlobalFilter(value);
+                                      }}
                                     className="pl-8"
                                 />
                             </div>
@@ -349,7 +382,7 @@ export default function Companies() {
                                 key={sector.idSector}
                                 onSelect={() => {
                                     setSectoresFilter(sector.nombre);
-                                    table.getColumn("sector")?.setFilterValue(sector.idSector);
+                                    table.getColumn("sector")?.setFilterValue(sector.nombre);
                                 }}
                             >
                                 {sector.nombre}
@@ -357,6 +390,63 @@ export default function Companies() {
                         ))}
                     </DropdownMenuContent>
                 </DropdownMenu>
+                {/* division */}
+                <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline">
+                              {t('Participants.filtro_estatus_usuario')}
+                              {estatusUsuarioFilter ? `: ${estatusUsuarioFilter}` : ""}
+                              <ChevronDown className="ml-2 h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="w-56">
+                            <div className="flex items-center px-2 py-1.5">
+                              <div className="relative">
+                                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                                <Input
+                                  type="text"
+                                  placeholder={t('Participants.searchStatus')}
+                                  value={estatusUsuarioSearch}
+                                  onChange={(e) => setEstatusUsuarioSearch(e.target.value)}
+                                  className="pl-8"
+                                />
+                              </div>
+                            </div>
+                            {estatusUsuarioFilter && (
+                              <DropdownMenuItem
+                                onSelect={() => {
+                                  setEstatusUsuarioFilter("");
+                                  table.getColumn("estatusUsuario")?.setFilterValue(undefined);
+                                }}
+                              >
+                                <X className="mr-2 h-4 w-4" /> {t('Participants.limpiar_filtro')}
+                              </DropdownMenuItem>
+                            )}
+                            {filteredEstatusUsuarios.map((estatus) => (
+                              <DropdownMenuItem
+                                key={estatus.idEstatusUsuario}
+                                onSelect={() => {
+                                  setEstatusUsuarioFilter(estatus.nombre);
+                                  table.getColumn("estatusUsuario")?.setFilterValue(estatus.nombre);
+                                }}
+                              >
+                              
+                                <Badge variant={`${estatus.nombre === 'Activo' || estatus.nombre === 'Asset'
+                                    ? "success"
+                                    : estatus.nombre === 'Empresa rechazada' || estatus.nombre === 'Company rejected'  
+                                    || estatus.nombre=== 'Bloqueada permanentemente' || estatus.nombre==='Permanently blocked' 
+                                      ? "destructive"
+                                      : "warning"
+                                    }`}>
+                                  <div className="flex items-center space-x-1 w-auto">
+                                    <span>{estatus.nombre}</span>
+                                  </div>
+                                </Badge>
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                {/* division */}
                 <Button
                     variant="outline"
                     onClick={clearFilters}
@@ -474,7 +564,7 @@ export default function Companies() {
                     }}
                     company={selectedCompany}
                     mode={dialogMode}
-                    relationalObjects={{ tamanosEmpresas, sectores }}
+                    relationalObjects={{ tamanosEmpresas, sectores, estatusUsuarios }}
                 />
             )}
         </div>

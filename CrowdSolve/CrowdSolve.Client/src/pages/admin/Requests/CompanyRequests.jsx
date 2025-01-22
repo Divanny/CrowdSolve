@@ -138,7 +138,7 @@ export default function CompanyRequests() {
       },
       cell: ({ getValue }) => {
         return (
-          <div className="w-20 text-center">
+          <div className="w-40 text-center">
             {getValue()}
           </div>
         );

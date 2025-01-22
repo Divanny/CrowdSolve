@@ -162,6 +162,16 @@ namespace CrowdSolve.Server.Controllers
         public List<ParticipantesModel> GetAdministrators()
         {
             List<ParticipantesModel> Participantes = _participantesRepo.Get().Where(x => x.idPerfil == (int)PerfilesEnum.Administrador).ToList();
+
+            foreach (var participante in Participantes)
+            {
+
+                if (participante.EstatusUsuario != null)
+                {
+                    participante.EstatusUsuario = _translationService.Traducir(participante.EstatusUsuario, _idioma);
+                }
+            }
+
             return Participantes;
         }
 
