@@ -30,8 +30,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import useAxios from '@/hooks/use-axios'
 import { useNavigate, useParams } from "react-router-dom"
 
-function getTimeAgo(date) {
-  const { t } = useTranslation();
+function getTimeAgo(date, t) {
   const now = new Date()
   const diffTime = Math.abs(now.getTime() - date.getTime())
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
@@ -46,8 +45,7 @@ function getTimeAgo(date) {
   return `${t('ChallengeCatalog.timeAgo.since')} ${months} ${months === 1 ? t('ChallengeCatalog.timeAgo.month') : t('ChallengeCatalog.timeAgo.months')}`
 }
 
-function getTimeRemaining(deadline) {
-  const { t } = useTranslation();
+function getTimeRemaining(deadline, t) {
   const now = new Date()
   const timeRemaining = deadline.getTime() - now.getTime()
   const daysRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24))
@@ -516,7 +514,7 @@ function ChallengeCard({ desafio, categorias, estatus }) {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground">
-                {getTimeAgo(desafio.fechaInicio)}
+                {getTimeAgo(desafio.fechaInicio, t)}
               </span>
               <Button
                 variant="ghost"
@@ -544,7 +542,7 @@ function ChallengeCard({ desafio, categorias, estatus }) {
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1">
               <Calendar className="h-4 w-4" />
-              {getTimeRemaining(desafio.fechaLimite)}
+              {getTimeRemaining(desafio.fechaLimite, t)}
             </span>
             <span className="flex items-center gap-1">
               <Users className="h-4 w-4" />

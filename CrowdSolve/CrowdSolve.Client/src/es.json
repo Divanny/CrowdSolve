@@ -122,6 +122,7 @@
   },
   "faq_section": {
     "title": "Preguntas frecuentes sobre CrowdSolve",
+    "noFaqsFound": "No se encontraron preguntas frecuentes.",
     "faqs": [
       {
         "question": "¿Qué es CrowdSolve?",
@@ -158,17 +159,10 @@
         "title": "Soluciones para desafíos complejos"
       }
     },
-    "design": {
-      "innovative_design": {
-        "text": "Innovación sin límites",
-        "gradient": "bg-gradient-to-br from-[#9F5638] to-[#F98E2E]",
-        "icon": "InnovationIcon"
-      },
-      "creative_solution": {
-        "text": "Soluciones creativas",
-        "gradient": "bg-gradient-to-br from-[#1F3B73] to-[#00A9F1]",
-        "icon": "CreativeSolutionIcon"
-      }
+    "designs": {
+      "innovation": "Innovación",
+      "global_community": "Comunidad global",
+      "collaboration": "Colaboración"
     }
   },
 
@@ -1698,6 +1692,39 @@
         "Nuestro equipo de soporte revisará tu mensaje.",
         "Recibirás una respuesta dentro de 24-48 horas."
       ]
+    }
+  },
+  "HelpCenter": {
+    "title": "Centro de Ayuda",
+    "description": "Encuentra toda la información que necesitas sobre CrowdSolve.",
+    "searchPlaceholder": "Busca artículos o guías...",
+    "searchButton": "Buscar",
+    "noSectionsFound": "No se encontraron secciones.",
+    "sections": {
+      "challenges": {
+        "title": "Desafíos",
+        "description": "Explora desafíos, crea uno nuevo, participa o evalúa desafíos fácilmente."
+      },
+      "solutions": {
+        "title": "Soluciones",
+        "description": "Revisa tus soluciones y ajusta su privacidad según tus necesidades."
+      },
+      "user": {
+        "title": "Usuario",
+        "description": "Gestiona tu perfil, crea usuarios o recupera tu contraseña."
+      },
+      "contact": {
+        "title": "Contáctanos",
+        "description": "¿Tienes preguntas? Envíanos un mensaje, estamos aquí para ayudarte."
+      },
+      "legal": {
+        "title": "Legal",
+        "description": "Consulta los términos, condiciones, y la política de privacidad."
+      },
+      "userManual": {
+        "title": "Manual de Usuario",
+        "description": "Encuentra la guía completa para usar CrowdSolve de forma efectiva."
+      }
     }
   }
 }

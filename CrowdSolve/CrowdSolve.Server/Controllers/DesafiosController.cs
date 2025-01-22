@@ -765,7 +765,8 @@ namespace CrowdSolve.Server.Controllers
 
             if (desafio == null) return new List<SolucionesModel>();
 
-            return _desafiosRepo.GetRanking(idDesafio).ToList();
+            var ranking = _desafiosRepo.GetRanking(idDesafio).ToList();
+            return ranking;
         }
 
         [HttpGet("GetCountForDate", Name = "GetCountForDate")]

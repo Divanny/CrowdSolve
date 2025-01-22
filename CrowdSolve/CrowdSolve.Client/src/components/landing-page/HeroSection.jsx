@@ -24,17 +24,17 @@ const HeroSection = () => {
     const designs = [
         {
             icon: Globe,
-            text: 'Comunidad Global',
+            text: t('Herosection.designs.global_community'),
             gradient: 'from-[#9F5638] to-[#EF8535]',
         },
         {
             icon: Sparkles,
-            text: 'Innovación',
+            text: t('Herosection.designs.innovation'),
             gradient: 'from-[#9F5638] to-[#EF8535]',
         },
         {
             icon: Users,
-            text: 'Colaboración',
+            text: t('Herosection.designs.collaboration'),
             gradient: 'from-[#9F5638] to-[#EF8535]',
         },
     ]
@@ -134,9 +134,9 @@ const HeroSection = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
                         transition={{ duration: 0.5 }}
-                        className={`absolute right-[12%] top-[20%] flex aspect-square w-1/5 flex-col items-center justify-center rounded-lg border border-[#9F5638] bg-gradient-to-br ${designs[currentDesign].gradient} p-2 text-center text-white shadow-lg`}
+                        className={`absolute right-[12%] top-[20%] flex aspect-square w-2/6 sm:w-1/5 flex-col items-center justify-center rounded-lg border border-[#9F5638] bg-gradient-to-br ${designs[currentDesign].gradient} p-2 text-center text-white shadow-lg`}
                     >
-                        {React.createElement(designs[currentDesign].icon, { className: "mb-1 size-8" })}
+                        {React.createElement(designs[currentDesign].icon, { className: "mb-1 size-4 sm:size-8" })}
                         <span className="text-xs font-semibold">{designs[currentDesign].text}</span>
                     </motion.div>
                 </AnimatePresence>

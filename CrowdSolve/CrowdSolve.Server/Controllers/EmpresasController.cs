@@ -386,7 +386,8 @@ namespace CrowdSolve.Server.Controllers
                 .Select(te => new TamañosEmpresa
                 {
                     idTamañoEmpresa = te.idTamañoEmpresa,
-                    Nombre = _translationService.Traducir(te.Nombre, _idioma)
+                    Nombre = _translationService.Traducir(te.Nombre, _idioma),
+                    Descripcion = _translationService.Traducir(te.Descripcion, _idioma)
                 })
                 .ToList();
 

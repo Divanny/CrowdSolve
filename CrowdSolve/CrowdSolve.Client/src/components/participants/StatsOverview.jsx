@@ -1,16 +1,24 @@
 import { Card, CardContent } from '@/components/ui/card'
 
 const StatsOverview = ({ solutions }) => {
+  const validSolutions = solutions.filter(s => s.puntuacion != null)
   const distributionData = Array.from({ length: 5 }).map((_, i) => {
-    const count = solutions.filter(s => 
+    const count = validSolutions.filter(s => 
       s.puntuacion >= i * 20 && s.puntuacion < (i + 1) * 20
     ).length
     return { 
       range: `${i * 20}-${(i + 1) * 20}`,
       count,
-      percentage: (count / solutions.length) * 100
+      percentage: (count / validSolutions.length) * 100
     }
   })
+
+  const averageScore = validSolutions.length > 0 
+    ? (validSolutions.reduce((acc, sol) => acc + sol.puntuacion, 0) / validSolutions.length).toFixed(2)
+    : 'N/A'
+  const highestScore = validSolutions.length > 0 
+    ? Math.max(...validSolutions.map(s => s.puntuacion)) 
+    : 'N/A'
 
   return (
     <div className="space-y-6">
@@ -44,18 +52,10 @@ const StatsOverview = ({ solutions }) => {
         <CardContent className="p-4">
           <h3 className="font-semibold mb-4">Estadísticas Generales</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <StatItem label="Promedio de puntuación" 
-              value={(solutions.reduce((acc, sol) => acc + sol.puntuacion, 0) / solutions.length).toFixed(2)} 
-            />
-            <StatItem label="Solución mejor puntuada" 
-              value={Math.max(...solutions.map(s => s.puntuacion))} 
-            />
-            <StatItem label="Soluciones públicas" 
-              value={solutions.filter(s => s.publica).length} 
-            />
-            <StatItem label="Soluciones privadas" 
-              value={solutions.filter(s => !s.publica).length} 
-            />
+            <StatItem label="Promedio de puntuación" value={averageScore} />
+            <StatItem label="Solución mejor puntuada" value={highestScore} />
+            <StatItem label="Soluciones públicas" value={solutions.filter(s => s.publica).length} />
+            <StatItem label="Soluciones privadas" value={solutions.filter(s => !s.publica).length} />
           </div>
         </CardContent>
       </Card>

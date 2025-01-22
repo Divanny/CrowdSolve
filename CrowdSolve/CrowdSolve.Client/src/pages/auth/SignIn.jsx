@@ -63,7 +63,7 @@ function SignIn() {
         } else if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
           navigate("/sign-up/complete");
         } else {
-          navigate(-1);
+          navigate('/');
         }
         toast.success(t('SignIn.successMessage'), {
           description: t('SignIn.successMessageDescription'),
