@@ -14,7 +14,6 @@ import {
     ChevronDown,
     Edit,
     Eye,
-    FileText,
     MoreHorizontal,
     X,
     Search,
@@ -173,14 +172,6 @@ export default function Companies() {
                         >
                             <Eye className="mr-2 h-4 w-4" />
                             {t('CompaniesPage.verDetalles')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() =>
-                                console.log("Ver desafíos", row.original.idEmpresa)
-                            }
-                        >
-                            <FileText className="mr-2 h-4 w-4" />
-                            {t('CompaniesPage.verDesafios')}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

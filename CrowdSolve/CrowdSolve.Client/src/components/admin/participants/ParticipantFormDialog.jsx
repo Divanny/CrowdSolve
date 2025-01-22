@@ -62,7 +62,8 @@ export function ParticipantFormDialog({
 
   const handleSave = async (e) => {
     e.preventDefault();
-
+    editedParticipant.fechaNacimiento = new Date(editedParticipant.fechaNacimiento)
+    editedParticipant.fechaNacimiento.setDate(editedParticipant.fechaNacimiento.getDate() + 1)
     editedParticipant.fechaNacimiento = format(editedParticipant.fechaNacimiento, "yyyy-MM-dd");
     
     const formDataToSend = new FormData();

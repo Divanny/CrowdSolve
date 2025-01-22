@@ -732,7 +732,7 @@
           "infoCollect2": "Información de perfil: experiencia profesional, habilidades, foto de perfil (opcional).",
           "infoCollect3": "Contenido generado por el usuario: propuestas, comentarios, votaciones.",
           "infoCollect4": "Información de uso: interacciones con la plataforma, participación en desafíos.",
-          "infoCollect5": "Información de pago: para procesar recompensas (solo para participantes ganadores)."
+          "infoCollect5": "Evidencias de entrega de premios: cualquier evidencia de recompensas recibidas (solo para participantes ganadores)."
         }
       },
       "informationUsage": {
@@ -741,9 +741,8 @@
         "list": {
           "infoUsage1": "Proporcionar y mejorar nuestros servicios.",
           "infoUsage2": "Facilitar la participación en desafíos y la colaboración entre usuarios.",
-          "infoUsage3": "Procesar pagos y recompensas.",
-          "infoUsage4": "Enviar notificaciones relacionadas con el servicio y actualizaciones.",
-          "infoUsage5": "Prevenir fraudes y garantizar la seguridad de la plataforma."
+          "infoUsage3": "Enviar notificaciones relacionadas con el servicio y actualizaciones.",
+          "infoUsage4": "Prevenir fraudes y garantizar la seguridad de la plataforma."
         }
       },
       "informationSharing": {
@@ -793,6 +792,8 @@
     "effectiveDate": "8 de agosto, 2024",
     "intro": "¡Bienvenido a CrowdSolve! Antes de acceder a nuestros servicios, por favor lee estos Términos de Servicio.",
     "overview": "Estos Términos de Servicio ('Términos') rigen tu uso de CrowdSolve, incluyendo nuestra plataforma web, herramientas de colaboración, y todos los servicios asociados (en conjunto, nuestros 'Servicios'). Estos Términos son un contrato entre tú y CrowdSolve. Al acceder a nuestros Servicios, aceptas estos Términos.",
+    "readPls": "Por favor, lea nuestra",
+    "readPlsDesc": ", que describe cómo recopilamos y utilizamos información personal.",
     "privacyPolicyLink": {
       "text": "Política de Privacidad",
       "url": "/privacy-policy"
@@ -816,7 +817,7 @@
       },
       {
         "title": "5. Pagos y Recompensas",
-        "content": "Las empresas son responsables de proporcionar las recompensas prometidas a los ganadores de los desafíos. CrowdSolve facilita el proceso de pago pero no es responsable de los incumplimientos por parte de las empresas. Los participantes son responsables de cualquier impuesto aplicable a las recompensas recibidas."
+        "content": "Las recompensas y pagos de los desafíos pasan a ser parte de la empresa. CrowdSolve no interviene ni desarrolla nada relacionado con las recompensas y pagos. Las empresas deberán adjuntar evidencia del pago o recompensa para que un desafío pueda ser finalizado por la administración."
       },
       {
         "title": "6. Privacidad y Protección de Datos",
@@ -827,8 +828,7 @@
         "content": "Podemos modificar estos Términos de vez en cuando. Te notificaremos de cualquier cambio significativo en los Términos. Tu uso continuado de nuestros Servicios después de dichos cambios constituye tu aceptación de los nuevos Términos."
       }
     ],
-    "byUsing": "Al utilizar CrowdSolve, aceptas estos Términos de Servicio. Si no estás de acuerdo con estos Términos, por favor no utilices nuestros Servicios. Si tienes alguna pregunta sobre estos Términos, contáctanos en",
-
+    "byUsing": "Al utilizar CrowdSolve, acepta estos Términos de servicio. Si no está de acuerdo con estos Términos, no utilice nuestros Servicios. Si tiene alguna pregunta sobre estos Términos, contáctenos en",
     "contact": {
       "text": "Si tienes alguna pregunta sobre estos Términos, contáctanos en",
       "email": "soporte@crowdsolve.site",
@@ -847,71 +847,71 @@
   },
   "UsagePolicy": {
     "title": "Política de Uso Aceptable",
-    "effectiveDate": "Vigente desde el 8 de agosto de 2024",
-    "accpUP": "Esta Política de Uso Aceptable (PUA) describe prácticas prohibidas al usar CrowdSolve. Al usar nuestra plataforma, aceptas cumplir con esta PUA. CrowdSolve se reserva el derecho de modificar esta política en cualquier momento.",
+    "effectiveDate": "Efectiva desde el 8 de agosto, 2024",
+    "accpUP": "Esta Política de uso aceptable (PUA) describe prácticas prohibidas al utilizar CrowdSolve. Al utilizar nuestra plataforma, usted acepta cumplir con esta PUA. CrowdSolve se reserva el derecho de modificar esta política en cualquier momento.",
     "generalConduct": {
-        "header": "1. Conducta General",
-        "header2": "Los usuarios de CrowdSolve deben:",
-        "content": {
-            "gC1": "Cumplir con todas las leyes aplicables.",
-            "gC2": "Respetar los derechos de propiedad intelectual.",
-            "gC3": "Ser honestos y transparentes en todas las interacciones.",
-            "gC4": "Mantener la confidencialidad de la información sensible compartida en los desafíos.",
-            "gC5": "Tratar a otros usuarios con respeto y profesionalismo."
-        }
+      "header": "1. Conducta General",
+      "header2": "Los usuarios de CrowdSolve deben:",
+      "content": {
+        "gC1": "Cumplir con todas las leyes aplicables.",
+        "gC2": "Respetar los derechos de propiedad intelectual.",
+        "gC3": "Ser honestos y transparentes en todas las interacciones.",
+        "gC4": "Mantener la confidencialidad de la información sensible compartida en los desafíos.",
+        "gC5": "Tratar a otros usuarios con respeto y profesionalismo."
+      }
     },
     "prohibitedActivities": {
-        "header": "2. Actividades Prohibidas",
-        "header2": "Los usuarios no deben:",
-        "content": {
-            "pAc1": "Publicar contenido ilegal, difamatorio, acosador, obsceno o fraudulento.",
-            "pAc2": "Infringir los derechos de propiedad intelectual de otros.",
-            "pAc3": "Usar la plataforma para distribuir spam o malware.",
-            "pAc4": "Intentar acceder a cuentas o sistemas de otros usuarios sin autorización.",
-            "pAc5": "Manipular los sistemas de votación o evaluación de la plataforma.",
-            "pAc6": "Crear múltiples cuentas para eludir reglas o ganar ventaja desleal.",
-            "pAc7": "Divulgar información confidencial de otros usuarios o empresas sin autorización."
-        }
+      "header": "2. Actividades Prohibidas",
+      "header2": "Los usuarios no deben:",
+      "content": {
+        "pAc1": "Publicar contenido ilegal, difamatorio, acosador, obsceno o fraudulento.",
+        "pAc2": "Infringir los derechos de propiedad intelectual de terceros.",
+        "pAc3": "Utilizar la plataforma para distribuir spam o malware.",
+        "pAc4": "Intentar acceder sin autorización a cuentas o sistemas de otros usuarios.",
+        "pAc5": "Manipular los sistemas de votación o evaluación de la plataforma.",
+        "pAc6": "Crear múltiples cuentas para eludir las reglas o ganar ventaja injusta.",
+        "pAc7": "Revelar información confidencial de otros usuarios o empresas sin autorización."
+      }
     },
     "challengeContent": {
-        "header": "3. Contenido de los Desafíos",
-        "header2": "Las empresas que publiquen desafíos deben:",
-        "content": {
-            "chC1": "Proporcionar información precisa y clara sobre los requisitos del desafío.",
-            "chC2": "Establecer términos justos para la transferencia de propiedad intelectual.",
-            "chC3": "Cumplir con las promesas relacionadas con recompensas y plazos.",
-            "chC4": "No solicitar soluciones para actividades ilegales o poco éticas."
-        }
+      "header": "3. Contenido de los Desafíos",
+      "header2": "Las empresas que publiquen desafíos deben:",
+      "content": {
+        "chC1": "Proporcionar información precisa y clara sobre los requisitos del desafío.",
+        "chC2": "Establecer términos justos para la transferencia de propiedad intelectual.",
+        "chC3": "Cumplir con las promesas de recompensas y plazos establecidos.",
+        "chC4": "No solicitar soluciones para actividades ilegales o no éticas."
+      }
     },
     "proposalsAndSolutions": {
-        "header": "4. Propuestas y Soluciones",
-        "header2": "Los participantes que presenten propuestas deben:",
-        "content": {
-            "pASol": "Presentar solo trabajos originales o tener los derechos necesarios para el contenido enviado.",
-            "pASo2": "Respetar la confidencialidad de la información proporcionada en los desafíos.",
-            "pASo3": "No copiar ni plagiar el trabajo de otros participantes.",
-            "pASo4": "Proporcionar información precisa sobre sus habilidades y experiencia."
-        }
+      "header": "4. Propuestas y Soluciones",
+      "header2": "Los participantes que presenten propuestas deben:",
+      "content": {
+        "pASol": "Presentar solo trabajo original o tener los derechos necesarios para el contenido enviado.",
+        "pASo2": "Respetar la confidencialidad de la información proporcionada en los desafíos.",
+        "pASo3": "No copiar o plagiar el trabajo de otros participantes.",
+        "pASo4": "Proporcionar información precisa sobre sus habilidades y experiencia."
+      }
     },
     "platformUsage": {
-        "header": "5. Uso de la Plataforma",
-        "header2": "Los usuarios no deben:",
-        "content": {
-            "pU1": "Intentar interferir con el funcionamiento adecuado de la plataforma.",
-            "pU2": "Usar bots, scrapers u otros medios automatizados para acceder a CrowdSolve.",
-            "pU3": "Recolectar información de otros usuarios sin su consentimiento.",
-            "pU4": "Vender o transferir su cuenta a terceros."
-        }
+      "header": "5. Uso de la Plataforma",
+      "header2": "Los usuarios no deben:",
+      "content": {
+        "pU1": "Intentar interferir con el funcionamiento adecuado de la plataforma.",
+        "pU2": "Utilizar bots, scrapers u otros medios automatizados para acceder a CrowdSolve.",
+        "pU3": "Recopilar información de otros usuarios sin su consentimiento.",
+        "pU4": "Vender o transferir su cuenta a terceros."
+      }
     },
     "nonComplianceConsequences": {
-        "header": "6. Consecuencias del Incumplimiento",
-        "header2": "La violación de esta PUA puede resultar en:",
-        "content": {
-            "nonCC1": "Eliminación del contenido infractor.",
-            "nonCC2": "Suspensión o terminación de la cuenta del usuario.",
-            "nonCC3": "Descalificación de desafíos actuales o futuros.",
-            "nonCC4": "Acciones legales en casos de violaciones graves."
-        }
+      "header": "6. Consecuencias del Incumplimiento",
+      "header2": "La violación de esta PUA puede resultar en:",
+      "content": {
+        "nonCC1": "Eliminación del contenido infractor.",
+        "nonCC2": "Suspensión o terminación de la cuenta del usuario.",
+        "nonCC3": "Descalificación de desafíos actuales o futuros.",
+        "nonCC4": "Acciones legales en casos graves de violación."
+      }
     },
     "reportingViolations": {
         "header": "7. Reportar Violaciones",

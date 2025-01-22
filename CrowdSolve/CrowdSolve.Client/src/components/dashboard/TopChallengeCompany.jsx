@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/components/ui/avatar";
+import useAxios from "@/hooks/use-axios";
+
 
 export function RecentSales() {
   
@@ -17,7 +18,6 @@ export function RecentSales() {
       const response = await api.get("/api/Empresas/GetEmpresasOrdenDesafios", {
         requireLoading: false,
       });
-      console.log(response.data);
       setData(response.data); // Asegúrate de que los datos son un array
 
     } catch (error) {

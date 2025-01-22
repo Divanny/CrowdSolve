@@ -220,8 +220,6 @@ export default function Categories() {
               const value = event.target.value;
               setGlobalFilter(value);
               table.setGlobalFilter(value);
-              console.log("Filtro global:", globalFilter);
-              console.log("Filas visibles:", table.getRowModel().rows);
             }}
             className="pl-8"
           />

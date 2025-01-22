@@ -768,7 +768,7 @@
           "infoCollect2": "Profile information: professional experience, skills, profile picture (optional).",
           "infoCollect3": "User-generated content: proposals, comments, votes.",
           "infoCollect4": "Usage information: interactions with the platform, participation in challenges.",
-          "infoCollect5": "Payment information: to process rewards (only for winning participants)."
+          "infoCollect5": "Evidence of Prize Delivery: Any evidence of rewards received (for winning participants only)."
         }
       },
       "informationUsage": {
@@ -777,9 +777,8 @@
         "list": {
           "infoUsage1": "Provide and improve our services.",
           "infoUsage2": "Facilitate participation in challenges and collaboration between users.",
-          "infoUsage3": "Process payments and rewards.",
-          "infoUsage4": "Send notifications related to the service and updates.",
-          "infoUsage5": "Prevent fraud and ensure platform security."
+          "infoUsage3": "Send notifications related to the service and updates.",
+          "infoUsage4": "Prevent fraud and ensure platform security."
         }
       },
       "informationSharing": {

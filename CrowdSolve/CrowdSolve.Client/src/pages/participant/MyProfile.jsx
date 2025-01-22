@@ -24,6 +24,7 @@ import { Label } from '@/components/ui/label'
 import ProfileSkeleton from '@/components/participants/ProfileSkeleton'
 import { useTranslation } from 'react-i18next';
 
+
 const MyProfile = () => {
   const { t } = useTranslation();
   const [user, setUser] = useState(null)
@@ -66,8 +67,9 @@ const MyProfile = () => {
 
   const handleSave = async (updatedUser) => {
     try {
+      
       updatedUser.fechaNacimiento = format(updatedUser.fechaNacimiento, "yyyy-MM-dd");
-
+      
       const formData = new FormData()
       Object.keys(updatedUser).forEach(key => {
         formData.append(key, updatedUser[key])
@@ -171,7 +173,11 @@ const MyProfile = () => {
 const EditProfileForm = ({ user, relationalObjects, onSave, onCancel, t }) => {
   const [formData, setFormData] = useState({
     ...user,
-    fechaNacimiento: new Date(user.fechaNacimiento)
+    fechaNacimiento: (() => {
+      const fecha = new Date(user.fechaNacimiento);
+      fecha.setDate(fecha.getDate() + 1);
+      return fecha;
+    })()
   })
 
   const handleChange = (e) => {
@@ -236,11 +242,13 @@ const EditProfileForm = ({ user, relationalObjects, onSave, onCancel, t }) => {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
+                captionLayout="dropdown-buttons"
                 selected={formData.fechaNacimiento}
                 onSelect={(date) => setFormData((prevData) => ({ ...prevData, fechaNacimiento: date }))}
                 fromYear={1960}
+                autoFocus
                 toYear={new Date().getFullYear()}
-                className="bg-transparent"
+                className={"w-full justify-start text-left font-normal"}
               />
             </PopoverContent>
           </Popover>
