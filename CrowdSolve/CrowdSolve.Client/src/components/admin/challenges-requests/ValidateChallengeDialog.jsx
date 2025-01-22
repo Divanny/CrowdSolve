@@ -11,8 +11,10 @@ import {
 import useAxios from "@/hooks/use-axios"
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
+import { useTranslation } from 'react-i18next'
 
 export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, mode  }) {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const [validateChallenge, setValidateChallenge] = useState(estatusId)
   const [reason, setReason] = useState(""); // Estado para almacenar el motivo
@@ -26,19 +28,19 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
       const response = await api.put(`api/Desafios/Validar/${validateChallenge}`);
 
       if (response.data.success) {
-        toast.success("Operación exitosa", {
+        toast.success(t('validateChallengeDialog.successOperation'), {
           description: response.data.message,
         });
 
         onSaved();
         onClose();
       } else {
-        toast.warning("Operación fallida", {
+        toast.warning(t('validateChallengeDialog.failedOperation'), {
           description: response.data.message,
         });
       }
     } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
+      toast.error(t('validateChallengeDialog.errorOperation'));
       console.error('Error:', error);
     }
   };
@@ -46,7 +48,7 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
   const rechazarDesafio = async () => {
     try {
       if (!reason) {
-        toast.warning("Por favor, ingrese un motivo antes de rechazar el desafío.");
+        toast.warning(t('validateChallengeDialog.enterReasonWarning'));
         return;
       }
 
@@ -61,19 +63,19 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
       );
 
       if (response.data.success) {
-        toast.success("Operación exitosa", {
+        toast.success(t('validateChallengeDialog.successOperation'), {
           description: response.data.message,
         });
 
         onSaved();
         onClose();
       } else {
-        toast.warning("Operación fallida", {
+        toast.warning(t('validateChallengeDialog.failedOperation'), {
           description: response.data.message,
         });
       }
     } catch (error) {
-      toast.error('Hubo un error al realizar la operación');
+      toast.error(t('validateChallengeDialog.errorOperation'));
       console.error('Error:', error);
     }
   };
@@ -82,15 +84,15 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>{mode === "validate" ? "Validar" : "Rechazar"} Desafío</DialogTitle>
+          <DialogTitle>{mode === "validate" ? t('validateChallengeDialog.validate') : t('validateChallengeDialog.reject')} {t('validateChallengeDialog.desafio')}</DialogTitle>
         </DialogHeader>
         <p className="text-sm text-red-500 mt-4 ">
-          Una vez {mode === "validate" ? "validado" : "rechazada"} el Desafío, no se podrá recuperar a menos que se solicite nuevamente.
+        {t('validateChallengeDialog.unaves')} {mode === "validate" ? t('validateChallengeDialog.validado') : t('validateChallengeDialog.rechazado')} {t('validateChallengeDialog.validationWarning')}
         </p>
         {mode === "decline" && (
           <div className="mb-4">
             <label htmlFor="reason" className="block text-sm font-medium">
-              Motivo del rechazo
+            {t('validateChallengeDialog.rejectReasonLabel')}
             </label>
             <Textarea
               id="reason"
@@ -104,16 +106,16 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
         <DialogFooter>
           {mode === "validate" && (
             <Button type="submit" onClick={validarDesafio}>
-              Validar Desafío
+              {t('validateChallengeDialog.validateDialog')}
             </Button>
           )}
           {mode === "decline" && (
             <Button type="submit" onClick={rechazarDesafio}>
-              Rechazar Desafío
+              {t('validateChallengeDialog.rejectDialog')}
             </Button>
           )}
           <Button type="button" variant="secondary" onClick={onClose}>
-            Cerrar
+          {t('validateChallengeDialog.close')}
           </Button>
         </DialogFooter>
       </DialogContent>

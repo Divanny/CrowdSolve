@@ -33,10 +33,12 @@ import { useSelector } from 'react-redux'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import EstatusProcesoEnum from '@/enums/EstatusProcesoEnum';
 import PageLoader from '@/components/PageLoader';
+import { useTranslation } from 'react-i18next';
 
 const editor = createEditorToConvertToHtml();
 
 const Challenge = () => {
+    const { t } = useTranslation();
     const { challengeId } = useParams()
     const { api } = useAxios()
     const navigate = useNavigate()
@@ -75,7 +77,7 @@ const Challenge = () => {
                 setDesafio(desafioResponse.data)
                 setRelationalObjects(relationalObjectsResponse.data)
             } catch (error) {
-                toast.error("No se pudo cargar el desafío.")
+                toast.error(t('challenge.errorMessages.challengeLoadError'))
                 console.error(error)
             }
             setLoadingSkeleton(false)
@@ -166,7 +168,7 @@ const Challenge = () => {
                             fileGuids.push(guid);
                         }
                     } else {
-                        toast.warning("Error al subir el archivo", { description: response.data.message });
+                        toast.warning(t('challenge.messages.uploadError'), { description: response.data.message });
                         return;
                     }
 
@@ -188,17 +190,17 @@ const Challenge = () => {
 
             if (response.data.success) {
                 setLoadingProgress(100);
-                toast.success("Operación exitosa", { description: "La solución se ha enviado correctamente." });
+                toast.success(t('challenge.messages.solutionSubmissionSuccess'), { description: t('challenge.messages.solutionSubmitted') });
                 setIsDrawerOpen(false);
                 setSolutionTitle('');
                 setSolutionDescription('');
                 setSolutionFiles([]);
                 setDesafio({ ...desafio, yaParticipo: true });
             } else {
-                toast.warning("Error al enviar la solución", { description: response.data.message });
+                toast.warning(t('challenge.messages.solutionSendingError'), { description: response.data.message });
             }
         } catch (error) {
-            toast.error("Error al enviar la solución", { description: error.message });
+            toast.error(t('challenge.messages.solutionSendingError'), { description: error.message });
         }
 
         setLoading(false);
@@ -216,12 +218,12 @@ const Challenge = () => {
                     onClick={() => navigate(-1)}
                     className="mb-4 text-muted-foreground hover:text-foreground"
                 >
-                    <ArrowLeft className="mr-2 h-4 w-4" /> Volver
+                    <ArrowLeft className="mr-2 h-4 w-4" /> {t('challenge.buttons.goBack')}
                 </Button>
                 {!desafio || !htmlContent ? (
                     <div className='w-full flex flex-col items-center justify-center gap-4 p-8'>
-                        <h1 className="text-2xl font-semibold text-center">Desafío no encontrado</h1>
-                        <p className="text-muted-foreground text-center">El desafío que buscas no existe o no tienes permisos para verlo.</p>
+                        <h1 className="text-2xl font-semibold text-center">{t('challenge.alerts.challengeNotFound')}</h1>
+                        <p className="text-muted-foreground text-center">{t('challenge.alerts.challengePermissionError')}</p>
                     </div>
                 ) : (
                     <div>
@@ -231,10 +233,10 @@ const Challenge = () => {
                                     <AlertTriangle className="h-5 w-5 text-primary mt-1" />
                                     <div>
                                         <AlertTitle className="font-semibold">
-                                            Desafío en Evaluación
+                                        {t('challenge.alerts.challengeInEvaluation')}
                                         </AlertTitle>
                                         <AlertDescription className="mt-2">
-                                            Este desafío está actualmente en proceso de evaluación. ¡Participa en la evaluación!
+                                        {t('challenge.alerts.participateInEvaluationAlert')}
                                         </AlertDescription>
                                     </div>
                                 </div>
@@ -242,7 +244,7 @@ const Challenge = () => {
                                     variant="outline"
                                     onClick={() => navigate(`/challenge/${challengeId}/evaluate`)}
                                 >
-                                    Participar
+                                    {t('challenge.buttons.participateInEvaluation')}
                                 </Button>
                             </Alert>
                         )}
@@ -254,30 +256,30 @@ const Challenge = () => {
                             </div>
                             <div className='w-full lg:w-1/3 order-1 lg:order-2'>
                                 <Card className="bg-card text-card-foreground p-6 sticky top-8">
-                                    <h2 className="text-xl font-semibold mb-4 text-foreground">Información del Desafío</h2>
+                                    <h2 className="text-xl font-semibold mb-4 text-foreground">{t('challenge.info.challengeInfo')}</h2>
                                     <div className="space-y-4">
                                         <div className="flex justify-between items-center">
                                             <Badge variant="primary" className="bg-primary/10 text-primary hover:bg-primary/20">
                                                 {getStatusName(desafio.idEstatusDesafio)}
                                             </Badge>
-                                            <span className="text-sm font-medium text-foreground">{getDaysRemaining()} días restantes</span>
+                                            <span className="text-sm font-medium text-foreground">{getDaysRemaining()} {t('challenge.info.daysRemaining')}</span>
                                         </div>
                                         <div className="bg-background rounded-lg p-4 space-y-3">
                                             <div className="flex items-center text-muted-foreground">
                                                 <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                                <span className="text-sm"><span className='font-semibold'>Inicio:</span> {formatDate(desafio.fechaInicio)}</span>
+                                                <span className="text-sm"><span className='font-semibold'>{t('challenge.labels.startDate')}</span> {formatDate(desafio.fechaInicio)}</span>
                                             </div>
                                             <div className="flex items-center text-muted-foreground">
                                                 <Calendar className="mr-2 h-5 w-5 text-primary" />
-                                                <span className="text-sm"><span className='font-semibold'>Cierre:</span> {formatDate(desafio.fechaLimite)}</span>
+                                                <span className="text-sm"><span className='font-semibold'>{t('challenge.labels.endDate')}</span> {formatDate(desafio.fechaLimite)}</span>
                                             </div>
                                             <div className="flex items-center text-muted-foreground">
                                                 <Users className="mr-2 h-5 w-5 text-primary" />
-                                                <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} soluciones enviadas</span>
+                                                <span className="text-sm">{desafio.soluciones ? desafio.soluciones.length : 0} {t('challenge.labels.solutionsSent')}</span>
                                             </div>
                                             <div className="flex items-center text-muted-foreground">
                                                 <Clock className="mr-2 h-5 w-5 text-primary" />
-                                                <span className="text-sm"><span className='font-semibold'>Registrado:</span> {formatDate(desafio.fechaRegistro)}</span>
+                                                <span className="text-sm"><span className='font-semibold'>{t('challenge.labels.registeredDate')}</span> {formatDate(desafio.fechaRegistro)}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -285,17 +287,17 @@ const Challenge = () => {
                                     {isCompany ? (
                                         isChallengeOwner && (
                                             <Button className="w-full mt-6" variant="outline" onClick={() => navigate(`/company/challenge/${challengeId}`)}>
-                                                <Users className="mr-2 h-4 w-4" /> Ver soluciones
+                                                <Users className="mr-2 h-4 w-4" /> {t('challenge.buttons1.viewSolutions')}
                                             </Button>
                                         )
                                     ) : !user ? (
                                         <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/sign-in')}>
-                                            Iniciar sesión para participar
+                                            {t('challenge.buttons1.signInToParticipate')}
                                         </Button>
                                     ) : (
                                         desafio.yaParticipo ? (
                                             <Button className="w-full mt-6" variant="outline" onClick={() => navigate('/my-solutions')}>
-                                                <Users className="mr-2 h-4 w-4" /> Ver estatus de mi solución
+                                                <Users className="mr-2 h-4 w-4" /> {t('challenge.buttons1.viewMySolutionStatus')}
                                             </Button>
                                         ) : (
                                             isChallengeInProgress ? (
@@ -303,13 +305,13 @@ const Challenge = () => {
                                                     <Dialog open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
                                                         <DialogTrigger asChild>
                                                             <Button className="w-full mt-6">
-                                                                <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
+                                                                <Send className="mr-2 h-4 w-4" /> {t('challenge.buttons1.participateInChallenge')}
                                                             </Button>
                                                         </DialogTrigger>
                                                         <DialogContent className="sm:max-w-[625px]">
                                                             <DialogHeader>
-                                                                <DialogTitle>Participar en el Desafío</DialogTitle>
-                                                                <DialogDescription>Complete el formulario para participar en el desafío.</DialogDescription>
+                                                                <DialogTitle>{t('challenge.buttons1.participateInChallenge')}</DialogTitle>
+                                                                <DialogDescription>{t('challenge.dialogs.participateInChallenge.description')}</DialogDescription>
                                                             </DialogHeader>
                                                             <SolutionForm
                                                                 solutionTitle={solutionTitle}
@@ -319,6 +321,7 @@ const Challenge = () => {
                                                                 solutionFiles={solutionFiles}
                                                                 setSolutionFiles={setSolutionFiles}
                                                                 handleSubmitSolution={handleSubmitSolution}
+                                                                t={t}
                                                             />
                                                         </DialogContent>
                                                     </Dialog>
@@ -326,13 +329,13 @@ const Challenge = () => {
                                                     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
                                                         <DrawerTrigger asChild>
                                                             <Button className="w-full mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
-                                                                <Send className="mr-2 h-4 w-4" /> Participar en el Desafío
+                                                                <Send className="mr-2 h-4 w-4" /> {t('challenge.dialogs.participateInChallenge.title')}
                                                             </Button>
                                                         </DrawerTrigger>
                                                         <DrawerContent>
                                                             <DrawerHeader className="text-left">
-                                                                <DrawerTitle>Participar en el Desafío</DrawerTitle>
-                                                                <DrawerDescription>Complete el formulario para participar en el desafío.</DrawerDescription>
+                                                                <DrawerTitle>{t('challenge.dialogs.participateInChallenge.title')}</DrawerTitle>
+                                                                <DrawerDescription>{t('challenge.dialogs.participateInChallenge.description')}</DrawerDescription>
                                                             </DrawerHeader>
                                                             <SolutionForm
                                                                 className="px-4"
@@ -343,10 +346,11 @@ const Challenge = () => {
                                                                 solutionFiles={solutionFiles}
                                                                 setSolutionFiles={setSolutionFiles}
                                                                 handleSubmitSolution={handleSubmitSolution}
+                                                            t={t}
                                                             />
                                                             <DrawerFooter className="pt-2">
                                                                 <DrawerClose asChild>
-                                                                    <Button variant="outline">Cancelar</Button>
+                                                                    <Button variant="outline">{t('challenge.buttons1.cancel')}</Button>
                                                                 </DrawerClose>
                                                             </DrawerFooter>
                                                         </DrawerContent>
@@ -354,7 +358,7 @@ const Challenge = () => {
                                                 )
                                             ) : (
                                                 <div className="text-center text-muted-foreground mt-6">
-                                                    El desafío no está en progreso.
+                                                    {t('challenge.alerts1.challengeNotInProgress')}
                                                 </div>
                                             )
                                         )
@@ -370,28 +374,28 @@ const Challenge = () => {
     )
 }
 
-const SolutionForm = ({ className, solutionTitle, setSolutionTitle, solutionDescription, setSolutionDescription, solutionFiles, setSolutionFiles, handleSubmitSolution }) => (
+const SolutionForm = ({ className, solutionTitle, setSolutionTitle, solutionDescription, setSolutionDescription, solutionFiles, setSolutionFiles, handleSubmitSolution, t }) => (
     <form className={`grid items-start gap-4 ${className}`} onSubmit={handleSubmitSolution}>
         <div className="grid gap-2">
-            <Label htmlFor="solutionTitle">Título de la solución</Label>
+            <Label htmlFor="solutionTitle">{t('challenge.form.solutionTitle.label')}</Label>
             <Input id="solutionTitle" value={solutionTitle} onChange={(e) => setSolutionTitle(e.target.value)} />
         </div>
         <div className="grid gap-2">
-            <Label htmlFor="solutionDescription">Descripción</Label>
+            <Label htmlFor="solutionDescription">{t('challenge.form.solutionDescription.label')}</Label>
             <Textarea id="solutionDescription" value={solutionDescription} onChange={(e) => setSolutionDescription(e.target.value)} />
         </div>
         <div className="grid gap-2">
-            <Label>Archivos</Label>
+            <Label>{t('challenge.form.files.label')}</Label>
             <FileUploader value={solutionFiles} onValueChange={setSolutionFiles} multiple={true} maxFileCount={Infinity} maxSize={1024 * 1024 * 1024} />
         </div>
         <div className="grid gap-2">
             <p className="text-xs text-muted-foreground">
-                Al participar en este desafío, usted acepta que su solución puede ser utilizada por la empresa organizadora y que ha leído y comprendido los términos y condiciones.
+            {t('challenge.form.termsAndConditions.text')}
             </p>
         </div>
         <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground">
             <Send className="h-4 w-4" />
-            Enviar solución
+            {t('challenge.buttons1.submitSolution')}
         </Button>
     </form>
 )

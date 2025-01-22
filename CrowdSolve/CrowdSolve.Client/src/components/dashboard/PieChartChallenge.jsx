@@ -3,6 +3,7 @@
 import { useMemo, useEffect, useState } from "react"
 import useAxios from "@/hooks/use-axios"
 import { Label, Pie, PieChart } from "recharts"
+import { useTranslation } from 'react-i18next';
 
 import {
   Card,
@@ -32,6 +33,7 @@ export function PieChartWithNumber() {
   const [filter, setFilter] = useState("total");
   const { api } = useAxios();
   const [dataCategorias, setDataCategoria] = useState([]);
+  const { t } = useTranslation();
 
   const fetchData = async () => {
     try {
@@ -90,19 +92,19 @@ export function PieChartWithNumber() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Cantidad Desafios</CardTitle>
-        <CardDescription>Creados</CardDescription>
+        <CardTitle>{t('pieChartChallenge.title')}</CardTitle>
+        <CardDescription>{t('pieChartChallenge.description')}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <div className="flex justify-end mb-4">
           <Select value={filter} onValueChange={(value) => { setFilter(value)}}>
             <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select a filter" />
+              <SelectValue placeholder={t('pieChartChallenge.selectFilter')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="total">Total</SelectItem>
-              <SelectItem value="Categorias">Categoria</SelectItem>
-              <SelectItem value="Empresas">Empresas</SelectItem>
+              <SelectItem value="total">{t('pieChartChallenge.filterOptions.total')}</SelectItem>
+              <SelectItem value="Categorias">{t('pieChartChallenge.filterOptions.categories')}</SelectItem>
+              <SelectItem value="Empresas">{t('pieChartChallenge.filterOptions.companies')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -144,7 +146,7 @@ export function PieChartWithNumber() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Desafios
+                          {t('pieChartChallenge.tooltip.challenges')}
                         </tspan>
                       </text>
                     )
@@ -157,7 +159,7 @@ export function PieChartWithNumber() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="leading-none text-muted-foreground">
-          Mostrando el total de Desafios en sus diferentes ambitos.
+        {t('pieChartChallenge.showingData')}
         </div>
       </CardFooter>
     </Card>

@@ -21,8 +21,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem,
 import { Eye, MoreHorizontal, Search, FilterX, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTranslation } from 'react-i18next';
 
 export default function AdminChallenges() {
+  const { t } = useTranslation();
   const { api } = useAxios();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -36,12 +38,12 @@ export default function AdminChallenges() {
   const columns = [
     {
       accessorKey: "titulo",
-      header: "Título",
+      header: t('adminChallenges.columns.titulo'),
       cell: ({ row }) => row.getValue("titulo"),
     },
     {
       accessorKey: "empresa",
-      header: "Empresa",
+      header: t('adminChallenges.columns.empresa'),
       cell: ({ row }) => {
         const idUsuarioEmpresa = row.original.idUsuarioEmpresa;
         return (
@@ -57,7 +59,7 @@ export default function AdminChallenges() {
     },
     {
       accessorKey: "estatusDesafio",
-      header: "Estatus",
+      header: t('adminChallenges.columns.estatusDesafio'),
       cell: ({ row }) => {
         return (
           <Badge variant={row.original.severidadEstatusDesafio}>
@@ -77,7 +79,7 @@ export default function AdminChallenges() {
           className="w-full justify-start text-left font-normal"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Fecha Registro
+          {t('adminChallenges.columns.fechaRegistro')}
           {column.getIsSorted() === "asc" ? (
             <ArrowUp className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === "desc" ? (
@@ -97,7 +99,7 @@ export default function AdminChallenges() {
           className="w-full justify-start text-left font-normal"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Fecha Inicio
+          {t('adminChallenges.columns.fechaInicio')}
           {column.getIsSorted() === "asc" ? (
             <ArrowUp className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === "desc" ? (
@@ -117,7 +119,7 @@ export default function AdminChallenges() {
           className="w-full justify-start text-left font-normal"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Fecha Límite
+          {t('adminChallenges.columns.fechaLimite')}
           {column.getIsSorted() === "asc" ? (
             <ArrowUp className="ml-2 h-4 w-4" />
           ) : column.getIsSorted() === "desc" ? (
@@ -135,15 +137,15 @@ export default function AdminChallenges() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir menú</span>
+              <span className="sr-only">{t('adminChallenges.columns.actions.openMenu')}</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('adminChallenges.columns.actions.menuLabel')}</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => navigate(`/admin/challenge/${row.original.idDesafio}`)}>
               <Eye className="mr-2 h-4 w-4" />
-              Ver detalles
+              {t('adminChallenges.columns.actions.viewDetails')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -216,7 +218,7 @@ export default function AdminChallenges() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Buscar por título de Desafío o Empresa"
+            placeholder={t('adminChallenges.search.placeholder')}
             value={globalFilter ?? ""}
             onChange={(event) => {
               const value = event.target.value;
@@ -235,7 +237,7 @@ export default function AdminChallenges() {
           }}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filtrar por estatus" />
+            <SelectValue placeholder={t('adminChallenges.filters.statusPlaceholder')} />
           </SelectTrigger>
           <SelectContent>
             {relationalObjects.estatusDesafios?.map((status) => (
@@ -256,7 +258,7 @@ export default function AdminChallenges() {
           onClick={clearFilters}
           disabled={!globalFilter && !statusFilter}
           size="icon"
-          tooltip="Limpiar filtros"
+          tooltip={t('adminChallenges.search.clearFiltersTooltip')}
         >
           <FilterX className="h-4 w-4" />
         </Button>
@@ -288,7 +290,7 @@ export default function AdminChallenges() {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No se encontraron resultados.
+                {t('adminChallenges.filters.noResults')}
                 </TableCell>
               </TableRow>
             )}
@@ -303,7 +305,7 @@ export default function AdminChallenges() {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Anterior
+            {t('adminChallenges.table.previousPage')}
           </Button>
           <Button
             variant="outline"
@@ -311,7 +313,7 @@ export default function AdminChallenges() {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Siguiente
+            {t('adminChallenges.table.nextPage')}
           </Button>
         </div>
       </div>

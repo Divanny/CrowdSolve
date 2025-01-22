@@ -15,8 +15,10 @@ import Icon from '@/components/ui/icon'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next';
 
 export default function NotificationsPage() {
+  const { t } = useTranslation();
   const { api } = useAxios()
   const [notifications, setNotifications] = React.useState([])
   const [selectedIds, setSelectedIds] = React.useState([])
@@ -72,12 +74,12 @@ export default function NotificationsPage() {
     try {
       const response = await api.put('/api/Notificaciones/MarcarLeido', ids)
       if (!response.data.success) {
-        toast.warning('Operación fallida', { description: response.data.message })
+        toast.warning(t('notification.functions.markAsRead.error'), { description: response.data.message })
         return;
       }
       setNotifications(prev => prev.map(n => ids.includes(n.idNotificacion) ? { ...n, leido: true } : n))
     } catch {
-      toast.error('Operación errónea', { description: 'Ocurrió un error al marcar las notificaciones como leídas' })
+      toast.error(t('notification.functions.markAsRead.error'), { description: t('notification.functions.markAsRead.warning') })
     }
   }
 
@@ -85,12 +87,12 @@ export default function NotificationsPage() {
     try {
       const response = await api.put('/api/Notificaciones/MarcarNoLeido', ids)
       if (!response.data.success) {
-        toast.warning('Operación fallida', { description: response.data.message })
+        toast.warning(t('notification.functions.markAsRead.error'), { description: response.data.message })
         return;
       }
       setNotifications(prev => prev.map(n => ids.includes(n.idNotificacion) ? { ...n, leido: false } : n))
     } catch {
-      toast.error('Operación errónea', { description: 'Ocurrió un error al marcar las notificaciones como leídas' })
+      toast.error(t('notification.functions.markAsRead.error'), { description: t('notification.functions.markAsRead.warning') })
     }
   }
 
@@ -98,13 +100,13 @@ export default function NotificationsPage() {
     try {
       const response = await api.delete(`/api/Notificaciones/EliminarNotificacion/${id}`)
       if (!response.data.success) {
-        toast.warning('Operación fallida', { description: response.data.message })
+        toast.warning(t('notification.functions.markAsRead.error'), { description: response.data.message })
         return;
       }
-      toast.success('Notificación eliminada', { description: 'La notificación ha sido eliminada correctamente' })
+      toast.success('Notificación eliminada', { description: t('notification.functions.deleteNotification.success') })
       setNotifications(prev => prev.filter(n => n.idNotificacion !== id))
     } catch {
-      toast.error('Operación errónea', { description: 'Ocurrió un error al eliminar la notificación' })
+      toast.error(t('notification.functions.markAsRead.error'), { description: t('notification.functions.deleteNotification.warning') })
     }
   }
 
@@ -112,10 +114,10 @@ export default function NotificationsPage() {
     <div className="container mx-auto py-6 space-y-4 px-4 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold">Notificaciones</h1>
+          <h1 className="text-2xl font-bold">{t('myProfile.interface.notifications')}</h1>
           {unreadCount > 0 && (
             <Badge variant="secondary">
-              {unreadCount} no leídas
+              {unreadCount} {t('myProfile.interface.unreadCount')}
             </Badge>
           )}
         </div>
@@ -125,7 +127,7 @@ export default function NotificationsPage() {
         <div className="flex-1 relative w-full sm:w-auto">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Buscar notificaciones..."
+            placeholder={t('myProfile.interface.search.placeholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-8 w-full sm:max-w-sm"
@@ -133,9 +135,9 @@ export default function NotificationsPage() {
         </div>
         <Tabs value={filterStatus} onValueChange={setFilterStatus} className="w-full sm:w-[400px]">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="all">Todos</TabsTrigger>
-            <TabsTrigger value="unread">No leídos</TabsTrigger>
-            <TabsTrigger value="read">Leídos</TabsTrigger>
+            <TabsTrigger value="all">{t('myProfile.interface.tabs.all')}</TabsTrigger>
+            <TabsTrigger value="unread">{t('myProfile.interface.tabs.unread')}</TabsTrigger>
+            <TabsTrigger value="read">{t('myProfile.interface.tabs.read')}</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
@@ -158,17 +160,17 @@ export default function NotificationsPage() {
                   onCheckedChange={toggleSelectAll}
                 />
                 <Label htmlFor='select-all' className="text-sm text-muted-foreground">
-                  {selectedIds.length} seleccionadas
+                  {selectedIds.length} {t('myProfile.labels.selectedCount')}
                 </Label>
               </div>
               {selectedIds.length > 0 && (
                 <div className="flex gap-2 flex-wrap">
                   <Button variant="outline" onClick={() => markAsRead(selectedIds)} size="sm" className="flex items-center gap-2 w-full sm:w-auto">
                     <Check className="h-4 w-4" />
-                    <span>Marcar como leídas</span>
+                    <span>{t('myProfile.labels.markAsRead')}</span>
                   </Button>
                   <Button variant="outline" onClick={() => markAsUnread(selectedIds)} size="sm" className="flex items-center gap-2 w-full sm:w-auto">
-                    <span>Marcar como no leídas</span>
+                    <span>{t('myProfile.labels.markAsUnread')}</span>
                   </Button>
                 </div>
               )}
@@ -176,7 +178,7 @@ export default function NotificationsPage() {
             {filteredNotifications.length === 0 ? (
               <div className='h-100 flex items-center justify-center'>
                 <div className="p-4 text-center text-muted-foreground">
-                  No hay notificaciones.
+                {t('myProfile.labels.noNotifications')}
                 </div>
               </div>
             ) : (
