@@ -321,6 +321,7 @@ const Challenge = () => {
                                                                 solutionFiles={solutionFiles}
                                                                 setSolutionFiles={setSolutionFiles}
                                                                 handleSubmitSolution={handleSubmitSolution}
+                                                                t={t}
                                                             />
                                                         </DialogContent>
                                                     </Dialog>
@@ -345,6 +346,7 @@ const Challenge = () => {
                                                                 solutionFiles={solutionFiles}
                                                                 setSolutionFiles={setSolutionFiles}
                                                                 handleSubmitSolution={handleSubmitSolution}
+                                                            t={t}
                                                             />
                                                             <DrawerFooter className="pt-2">
                                                                 <DrawerClose asChild>
@@ -372,7 +374,7 @@ const Challenge = () => {
     )
 }
 
-const SolutionForm = ({ className, solutionTitle, setSolutionTitle, solutionDescription, setSolutionDescription, solutionFiles, setSolutionFiles, handleSubmitSolution }) => (
+const SolutionForm = ({ className, solutionTitle, setSolutionTitle, solutionDescription, setSolutionDescription, solutionFiles, setSolutionFiles, handleSubmitSolution, t }) => (
     <form className={`grid items-start gap-4 ${className}`} onSubmit={handleSubmitSolution}>
         <div className="grid gap-2">
             <Label htmlFor="solutionTitle">{t('challenge.form.solutionTitle.label')}</Label>

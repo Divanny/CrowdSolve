@@ -144,6 +144,7 @@ const MyProfile = () => {
               relationalObjects={relationalObjects}
               onSave={handleSave}
               onCancel={() => setIsEditing(false)}
+              t={t}
             />
           </DialogContent>
         </Dialog>
@@ -158,6 +159,7 @@ const MyProfile = () => {
               relationalObjects={relationalObjects}
               onSave={handleSave}
               onCancel={() => setIsEditing(false)}
+              t={t}
             />
           </DrawerContent>
         </Drawer>
@@ -166,7 +168,7 @@ const MyProfile = () => {
   )
 }
 
-const EditProfileForm = ({ user, relationalObjects, onSave, onCancel }) => {
+const EditProfileForm = ({ user, relationalObjects, onSave, onCancel, t }) => {
   const [formData, setFormData] = useState({
     ...user,
     fechaNacimiento: new Date(user.fechaNacimiento)
