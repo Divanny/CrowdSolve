@@ -106,16 +106,16 @@ export function ValidateChallengeDialog({ isOpen, onClose, onSaved, estatusId, m
         <DialogFooter>
           {mode === "validate" && (
             <Button type="submit" onClick={validarDesafio}>
-              {t('validateChallengeDialog.validateDialog')}
+              {t('validateChallengeDialog.buttons.validate')}
             </Button>
           )}
           {mode === "decline" && (
             <Button type="submit" onClick={rechazarDesafio}>
-              {t('validateChallengeDialog.rejectDialog')}
+              {t('validateChallengeDialog.buttons.reject')}
             </Button>
           )}
           <Button type="button" variant="secondary" onClick={onClose}>
-          {t('validateChallengeDialog.close')}
+          {t('validateChallengeDialog.buttons.close')}
           </Button>
         </DialogFooter>
       </DialogContent>

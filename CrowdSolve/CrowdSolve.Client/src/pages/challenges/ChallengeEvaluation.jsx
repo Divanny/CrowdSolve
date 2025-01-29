@@ -146,7 +146,7 @@ const ChallengeEvaluation = () => {
                                     <CompanyEvaluation solutions={challenge.soluciones} reloadChallengeData={reloadChallengeData} />
                                 </div>
                             )}
-                            {(currentEvaluationProcess.idTipoEvaluacion === TiposEvaluacionEnum.Voto_Comunidad || currentEvaluationProcess.tipo === TiposEvaluacionEnum.Voto_Comunidad) && (
+                            {(currentEvaluationProcess.idTipoEvaluacion === TiposEvaluacionEnum.Voto_Participantes_Desafio || currentEvaluationProcess.tipo === TiposEvaluacionEnum.Voto_Comunidad) && (
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center">
                                         <h2 className="text-2xl font-bold">{t('challengeEvaluation.messages.evaluateSolutions')}</h2>

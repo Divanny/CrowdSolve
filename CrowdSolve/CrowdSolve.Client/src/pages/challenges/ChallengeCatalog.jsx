@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useTranslation } from 'react-i18next';
-import { Search, Calendar, Users, BookmarkPlus, Filter, Lightbulb, Code, Cpu } from 'lucide-react'
+import { Search, Calendar, Users, Filter, Lightbulb, Code, Cpu } from 'lucide-react'
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -39,10 +39,10 @@ function getTimeAgo(date, t) {
   if (diffDays < 7) return ` ${diffDays} ${t('ChallengeCatalog.timeAgo.?daysAgo')}`
   if (diffDays < 30) {
     const weeks = Math.floor(diffDays / 7)
-    return `${t('ChallengeCatalog.timeAgo.since')} ${weeks} ${weeks === 1 ? t('ChallengeCatalog.timeAgo.week') : t('ChallengeCatalog.timeAgo.weeks')}`
+    return `${weeks === 1 ? t('ChallengeCatalog.timeAgo.week') : t('ChallengeCatalog.timeAgo.weeks')}`
   }
   const months = Math.floor(diffDays / 30)
-  return `${t('ChallengeCatalog.timeAgo.since')} ${months} ${months === 1 ? t('ChallengeCatalog.timeAgo.month') : t('ChallengeCatalog.timeAgo.months')}`
+  return `${months === 1 ? t('ChallengeCatalog.timeAgo.month') : t('ChallengeCatalog.timeAgo.months')}`
 }
 
 function getTimeRemaining(deadline, t) {
@@ -516,13 +516,6 @@ function ChallengeCard({ desafio, categorias, estatus }) {
               <span className="text-xs text-muted-foreground">
                 {getTimeAgo(desafio.fechaInicio, t)}
               </span>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="transition-transform group-hover:scale-110"
-              >
-                <BookmarkPlus className="h-5 w-5" />
-              </Button>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2 mt-2">

@@ -58,9 +58,9 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
             </DialogTrigger>
             <DialogContent className="sm:max-w-[625px]" onOpenAutoFocus={(event) => event.preventDefault()}>
                 <DialogHeader>
-                    <DialogTitle>{t('CategoryFormdialog.prizeEvidenceTitle')}</DialogTitle>
+                    <DialogTitle>{t('prizeEvidenceDialog.prizeEvidenceTitle')}</DialogTitle>
                     <DialogDescription>
-                    {t('CategoryFormdialog.downloadEvidence')}
+                    {t('prizeEvidenceDialog.downloadEvidence')}
                     </DialogDescription>
                 </DialogHeader>
                 {evidence?.length > 0 && (
@@ -69,7 +69,7 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
                             <Button
                                 type="button"
                                 variant="outline"
-                                tooltip={t('CategoryFormdialog.placeholders.downloadTooltip')}
+                                tooltip={t('prizeEvidenceDialog.placeholders.downloadTooltip')}
                                 onClick={() => downloadEvidence(evidencia)}
                                 className='h-auto'
                                 key={index}
@@ -88,10 +88,10 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
                 <DialogFooter className="flex flex-col items-start gap-4">
                     <div className="flex items-center">
                         <Checkbox id="confirm-checkbox" checked={isConfirmed} onCheckedChange={setIsConfirmed} />
-                        <label htmlFor="confirm-checkbox" className="ml-2 text-sm">{t('CategoryFormdialog.confirmationDialogTitle')}</label>
+                        <label htmlFor="confirm-checkbox" className="ml-2 text-sm">{t('prizeEvidenceDialog.confirmationDialogTitle')}</label>
                     </div>
                     <Button onClick={() => setIsConfirmDialogOpen(true)} disabled={!isConfirmed} className="self-stretch">
-                    {t('CategoryFormdialog.finalizeChallenge')}
+                    {t('prizeEvidenceDialog.finalizeChallenge')}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -99,17 +99,17 @@ const PrizeEvidenceDialog = ({ children, evidence, challengeId, onFinalized }) =
             <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{t('CategoryFormdialog.confirmCheckbox')}</DialogTitle>
+                        <DialogTitle>{t('prizeEvidenceDialog.confirmCheckbox')}</DialogTitle>
                     </DialogHeader>
                     <DialogDescription>
-                    {t('CategoryFormdialog.confirmationDialogDescription')}
+                    {t('prizeEvidenceDialog.confirmationDialogDescription')}
                     </DialogDescription>
                     <DialogFooter>
                         <Button variant="secondary" onClick={() => setIsConfirmDialogOpen(false)}>
-                        {t('CategoryFormdialog.cancel')}
+                        {t('prizeEvidenceDialog.cancel')}
                         </Button>
                         <Button variant="destructive" onClick={finalizeChallenge}>
-                        {t('CategoryFormdialog.finalize')}
+                        {t('prizeEvidenceDialog.finalize')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
