@@ -1,31 +1,38 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
 {
     public class PerfilesRepo : Repository<Perfiles, PerfilesModel>
     {
-        public PerfilesRepo(DbContext dbContext) : base
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
+
+        public PerfilesRepo(DbContext dbContext, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (
             dbContext,
             new ObjectsMapper<PerfilesModel, Perfiles>(p => new Perfiles()
             {
                 idPerfil = p.idPerfil,
                 Nombre = p.Nombre,
-                Descripcion = p.Descripcion
+                Descripcion = p.Descripcion,
+                PorDefecto = p.PorDefecto
             }),
                     (DB, filter) => (from p in DB.Set<Perfiles>().Where(filter)
                                      select new PerfilesModel()
                                      {
                                          idPerfil = p.idPerfil,
                                          Nombre = p.Nombre,
-                                         Descripcion = p.Descripcion
+                                         Descripcion = p.Descripcion,
+                                         PorDefecto = p.PorDefecto
                                      })
         )
         {
+            _translationService = translationService;
+            _idioma = idioma;
         }
 
         public PerfilesModel Get(int Id)
@@ -33,36 +40,37 @@ namespace CrowdSolve.Server.Repositories.Autenticación
             var model = base.Get(p => p.idPerfil == Id).FirstOrDefault();
             return model;
         }
-        public IEnumerable<Vistas> GetPermisos(int? idPerfil)
+        public override IEnumerable<PerfilesModel> Get(Func<Perfiles, bool> filter = null)
         {
-            int id = idPerfil ?? 0;
-            var permisosSet = dbContext.Set<PerfilesVistas>().Where(p => p.idPerfil == id);
-
-            var vistas = from v in dbContext.Set<Vistas>()/*.OrderBy(x => x.Orden)*/
-                   select new
-                   {
-                       idVista = v.idVista,
-                       Nombre = v.Nombre,
-                       URL = v.URL,
-                       Permiso = permisosSet.Any(a => a.idVista == v.idVista),
-                       EsPrincipal = v.EsPrincipal,
-                       ClaseIcono = v.ClaseIcono,
-                       idVistaPadre = v.idVistaPadre,
-                   };
-
-            return vistas.Where(x => x.Permiso).Select(v => new Vistas()
+            var perfiles = base.Get(filter).ToList();
+            foreach (var perfil in perfiles)
             {
-                idVista = v.idVista,
-                Nombre = v.Nombre,
-                URL = v.URL,
-                EsPrincipal = v.EsPrincipal,
-                ClaseIcono = v.ClaseIcono,
-                idVistaPadre = v.idVistaPadre
-            }).ToList();
+                perfil.Nombre = _translationService.Traducir(perfil.Nombre, _idioma);
+            }
+            return perfiles;
+        }
+        public IEnumerable<Vistas> GetPermisos(int idPerfil)
+        {
+            var idsPermisos = dbContext.Set<PerfilesVistas>().Where(p => p.idPerfil == idPerfil).Select(x => x.idVista);
+
+            var vistas = GetPermisos();
+
+            return vistas.Where(x => idsPermisos.Contains(x.idVista)).ToList();
+        }
+        public IEnumerable<Vistas> GetPermisos()
+        {
+            var vistas = dbContext.Set<Vistas>().ToList();
+
+            foreach (var vista in vistas)
+            {
+                vista.Nombre = _translationService.Traducir(vista.Nombre, _idioma);
+            }
+
+            return vistas;
         }
         public IEnumerable<UsuariosModel> GetUsuarios(int idPerfil)
         {
-            UsuariosRepo usuariosRepo = new UsuariosRepo(dbContext);
+            UsuariosRepo usuariosRepo = new UsuariosRepo(dbContext, _translationService, _idioma);
             var listUsuarios = usuariosRepo.Get(x => x.idPerfil == idPerfil);
             return listUsuarios;
         }
@@ -144,17 +152,6 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                                 idPerfil = model.idPerfil,
                                 idVista = p.idVista
                             }));
-
-                            foreach (var p in newPermisos)
-                            {
-                                var VistasHijos = dbContext.Set<Vistas>().Where(x => x.idVistaPadre == p.idVista).ToList();
-
-                                permisosSet.AddRange(VistasHijos.Select(v => new PerfilesVistas()
-                                {
-                                    idPerfil = model.idPerfil,
-                                    idVista = v.idVista
-                                }));
-                            }
                         }
                         SaveChanges();
                     }
@@ -231,7 +228,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
         }
         public IEnumerable<Vistas> GetVistas()
         {
-            return dbContext.Set<Vistas>()/*.OrderBy(x => x.Orden)*/;
+            return dbContext.Set<Vistas>();
         }
         public int GetPerfilDefault()
         {

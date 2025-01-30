@@ -1,0 +1,2584 @@
+{
+  "about": {
+    "title": "Conectando personas",
+    "description": "CrowdSolve es una plataforma diseñada para conectar a personas que buscan resolver problemas de manera colaborativa. Su objetivo es reunir a diferentes tipos de usuarios, como expertos, empresas y participantes interesados en encontrar soluciones innovadoras para desafíos específicos.",
+    "mission": "NUESTRA MISIÓN",
+    "mission_description": "CrowdSolve busca fomentar la colaboración abierta, donde las ideas y las soluciones se compartan y evalúen, permitiendo que los problemas se resuelvan de forma eficiente. Además, se enfoca en crear un espacio donde los usuarios puedan demostrar sus habilidades, trabajar en conjunto, y aportar valor tanto a nivel individual como a nivel organizacional.",
+    "vision": "NUESTRA VISIÓN",
+    "vision_description": "CrowdSolve tiene como visión ser la plataforma global líder en resolución colaborativa de problemas, donde la inteligencia colectiva y la creatividad transformen desafíos en soluciones innovadoras. Buscamos crear un ecosistema inclusivo y gamificado que conecte a empresas, expertos y creativos de todo el mundo para impulsar el progreso y la innovación.",
+    "section_title": "Facilitando la Creación de Soluciones Innovadoras",
+    "section_description": "Nuestro objetivo es empoderar a equipos y personas para que colaboren y encuentren soluciones innovadoras a desafíos específicos. Aquí es cómo planeamos lograrlo.",
+    "features": [
+      {
+        "title": "Fomentando la Colaboración Abierta",
+        "description": "Creemos que no hay lugar para grandes egos y siempre hay tiempo para ayudarnos mutuamente. Nos esforzamos por dar y recibir retroalimentación, ideas y perspectivas."
+      },
+      {
+        "title": "Avanzando con Claridad",
+        "description": "Audazmente, con valentía y con objetivos claros. Buscamos las grandes oportunidades y nos enfocamos en las cosas más importantes en las que trabajar."
+      },
+      {
+        "title": "Optimizando para el Empoderamiento",
+        "description": "Creemos que todos deberían estar empoderados para hacer lo que consideren mejor para los intereses de la empresa."
+      },
+      {
+        "title": "Gamificación para la Participación",
+        "description": "Incorporamos puntos, insignias y rankings para incentivar la participación activa, recompensando el esfuerzo y la creatividad dentro de la comunidad."
+      },
+      {
+        "title": "Colaboración en Tiempo Real",
+        "description": "Ofrecemos herramientas de colaboración en línea que facilitan la interacción, el intercambio de ideas y la revisión de propuestas, promoviendo un trabajo conjunto eficiente y enriquecedor."
+      },
+      {
+        "title": "Impulsando la Innovación Global",
+        "description": "Conectamos a una red diversa de participantes globales, permitiendo que las ideas más innovadoras surjan de distintas perspectivas y experiencias."
+      }
+    ],
+    "stats_title": "Estadísticas de CrowdSolve",
+    "stats": {
+      "users": "Usuarios",
+      "projects": "Proyectos",
+      "uptime": "Tiempo de Actividad",
+      "support": "Soporte"
+    }
+  },
+  "MeetOurteam": {
+    "title": "Conoce a nuestro equipo",
+    "description": "Conoce a los talentosos individuos detrás de nuestro éxito."
+  },
+  "authAdminLayout": {
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse"
+  },
+  "AdminLayout": {
+    "sideBarAdm": {
+      "AdmUser": "Administración de usuarios",
+      "Participants": "Participantes",
+      "Companies": "Empresas",
+      "Admins": "Administradores",
+      "RolesPermissions": "Roles y permisos",
+      "AdmChallenges": "Gestión de desafíos",
+      "Challenges": "Desafíos",
+      "Solutions": "Soluciones",
+      "Categories": "Categorías",
+      "CompanyRequests": "Solicitudes de empresas",
+      "SupportRequests": "Solicitudes de soporte",
+      "ChallengesRequests": "Solicitudes de desafíos",
+      "Requests": "Solicitudes",
+      "Settings": "Configuraciones",
+      "UserManual": "Manual de usuario"
+    },
+    "authAdminLayout": {
+      "signIn": "Iniciar sesión",
+      "signUp": "Registrarse"
+    }
+  },
+  "CategoryFormdialog": {
+    "operations": {
+      "success": "Operación exitosa",
+      "failure": "Operación fallida"
+    },
+    "title": "Categoría",
+    "editTitle": "Editar",
+    "viewTitle": "Ver",
+    "nameLabel": "Nombre de la Categoría",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Ingrese una descripción",
+    "saveChanges": "Guardar cambios",
+    "close": "Cerrar"
+  },
+  "challengesPost": {
+    "sectionLabel": "Desafíos",
+    "sectionTitle": "Desafíos publicados por empresas",
+    "sectionDescription": "Participa en los desafíos publicados por diversas empresas y demuestra tus habilidades. ¡Grandes oportunidades te esperan!",
+    "exploreChallengesButton": "Explorar todos los desafíos",
+    "readMore": "Leer más"
+  },
+  "CrowdSourcingEasy": {
+    "sectionLabel": "¿Cómo funciona?",
+    "sectionTitle": "El crowdsourcing es fácil",
+    "sectionDescription": "CrowdSolve simplifica el proceso de crowdsourcing en tres fases claves: publicación del desafío, participación de la comunidad y evaluación colaborativa.",
+    "publishChallenges": {
+      "title": "Publicar desafíos",
+      "description": "Describe tu problema e invita a la comunidad CrowdSolve a brindar soluciones innovadoras."
+    },
+    "engageCommunity": {
+      "title": "Involucrar a la comunidad",
+      "description": "Acceda a una red global de solucionadores de problemas y colabore en las mejores soluciones."
+    },
+    "evaluateCollaboratively": {
+      "title": "Evaluar colaborativamente",
+      "description": "Revisar las soluciones propuestas y seleccionar las más prometedoras a través de un proceso colaborativo."
+    }
+  },
+  "ParticipantFormDialog": {
+    "participant": "Participante",
+    "title_edit": "Editar",
+    "title_view": "Ver",
+    "username_label": "Nombre de usuario",
+    "email_label": "Correo electrónico",
+    "first_name_label": "Nombre",
+    "last_name_label": "Apellido",
+    "birthdate_label": "Fecha de nacimiento",
+    "birthdate_placeholder": "Seleccione una fecha",
+    "phone_label": "Teléfono",
+    "education_level_label": "Nivel de educación",
+    "education_level_placeholder": "Seleccione un nivel de educación",
+    "user_profile_label": "Perfil de Usuario",
+    "user_profile_placeholder": "Seleccione un perfil",
+    "select": "Seleccionar",
+    "user_status_label": "Estatus del usuario",
+    "user_status_placeholder": "Seleccione un estatus",
+    "description_label": "Descripción personal",
+    "description_placeholder": "Ingrese una descripción personal",
+    "button_save_changes": "Guardar cambios",
+    "button_close": "Cerrar",
+    "successOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida"
+  },
+  "faq_section": {
+    "title": "Preguntas frecuentes sobre CrowdSolve",
+    "noFaqsFound": "No se encontraron preguntas frecuentes.",
+    "faqs": [
+      {
+        "question": "¿Qué es CrowdSolve?",
+        "answer": "CrowdSolve es una plataforma colaborativa donde los usuarios pueden trabajar juntos para resolver problemas complejos."
+      },
+      {
+        "question": "¿Cómo funciona CrowdSolve?",
+        "answer": "CrowdSolve permite a los usuarios publicar problemas y colaborar con otros para encontrar soluciones a través de la inteligencia colectiva."
+      },
+      {
+        "question": "¿Quién puede usar CrowdSolve?",
+        "answer": "Cualquier persona interesada en resolver problemas puede unirse a CrowdSolve. No se requieren habilidades específicas, solo un deseo de colaborar y contribuir."
+      },
+      {
+        "question": "¿Cuáles son los beneficios?",
+        "answer": "Los beneficios de usar CrowdSolve incluyen acceso a una comunidad diversa de solucionadores de problemas, la posibilidad de encontrar soluciones innovadoras y la oportunidad de aprender de otros."
+      }
+    ]
+  },
+  "Herosection": {
+    "designs": {
+      "globalCommunity": "Comunidad Global",
+      "innovation": "Innovación",
+      "collaboration": "Colaboración"
+    },
+    "title": "Desbloquea soluciones creativas con CrowdSolve",
+    "description": "CrowdSolve es una poderosa plataforma de crowdsourcing que conecta empresas con una comunidad global para resolver desafíos complejos. Publique su desafío, involucre a la multitud y colabore en soluciones innovadoras.",
+    "buttons": {
+      "post_challenge": "Publicar un desafío",
+      "join_community": "Unirse a la comunidad"
+    },
+    "card_texts": {
+      "innovation": {
+        "title": "Innovación sin límites",
+        "subtitle": "Desata el potencial creativo de la multitud"
+      },
+      "solutions": {
+        "title": "Soluciones para desafíos complejos"
+      }
+    }
+  },
+  
+  "TrustedBysection": {
+    "title": "Confiado por estas empresas"
+  },
+  "WhyClientsLoveUs": {
+    "title": "¿Por qué nuestros usuarios nos aman?"
+  },
+  "footer": {
+    "logoAlt": "Logo de CrowdSolve",
+    "description": "Conectamos mentes brillantes con desafíos empresariales innovadores.",
+    "socialLinks": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn"
+    },
+    "sections": {
+      "product": {
+        "title": "Producto",
+        "links": {
+          "challenges": "Desafíos",
+          "registeredCompanies": "Empresas Registradas",
+          "helpCenter": "Centro de Ayuda"
+        }
+      },
+      "company": {
+        "title": "Empresa",
+        "links": {
+          "aboutUs": "Sobre Nosotros",
+          "team": "Equipo",
+          "contact": "Contacto"
+        }
+      }
+    },
+    "copyright": "CrowdSolve. Todos los derechos reservados.",
+    "terms": "Términos y Condiciones",
+    "privacy": "Política de Privacidad"
+  },
+  "navbar": {
+    "logoAlt": "Logo de CrowdSolve",
+    "links": {
+      "aboutUs": "Sobre nosotros",
+      "challenges": "Desafíos",
+      "companies": "Empresas",
+      "contactUs": "Contáctanos"
+    },
+    "auth": {
+      "signIn": "Iniciar sesión",
+      "signUp": "Registrarse"
+    }
+  },
+  "ProfileDropdownMenuContent": {
+    "miEmpresa":"Mi empresa",
+    "profile": "Perfil",
+    "solutions": "Soluciones",
+    "settings": "Configuraciones",
+    "notifications": "Notificaciones",
+    "admin": "Administrador",
+    "toastMessageTitle": "Operación exitosa",
+    "toastMessageDescription": "Has cerrado sesión correctamente",
+    "appearance": "Apariencia",
+    "language": "Idioma",
+    "logout": "Cerrar sesión",
+    "theme": {
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "language_options": {
+      "es": "Español",
+      "en": "Inglés"
+    },
+    "user": {
+      "name": "Nombre de usuario",
+      "profile": "Nombre de perfil",
+      "participant_info": "Información del participante",
+      "first_name": "Nombre",
+      "last_name": "Apellido"
+    }
+  },
+  "Sidebar": {
+    "hamburgerIconAlt": "Ícono de menú",
+    "aboutUs": "Sobre nosotros",
+    "challenges": "Desafíos",
+    "companies": "Empresas",
+    "contact": "Contacto",
+    "userProfile": {
+      "defaultAvatar": "Avatar de usuario",
+      "userName": "Nombre de usuario",
+      "userProfileName": "Nombre de perfil"
+    },
+    "buttons": {
+      "signIn": "Iniciar sesión",
+      "signUp": "Registrarse"
+    },
+    "footer": {
+      "menuTrigger": "Desplegar menú",
+      "logOut": "Cerrar sesión"
+    }
+  },
+  "GoogleLoginbutton": {
+    "success": {
+      "operationSuccess": "Operación exitosa",
+      "loginSuccess": "Inicio de sesión con Google exitoso"
+    },
+    "warning": {
+      "operationError": "Operación fallida",
+      "loginWarning": "Error en el inicio de sesión con Google",
+      "defaultErrorMessage": "Error al iniciar sesión con Google"
+    },
+    "error": {
+      "operationError": "Operación fallida",
+      "loginError": "Error al iniciar sesión con Google:"
+    },
+    "continueWithGoogle": "Continuar con Google"
+  },
+  "RegistroEmpresa": {
+    "successfulOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida",
+    "failedOpeDescription": "Por favor, complete todos los campos",
+    "companyName": "Nombre de la empresa",
+    "companyDescription": "Descripción",
+    "phone": "Teléfono",
+    "phPhone": "Ingrese el teléfono de la empresa",
+    "phName": "Ingrese el nombre de la empresa",
+    "phDescription": "Ingrese una breve descripción de la empresa",
+    "select": "Seleccione",
+    "selectSector": "Seleccione un sector",
+    "sector": "Sector",
+    "website": "Página web",
+    "enterWebsite": "Ingrese la página web de la empresa",
+    "companySize": "Tamaño de la empresa",
+    "selectComSize": "Seleccione un tamaño de empresa",
+    "address": "Dirección",
+    "enterComAddress": "Ingrese la dirección de la empresa",
+    "register": "Registrar"
+  },
+  "RegistroEmpresaEntry": {
+    "welcomeTitle": "Bienvenido a CrowdSolve",
+    "welcomeDescription": "Un par de cosas clave que debe saber antes de crear su cuenta de empresa:",
+    "moderationTitle": "Moderamos todos los desafíos antes de su publicación.",
+    "moderationDescription": "Nuestro equipo editorial revisa manualmente cada desafío y puede realizar cambios en su bandeja de desafíos antes de aprobar la publicación.",
+    "verificationTitle": "Tu empresa será verificada antes de la activación de la cuenta.",
+    "verificationDescription": "Después de crear la cuenta, verificaremos la autenticidad de la información proporcionada sobre tu empresa. Este proceso es necesario para garantizar la validez de los datos.",
+    "continueButton": "¡Perfecto!, continuar"
+  },
+  "RegistroParticipante": {
+    "successfulOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida",
+    "failedOpeDescription": "Por favor, complete todos los campos",
+    "nombres": "Nombres",
+    "apellidos": "Apellidos",
+    "fechaNacimiento": "Fecha de Nacimiento",
+    "telefono": "Teléfono",
+    "nivelEducativo": "Nivel Educativo",
+    "descripcionPersonal": "Descripción Personal",
+    "registrarse": "Registrarse",
+    "selectDate": "Seleccione una fecha",
+    "selectLevel": "Seleccione un nivel educativo",
+    "enterFirstName": "Ingrese sus nombres",
+    "enterLastName": "Ingrese sus apellidos",
+    "enterPhoneNumber": "Ingrese su teléfono",
+    "enterPersonalDescription": "Ingrese una descripción personal"
+  },
+  "ContinueGoogle": {
+    "continueWithGoogle": "Continuar con Google"
+  },
+  "LoadingPage": {
+    "loading": "Cargando..."
+  },
+  "ProtectedRoute": {
+    "errorFetchingUserInfo": "Error al obtener la información del usuario"
+  },
+  "use-axios": {
+    "sessionExpired": "Sesión expirada. Por favor, inicia sesión nuevamente.",
+    "accessDenied": "Acceso denegado",
+    "signInRequired": "Debes iniciar sesión para acceder a esta página.",
+    "operationFailed": "Operación fallida"
+  },
+  "Categories": {
+    "table": {
+      "selectAll": "Seleccionar todo",
+      "selectRow": "Seleccionar fila",
+      "columns": {
+        "nombre": "Nombre Categoria",
+        "descripcion": "Descripción",
+        "icono": "Icono",
+        "cantidadDesafios": "Cantidad Desafíos",
+        "actions": "Acciones"
+      },
+      "actionsMenu": {
+        "edit": "Editar",
+        "viewDetails": "Ver detalles"
+      },
+      "searchPlaceholder": "Buscar por nombre de Categoria",
+      "noResults": "No se encontraron resultados.",
+      "rowsSelected": "fila seleccionada.",
+      "de":"of",
+      "buttons": {
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "clearFilters": "Limpiar filtros",
+        "columns": "Columnas",
+        "create": "Crear nueva categoría"
+      },
+      "pagination": {
+        "selected": "Seleccionado",
+        "rows": "filas"
+      }
+    },
+    "notifications": {
+      "sessionExpired": "Sesión expirada. Por favor, inicia sesión nuevamente.",
+      "accessDenied": {
+        "title": "Acceso denegado",
+        "description": "Debes iniciar sesión para acceder a esta página."
+      },
+      "operationFailed": {
+        "title": "Operación fallida",
+        "description": "Ha ocurrido un error. Por favor, intenta nuevamente."
+      }
+    },
+    "abrirMenu": "Abrir menú"
+  },
+  "Participants": {
+    "select_all": "Seleccionar todo",
+    "select_row": "Seleccionar fila",
+    "nombre_usuario": "Nombre de Usuario",
+    "correo_electronico": "Correo Electrónico",
+    "nombre_completo": "Nombre Completo",
+    "telefono": "Teléfono",
+    "fecha_nacimiento": "Fecha de Nacimiento",
+    "nivel_educativo": "Nivel Educativo",
+    "buscarPH": "Buscar...",
+    "soluciones_enviadas": "Soluciones Enviadas",
+    "fecha_registro": "Fecha de Registro",
+    "estatus_usuario": "Estatus",
+    "acciones": "Acciones",
+    "ver_detalles": "Ver detalles",
+    "editar": "Editar",
+    "ver_soluciones": "Ver soluciones",
+    "buscar": "Buscar por nombre de usuario, correo electrónico o nombre completo...",
+    "filtro_nivel_educativo": "Nivel Educativo",
+    "filtro_estatus_usuario": "Estatus de Usuario",
+    "limpiar_filtro": "Limpiar filtro",
+    "limpiarFiltros": "Limpiar filtros",
+    "columna": "Columnas",
+    "no_resultados": "No se encontraron resultados",
+    "PrevButton": "Anterior",
+    "NextButton": "Siguiente",
+    "openMenu": "Abrir Menú",
+    "searchStatus": "Buscar estatus...",
+    "of": "de",
+    "row": "fila",
+    "selected": "Seleccionada"
+  },
+  "RoleAndPermissions": {
+    "saveChanges": {
+      "success": {
+        "title": "Operación exitosa",
+        "description": "Los cambios se guardaron correctamente."
+      },
+      "failure": {
+        "title": "Operación fallida",
+        "description": "No se pudieron guardar los cambios."
+      },
+      "error": {
+        "title": "Error al guardar los cambios",
+        "description": "Ocurrió un error al guardar los cambios, por favor intenta de nuevo."
+      }
+    },
+    "title": "Roles y permisos",
+    "description": "Administra los permisos y accesos para cada rol del sistema",
+    "saveChanges2": "Guardar cambios",
+    "permission": "Permiso"
+  },
+  "CompleteSignUp": {
+    "companyForm": "Formulario de empresa",
+    "participantForm": "Formulario de participante",
+    "backToRoleSelection": "← Volver a seleccionar rol"
+  },
+  "ForgotPassword": {
+  "passwordRecovery": {
+    "forgotPasswordTitle": "¿Olvidaste tu contraseña?",
+    "forgotPasswordDescription": "No te preocupes, te enviaremos instrucciones para restablecerla por correo electrónico.",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "Introduce tu correo electrónico",
+    "resetPasswordButton": "Restablecer contraseña",
+    "checkEmailTitle": "Revisa tu correo electrónico",
+    "checkEmailDescription": "Hemos enviado un enlace de restablecimiento a",
+    "validateLinkButton": "Validar enlace de restablecimiento",
+    "resendCodeLink": "¿No recibiste el código?",
+    "resendCodeBt": "Reenviar código",
+    "setNewPasswordTitle": "Establecer nueva contraseña",
+    "setNewPasswordDescription": "Introduce tu nueva contraseña a continuación.",
+    "newPasswordLabel": "Nueva contraseña",
+    "confirmPasswordLabel": "Confirmar nueva contraseña",
+    "setNewPasswordButton": "Establecer nueva contraseña",
+    "backToSignInButton": "Volver a iniciar sesión"
+  },
+  "toastMessages": {
+    "operationFailed": "Operación fallida",
+    "pleaseCompleteFields": "Por favor, completa todos los campos",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "operationSuccessful": "Operación exitosa",
+    "resetPasswordLinkSent": "Se ha enviado un enlace de restablecimiento a tu correo electrónico",
+    "verificationCodeCorrect": "Código de verificación correcto",
+    "passwordResetSuccessful": "Contraseña restablecida con éxito"
+  }
+},
+
+  "RoleSelection": {
+    "selectRoleTitle": "Selecciona tu rol en CrowdSolve",
+    "selectRoleSubtitle": "¿Cómo quieres participar en nuestra plataforma?",
+    "companyRoleTitle": "Empresa",
+    "companyRoleDescription": "Conecta con talento y soluciones innovadoras.",
+    "participantRoleTitle": "Participante",
+    "participantRoleDescription": "Únete a proyectos y desarrolla tus habilidades.",
+    "nextButton": "Siguiente",
+    "errorMessage": "Operación fallida",
+    "errorMessageDescription": "Por favor selecciona un rol"
+  },
+  "SignIn": {
+    "signInTitle": "Iniciar sesión",
+    "signInSubtitle": "Empieza usando CrowdSolve para ti o tu empresa",
+    "usernamePlaceholder": "Ingrese su de usuario o su correo electrónico",
+    "passwordPlaceholder": "Ingrese su contraseña",
+    "forgotPassword": "¿Has olvidado tu contraseña?",
+    "loadingText": "Por favor, espere",
+    "signInButton": "Iniciar sesión",
+    "signUpLink": "Registrarse",
+    "errorMessage": "Operación fallida",
+    "errorMessageDescription": "Por favor, complete todos los campos",
+    "successMessage": "Operación exitosa",
+    "successMessageDescription": "Inicio de sesión exitoso",
+    "creativeMessage": "Despierta tu creatividad",
+    "showTalentMessage": "Demuestra tu talento",
+    "solveProblemsMessage": "Resuelve problemas",
+    "noAccount": "¿No tienes una cuenta?"
+  },
+  "SignUp": {
+    "signUpTitle": "Crear cuenta",
+    "signUpSubtitle": "Empieza usando CrowdSolve para ti o tu empresa",
+    "usernamePlaceholder": "Ingrese su usuario",
+    "emailPlaceholder": "Ingrese su correo electrónico",
+    "passwordPlaceholder": "Ingrese su contraseña",
+    "confirmPasswordPlaceholder": "Confirme su contraseña",
+    "loadingText": "Por favor, espere",
+    "signUpButton": "Crear cuenta",
+    "signInLink": "Iniciar Sesión",
+    "errorMessage": "Operación fallida",
+    "errorMessageDescription": "Por favor, complete todos los campos",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "successMessage": "Operación exitosa",
+    "successMessageDescription": "Cuenta creada exitosamente",
+    "termsOfServiceLink": "Términos",
+    "usagePolicyLink": "Política de uso",
+    "privacyPolicyLink": "Política de privacidad",
+    "creativeMessage": "Despierta tu creatividad",
+    "showTalentMessage": "Demuestra tu talento",
+    "solveProblemsMessage": "Resuelve problemas",
+    "haveaccount": "¿Ya tienes una cuenta?",
+    "userName": "Nombre de usuario",
+    "Email": "Correo electrónico",
+    "password": "Contraseña"
+  },
+  "AccessDenied": {
+    "accessDeniedTitle": "Acceso Denegado",
+    "accessDeniedMessage": "Lo sentimos, no tienes permiso para acceder a esta página. Si crees que esto es un error, por favor contacta al administrador.",
+    "goBackButton": "Volver",
+    "goHomeButton": "Ir al inicio"
+  },
+  "ChallengeCatalog": {
+  "pageTitle": "Encuentra tu próximo",
+  "pageTitle2": "desafío innovador",
+  "searchPlaceholder": "Buscar desafíos...",
+  "pagedescription": "Explora los últimos desafíos de innovación y muestra tu talento en nuestra plataforma líder.",
+  "filter": "Filtros",
+  "searchPreferences": "Ajusta tus preferencias de búsqueda",
+  "itemSelect": {
+    "recent": "Más recientes",
+    "popular": "Más populares",
+    "closeSoon": "Próximos a cerrar"
+  },
+  "filters": {
+    "all": "Todos",
+    "design": "Diseño",
+    "software": "Software",
+    "data": "Datos",
+    "ai": "IA",
+    "cybersecurity": "Ciberseguridad"
+  },
+  "categories": {
+    "label": "Categoría",
+    "status": "Estado",
+    "company": "Compañía:",
+    "endDate": "Fecha de cierre:"
+  },
+  "noResults": {
+    "title": "No encontrado",
+    "imageAlt": "No encontrado"
+  },
+  "pagination": {
+    "page": "Página",
+    "of": "de"
+  },
+  "buttons": {
+    "viewMore": "Ver más",
+    "previous": "Anterior",
+    "next": "Siguiente"
+  },
+  "timeAgo": {
+    "since": "Hace",
+    "1dayAgo": "1 día",
+    "?daysAgo": "días",
+    "week": "Hace 1 semana",
+    "weeks": "semanas",
+    "month": "Hace 1 mes",
+    "months": "meses",
+    "close": "Cerrado",
+    "closeToday": "Cierra hoy",
+    "dayRemaining": "1 día restante",
+    "daysRemaining": "días restantes"
+  },
+  "solutions": "Soluciones"
+},
+
+  "CompanyListing": {
+    "general": {
+      "searchPlaceholder": "Buscar empresas...",
+      "sectorPlaceholder": "Sector",
+      "companySizePlaceholder": "Tamaño de empresa",
+      "clearFilters": "Limpiar filtros",
+      "notFoundMessage": "No se encontraron empresas que coincidan con los filtros seleccionados.",
+      "website": "Sitio web",
+      "moreOptions": "Más opciones",
+      "actions": "Acciones",
+      "contact": "Contactar",
+      "viewChallenges": "Ver desafíos"
+    },
+    "header": {
+      "badge": {
+        "message": "Descubre las últimas empresas que se han unido a CrowdSolve"
+      },
+      "title": "Potencia tu innovación con CrowdSolve.",
+      "description": "Conecta con empresas líderes, resuelve desafíos emocionantes y forma parte de la revolución del crowdsourcing."
+    },
+    "companies": {
+      "title": "Empresas asociadas",
+      "challenges": "desafíos",
+      "solutions": "soluciones",
+      "actions": {
+        "contact": "Contactar",
+        "viewChallenges": "Ver desafíos"
+      }
+    }
+  },
+  "CompaniesPage": {
+    "selectAll": "Seleccionar todo",
+    "selectRow": "Seleccionar fila",
+    "nombre": "Nombre",
+    "descripcion": "Descripción",
+    "direccion": "Dirección",
+    "telefono": "Teléfono",
+    "paginaWeb": "Página web",
+    "tamanoEmpresa": "Tamaño de la empresa",
+    "sector": "Sector",
+    "cantidadDesafios": "Cantidad de desafíos",
+    "cantidadSoluciones": "Cantidad de soluciones",
+    "estatusUsuario": "Estado",
+    "acciones": "Acciones",
+    "abrirMenu": "Abrir menú",
+    "editar": "Editar",
+    "verDetalles": "Ver detalles",
+    "verDesafios": "Ver desafíos",
+    "buscarPorNombre": "Buscar por nombre...",
+    "tamanoEmpresaFiltro": "Tamaño de la empresa",
+    "buscar": "Buscar...",
+    "limpiarFiltro": "Limpiar filtro",
+    "sectorFiltro": "Sector",
+    "limpiarFiltros": "Limpiar filtros",
+    "columnaBoton": "Columnas",
+    "noResultsFound": "No se encontraron resultados.",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "preposicionDe": "de",
+    "rows": "fila",
+    "selected": "seleccionada"
+  },
+  "ContactUs": {
+    "contact": {
+      "title": "Puedes encontrarnos en nuestras redes y contactarnos",
+      "description": "Si tienes preguntas, comentarios o necesitas más información sobre nuestros desafíos, no dudes en ponerte en contacto con nosotros. Tu opinión es importante y estamos comprometidos en brindarte el apoyo que necesites. Completa el formulario a continuación o utiliza cualquiera de nuestros canales de contacto para comunicarse con nosotros. ¡Esperamos saber de ti pronto!",
+      "socials": {
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "email": "Correo",
+        "location": "Ubicación",
+        "phone": "Teléfono"
+      },
+      "form": {
+        "title": "¡Contáctanos!",
+        "fields": {
+          "subject": "Asunto del mensaje",
+          "firstName": "Nombre",
+          "lastName": "Apellido",
+          "email": "Correo electrónico",
+          "message": "¿En qué te podemos ayudar?"
+        },
+        "captchaWarning": "Por favor, complete el captcha",
+        "submit": {
+          "default": "Enviar Formulario",
+          "loading": "Por favor, espere"
+        },
+        "toasts": {
+          "incompleteFields": "Por favor, complete todos los campos",
+          "success": "Mensaje enviado con éxito",
+          "error": "Error al enviar el mensaje"
+        }
+      }
+    }
+  },
+  "errorPage": {
+    "title": "Error",
+    "subtitle": "Algo salió mal",
+    "description": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde o contacte al soporte si el problema persiste.",
+    "buttons": {
+      "goBack": "Regresar",
+      "goHome": "Ir al Inicio"
+    }
+  },
+  "notFoundPage": {
+    "title": "404",
+    "subtitle": "Página no encontrada",
+    "description": "Es posible que la página que está buscando se haya eliminado, se haya cambiado de nombre o no esté disponible temporalmente.",
+    "buttons": {
+      "goBack": "Volver",
+      "goHome": "Ir al inicio"
+    }
+  },
+  "privacyPolicy": {
+    "title": "Política de Privacidad",
+    "effectiveDate": "Efectiva desde el 8 de agosto, 2024",
+    "intro": "En CrowdSolve, valoramos y respetamos tu privacidad. Esta Política de Privacidad explica cómo recopilamos, utilizamos y protegemos tu información personal cuando utilizas nuestra plataforma y servicios.",
+    "sections": {
+      "informationCollected": {
+        "title": "1. Información que Recopilamos",
+        "description": "Recopilamos la siguiente información:",
+        "list": {
+          "infoCollect1": "Información de registro: nombre, dirección de correo electrónico, contraseña.",
+          "infoCollect2": "Información de perfil: experiencia profesional, habilidades, foto de perfil (opcional).",
+          "infoCollect3": "Contenido generado por el usuario: propuestas, comentarios, votaciones.",
+          "infoCollect4": "Información de uso: interacciones con la plataforma, participación en desafíos.",
+          "infoCollect5": "Evidencias de entrega de premios: cualquier evidencia de recompensas recibidas (solo para participantes ganadores)."
+        }
+      },
+      "informationUsage": {
+        "title": "2. Cómo Utilizamos tu Información",
+        "description": "Utilizamos tu información para:",
+        "list": {
+          "infoUsage1": "Proporcionar y mejorar nuestros servicios.",
+          "infoUsage2": "Facilitar la participación en desafíos y la colaboración entre usuarios.",
+          "infoUsage3": "Enviar notificaciones relacionadas con el servicio y actualizaciones.",
+          "infoUsage4": "Prevenir fraudes y garantizar la seguridad de la plataforma."
+        }
+      },
+      "informationSharing": {
+        "title": "3. Compartir Información",
+        "description": "Compartimos tu información en las siguientes circunstancias:",
+        "list": {
+          "infoSharing1": "Con empresas que publican desafíos, limitado a la información necesaria para evaluar propuestas.",
+          "infoSharing2": "Con proveedores de servicios que nos ayudan a operar la plataforma.",
+          "infoSharing3": "Cuando sea requerido por ley o para proteger nuestros derechos legales."
+        }
+      },
+      "dataSecurity": {
+        "title": "4. Seguridad de Datos",
+        "description": "Implementamos medidas de seguridad técnicas y organizativas para proteger tu información personal contra acceso no autorizado, pérdida o alteración. Sin embargo, ninguna transmisión de datos por Internet es 100% segura."
+      },
+      "userRights": {
+        "title": "5. Tus Derechos",
+        "description": "Tienes derecho a:",
+        "list": {
+          "uRights1": "Acceder a tu información personal.",
+          "uRights2": "Corregir datos inexactos.",
+          "uRights3": "Solicitar la eliminación de tus datos.",
+          "uRights4": "Oponerte al procesamiento de tus datos.",
+          "uRights5": "Solicitar la portabilidad de tus datos."
+        }
+      },
+      "cookies": {
+        "title": "6. Cookies y Tecnologías Similares",
+        "description": "Utilizamos cookies y tecnologías similares para mejorar la experiencia del usuario, analizar el tráfico y personalizar el contenido. Puedes controlar el uso de cookies a través de la configuración de tu navegador."
+      },
+      "policyChanges": {
+        "title": "7. Cambios en la Política de Privacidad",
+        "description": "Podemos actualizar esta Política de Privacidad ocasionalmente. Te notificaremos sobre cambios significativos mediante un aviso en nuestra plataforma o por correo electrónico."
+      },
+      "contact": {
+        "description": "Si tienes preguntas sobre esta Política de Privacidad, por favor contáctanos en",
+        "email": "soporte@crowdsolve.site"
+      }
+    },
+    "buttons": {
+      "termsOfService": "Ver Términos de Servicio",
+      "usagePolicy": "Ver Política de Uso Aceptable"
+    }
+  },
+  "Termsofservice": {
+    "title": "Términos de Servicio",
+    "effectiveDate": "8 de agosto, 2024",
+    "intro": "¡Bienvenido a CrowdSolve! Antes de acceder a nuestros servicios, por favor lee estos Términos de Servicio.",
+    "overview": "Estos Términos de Servicio ('Términos') rigen tu uso de CrowdSolve, incluyendo nuestra plataforma web, herramientas de colaboración, y todos los servicios asociados (en conjunto, nuestros 'Servicios'). Estos Términos son un contrato entre tú y CrowdSolve. Al acceder a nuestros Servicios, aceptas estos Términos.",
+    "readPls": "Por favor, lea nuestra",
+    "readPlsDesc": ", que describe cómo recopilamos y utilizamos información personal.",
+    "privacyPolicyLink": {
+      "text": "Política de Privacidad",
+      "url": "/privacy-policy"
+    },
+    "sections": [
+      {
+        "title": "1. Uso de nuestros Servicios",
+        "content": "Nuestros Servicios están diseñados para conectar empresas con una comunidad global de solucionadores. Debes seguir todas las políticas puestas a tu disposición dentro de los Servicios. Solo puedes usar nuestros Servicios según lo permitido por la ley. Podemos suspender o dejar de proporcionarte nuestros Servicios si no cumples con nuestros términos o políticas o si estamos investigando una sospecha de mala conducta."
+      },
+      {
+        "title": "2. Tu Cuenta",
+        "content": "Necesitas una cuenta para utilizar CrowdSolve. Eres responsable de mantener la seguridad de tu cuenta y de cualquier actividad que ocurra a través de ella. Mantén tu contraseña segura y contáctanos inmediatamente si detectas cualquier uso no autorizado de tu cuenta. Tu cuenta puede ser para una empresa que publica desafíos o para un participante que propone soluciones."
+      },
+      {
+        "title": "3. Publicación de Desafíos y Participación",
+        "content": "Las empresas pueden publicar desafíos en nuestra plataforma. Al hacerlo, aceptas proporcionar información precisa sobre los requisitos, plazos y recompensas. Los participantes pueden enviar propuestas para estos desafíos. Al participar, garantizas que tu propuesta es original y no infringe los derechos de terceros."
+      },
+      {
+        "title": "4. Propiedad Intelectual",
+        "content": "Los derechos de propiedad intelectual de las propuestas ganadoras se transferirán a la empresa que publicó el desafío, según los términos específicos de cada reto. CrowdSolve no reclama la propiedad de las propuestas no ganadoras. Respetamos los derechos de propiedad intelectual y esperamos que todos los usuarios hagan lo mismo."
+      },
+      {
+        "title": "5. Pagos y Recompensas",
+        "content": "Las recompensas y pagos de los desafíos pasan a ser parte de la empresa. CrowdSolve no interviene ni desarrolla nada relacionado con las recompensas y pagos. Las empresas deberán adjuntar evidencia del pago o recompensa para que un desafío pueda ser finalizado por la administración."
+      },
+      {
+        "title": "6. Privacidad y Protección de Datos",
+        "content": "Nuestra política de privacidad explica cómo tratamos tus datos personales y protegemos tu privacidad cuando utilizas nuestros Servicios. Al usar CrowdSolve, aceptas que podemos usar dichos datos de acuerdo con nuestra política de privacidad. Nos comprometemos a proteger la confidencialidad de la información sensible compartida en los desafíos."
+      },
+      {
+        "title": "7. Modificaciones a los Términos",
+        "content": "Podemos modificar estos Términos de vez en cuando. Te notificaremos de cualquier cambio significativo en los Términos. Tu uso continuado de nuestros Servicios después de dichos cambios constituye tu aceptación de los nuevos Términos."
+      }
+    ],
+    "byUsing": "Al utilizar CrowdSolve, acepta estos Términos de servicio. Si no está de acuerdo con estos Términos, no utilice nuestros Servicios. Si tiene alguna pregunta sobre estos Términos, contáctenos en",
+    "contact": {
+      "text": "Si tienes alguna pregunta sobre estos Términos, contáctanos en",
+      "email": "soporte@crowdsolve.site",
+      "emailLink": "mailto:soporte@crowdsolve.site"
+    },
+    "buttons": [
+      {
+        "text": "Ver Política de Uso Aceptable",
+        "link": "/usage-policy"
+      },
+      {
+        "text": "Ver Política de Privacidad",
+        "link": "/privacy-policy"
+      }
+    ]
+  },
+  "UsagePolicy": {
+    "title": "Política de Uso Aceptable",
+    "effectiveDate": "Efectiva desde el 8 de agosto, 2024",
+    "accpUP": "Esta Política de uso aceptable (PUA) describe prácticas prohibidas al utilizar CrowdSolve. Al utilizar nuestra plataforma, usted acepta cumplir con esta PUA. CrowdSolve se reserva el derecho de modificar esta política en cualquier momento.",
+    "generalConduct": {
+      "header": "1. Conducta General",
+      "header2": "Los usuarios de CrowdSolve deben:",
+      "content": {
+        "gC1": "Cumplir con todas las leyes aplicables.",
+        "gC2": "Respetar los derechos de propiedad intelectual.",
+        "gC3": "Ser honestos y transparentes en todas las interacciones.",
+        "gC4": "Mantener la confidencialidad de la información sensible compartida en los desafíos.",
+        "gC5": "Tratar a otros usuarios con respeto y profesionalismo."
+      }
+    },
+    "prohibitedActivities": {
+      "header": "2. Actividades Prohibidas",
+      "header2": "Los usuarios no deben:",
+      "content": {
+        "pAc1": "Publicar contenido ilegal, difamatorio, acosador, obsceno o fraudulento.",
+        "pAc2": "Infringir los derechos de propiedad intelectual de terceros.",
+        "pAc3": "Utilizar la plataforma para distribuir spam o malware.",
+        "pAc4": "Intentar acceder sin autorización a cuentas o sistemas de otros usuarios.",
+        "pAc5": "Manipular los sistemas de votación o evaluación de la plataforma.",
+        "pAc6": "Crear múltiples cuentas para eludir las reglas o ganar ventaja injusta.",
+        "pAc7": "Revelar información confidencial de otros usuarios o empresas sin autorización."
+      }
+    },
+    "challengeContent": {
+      "header": "3. Contenido de los Desafíos",
+      "header2": "Las empresas que publiquen desafíos deben:",
+      "content": {
+        "chC1": "Proporcionar información precisa y clara sobre los requisitos del desafío.",
+        "chC2": "Establecer términos justos para la transferencia de propiedad intelectual.",
+        "chC3": "Cumplir con las promesas de recompensas y plazos establecidos.",
+        "chC4": "No solicitar soluciones para actividades ilegales o no éticas."
+      }
+    },
+    "proposalsAndSolutions": {
+      "header": "4. Propuestas y Soluciones",
+      "header2": "Los participantes que presenten propuestas deben:",
+      "content": {
+        "pASol": "Presentar solo trabajo original o tener los derechos necesarios para el contenido enviado.",
+        "pASo2": "Respetar la confidencialidad de la información proporcionada en los desafíos.",
+        "pASo3": "No copiar o plagiar el trabajo de otros participantes.",
+        "pASo4": "Proporcionar información precisa sobre sus habilidades y experiencia."
+      }
+    },
+    "platformUsage": {
+      "header": "5. Uso de la Plataforma",
+      "header2": "Los usuarios no deben:",
+      "content": {
+        "pU1": "Intentar interferir con el funcionamiento adecuado de la plataforma.",
+        "pU2": "Utilizar bots, scrapers u otros medios automatizados para acceder a CrowdSolve.",
+        "pU3": "Recopilar información de otros usuarios sin su consentimiento.",
+        "pU4": "Vender o transferir su cuenta a terceros."
+      }
+    },
+    "nonComplianceConsequences": {
+      "header": "6. Consecuencias del Incumplimiento",
+      "header2": "La violación de esta PUA puede resultar en:",
+      "content": {
+        "nonCC1": "Eliminación del contenido infractor.",
+        "nonCC2": "Suspensión o terminación de la cuenta del usuario.",
+        "nonCC3": "Descalificación de desafíos actuales o futuros.",
+        "nonCC4": "Acciones legales en casos graves de violación."
+      }
+    },
+    "reportingViolations": {
+        "header": "7. Reportar Violaciones",
+        "content": "Si notas contenido o comportamiento que viole esta PUA, por favor repórtalo de inmediato a nuestro equipo de moderación. Agradecemos tu ayuda para mantener CrowdSolve como un espacio seguro y productivo para todos."
+    },
+    "contact": {
+        "header": "Si tienes preguntas sobre esta Política de Uso Aceptable, por favor contáctanos en",
+        "email": "soporte@crowdsolve.site"
+    },
+    "buttons": {
+        "termsOfService": "Ver Términos de Servicio",
+        "privacyPolicy": "Ver Política de Privacidad"
+    }
+},
+
+  "SupportRequestDialog": {
+    "closeSupport": "Finalizar Soporte",
+    "declineSupport": "Descartar Soporte",
+    "finalize": "Finalizar ",
+    "finalizeSupport": "Finalizar soporte",
+    "discardSupport": "Descartar soporte",
+    "SupportRequest": "Solicitud de Soporte",
+    "discard": "Descartar ",
+    "viewSupportRequest": "Ver Solicitud de Soporte",
+    "Once": "Una vez",
+    "finalized": "finalizada",
+    "Confirmation": " la solicitud de soporte no podrá ser reabierta ni trabajada nuevamente.",
+    "discarded": "descartada",
+    "close": "Cerrar",
+    "saveChanges": "Guardar cambios",
+    "affectedUser": "Usuario Afectado",
+    "title": "Título",
+    "message": "Mensaje",
+    "supportDate": "Fecha de Soporte",
+    "names": "Nombres",
+    "lastNames": "Apellidos",
+    "email": "Correo Electrónico",
+    "assignedUser": "Usuario Asignado",
+    "successfulOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida",
+    "operationError": "Hubo un error al realizar la operación",
+    "rows": "fila",
+    "selected": "seleccionada"
+  },
+  "solutionsValidation": {
+    "successOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida",
+    "noSolutionsToValidate": {
+      "title": "No hay soluciones para validar",
+      "description": "Por favor, regrese más tarde"
+    },
+    "user": "Usuario",
+    "title": "Título",
+    "date": "Fecha",
+    "status": "Estatus",
+    "selectStatus": "Seleccione un estatus",
+    "actions": "Acciones",
+    "viewDetails": "Ver detalles",
+    "solutionDetails": "Detalles de la solución",
+    "solutionAuthor": "Autor de la solución",
+    "description": "Descripción",
+    "attachments": "Adjuntos",
+    "fileSize": "Tamaño",
+    "submissionDate": "Fecha de envío",
+    "validation": "Validación",
+    "validate": "Validar",
+    "incomplete": "Incompleto",
+    "discard": "Descartar",
+    "reason": "Razón",
+    "reasonPlaceholder": "Explique la razón del cambio de estatus...",
+    "statusUpdated": "Esta solución ya ha sido",
+    "reasonForRejection": "Razón:",
+    "save": "Guardar",
+    "close": "Cerrar",
+    "downloadError": {
+      "title": "Operación fallida",
+      "description": "Ocurrió un error durante la descarga"
+    },
+    "requiredReason": "La razón es requerida para este estatus."
+  },
+  "validateCompanyDialog": {
+    "operations": {
+      "success": "Operación exitosa",
+      "failure": "Operación fallida",
+      "error": "Hubo un error al realizar la operación"
+    },
+    "dialog": {
+      "validate_company": {
+        "validate": "Validar",
+        "button": "Validar Empresa"
+      },
+      "decline_company": {
+        "reject": "Rechazar",
+        "button": "Rechazar Empresa"
+      },
+      "close_button": "Cerrar",
+      "once": "Una vez",
+      "title": "Empresa",
+      "description": "la empresa, no se podrá recuperar a menos que se solicite nuevamente."
+    }
+  },
+  "adminFormDialog": {
+    "operations": {
+      "success": "Operation successful",
+      "failure": "Operation failed"
+    },
+    "dialog": {
+      "participant": "Administrador",
+      "edit": "Edit",
+      "view": "View",
+      "title": {
+        "edit": "Editar Administrador",
+        "view": "Ver Administrador"
+      },
+      "fields": {
+        "username": "Username",
+        "email": "Email"
+      },
+      "avatarPicker": "Avatar",
+      "buttons": {
+        "saveChanges": "Save changes",
+        "close": "Close"
+      }
+    }
+  },
+  "challengeHeader": {
+    "company": "Empresa",
+    "startDate": "Fecha de inicio",
+    "deadline": "Fecha límite",
+    "daysRemaining": "Días restantes",
+    "days": "días",
+    "viewChallengeContent": "Ver contenido del desafío"
+  },
+  "challengetimelineSteps": {
+    "operations": {
+      "success": "Operación exitosa",
+      "failure": "Operación fallida"
+    },
+    "Desafio_Sin_validar": {
+      "label": "Sin validar"
+    },
+    "Desafio_Sin_iniciar": {
+      "label": "Sin iniciar"
+    },
+    "Desafio_En_progreso": {
+      "label": "En progreso"
+    },
+    "Desafio_En_evaluacion": {
+      "label": "En evaluación"
+    },
+    "Desafio_En_espera_de_entrega_de_premios": {
+      "label": "Espera de premios"
+    },
+    "Desafio_Finalizado": {
+      "label": "Finalizado"
+    },
+    "currentStatus": {
+      "Desafio_Cancelado": "Desafío Cancelado"
+    },
+    "statusLabels": {
+      "startDate": "Fecha de inicio",
+      "deadline": "Fecha límite",
+      "daysRemaining": "Días restantes"
+    },
+    "challengenoValidated": "El desafío aún no ha sido validado por la administración."
+  },
+  "solutionRanking": {
+    "error": {
+      "title": "Operación fallida",
+      "descriptionFallback": "Ocurrió un error al descargar el archivo"
+    },
+    "Nohaysolucionesparamostrar": "No hay soluciones para mostrar",
+    "Elrankingaúnnoestádisponible": "El ranking aún no está disponible",
+    "Posición": "Posición",
+    "Usuario": "Usuario",
+    "Título": "Título",
+    "Puntuación": "Puntuación",
+    "VotosComunidad": "Votos de la comunidad",
+    "VotosParticipantes": "Votos de los participantes",
+    "Puntuaciónfinal": "Puntuación final",
+    "Acciones": "Acciones",
+    "Verdetalles": "Ver detalles",
+    "Autordelasolución": "Autor de la solución",
+    "Descripción": "Descripción",
+    "Fechadeenvío": "Fecha de envío",
+    "Puntuacióndelaempresa": "Puntuación de la empresa",
+    "Votosdelacomunidad": "Votos de la comunidad",
+    "Votosdeparticipantes": "Votos de participantes",
+    "Cerrar": "Cerrar",
+    "Erroralcargarelranking": "Error al cargar el ranking",
+    "Puntuaciónfinaldelasolución": "Puntuación final de la solución",
+    "Votosdelosparticipantes": "Votos de los participantes",
+    "Accionesdelasolución": "Acciones de la solución",
+    "Fechaderegistro": "Fecha de registro",
+    "Nombredelusuario": "Nombre de usuario",
+    "attachments": "Archivos adjuntos"
+  },
+  "userVoting": {
+    "descargarAdjuntoError": "Operación fallida",
+    "Operacionencurso": "Operación en curso",
+    "esperaOperacion": "Por favor, espera a que la operación actual termine antes de continuar.",
+    "operacionFallidaGuardarVoto": "Operación fallida al guardar voto",
+    "noHaySolucionesParaEvaluar": "No hay soluciones para evaluar",
+    "vuelveMasTarde": "Por favor, vuelve más tarde",
+    "copiarEnlace": "Copiar enlace",
+    "reportar": "Reportar",
+    "sinSolucionesParaMostrar": "No hay soluciones para mostrar",
+    "titulo": "Título",
+    "descripcion": "Descripción",
+    "fechaEnvio": "Fecha de envío",
+    "acciones": "Acciones",
+    "verDetalles": "Ver detalles",
+    "autorSolucion": "Autor de la solución",
+    "errorCargando": "Error al cargar",
+    "finalScore": "Puntuación final de la solución",
+    "votesFromParticipants": "Votos de los participantes",
+    "actionsOfSolution": "Acciones de la solución",
+    "submissionDate": "Fecha de envío",
+    "userName": "Nombre de usuario",
+    "meGusta": "Me gusta",
+    "voto": "voto",
+    "votos": "votos"
+  },
+  "layout": {
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse"
+  },
+  "fileUploader": {
+    "singleFileError": "No se puede cargar más de 1 archivo a la vez",
+    "maxFileCountError": "No se pueden cargar más de {0} archivos",
+    "files": "archivos",
+    "fileRejectedError": "El archivo {0} fue rechazado",
+    "uploading": "Cargando {0}...",
+    "uploadSuccess": " cargado con éxito",
+    "uploadError": "Error al cargar ",
+    "dropHere": "Suelta los archivos aquí",
+    "dragAndDropOrClick": "Arrastra y suelta archivos aquí, o haz clic para seleccionarlos",
+    "canUpload": "Puedes cargar ",
+    "multiples": "múltiples",
+    "file": "archivos (hasta",
+    "cadaUno": "cada uno)",
+    "aFileUpTo": "un archivo de hasta",
+    "removeFile": "Eliminar archivo",
+    "uploadProgress": "Progreso de carga",
+    "fileName": "Nombre del archivo",
+    "fileSize": "Tamaño del archivo",
+    "noFilesMessage": "No hay archivos para mostrar",
+    "actions": "Acciones",
+    "deleteFile": "Eliminar archivo"
+  },
+  "pageLoader": {
+    "cargando": "Cargando..."
+  },
+  "protetedRoute": {
+    "toast": {
+      "sessionExpired": {
+        "title": "Debe iniciar sesión",
+        "description": "La sesión ha expirado. Por favor, inicie sesión nuevamente."
+      },
+      "fetchUserError": {
+        "title": "Error al obtener la información del usuario",
+        "description": "{error_message}"
+      }
+    },
+    "compareRoutes": {
+      "parameterValidation": {
+        "isParam": "Verifica si un segmento es un parámetro.",
+        "isNumber": "Verifica si un segmento es un número."
+      }
+    },
+    "canAccess": {
+      "toast": {
+        "warning": {
+          "title": "Advertencia - Acceso restringido a la vista",
+          "description": "La vista \"{location_pathname}\" no tiene acceso asignado. Por motivos de desarrollo, se permitirá el acceso."
+        }
+      },
+      "messages": {
+        "developmentMode": "Acceso permitido durante el modo de desarrollo."
+      }
+    }
+  },
+  "Administrators": {
+    "columns": {
+      "select": {
+        "ariaLabelAll": "Seleccionar todo",
+        "ariaLabelRow": "Seleccionar fila"
+      },
+      "nombreUsuario": "Nombre de Usuario",
+      "correoElectronico": {
+        "header": "Correo Electrónico",
+        "tooltip": "Ordenar por Correo Electrónico"
+      },
+      "fechaRegistro": "Fecha de Registro",
+      "nombreEstatusUsuario": {
+        "status": "Estatus",
+        "Activo": "Activo",
+        "Inactivo": "Inactivo",
+        "default": "Pendiente"
+      },
+      "actions": {
+        "menu": "Acciones",
+        "edit": "Editar",
+        "viewDetails": "Ver detalles"
+      }
+    },
+    "buttons": {
+      "clearFilters": "Limpiar filtros",
+      "columns": "Columnas",
+      "previousPage": "Anterior",
+      "nextPage": "Siguiente"
+    },
+    "placeholders": {
+      "search": "Buscar por nombre de usuario o correo...",
+      "noResults": "No se encontraron resultados."
+    },
+    "status": {
+      "of": "de",
+      "row": "fila",
+      "selected": "Seleccionado",
+      "selectedRows": "{selected} de {total} fila(s) seleccionada(s)."
+    },
+    "dialogs": {
+      "form": {
+        "saved": "Guardado con éxito."
+      }
+    },
+    "abrirMenu": "Abrir menú"
+  },
+  "challengeForm": {
+    "formSchema": {
+      "idDesafio": "ID del Desafío",
+      "idUsuarioEmpresa": "ID de Usuario (Empresa)",
+      "idEmpresa": "ID de Empresa",
+      "empresa": "Empresa",
+      "titulo": "Título",
+      "contenido": "Contenido",
+      "fechaInicio": "Fecha de Inicio",
+      "fechaLimite": "Fecha Límite",
+      "categorias": "Categorías",
+      "procesoEvaluacion": "Proceso de Evaluación",
+      "idEstatusDesafio": "ID de Estado del Desafío",
+      "estatusDesafio": "Estado del Desafío"
+    },
+    "messages": {
+      "tituloRequerido": "El título es requerido",
+      "contenidoRequerido": "El contenido es requerido",
+      "fechaInicioRequerida": "La fecha de inicio es requerida",
+      "fechaLimiteRequerida": "La fecha límite es requerida",
+      "categoriasRequeridas": "Las categorías son requeridas",
+      "procesoEvaluacionRequerido": "El proceso de evaluación es requerido",
+      "errorCargaDesafio": "Error al cargar el desafío",
+      "errorCargaObjetosRelacionales": "Error al cargar objetos relacionales",
+      "operacionExitosa": "Operación exitosa",
+      "operacionFallida": "Operación fallida",
+      "errorGuardarDesafio": "Error al guardar el desafío"
+    },
+    "buttons": {
+      "limpiarFiltros": "Limpiar Filtros",
+      "columnas": "Columnas",
+      "paginaAnterior": "Página Anterior",
+      "paginaSiguiente": "Página Siguiente"
+    },
+    "placeholders": {
+      "buscar": "Buscar por título de desafío o categoría...",
+      "noResultados": "No se encontraron resultados"
+    },
+    "dialogs": {
+      "formGuardado": "Formulario guardado exitosamente"
+    },
+    "acciones": {
+      "agregarProcesoEvaluacion": "Agregar Proceso de Evaluación",
+      "eliminarProcesoEvaluacion": "Eliminar Proceso de Evaluación",
+      "actualizarFecha": "Actualizar Fecha",
+      "ordenarProcesoEvaluacion": "Reordenar Proceso de Evaluación"
+    },
+    "publicarDesafio": {
+      "titulo": "Publicar Desafío",
+      "descripcion": "Rellene el formulario para publicar un nuevo desafío"
+    },
+    "editarDesafio": {
+      "titulo": "Editar Desafío",
+      "descripcion": "Rellene el formulario para editar un desafío"
+    },
+    "volver": "Volver",
+    "guardarDesafio": "Guardar Desafío",
+    "tituloDesafio": "Título del Desafío",
+    "placeholderTitulo": "Ingrese el título del desafío",
+    "categorias": "Categorías",
+    "seleccionarCategorias": "Seleccionar categorías",
+    "fechaInicio": "Fecha de Inicio",
+    "fechaLimite": "Fecha Límite",
+    "seleccionarFecha": "Seleccionar una fecha",
+    "procesosEvaluacion": "Procesos de Evaluación",
+    "agregarProcesoEvaluacion": "Agregar Proceso de Evaluación",
+    "seleccionarProcesoEvaluacion": "Seleccionar Proceso de Evaluación",
+    "noMasProcesosDisponibles": "No hay más procesos de evaluación disponibles",
+    "noProcesosAgregados": "No se han agregado procesos de evaluación",
+    "procesosEvaluacionNoAgregados": "Aún no se han agregado procesos de evaluación",
+    "noNombreProceso": "Proceso sin nombre",
+    "eliminarProceso": "Eliminar Proceso",
+    "contenidoDesafio": "Contenido del Desafío",
+    "placeholderContenido": "Ingrese el contenido del desafío",
+    "iniciaraDia": "Iniciara el dia"
+  },
+  "prizeEvidenceDialog": {
+    "confirmBeforeFinalizing": "Debe confirmar antes de finalizar el desafío",
+    "challengeFinalizedSuccess": "Desafío finalizado exitosamente",
+    "errorFinalizingChallenge": "Error al finalizar el desafío",
+    "errorDownloadingEvidence": "Error al descargar la evidencia",
+    "downloadEvidence": "Descarga las evidencias de los premios y finaliza el desafío",
+    "confirmFinalization": "Confirmar finalización",
+    "confirmCheckbox": "Confirmar finalización",
+    "finalizeChallenge": "Finalizar Desafío",
+    "cancel": "Cancelar",
+    "confirmationDialogTitle": "Confirmar Finalización",
+    "confirmationDialogDescription": "¿Está seguro de que desea finalizar el desafío? Esta acción no se puede deshacer.",
+    "prizeEvidenceTitle": "Evidencia de Premios",
+    "placeholders": {
+      "downloadTooltip": "Descargar"
+    },
+    "labels": {
+      "fileSize": "Tamaño",
+      "fileName": "Nombre"
+    },
+    "buttons": {
+      "finalize": "Finalizar",
+      "cancel": "Cancelar"
+    }
+  },
+  "validateChallengeDialog": {
+    "successOperation": "Operación exitosa",
+    "failedOperation": "Operación fallida",
+    "errorOperation": "Hubo un error al realizar la operación",
+    "validationWarning": "el desafío no se podrá recuperar a menos que se solicite nuevamente.",
+    "rejectReasonLabel": "Motivo del rechazo",
+    "enterReasonWarning": "Por favor, ingrese un motivo antes de rechazar el desafío.",
+    "desafio": "Desafío",
+    "unaves": "Una vez",
+    "validado": "validado",
+    "rechazado": "rechazado",
+    "validate": "Validar",
+    "reject": "Rechazar",
+    "buttons": {
+      "validate": "Validar Desafío",
+      "reject": "Rechazar Desafío",
+      "close": "Cerrar"
+    },
+    "titles": {
+      "validateDialog": "Validar Desafío",
+      "rejectDialog": "Rechazar Desafío"
+    },
+    "placeholders": {
+      "reasonInput": "Ingrese el motivo del rechazo"
+    }
+  },
+  "ParticipantSolutionsDialog": {
+    "title": "Soluciones de ",
+    "searchPlaceholder": "Buscar soluciones...",
+    "filterByStatus": "Filtrar por estado",
+    "statusOptions": {
+      "all": "Todas",
+      "public": "Públicas",
+      "private": "Privadas"
+    },
+    "noSolutions": "No hay soluciones disponibles.",
+    "downloadError": {
+      "title": "Operación fallida",
+      "description": "Ocurrió un error al descargar el archivo"
+    },
+    "solutionDetails": {
+      "attachments": "{count} adjuntos",
+      "votes": "votos",
+      "company": "Empresa",
+      "submissionDate": "Fecha de envío",
+      "description": "Descripción",
+      "attachmentsLabel": "Adjuntos"
+    },
+    "viewChallenge": "Ver desafío",
+    "viewDetails": "Ver detalles",
+    "publicLabel": "Pública",
+    "privateLabel": "Privada",
+    "switchPublicPrivate": "Cambiar a {status}",
+    "fileSize": "{size} MB",
+    "dialog": {
+      "detailsTitle": "{solution.title}",
+      "descriptionTitle": "Descripción:",
+      "attachmentsTitle": "Adjuntos:"
+    },
+    "loadingSkeleton": {
+      "lines": [
+        "Espacio para el título",
+        "Espacio para el subtítulo",
+        "Espacio para el contenido"
+      ]
+    }
+  },
+  "overview": {
+    "title": "Visión general",
+    "description": "Filtrar datos por año",
+    "selectYear": "Seleccionar año",
+    "showingData": "Mostrando datos del año seleccionado"
+  },
+  "chart": {
+    "selectPlaceholder": "Seleccionar año",
+    "noData": "No hay datos disponibles"
+  },
+  "pieChartChallenge": {
+    "title": "Cantidad Desafíos",
+    "description": "Creados",
+    "selectFilter": "Seleccionar un filtro",
+    "filterOptions": {
+      "total": "Total",
+      "categories": "Categoría",
+      "companies": "Empresas"
+    },
+    "totalChallenges": "Total Desafíos",
+    "showingData": "Mostrando el total de Desafíos en sus diferentes ámbitos",
+    "tooltip": {
+      "companies": "Empresas"
+    }
+  },
+  "pieChartCompany": {
+    "title": "Cantidad de Empresas",
+    "description": "Registradas",
+    "selectFilter": "Seleccionar un filtro",
+    "filterOptions": {
+      "total": "Total",
+      "size": "Tamaño",
+      "sector": "Sectores"
+    },
+    "totalCompanies": "Total de Empresas",
+    "showingData": "Mostrando el total de Empresas en sus diferentes áreas",
+    "tooltip": {
+      "companies": "Empresas"
+    }
+  },
+  "adminChallengeDetails": {
+    "errorLoadingChallenge": "No se pudo cargar el desafío.",
+    "errorValidateChallenge": "Error al validar el desafío",
+    "successOperation": "Operación exitosa",
+    "errorRejectChallenge": "Error al rechazar el desafío",
+    "successRejectChallenge": "Operación exitosa, desafío rechazado",
+    "successValidateChallenge": "Operación exitosa, desafío validado",
+    "backButton": "Volver",
+    "challengeNotFound": "Desafío no encontrado",
+    "challengeNotFoundMessage": "El desafío que buscas no existe o no tienes permiso para verlo.",
+    "challengeInfo": "Información del desafío",
+    "start": "Inicio",
+    "end": "Fin",
+    "submittedSolutions": "soluciones enviadas",
+    "registered": "Registrados",
+    "viewPrizeEvidence": "Ver evidencia del premio",
+    "validateChallenge": "Validar desafío",
+    "rejectChallenge": "Rechazar desafío",
+    "areYouSureToValidate": "¿Estás seguro de que deseas validar este desafío?",
+    "areYouSureToReject": "¿Estás seguro de que deseas rechazar este desafío?",
+    "rejectionReason": "Razón del rechazo",
+    "cancel": "Cancelar",
+    "validate": "Validar",
+    "reject": "Rechazar",
+    "viewRankingOfSolutions": "Ver ranking de soluciones",
+    "solutionRanking": "Ranking de soluciones",
+    "evaluationProcess": "Proceso de evaluación",
+    "evaluationType": "Tipo de evaluación",
+    "evaluationStatus": "Estado",
+    "evaluationTime": "Tiempo"
+  },
+  "adminChallenges": {
+    "columns": {
+      "titulo": "Título",
+      "empresa": "Empresa",
+      "estatusDesafio": "Estatus",
+      "fechaRegistro": "Fecha de Registro",
+      "fechaInicio": "Fecha de Inicio",
+      "fechaLimite": "Fecha Límite",
+      "actions": {
+        "menuLabel": "Acciones",
+        "viewDetails": "Ver Detalles",
+        "openMenu": "Abrir menú"
+      }
+    },
+    "search": {
+      "placeholder": "Buscar por Título del Desafío o Empresa",
+      "clearFiltersTooltip": "Limpiar filtros"
+    },
+    "filters": {
+      "statusPlaceholder": "Filtrar por estatus",
+      "noResults": "No se encontraron resultados."
+    },
+    "table": {
+      "rowsSelected": "{selected} de {total} fila(s) seleccionada(s).",
+      "of": "de",
+      "row": "fila",
+      "selected": "Seleccionada",
+      "previousPage": "Anterior",
+      "nextPage": "Siguiente"
+    }
+  },
+  "challengeRequests": {
+    "columns": {
+      "select": {
+        "header": "Seleccionar todo",
+        "cell": "Seleccionar fila",
+        "ariaLabelSelectAll": "Seleccionar todo",
+        "ariaLabelSelectRow": "Seleccionar fila"
+      },
+      "titulo": "Título",
+      "empresa": {
+        "header": "Empresa",
+        "avatarAltText": "Avatar de la Empresa",
+        "fallbackText": "Nombre de la Empresa"
+      },
+      "fechaRegistro": "Fecha de Registro",
+      "fechaInicio": "Fecha de Inicio",
+      "fechaLimite": "Fecha Límite",
+      "actions": {
+        "menuLabel": "Acciones",
+        "viewDetails": "Ver Detalles",
+        "validateChallenge": "Validar Desafío",
+        "declineChallenge": "Rechazar Desafío",
+        "openMenu": "Abrir Menú"
+      },
+      "sort": {
+        "ascending": "Orden Ascendente",
+        "descending": "Orden Descendente"
+      }
+    },
+    "searchPlaceholder": "Buscar por Título de Desafío o Empresa",
+    "tooltipClearFilters": "Limpiar filtros",
+    "columnsDropdownLabel": "Columnas",
+    "columnsDropdownToggle": "Columnas",
+    "noResults": "No se encontraron resultados.",
+    "of": "de",
+    "row": "fila",
+    "selected": "Seleccionada",
+    "selectedRows": "{selectedRows} de {totalRows} fila(s) seleccionada(s).",
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "validateChallengeDialog": {
+      "title": "Validar Desafío",
+      "closeButton": "Cerrar",
+      "saveButton": "Guardar"
+    }
+  },
+  "companyRequest": {
+    "select": {
+      "header": "Seleccionar Todo",
+      "cell": "Seleccionar Fila",
+      "ariaLabelSelectAll": "Seleccionar Todo",
+      "ariaLabelSelectRow": "Seleccionar Fila"
+    },
+    "nombre": "Nombre de la Empresa",
+    "descripcion": "Descripción",
+    "telefono": "Teléfono",
+    "paginaWeb": "Sitio Web",
+    "tamañoEmpresa": "Tamaño",
+    "sector": "Sector",
+    "direccion": "Dirección",
+    "avatar": "Avatar",
+    "cantidadDesafios": "Cantidad de Desafíos",
+    "cantidadSoluciones": "Cantidad de Soluciones",
+    "estatusUsuario": "Estado de la Empresa",
+    "actions": {
+      "menuLabel": "Acciones",
+      "validateCompany": "Validar Empresa",
+      "declineCompany": "Rechazar Empresa",
+      "openMenu": "Abrir menú"
+    },
+    "searchPlaceholder": "Buscar por Nombre de la Empresa",
+    "sectorLabel": "Sector",
+    "search": "Buscar...",
+    "clearFilter": "Limpiar filtro",
+    "companySizeLabel": "Tamaño de la Empresa",
+    "searchSize": "Buscar tamaño...",
+    "columnsLabel": "Columnas",
+    "clearFiltersTooltip": "Limpiar filtros",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "noResultsFound": "No se encontraron resultados.",
+    "of": "de",
+    "row": "fila",
+    "selected": "Seleccionado",
+    "selectedRowsText": "{selected} de {total} fila(s) seleccionada(s).",
+    "validateCompany": "Validar Empresa",
+    "declineCompany": "Rechazar Empresa"
+  },
+  "supportRequest": {
+    "select": "Seleccionar Todo",
+    "cell": "Seleccionar Fila",
+    "nombreUsuario": "Usuario Afectado",
+    "titulo": "Título",
+    "mensaje": "Mensaje",
+    "fecha": "Fecha de Soporte",
+    "nombres": "Nombre",
+    "apellidos": "Apellido",
+    "correoElectronico": "Correo Electrónico",
+    "nombreAsignado": "Usuario Asignado",
+    "idEstatusProceso": "Estatus de Solicitud",
+    "openMenu": "Abrir menú",
+    "actions": "Acciones",
+    "viewDetails": "Ver Detalles",
+    "assignRequest": "Asignarme Solicitud",
+    "closeRequest": "Cerrar Solicitud",
+    "downloadRequest": "Descargar Solicitud",
+    "successToast": {
+      "title": "Operación Exitosa",
+      "description": "response.data.message"
+    },
+    "failureToast": {
+      "title": "Operación Fallida",
+      "description": "response.data.message"
+    },
+    "errorToast": {
+      "title": "Ocurrió un error al realizar la operación"
+    },
+    "searchPlaceholder": "Buscar Soporte",
+    "assignedUsersButton": "Usuarios Asignados",
+    "clearFilter": "Limpiar filtro",
+    "clearFilterButton": "Limpiar filtros",
+    "statusRequestButton": "Estatus de Solicitud",
+    "search": "Buscar...",
+    "statusProcessSearchPlaceholder": "Buscar tamaño...",
+    "recentLabel": "Recientes",
+    "inProcessLabel": "En Proceso",
+    "columnsButton": "Columnas",
+    "columnsHeader": "Columnas",
+    "noResultsFound": "No se encontraron resultados.",
+    "of": "de",
+    "row": "fila",
+    "selected": "Seleccionado",
+    "selectedRowsText": "{count} de {total} fila(s) seleccionada(s).",
+    "previousButton": "Anterior",
+    "nextButton": "Siguiente"
+  },
+  "adminDashbord": {
+    "dashboard": "Tablero",
+    "download": "Descargar",
+    "totalUsers": "Total de Usuarios",
+    "participatingUsers": "Usuarios Participantes",
+    "companyUsers": "Usuarios Empresas",
+    "sentSolutions": "Soluciones Enviadas",
+    "top10CompaniesChallenges": "Top 10 Empresas con Más Desafíos"
+  },
+  "companyChallenge": {
+    "operationFailed": "Operación fallida",
+    "back": "Volver",
+    "edit": "Editar",
+    "unvalidatedChallenge": "Desafío sin validar",
+    "unvalidatedChallengeDescription": "El desafío aún no ha sido validado por la administración.",
+    "rejectedChallenge": "Desafío rechazado",
+    "rejectedChallengeDescription": "El desafío fue rechazado por la administración.",
+    "discardedChallenge": "Desafío descartado",
+    "discardedChallengeDescription": "El desafío fue descartado.",
+    "solutions": "Soluciones",
+    "evaluatingChallenge": "Desafío en evaluación",
+    "completedChallenge": "Desafío finalizado",
+    "waitingForPrizeDelivery": "En espera de entrega de premios"
+  },
+  "companyDashboard": {
+    "challenges": {
+      "loadError": "Error al cargar los desafíos, por favor intenta nuevamente",
+      "uploadEvidenceError": "Error al subir la evidencia",
+      "uploadEvidenceSuccess": "Evidencia subida con éxito",
+      "uploadEvidenceDescription": "La evidencia de la entrega del premio se ha subido con éxito",
+      "cancelChallengeSuccess": "Desafío cancelado con éxito",
+      "successToast": "Operación exitosa",
+      "cancelChallengeError": "Error en la operación",
+      "cancelChallengeDescription": "El desafío se ha cancelado con éxito",
+      "deleteEvidenceSuccess": "Evidencia eliminada con éxito",
+      "deleteEvidenceError": "Error al eliminar la evidencia",
+      "downloadEvidenceError": "Error al descargar el archivo"
+    },
+    "buttons": {
+      "back": "Volver",
+      "edit": "Editar",
+      "submitEvidence": "Enviar evidencia",
+      "cancelChallenge": "Cancelar desafío",
+      "deleteEvidence": "Eliminar evidencia",
+      "downloadEvidence": "Descargar evidencia"
+    },
+    "progress": {
+      "uploading": "Subiendo evidencia...",
+      "loading": "Cargando desafíos..."
+    },
+    "loading": "Cargando información del panel...",
+    "totalChallenges": "Total de desafíos",
+    "totalParticipations": "Total de participaciones",
+    "unevaluatedSolutions": "Soluciones no evaluadas",
+    "unvalidatedChallenges": "Desafíos no validados",
+    "challenge": "Desafíos",
+    "newChallenge": "Nuevo desafío",
+    "title": "Título",
+    "startDate": "Fecha de inicio",
+    "deadline": "Fecha límite",
+    "status": "Estado",
+    "participations": "Participaciones",
+    "pending": "Pendiente",
+    "actions": "Acciones",
+    "uploadEvidence": "Subir evidencia de entrega",
+    "evaluateSolutions": "Evaluar soluciones",
+    "cancelChallenge": "Cancelar desafío",
+    "editChallenge": "Editar desafío",
+    "viewDetails": "Ver detalles",
+    "cancelDialog": {
+      "title": "¿Estás seguro de que quieres cancelar este desafío?",
+      "description": "Esta acción no se puede deshacer. Por favor, proporciona un motivo para la cancelación.",
+      "placeholder": "Motivo de cancelación",
+      "cancelButton": "Cancelar",
+      "confirmButton": "Confirmar"
+    },
+    "prizeDialog": {
+      "title": "Subir evidencia de entrega del premio",
+      "description": "Por favor, sube la evidencia de la entrega del premio.",
+      "previousEvidences": {
+        "label": "Evidencias previas",
+        "note": "Estas evidencias están pendientes de validación por un administrador."
+      },
+      "actions": {
+        "deleteConfirmation": {
+          "title": "¿Estás seguro de que quieres eliminar esta evidencia?",
+          "description": "Esta acción no se puede deshacer.",
+          "cancelButton": "Cancelar",
+          "confirmButton": "Confirmar"
+        },
+        "deleteTooltip": "Eliminar",
+        "downloadTooltip": "Descargar"
+      },
+      "submitButton": "Confirmar",
+      "cancelButton": "Cancelar"
+    },
+    "downloadFile": "Descargar archivo",
+    "deleteFile": "Eliminar archivo"
+  },
+  "verificationPending": {
+    "successCard": {
+      "header": {
+        "iconAltText": "Éxito",
+        "title": "Cuenta Creada con Éxito",
+        "description": "Su cuenta empresarial está en proceso de verificación"
+      },
+      "content": {
+        "verificationTime": {
+          "iconAltText": "Reloj",
+          "text": "Tiempo estimado de verificación: 1-3 días hábiles"
+        },
+        "thankYouMessage": "Gracias por crear su cuenta empresarial. Nuestro equipo está revisando la información proporcionada para asegurar que todo esté en orden.",
+        "emailNotification": "Le notificaremos por correo electrónico una vez que la verificación esté completa y su cuenta esté totalmente activada."
+      },
+      "footer": {
+        "backButton": "Volver al Inicio",
+        "supportButton": "Contactar Soporte"
+      }
+    }
+  },
+  "myProfile": {
+    "fetch": {
+      "success": "Operación exitosa",
+      "error": "Operación fallida",
+      "profileErrorDescription": "No se pudo cargar la información de tu perfil",
+      "relationalObjectsErrorDescription": "No se pudieron cargar los objetos relacionados"
+    },
+    "edit": {
+      "startEditing": "Editar perfil",
+      "saveSuccess": "Operación exitosa",
+      "saveError": "Operación fallida",
+      "saveErrorDescription": "No se pudo actualizar la información de tu perfil",
+      "saveWarningDescription": "Operación fallida"
+    },
+    "messages": {
+      "updatedSuccessfully": "Tu información de perfil ha sido actualizada con éxito",
+      "updateFailed": "Tu actualización de perfil falló"
+    },
+    "profile": {
+      "title": "Editar perfil",
+      "tabs": {
+        "solutions": "Soluciones",
+        "stats": "Estadísticas"
+      },
+      "profileInfo": "Información del perfil",
+      "editButton": "Editar perfil",
+      "cancelButton": "Cancelar"
+    },
+    "dialog": {
+      "open": "Editar perfil",
+      "close": "Cerrar"
+    },
+    "form": {
+      "avatarPicker": {
+        "label": "Elegir avatar",
+        "changeAvatar": "Cambiar avatar"
+      },
+      "fields": {
+        "firstName": {
+          "label": "Nombre",
+          "placeholder": "Ingresa tu nombre"
+        },
+        "lastName": {
+          "label": "Apellido",
+          "placeholder": "Ingresa tu apellido"
+        },
+        "birthDate": {
+          "label": "Fecha de nacimiento",
+          "placeholder": "Selecciona una fecha"
+        },
+        "phone": {
+          "label": "Teléfono",
+          "placeholder": "Ingresa tu número de teléfono"
+        },
+        "educationLevel": {
+          "label": "Nivel educativo",
+          "placeholder": "Selecciona un nivel educativo"
+        },
+        "personalDescription": {
+          "label": "Descripción personal",
+          "placeholder": "Ingresa una descripción personal"
+        }
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Guardar"
+      }
+    }
+  },
+  "notification": {
+    "functions": {
+      "markAsRead": {
+        "error": "Operación fallida",
+        "success": "Notificaciones marcadas como leídas con éxito",
+        "warning": "Hubo un error al marcar las notificaciones como leídas"
+      },
+      "markAsUnread": {
+        "error": "Operación fallida",
+        "success": "Notificaciones marcadas como no leídas con éxito",
+        "warning": "Hubo un error al marcar las notificaciones como no leídas"
+      },
+      "deleteNotification": {
+        "error": "Operación fallida",
+        "success": "Notificación eliminada",
+        "warning": "Hubo un error al eliminar la notificación"
+      }
+    },
+    "interface": {
+      "notifications": "Notificaciones",
+      "unreadCount": "no leídas",
+      "search": {
+        "placeholder": "Buscar notificaciones..."
+      },
+      "tabs": {
+        "all": "Todas",
+        "unread": "No leídas",
+        "read": "Leídas"
+      }
+    },
+    "labels": {
+      "selectedCount": "seleccionadas",
+      "markAsRead": "Marcar como leída",
+      "markAsUnread": "Marcar como no leída",
+      "noNotifications": "No hay notificaciones."
+    },
+    "buttons": {
+      "markAsRead": "Marcar como leída",
+      "markAsUnread": "Marcar como no leída",
+      "delete": "Eliminar"
+    },
+    "notification": {
+      "timeAgo": "Hace {time}",
+      "deleteNotification": "Eliminar notificación"
+    },
+    "checkbox": {
+      "selectAll": "Seleccionar todo"
+    },
+    "status": {
+      "unread": "No leída",
+      "read": "Leída"
+    }
+  },
+  "mySolutions": {
+    "messages": {
+      "changeVisibilityError": "Ocurrió un error al cambiar la visibilidad de la solución",
+      "downloadError": "Operación fallida",
+      "downloadErrorMessage": "Ocurrió un error al descargar el archivo"
+    },
+    "buttons": {
+      "markAsPublished": "Publicar",
+      "markAsPrivate": "Hacer privada",
+      "downloadAttachment": "Descargar adjunto"
+    },
+    "filters": {
+      "searchPlaceholder": "Buscar soluciones...",
+      "statusFilterPlaceholder": "Filtrar por estado",
+      "statusOptions": {
+        "all": "Todas",
+        "public": "Pública",
+        "private": "Privada"
+      }
+    },
+    "titles": {
+      "mySolutions": "Mis soluciones"
+    },
+    "company": "Empresa",
+    "submissionDate": "Fecha de presentación",
+    "attachmentLabel": "Adjuntos",
+    "votesLabel": "Votos",
+    "buttons2": {
+      "viewChallenge": "Ver desafío",
+      "viewDetails": "Ver detalles",
+      "downloadAttachment": "Descargar adjunto"
+    },
+    "dialog": {
+      "descriptionLabel": "Descripción:",
+      "attachmentsLabel": "Adjuntos"
+    },
+    "file": {
+      "sizeLabel": "Tamaño"
+    }
+  },
+  "publicProfile": {
+    "errors": {
+      "failedOperation": "Operación fallida",
+      "profileLoadError": "No se pudo cargar la información del perfil público"
+    }
+  },
+  "challenge": {
+    "errorMessages": {
+      "challengeLoadError": "No se pudo cargar el desafío."
+    },
+    "messages": {
+      "uploadError": "Error al subir el archivo",
+      "solutionSubmissionError": "Error al enviar la solución",
+      "solutionSubmissionSuccess": "Operación exitosa",
+      "solutionSubmitted": "La solución ha sido enviada exitosamente.",
+      "solutionSendingError": "Error al enviar la solución",
+      "solutionSendingErrorDescription": "No se pudo enviar la solución"
+    },
+    "progress": {
+      "loading": "Cargando...",
+      "uploadProgress": "Subiendo {progress}%"
+    },
+    "buttons": {
+      "goBack": "Volver",
+      "submitSolution": "Enviar solución",
+      "participateInEvaluation": "Participar"
+    },
+    "alerts": {
+      "challengeNotFound": "Desafío no encontrado",
+      "challengePermissionError": "El desafío que buscas no existe o no tienes permiso para verlo",
+      "challengeInEvaluation": "Desafío en evaluación",
+      "participateInEvaluationAlert": "Este desafío está actualmente en proceso de evaluación. ¡Participa en la evaluación!"
+    },
+    "info": {
+      "challengeInfo": "Información del desafío",
+      "daysRemaining": " días restantes"
+    },
+    "labels": {
+      "category": "Categoría",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de finalización",
+      "solutionsSent": "soluciones enviadas",
+      "registeredDate": "Registrado en"
+    },
+    "file": {
+      "sizeLabel": "Tamaño"
+    },
+    "buttons1": {
+      "viewSolutions": "Ver soluciones",
+      "signInToParticipate": "Iniciar sesión para participar",
+      "viewMySolutionStatus": "Ver estado de mi solución",
+      "participateInChallenge": "Participar en el desafío",
+      "cancel": "Cancelar",
+      "submitSolution": "Enviar solución"
+    },
+    "dialogs": {
+      "participateInChallenge": {
+        "title": "Participar en el desafío",
+        "description": "Complete el formulario para participar en el desafío."
+      }
+    },
+    "alerts1": {
+      "challengeNotInProgress": "El desafío no está en progreso."
+    },
+    "form": {
+      "solutionTitle": {
+        "label": "Título de la solución"
+      },
+      "solutionDescription": {
+        "label": "Descripción"
+      },
+      "files": {
+        "label": "Archivos"
+      },
+      "termsAndConditions": {
+        "text": "Al participar en este desafío, acepta que su solución pueda ser utilizada por la empresa organizadora y que ha leído y comprendido los términos y condiciones."
+      }
+    },
+    "fileUploader": {
+      "maxSize": "Tamaño máximo del archivo: 1GB",
+      "multiple": "Puede subir múltiples archivos."
+    },
+    "messages1": {
+      "challengeNotFound": "Desafío no encontrado",
+      "challengePermissionError": "El desafío que buscas no existe o no tienes permiso para verlo"
+    }
+  },
+  "HelpCenterLayout": {
+    "title": "Centro de Ayuda",
+    "categories": {
+      "Challenges": "Desafíos",
+      "User": "Usuario",
+      "Solutions": "Soluciones",
+      "ContactUs": "Contáctanos",
+      "Legal": "Legal",
+      "UserManual": "Manual de Usuario"
+    },
+    "items": {
+      "PostNewChallenge": "Publicar nuevo desafío",
+      "ViewChallengeCatalog": "Ver catálogo de desafíos",
+      "ParticipateInChallenge": "Participar en el desafío",
+      "EvaluateChallenge": "Evaluar desafío",
+      "CreateCompanyUser": "Creación de usuario empresa",
+      "CreateParticipantUser": "Creación de usuario participantes",
+      "EditMyProfile": "Editar mi perfil",
+      "ForgotPassword": "Olvidar contraseña",
+      "ViewMySolutions": "Ver mis soluciones",
+      "ChangeSolutionPrivacy": "Cambiar privacidad de solución",
+      "SendMessage": "Enviar mensaje",
+      "TermsAndConditions": "Términos y condiciones",
+      "PrivacyPolicy": "Privacidad",
+      "UserManual": "Manual de Usuario",
+      "UsagePolicy": "Política de Uso",
+      "backToAdmin": "Volver al Admin"
+    }
+  },
+  "helpCenter": {
+    "postNewChallenge": {
+      "title": "Publicar nuevo desafío",
+      "description": "Aquí encontrarás información sobre cómo funcionan los desafíos y sus diferentes estatus.",
+      "statusesTitle": "Estatus de los Desafíos",
+      "importantInfoTitle": "Información importante",
+      "importantInfoDescription": "Asegúrate de seguir todas las instrucciones y cumplir con los requisitos del desafío para evitar descalificaciones.",
+      "faqTitle": "Preguntas frecuentes sobre la publicación de desafíos",
+      "howToPostTitle": "¿Cómo puedo publicar un nuevo desafío?",
+      "howToPostSteps": "Para publicar un nuevo desafío, sigue estos pasos:",
+      "steps": [
+        "Navega al Dashboard de tu empresa.",
+        "Haz clic en \"Publicar Nuevo Desafío\".",
+        "Rellena el formulario del desafío con los detalles requeridos, incluyendo:",
+        "Haz clic en \"Enviar\" para publicar tu desafío."
+      ],
+      "details": [
+        "Título: Proporciona un título descriptivo para tu desafío.",
+        "Contenido: Describe el desafío en detalle.",
+        "Fecha de Inicio: Selecciona la fecha en que comenzará el desafío.",
+        "Fecha Límite: Selecciona la fecha límite para el desafío.",
+        "Categorías: Elige las categorías relevantes para el desafío.",
+        "Proceso de Evaluación: Define los criterios y el proceso de evaluación."
+      ],
+      "problemsTitle": "¿Qué debo hacer si encuentro problemas?",
+      "problemsDescription": "Si encuentras algún problema, por favor contacta al soporte."
+    },
+    "viewChallengeCatalog": {
+      "title": "Catálogo de Desafíos",
+      "description": "Aquí puedes ver todos los desafíos disponibles.",
+      "featuresTitle": "Características",
+      "feature1": "Funcionalidad de búsqueda",
+      "feature2": "Filtrado",
+      "feature3": "Ordenar",
+      "feature4": "Diseño adaptable",
+      "feature5": "Interfaz animada",
+      "statusesTitle": "Estatus de los Desafíos",
+      "statusColumn": "Estatus",
+      "descriptionColumn": "Descripción",
+      "statusInProgress": "Desafío en progreso",
+      "statusInProgressDescription": "El desafío está actualmente en curso.",
+      "statusUnderEvaluation": "Desafío en evaluación",
+      "statusUnderEvaluationDescription": "El desafío está siendo evaluado.",
+      "statusAwaitingPrizes": "Desafío en espera de entrega de premios",
+      "statusAwaitingPrizesDescription": "El desafío está esperando la entrega de premios.",
+      "statusCompleted": "Desafío finalizado",
+      "statusCompletedDescription": "El desafío ha finalizado.",
+      "statusCancelled": "Desafío cancelado",
+      "statusCancelledDescription": "El desafío ha sido cancelado.",
+      "statusUnvalidated": "Desafío sin validar",
+      "statusUnvalidatedDescription": "El desafío aún no ha sido validado por la administración.",
+      "statusRejected": "Desafío rechazado",
+      "statusRejectedDescription": "El desafío ha sido rechazado.",
+      "statusDiscarded": "Desafío descartado",
+      "statusDiscardedDescription": "El desafío ha sido descartado.",
+      "statusSolutionValidation": "Desafío en validación de soluciones",
+      "statusSolutionValidationDescription": "El desafío está en proceso de validación de soluciones.",
+      "importantInfoTitle": "Información importante",
+      "importantInfoDescription": "Asegúrate de seguir todas las instrucciones y cumplir con los requisitos del desafío para evitar descalificaciones.",
+      "howToUseTitle": "Cómo usar",
+      "searchingTitle": "Buscar",
+      "searchingSteps": "Pasos para buscar desafíos:",
+      "searchSteps": [
+        "Usa la barra de búsqueda en la parte superior del catálogo para buscar desafíos por título o nombre de la empresa."
+      ],
+      "filteringTitle": "Filtrar",
+      "filteringSteps": "Pasos para filtrar desafíos:",
+      "filterSteps": [
+        "En el escritorio: Usa la barra lateral a la izquierda para filtrar desafíos por categoría y estatus.",
+        "En el móvil: Haz clic en el botón 'Filtrar' para abrir la hoja de filtros, luego selecciona los filtros deseados."
+      ],
+      "sortingTitle": "Ordenar",
+      "sortingDescription": "Usa el menú desplegable junto a la barra de búsqueda para ordenar desafíos por recencia, popularidad o fecha de cierre.",
+      "challengeCardTitle": "Tarjeta de Desafío",
+      "challengeCardDescription": "Cada tarjeta de desafío en el catálogo muestra la siguiente información:",
+      "challengeCardInfo": [
+        "Título del desafío",
+        "Nombre y logo de la empresa",
+        "Estatus del desafío",
+        "Categorías",
+        "Tiempo desde la publicación",
+        "Tiempo restante hasta la fecha límite",
+        "Número de soluciones enviadas"
+      ],
+      "troubleshootingTitle": "Solución de problemas",
+      "troubleshootingDescription": "Si encuentras algún problema mientras usas el Catálogo de Desafíos:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable, ya que el catálogo obtiene datos del servidor.",
+        "Intenta actualizar la página si la lista de desafíos no se carga o parece desactualizada.",
+        "Limpia la caché de tu navegador si experimentas problemas persistentes.",
+        "Si los problemas persisten, por favor contacta a nuestro equipo de soporte para asistencia."
+      ]
+    },
+    "participateInChallenge": {
+      "title": "Participar en el desafío",
+      "description": "Aquí encontrarás información sobre cómo participar en los desafíos.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes estar registrado en la plataforma.",
+      "requirement2": "Debes haber iniciado sesión.",
+      "requirement3": "Debes cumplir con los requisitos específicos del desafío.",
+      "stepsTitle": "Pasos para participar",
+      "loginTitle": "Iniciar sesión",
+      "loginDescription": "Asegúrate de haber iniciado sesión en tu cuenta.",
+      "submitTitle": "Enviar solución",
+      "submitDescription": "Sigue estos pasos para enviar tu solución:",
+      "submitSteps": [
+        "Navega al desafío en el que deseas participar.",
+        "Haz clic en el botón 'Participar en el Desafío'.",
+        "Rellena el formulario con el título y la descripción de tu solución.",
+        "Adjunta los archivos necesarios.",
+        "Haz clic en 'Enviar solución' para completar el proceso."
+      ],
+      "uploadTitle": "Subir archivos",
+      "uploadDescription": "Puedes subir archivos como parte de tu solución.",
+      "uploadSteps": [
+        "Haz clic en 'Seleccionar archivos' para elegir los archivos desde tu dispositivo.",
+        "Asegúrate de que los archivos no excedan el tamaño máximo permitido.",
+        "Espera a que los archivos se carguen completamente antes de enviar tu solución."
+      ],
+      "troubleshootingTitle": "Solución de problemas",
+      "troubleshootingDescription": "Si encuentras algún problema mientras participas en un desafío:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "evaluateChallenge": {
+      "title": "Evaluar un desafío",
+      "description": "Aquí encontrarás información sobre cómo evaluar las soluciones de un desafío.",
+      "importantInfoTitle": "Información importante",
+      "importantInfoDescription": "Para poder evaluar un desafío, el mismo debe estar en fase de evaluación.",
+      "stepsTitle": "Pasos para evaluar",
+      "companyEvaluationTitle": "Evaluación por empresas",
+      "companyEvaluationDescription": "Las empresas pueden ver todas las soluciones y asignar una puntuación del 1 al 100.",
+      "companyEvaluationSteps": [
+        "Navega al desafío que deseas evaluar.",
+        "Si el desafío está en fase de evaluación, verás una alerta indicando que puedes evaluar.",
+        "Haz clic en 'Participar' para comenzar la evaluación.",
+        "Revisa cada solución y asigna una puntuación del 1 al 100."
+      ],
+      "participantEvaluationTitle": "Evaluación por participantes",
+      "participantEvaluationDescription": "Los participantes pueden ver todas las soluciones del desafío en el que participaron y dar 'me gusta' a las que les gusten.",
+      "participantEvaluationSteps": [
+        "Navega al desafío en el que participaste.",
+        "Si el desafío está en fase de evaluación, verás una alerta indicando que puedes evaluar.",
+        "Haz clic en 'Participar' para comenzar la evaluación.",
+        "Revisa cada solución y da 'me gusta' a las que te gusten."
+      ]
+    },
+    "viewMySolutions": {
+      "title": "Ver Mis Soluciones",
+      "description": "Aquí encontrarás información sobre cómo ver y gestionar tus soluciones.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes estar registrado en la plataforma.",
+      "requirement2": "Debes haber iniciado sesión.",
+      "stepsTitle": "Pasos para Ver Soluciones",
+      "accessingTitle": "Accediendo a Mis Soluciones",
+      "accessingDescription": "Sigue estos pasos para acceder a tus soluciones:",
+      "accessingSteps": [
+        "Navega al menú de perfil.",
+        "Selecciona 'Mis Soluciones' del menú desplegable."
+      ],
+      "managingTitle": "Gestionando Soluciones",
+      "managingDescription": "Una vez que estés en la página de Mis Soluciones, puedes:",
+      "managingSteps": [
+        "Ver la lista de soluciones que has enviado.",
+        "Filtrar soluciones por estado.",
+        "Buscar soluciones específicas usando la barra de búsqueda.",
+        "Cambiar el estado público de tus soluciones.",
+        "Descargar archivos adjuntos asociados con tus soluciones."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al ver tus soluciones:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "changeSolutionPrivacy": {
+      "title": "Cambiar Privacidad de la Solución",
+      "description": "Aquí encontrarás información sobre cómo cambiar la privacidad de tus soluciones.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes estar registrado en la plataforma.",
+      "requirement2": "Debes haber iniciado sesión.",
+      "stepsTitle": "Pasos para Cambiar la Privacidad de la Solución",
+      "accessingTitle": "Accediendo a Mis Soluciones",
+      "accessingDescription": "Sigue estos pasos para acceder a tus soluciones:",
+      "accessingSteps": [
+        "Navega al menú de perfil.",
+        "Selecciona 'Mis Soluciones' del menú desplegable."
+      ],
+      "managingTitle": "Gestionando la Privacidad de las Soluciones",
+      "managingDescription": "Una vez que estés en la página de Mis Soluciones, puedes:",
+      "managingSteps": [
+        "Seleccionar la solución cuya privacidad deseas cambiar.",
+        "Hacer clic en el botón de privacidad para alternar entre pública y privada.",
+        "Confirmar el cambio de privacidad."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al cambiar la privacidad de tus soluciones:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "createCompanyUser": {
+      "title": "Crear Usuario Empresa",
+      "description": "Aquí encontrarás información sobre cómo crear una cuenta de usuario empresa.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes tener una dirección de correo electrónico válida.",
+      "requirement2": "Debes proporcionar información precisa sobre tu empresa.",
+      "stepsTitle": "Pasos para Crear Usuario Empresa",
+      "signUpTitle": "Registrarse",
+      "signUpDescription": "Sigue estos pasos para registrarte:",
+      "signUpSteps": [
+        "Navega a la página de registro.",
+        "Introduce tu nombre de usuario, correo electrónico y contraseña.",
+        "Haz clic en 'Crear cuenta' para completar el registro."
+      ],
+      "roleSelectionTitle": "Selección de Rol",
+      "roleSelectionDescription": "Después de registrarte, selecciona el rol de empresa:",
+      "roleSelectionSteps": [
+        "Inicia sesión en tu cuenta.",
+        "Selecciona 'Empresa' como tu rol.",
+        "Haz clic en 'Siguiente' para continuar."
+      ],
+      "completeSignUpTitle": "Completar Registro",
+      "completeSignUpDescription": "Proporciona la información de tu empresa:",
+      "completeSignUpSteps": [
+        "Introduce el nombre de tu empresa, teléfono y página web.",
+        "Selecciona el sector y tamaño de la empresa.",
+        "Introduce la dirección y descripción de la empresa.",
+        "Haz clic en 'Registrar' para completar el proceso."
+      ],
+      "verificationPendingTitle": "Verificación Pendiente",
+      "verificationPendingDescription": "Tu cuenta empresarial está en proceso de verificación. Recibirás una notificación por correo electrónico una vez que la verificación esté completa.",
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al crear tu cuenta de usuario empresa:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "createParticipantUser": {
+      "title": "Crear Usuario Participante",
+      "description": "Aquí encontrarás información sobre cómo crear una cuenta de usuario participante.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes tener una dirección de correo electrónico válida.",
+      "requirement2": "Debes proporcionar información precisa sobre ti mismo.",
+      "stepsTitle": "Pasos para Crear Usuario Participante",
+      "signUpTitle": "Registrarse",
+      "signUpDescription": "Sigue estos pasos para registrarte:",
+      "signUpSteps": [
+        "Navega a la página de registro.",
+        "Introduce tu nombre de usuario, correo electrónico y contraseña.",
+        "Haz clic en 'Crear cuenta' para completar el registro."
+      ],
+      "roleSelectionTitle": "Selección de Rol",
+      "roleSelectionDescription": "Después de registrarte, selecciona el rol de participante:",
+      "roleSelectionSteps": [
+        "Inicia sesión en tu cuenta.",
+        "Selecciona 'Participante' como tu rol.",
+        "Haz clic en 'Siguiente' para continuar."
+      ],
+      "completeSignUpTitle": "Completar Registro",
+      "completeSignUpDescription": "Proporciona tu información personal:",
+      "completeSignUpSteps": [
+        "Introduce tu nombre, apellidos y fecha de nacimiento.",
+        "Introduce tu número de teléfono y una descripción personal.",
+        "Selecciona tu nivel educativo.",
+        "Haz clic en 'Registrarse' para completar el proceso."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al crear tu cuenta de usuario participante:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "editMyProfile": {
+      "title": "Editar Mi Perfil",
+      "description": "Aquí encontrarás información sobre cómo editar tu perfil.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes estar registrado en la plataforma.",
+      "requirement2": "Debes haber iniciado sesión.",
+      "stepsTitle": "Pasos para Editar Perfil",
+      "accessProfileTitle": "Acceder al Perfil",
+      "accessProfileDescription": "Sigue estos pasos para acceder a tu perfil:",
+      "accessProfileSteps": [
+        "Navega al menú de perfil.",
+        "Selecciona 'Mi Perfil' del menú desplegable."
+      ],
+      "updateInfoTitle": "Actualizar Información",
+      "updateInfoDescription": "Una vez que estés en la página de Mi Perfil, puedes actualizar la siguiente información:",
+      "updateInfoSteps": [
+        "Nombres",
+        "Apellidos",
+        "Correo Electrónico",
+        "Número de Teléfono",
+        "Descripción Personal",
+        "Nivel Educativo",
+        "Foto de Perfil"
+      ],
+      "saveChangesTitle": "Guardar Cambios",
+      "saveChangesDescription": "Después de actualizar tu información, sigue estos pasos para guardar los cambios:",
+      "saveChangesSteps": [
+        "Haz clic en el botón 'Guardar Cambios'.",
+        "Espera el mensaje de confirmación."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al editar tu perfil:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Intenta actualizar la página si encuentras algún error.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "forgotPassword": {
+      "title": "Olvidé mi Contraseña",
+      "description": "Aquí encontrarás información sobre cómo restablecer tu contraseña.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes tener acceso al correo electrónico asociado con tu cuenta.",
+      "requirement2": "Debes seguir las instrucciones enviadas a tu correo electrónico.",
+      "stepsTitle": "Pasos para Restablecer la Contraseña",
+      "accessForgotPasswordTitle": "Acceder a Olvidé mi Contraseña",
+      "accessForgotPasswordDescription": "Sigue estos pasos para acceder a la página de olvidé mi contraseña:",
+      "accessForgotPasswordSteps": [
+        "Navega a la página de inicio de sesión.",
+        "Haz clic en el enlace 'Olvidé mi Contraseña'."
+      ],
+      "enterEmailTitle": "Ingresar Correo Electrónico",
+      "enterEmailDescription": "Ingresa la dirección de correo electrónico asociada con tu cuenta:",
+      "enterEmailSteps": [
+        "Escribe tu dirección de correo electrónico en el campo proporcionado.",
+        "Haz clic en el botón 'Restablecer Contraseña'."
+      ],
+      "enterCodeTitle": "Ingresar Código",
+      "enterCodeDescription": "Revisa tu correo electrónico para obtener el código de verificación e ingrésalo:",
+      "enterCodeSteps": [
+        "Abre el correo electrónico de CrowdSolve.",
+        "Copia el código de verificación.",
+        "Pega el código en el campo proporcionado en la página de restablecer contraseña."
+      ],
+      "setNewPasswordTitle": "Establecer Nueva Contraseña",
+      "setNewPasswordDescription": "Ingresa tu nueva contraseña y confírmala:",
+      "setNewPasswordSteps": [
+        "Escribe tu nueva contraseña en el campo 'Nueva Contraseña'.",
+        "Escribe tu nueva contraseña nuevamente en el campo 'Confirmar Nueva Contraseña'.",
+        "Haz clic en el botón 'Establecer Nueva Contraseña'."
+      ],
+      "troubleshootingTitle": "Solución de Problemas",
+      "troubleshootingDescription": "Si encuentras algún problema al restablecer tu contraseña:",
+      "troubleshootingSteps": [
+        "Asegúrate de tener una conexión a internet estable.",
+        "Revisa tu carpeta de spam/correo no deseado si no ves el correo.",
+        "Contacta al soporte si el problema persiste."
+      ]
+    },
+    "sendMessage": {
+      "title": "Enviar Mensaje",
+      "description": "Aquí encontrarás información sobre cómo contactar a la administración de CrowdSolve.",
+      "requirementsTitle": "Requisitos",
+      "requirement1": "Debes tener una dirección de correo electrónico válida.",
+      "requirement2": "Debes proporcionar información precisa en el formulario de contacto.",
+      "stepsTitle": "Pasos para Contactarnos",
+      "accessContactUsTitle": "Acceder a Contáctanos",
+      "accessContactUsDescription": "Sigue estos pasos para acceder al formulario de contacto:",
+      "accessContactUsSteps": [
+        "Navega a la página de 'Contáctanos' desde el menú principal.",
+        "Haz clic en el enlace 'Contáctanos'."
+      ],
+      "fillFormTitle": "Rellenar el Formulario",
+      "fillFormDescription": "Proporciona la información necesaria en el formulario de contacto:",
+      "fillFormSteps": [
+        "Introduce el asunto de tu mensaje.",
+        "Introduce tu nombre y apellido.",
+        "Introduce tu dirección de correo electrónico.",
+        "Escribe tu mensaje en el campo proporcionado."
+      ],
+      "submitFormTitle": "Enviar el Formulario",
+      "submitFormDescription": "Sigue estos pasos para enviar el formulario de contacto:",
+      "submitFormSteps": [
+        "Asegúrate de que todos los campos obligatorios estén completos.",
+        "Haz clic en el botón 'Enviar Formulario'.",
+        "Espera el mensaje de confirmación."
+      ],
+      "responseTitle": "Respuesta",
+      "responseDescription": "Después de enviar el formulario, recibirás una respuesta por correo electrónico:",
+      "responseSteps": [
+        "Revisa tu correo electrónico para un mensaje de confirmación.",
+        "Nuestro equipo de soporte revisará tu mensaje.",
+        "Recibirás una respuesta dentro de 24-48 horas."
+      ]
+    }
+  },
+  "HelpCenter": {
+    "title": "Centro de Ayuda",
+    "description": "Encuentra toda la información que necesitas sobre CrowdSolve.",
+    "searchPlaceholder": "Busca artículos o guías...",
+    "searchButton": "Buscar",
+    "noSectionsFound": "No se encontraron secciones.",
+    "sections": {
+      "challenges": {
+        "title": "Desafíos",
+        "description": "Explora desafíos, crea uno nuevo, participa o evalúa desafíos fácilmente."
+      },
+      "solutions": {
+        "title": "Soluciones",
+        "description": "Revisa tus soluciones y ajusta su privacidad según tus necesidades."
+      },
+      "user": {
+        "title": "Usuario",
+        "description": "Gestiona tu perfil, crea usuarios o recupera tu contraseña."
+      },
+      "contact": {
+        "title": "Contáctanos",
+        "description": "¿Tienes preguntas? Envíanos un mensaje, estamos aquí para ayudarte."
+      },
+      "legal": {
+        "title": "Legal",
+        "description": "Consulta los términos, condiciones, y la política de privacidad."
+      },
+      "userManual": {
+        "title": "Manual de Usuario",
+        "description": "Encuentra la guía completa para usar CrowdSolve de forma efectiva."
+      }
+    }
+  },
+  "userManual": {
+    "title": "Manual de Usuario",
+    "description": "Encuentra la guía completa para usar CrowdSolve de forma efectiva."
+  },
+
+  "companyEvaluation": {
+    "messages": {
+      "operationSuccessful": "Operación exitosa",
+      "operationFailed": "Operación fallida",
+      "noSolutionsToEvaluate": "No hay soluciones para evaluar",
+      "pleaseComeBackLater": "Por favor, regresa más tarde",
+      "solutionDetails": "Detalles de la solución",
+      "authorOfSolution": "Autor de la solución",
+      "description": "Descripción",
+      "attachedFiles": "Archivos adjuntos",
+      "fileName": "Nombre del archivo",
+      "fileSize": "Tamaño del archivo",
+      "sendDate": "Fecha de envío",
+      "status": "Estado",
+      "rating": "Calificación",
+      "saveRating": "Guardar calificación"
+    },
+    "buttons": {
+      "viewDetails": "Ver detalles",
+      "close": "Cerrar",
+      "downloadFile": "Descargar archivo",
+      "saveRating": "Guardar calificación"
+    },
+    "fields": {
+      "user": "Usuario",
+      "title": "Título",
+      "date": "Fecha",
+      "status": "Estado",
+      "rating": "Calificación",
+      "tableActions": "Acciones"
+    },
+    "statuses": {
+      "notEvaluated": "No evaluado"
+    },
+    "statusVariants": {
+      "outline": "Esquema"
+    },
+    "rating": {
+      "notEvaluated": "No evaluado"
+    }
+  },
+
+
+"CompanyFormDialog": {
+  "company": "Compañía",
+  "title_edit": "Editar",
+  "title_view": "Ver",
+  "fields": {
+    "name": "Nombre",
+    "description": "Descripción",
+    "phone": "Teléfono",
+    "website": "Sitio web",
+    "company_size": "Tamaño de la compañía",
+    "sector": "Sector"
+  },
+  "placeholders": {
+    "description": "Ingrese una descripción",
+    "phone": "Ingrese su número de teléfono",
+    "company_size": "Seleccione un tamaño de compañía",
+    "sector": "Seleccione un sector"
+  },
+  "buttons": {
+    "save_changes": "Guardar cambios",
+    "close": "Cerrar"
+  },
+  "messages": {
+    "success": "Operación exitosa",
+    "failure": "Operación fallida"
+  }
+},
+
+"challengeEvaluation": {
+  "messages": {
+    "operationFailed": "Operación fallida",
+    "notInEvaluationProcess": "El desafío no está en proceso de evaluación.",
+    "noCurrentEvaluationProcess": "No hay un proceso de evaluación actual.",
+    "evaluationFailed": "La evaluación falló",
+    "unknownCategory": "Desconocido",
+    "evaluateSolutions": "Evaluar soluciones",
+    "endsOn": "Finaliza el: ",
+    "companyEvaluation": "Evaluación de la compañía",
+    "communityVoting": "Votación de la comunidad"
+  },
+  "buttons": {
+    "reload": "Recargar"
+  },
+  "headers": {
+    "evaluationTitle": "Soluciones de Evaluación"
+  },
+  "descriptions": {
+    "noChallengeOrLoading": "No hay datos del desafío disponibles o aún se están cargando."
+  }
+}
+
+
+
+}

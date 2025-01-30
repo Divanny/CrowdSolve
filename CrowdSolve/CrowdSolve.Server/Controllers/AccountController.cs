@@ -1,8 +1,11 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
+using CrowdSolve.Server.Enums;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
 using CrowdSolve.Server.Repositories.Autenticación;
+using CrowdSolve.Server.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrowdSolve.Server.Controllers
@@ -16,14 +19,26 @@ namespace CrowdSolve.Server.Controllers
         private readonly int _idUsuarioOnline;
         private readonly UsuariosRepo _usuariosRepo;
         private readonly PerfilesRepo _perfilesRepo;
+        private readonly SoportesRepo _soportesRepo;
+        private readonly DesafiosRepo _desafiosRepo;
+        private readonly FirebaseStorageService _firebaseStorageService;
+        private readonly Mailing _mailingService;
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
 
-        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger)
+        public AccountController(IUserAccessor userAccessor, CrowdSolveContext crowdSolveContext, Authentication authentication, Logger logger, FirebaseStorageService firebaseStorageService, Mailing mailing, FirebaseTranslationService translationService, IHttpContextAccessor httpContextAccessor)
         {
             _authentication = authentication;
             _logger = logger;
             _idUsuarioOnline = userAccessor.idUsuario;
-            _usuariosRepo = new UsuariosRepo(crowdSolveContext);
-            _perfilesRepo = new PerfilesRepo(crowdSolveContext);
+            _firebaseStorageService = firebaseStorageService;
+            _mailingService = mailing;
+            _translationService = translationService;
+            _idioma = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString() ?? "es";
+            _perfilesRepo = new PerfilesRepo(crowdSolveContext, _translationService, _idioma);
+            _soportesRepo = new SoportesRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _desafiosRepo = new DesafiosRepo(crowdSolveContext, _idUsuarioOnline, _translationService, _idioma);
+            _usuariosRepo = new UsuariosRepo(crowdSolveContext, _translationService, _idioma);
         }
 
         /// <summary>
@@ -35,6 +50,8 @@ namespace CrowdSolve.Server.Controllers
         public object GetUserData()
         {
             UsuariosModel usuario = _usuariosRepo.Get(_idUsuarioOnline);
+            usuario.ContraseñaHashed = null;
+
             List<Vistas> vistas = _perfilesRepo.GetPermisos(Convert.ToInt32(usuario.idPerfil)).ToList();
 
             var data = new
@@ -69,6 +86,7 @@ namespace CrowdSolve.Server.Controllers
 
                 OperationResult result = _authentication.SignUp(credentials);
                 _logger.LogHttpRequest(result.Data);
+
                 return result;
             }
             catch (Exception ex)
@@ -110,7 +128,7 @@ namespace CrowdSolve.Server.Controllers
         {
             if (request == null || string.IsNullOrEmpty(request.Code))
                 return BadRequest(new { success = false, message = "Código de token de Google no proporcionado." });
-                
+
             var result = await _authentication.GoogleLogin(request.Code);
 
             if (result.Success)
@@ -235,6 +253,60 @@ namespace CrowdSolve.Server.Controllers
             {
                 _logger.LogError(ex);
                 return new OperationResult(false, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el avatar de un usuario.
+        /// </summary>
+        /// <param name="idUsuario">ID del usuario.</param>
+        /// <returns>Avatar del usuario.</returns>
+        [HttpGet("GetAvatar/{idUsuario}", Name = "GetAvatar")]
+        public async Task<IActionResult> GetAvatar(int idUsuario)
+        {
+            var usuario = _usuariosRepo.Get(idUsuario);
+            if (usuario == null) return NotFound();
+
+            if (string.IsNullOrEmpty(usuario.AvatarURL)) return NoContent();
+
+            if (usuario.AvatarURL.Contains("http"))
+            {
+                return Redirect(usuario.AvatarURL);
+            }
+
+            var stream = await _firebaseStorageService.GetFileAsync(usuario.AvatarURL);
+            return File(stream, "image/jpeg");
+        }
+
+        /// <summary>
+        /// Obtiene la cantidad de registros pendientes de revisión.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetAdminCantidadSolicitudes")]
+        [AuthorizeByPermission(PermisosEnum.Administrador_Dashboard)]
+        public IActionResult GetCantidadRegistros()
+        {
+            try
+            {
+                var cantidadEmpresasPendientes = _usuariosRepo
+                    .Get()
+                    .Where(x => x.idEstatusUsuario == (int)EstatusUsuariosEnum.Pendiente_de_validar && x.idPerfil == (int)PerfilesEnum.Empresa)
+                    .Count();
+
+                var cantidadSoportesPendientes = _soportesRepo.Get().Where(x => x.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_Enviada || x.idEstatusProceso == (int)EstatusProcesoEnum.Soporte_En_progreso).Count();
+
+                var cantidadDesafiosPendientes = _desafiosRepo.Get().Where(x => x.idEstatusDesafio == (int)EstatusProcesoEnum.Desafío_Sin_validar).Count();
+
+                return Ok(new
+                {
+                    CantidadEmpresas = cantidadEmpresasPendientes,
+                    CantidadSoportes = cantidadSoportesPendientes,
+                    CantidadDesafios = cantidadDesafiosPendientes
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = ex.Message });
             }
         }
 

@@ -15,8 +15,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '@/redux/slices/userSlice';
 import EstatusUsuarioEnum from "@/enums/EstatusUsuarioEnum";
 import GoogleLoginButton from '@/components/GoogleLoginButton';
+import { useTranslation } from 'react-i18next';
+import Lottie from 'lottie-react';
+import animationData from '@/assets/sign-in.json';
 
 function SignIn() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const theme = useSelector((state) => state.theme.theme);
@@ -33,8 +37,8 @@ function SignIn() {
   const handleSignIn = async (e) => {
     e.preventDefault();
     if (!username || !password) {
-      toast.warning("Operación fallida", {
-        description: "Por favor, complete todos los campos",
+      toast.warning(t('SignIn.errorMessage'), {
+        description: t('SignIn.errorMessageDescription'),
       });
       return;
     }
@@ -49,7 +53,7 @@ function SignIn() {
         const { token, data } = response.data;
 
         dispatch(setUser({
-          user: data.usuario,
+          user: { ...data.usuario },
           token: token,
           views: Array.isArray(data.vistas) ? data.vistas : []
         }));
@@ -59,13 +63,13 @@ function SignIn() {
         } else if (data.usuario.idEstatusUsuario === EstatusUsuarioEnum.Incompleto) {
           navigate("/sign-up/complete");
         } else {
-          navigate("/");
+          navigate('/');
         }
-        toast.success("Operación exitosa", {
-          description: "Inicio de sesión exitoso",
+        toast.success(t('SignIn.successMessage'), {
+          description: t('SignIn.successMessageDescription'),
         });
       } else {
-        toast.warning("Operación fallida", {
+        toast.warning(t('SignIn.errorMessage'), {
           description: response.data.message,
         });
       }
@@ -92,16 +96,13 @@ function SignIn() {
             <h2 className="mb-6 sm:mb-8 text-center text-base sm:text-lg">
               <ReactTyped
                 strings={[
-                  "Despierta tu creatividad",
-                  "Demuestra tu talento",
-                  "Resuelve problemas",
+                  t('SignIn.creativeMessage'),
+                  t('SignIn.showTalentMessage'),
+                  t('SignIn.solveProblemsMessage'),
                 ]}
                 typeSpeed={80}
                 loop
                 className="text-lg sm:text-3xl font-serif"
-                style={{
-                  fontFamily: 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif',
-                }}
                 backSpeed={20}
                 cursorChar="|"
                 showCursor={true}
@@ -111,7 +112,7 @@ function SignIn() {
 
             <Card className="p-4 sm:p-6 max-w-md shadow-sm">
               <p className="text-sm text-center mb-4">
-                Empieza usando CrowdSolve para ti o tu empresa
+              {t('SignIn.signInSubtitle')}
               </p>
 
               <GoogleLoginButton />
@@ -127,74 +128,76 @@ function SignIn() {
 
               <form onSubmit={handleSignIn} className="grid gap-4 mb-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="username">Usuario o correo electrónico</Label>
+                  <Label htmlFor="username">{t('SignIn.usernamePlaceholder')}</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="Ingrese su de usuario o su correo electrónico"
+                    placeholder={t('SignIn.usernamePlaceholder')}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
                     tabIndex={2}
-                    autocomplete="username email"
+                    autoComplete="username email"
                   />
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
-                    <Label htmlFor="password">Contraseña</Label>
+                    <Label htmlFor="password">{t('SignIn.passwordPlaceholder')}</Label>
                     <Link
                       to="/forgot-password"
                       className="text-primary font-medium ml-auto text-xs hidden sm:inline-block"
                       tabIndex={4}
                     >
-                      ¿Has olvidado tu contraseña?
+                      {t('SignIn.forgotPassword')}
                     </Link>
                   </div>
                   <PasswordInput
                     id="password"
-                    placeholder="Ingrese su contraseña"
+                    placeholder={t('SignIn.passwordPlaceholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     tabIndex={3}
-                    autocomplete="current-password"
+                    autoComplete="current-password"
                   />
                   <Link
                       to="/forgot-password"
                       className="text-primary font-medium ml-auto text-xs inline-block sm:hidden"
                       tabIndex={4}
                     >
-                      ¿Has olvidado tu contraseña?
+                      {t('SignIn.forgotPassword')}
                     </Link>
                 </div>
 
                 {isLoading ? (
                   <Button disabled className="w-full" tabIndex={5}>
                     <Loading02Icon className="mr-2 h-4 w-4 animate-spin" />
-                    Por favor, espere
+                    {t('SignIn.loadingText')}
                   </Button>
                 ) : (
                   <Button type="submit" className="w-full" tabIndex={5}>
-                    Iniciar sesión
+                    {t('SignIn.signInButton')}
                   </Button>
                 )}
               </form>
 
               <div className="mt-4 text-center text-xs">
-                ¿No tienes una cuenta?{" "}
+              {t('SignIn.noAccount')}{" "}
                 <Link
                   to="/sign-up"
                   className="text-primary font-medium"
                   tabIndex={6}
                 >
-                  Registrarse
+                  {t('SignIn.signUpLink')}
                 </Link>
               </div>
             </Card>
           </div>
         </div>
         <div className="hidden min-[500px]:flex justify-center p-0 sm:p-4 ">
-          <div className="w-full rounded-xl bg-card"></div>
+          <div className="w-full rounded-xl bg-card flex flex-col justify-center">
+            <Lottie animationData={animationData} loop={true} className="w-3/4 h-3/4 mx-auto" />
+          </div>
         </div>
       </main>
     </div>

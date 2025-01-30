@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "sonner";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../redux/slices/loadingSlice';
 import { clearUser } from '../redux/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { store } from '../redux/store';
 const useAxios = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const language = useSelector((state) => state.language.language);
 
     const api = axios.create({
         baseURL: import.meta.env.BASE_URL
@@ -27,6 +28,7 @@ const useAxios = () => {
             config.headers.Authorization = `Bearer ${token}`;
         }
 
+        config.headers["Accept-Language"] = language;
         return config;
     });
 
@@ -40,22 +42,24 @@ const useAxios = () => {
 
             if (error.response) {
                 const { status } = error.response;
-                if (status === 401) {
+                if (status === 401 && window.location.pathname !== "/sign-in") {
                     dispatch(clearUser());
                     navigate("/sign-in");
-                    toast.warning("Sesión expirada. Por favor, inicia sesión nuevamente.");
-                } else {
-                    // Manejar otros errores
-                    toast.error("Operación fallida", {
-                        description: error.message,
-                    });
-                }
-            } else {
-                toast.error("Operación fallida", {
-                    description: error.message,
-                });
-            }
 
+                    const state = store.getState();
+                    const token = state.user.token;
+
+                    if (token) {
+                        toast.warning("Sesión expirada. Por favor, inicia sesión nuevamente.");
+                    }
+                    else {
+                        toast.warning("Acceso denegado", {
+                            description: "Debes iniciar sesión para acceder a esta página.",
+                        });
+                    }
+                }
+            }
+            
             return Promise.reject(error);
         }
     );

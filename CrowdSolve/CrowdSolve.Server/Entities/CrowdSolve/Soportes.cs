@@ -9,11 +9,17 @@ public partial class Soportes
 {
     public int idSoporte { get; set; }
 
-    public int idUsuario { get; set; }
+    public int? idUsuario { get; set; }
 
     public string Titulo { get; set; }
 
     public string Mensaje { get; set; }
 
     public DateTime Fecha { get; set; }
+
+    public string Nombres { get; set; }
+
+    public string Apellidos { get; set; }
+
+    public string CorreoElectronico { get; set; }
 }

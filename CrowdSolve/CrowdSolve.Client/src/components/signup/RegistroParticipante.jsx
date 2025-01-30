@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxios from "@/hooks/use-axios";
 import { toast } from "sonner";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectToken } from '@/redux/selectors/userSelectors';
+import { setUser } from '@/redux/slices/userSlice';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,11 +29,16 @@ import {
 } from "@/components/ui/popover"
 
 import { PhoneInput } from "@/components/ui/phone-input";
+import { useTranslation } from 'react-i18next';
+import AvatarPicker from "@/components/ui/avatar-picker";
 
 const RegistroParticipante = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { api } = useAxios();
     const { user } = useSelector((state) => state.user);
+    const token = useSelector(selectToken);
 
     const [relationalObjects, setRelationalObjects] = useState({});
 
@@ -43,6 +50,7 @@ const RegistroParticipante = () => {
         telefono: "",
         descripcionPersonal: "",
         idNivelEducativo: 0,
+        avatar: null,
     });
 
     useEffect(() => {
@@ -72,24 +80,44 @@ const RegistroParticipante = () => {
         e.preventDefault();
 
         if (!formData.nombres || !formData.apellidos || !formData.fechaNacimiento || !formData.telefono || !formData.idNivelEducativo || !formData.descripcionPersonal) {
-            toast.warning("Operación fallida", {
-                description: "Por favor, complete todos los campos",
+            toast.warning(t('RegistroParticipante.failedOperation'), {
+                description: t('RegistroParticipante.failedOpeDescription'),
             });
             return;
         }
 
         formData.fechaNacimiento = format(formData.fechaNacimiento, "yyyy-MM-dd");
 
+        const formDataToSend = new FormData();
+        Object.keys(formData).forEach(key => {
+            formDataToSend.append(key, formData[key]);
+        });
+
         try {
-            const response = await api.post("api/Participantes", formData);
+            const response = await api.post("api/Participantes", formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
 
             if (response.data.success) {
                 navigate("/");
-                toast.success("Operación exitosa", {
+
+                const { data } = await api.get("/api/Account");
+
+                if (data) {
+                    dispatch(setUser({
+                        user: { ...data.usuario },
+                        token: token,
+                        views: Array.isArray(data.vistas) ? data.vistas : []
+                    }));
+                }
+
+                toast.success(t('RegistroParticipante.successfulOperation'), {
                     description: response.data.message,
                 });
             } else {
-                toast.warning("Operación fallida", {
+                toast.warning(t('RegistroParticipante.failedOperation'), {
                     description: response.data.message,
                 });
             }
@@ -100,9 +128,12 @@ const RegistroParticipante = () => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-2">
+            <div className="space-y-2">
+                <AvatarPicker avatar={formData.avatar} onAvatarChange={(value) => setFormData((prevData) => ({ ...prevData, avatar: value }))} />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="nombres">Nombres</Label>
+                    <Label htmlFor="nombres">{t('RegistroParticipante.nombres')}</Label>
                     <Input
                         id="nombres"
                         name="nombres"
@@ -110,11 +141,11 @@ const RegistroParticipante = () => {
                         value={formData.nombres}
                         onChange={handleChange}
                         required
-                        autocomplete="given-name"
+                        autoComplete="given-name"
                     />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="apellidos">Apellidos</Label>
+                    <Label htmlFor="apellidos">{t('RegistroParticipante.apellidos')}</Label>
                     <Input
                         id="apellidos"
                         name="apellidos"
@@ -122,13 +153,13 @@ const RegistroParticipante = () => {
                         value={formData.apellidos}
                         onChange={handleChange}
                         required
-                        autocomplete="family-name"
+                        autoComplete="family-name"
                     />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="fechaNacimiento">Fecha de nacimiento</Label>
+                    <Label htmlFor="fechaNacimiento">{t('RegistroParticipante.fechaNacimiento')}</Label>
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button
@@ -136,12 +167,12 @@ const RegistroParticipante = () => {
                                 name="fechaNacimiento"
                                 variant={"outline"}
                                 className={cn(
-                                    "w-full justify-start text-left font-normal bg-accent",
+                                    "w-full justify-start text-left font-normal",
                                     !formData.fechaNacimiento && "text-muted-foreground"
                                 )}
                             >
                                 <CalendarIcon className="mr-2 h-4 w-4" />
-                                {formData.fechaNacimiento ? format(formData.fechaNacimiento, "PPP") : <span>Seleccione una fecha</span>}
+                                {formData.fechaNacimiento ? format(formData.fechaNacimiento, "PPP") : <span>{t('RegistroParticipante.selectDate')}</span>}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
@@ -158,26 +189,26 @@ const RegistroParticipante = () => {
                     </Popover>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="telefono">Teléfono</Label>
-                    <PhoneInput 
-                        placeholder="Ingrese su teléfono" 
+                    <Label htmlFor="telefono">{t('RegistroParticipante.telefono')}</Label>
+                    <PhoneInput
+                        placeholder="Ingrese su teléfono"
                         id="telefono"
                         name="telefono"
                         type="tel"
                         value={formData.telefono}
                         onChange={(value) => setFormData((prevData) => ({ ...prevData, telefono: value }))}
-                        autocomplete="tel"
+                        autoComplete="tel"
                     />
                 </div>
             </div>
             <div className="space-y-2">
-                <Label htmlFor="nivelEducativo">Nivel educativo</Label>
+                <Label htmlFor="nivelEducativo">{t('RegistroParticipante.nivelEducativo')}</Label>
                 <Select
                     onValueChange={(value) => handleSelectChange("idNivelEducativo", value)}
                     value={formData.idNivelEducativo}
                 >
                     <SelectTrigger>
-                        <SelectValue placeholder="Seleccione">{formData.idNivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == formData.idNivelEducativo).nombre : "Seleccione un nivel educativo"}</SelectValue>                        
+                        <SelectValue placeholder="Seleccione">{formData.idNivelEducativo ? relationalObjects.nivelesEducativos.find((ne) => ne.idNivelEducativo == formData.idNivelEducativo).nombre : "Seleccione un nivel educativo"}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                         {relationalObjects.nivelesEducativos && relationalObjects.nivelesEducativos.map((ne) => (
@@ -189,7 +220,7 @@ const RegistroParticipante = () => {
                 </Select>
             </div>
             <div className="space-y-2">
-                <Label htmlFor="descripcionPersonal">Descripción personal</Label>
+                <Label htmlFor="descripcionPersonal">{t('RegistroParticipante.descripcionPersonal')}</Label>
                 <Textarea
                     id="descripcionPersonal"
                     name="descripcionPersonal"
@@ -197,14 +228,14 @@ const RegistroParticipante = () => {
                     value={formData.descripcionPersonal}
                     onChange={handleChange}
                     rows={4}
-                    autocomplete="off"
+                    autoComplete="off"
                 />
             </div>
             <Button
                 type="submit"
                 className="w-full"
             >
-                Registrarse
+                {t('RegistroParticipante.registrarse')}
             </Button>
         </form>
     );

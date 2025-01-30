@@ -14,8 +14,10 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { PasswordInput } from "@/components/ui/password-input"
+import { useTranslation } from 'react-i18next';
 
 export default function ForgotPassword() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { api } = useAxios();
 
@@ -33,8 +35,8 @@ export default function ForgotPassword() {
     e.preventDefault()
 
     if (!email) {
-      toast.warning("Operación fallida", {
-        description: "Por favor, complete todos los campos",
+      toast.warning(t('ForgotPassword.toastMessages.operationFailed'), {
+        description: t('ForgotPassword.toastMessages.pleaseCompleteFields'),
       });
       return
     }
@@ -43,21 +45,21 @@ export default function ForgotPassword() {
       const response = await api.get(`/api/Account/ForgotPassword/${email}`);
 
       if (response.data.success) {
-        toast.success("Operación exitosa", {
-          description: "Se ha enviado un enlace de restablecimiento a su correo electrónico",
+        toast.success(t('ForgotPassword.toastMessages.operationSuccessful'), {
+          description: t('ForgotPassword.toastMessages.resetPasswordLinkSent'),
         });
 
         setUser(response.data.data);
         setStep(2);
       }
       else {
-        toast.error("Operación fallida", {
+        toast.error(t('ForgotPassword.toastMessages.operationFailed'), {
           description: response.data.message,
         });
       }
     }
     catch (error) {
-      toast.error("Operación fallida", {
+      toast.error(t('ForgotPassword.toastMessages.operationFailed'), {
         description: error.message,
       });
     }
@@ -67,8 +69,8 @@ export default function ForgotPassword() {
     e.preventDefault()
 
     if (!otp) {
-      toast.warning("Operación fallida", {
-        description: "Por favor, complete todos los campos",
+      toast.warning(t('ForgotPassword.toastMessages.operationFailed'), {
+        description: t('ForgotPassword.toastMessages.pleaseCompleteFields'),
       });
       return
     }
@@ -80,21 +82,21 @@ export default function ForgotPassword() {
       });
 
       if (response.data.success) {
-        toast.success("Operación exitosa", {
-          description: "Código de verificación correcto",
+        toast.success(t('ForgotPassword.toastMessages.operationSuccessful'), {
+          description: t('ForgotPassword.toastMessages.verificationCodeCorrect'),
         });
 
         setJwtToken(response.data.data);
         setStep(3);
       }
       else {
-        toast.error("Operación fallida", {
+        toast.error(t('ForgotPassword.toastMessages.operationFailed'), {
           description: response.data.message,
         });
       }
     }
     catch (error) {
-      toast.error("Operación fallida", {
+      toast.error(t('ForgotPassword.toastMessages.operationFailed'), {
         description: error.message,
       });
     }
@@ -104,15 +106,15 @@ export default function ForgotPassword() {
     e.preventDefault()
 
     if (!password || !confirmPassword) {
-      toast.warning("Operación fallida", {
-        description: "Por favor, complete todos los campos",
+      toast.warning(t('ForgotPassword.toastMessages.operationFailed'), {
+        description: t('ForgotPassword.toastMessages.pleaseCompleteFields'),
       });
       return
     }
 
     if (password !== confirmPassword) {
-      toast.warning("Operación fallida", {
-        description: "Las contraseñas no coinciden",
+      toast.warning(t('ForgotPassword.toastMessages.operationFailed'), {
+        description: t('ForgotPassword.toastMessages.passwordMismatch'),
       });
       return
     }
@@ -128,21 +130,21 @@ export default function ForgotPassword() {
       });
 
       if (response.data.success) {
-        toast.success("Operación exitosa", {
-          description: "Contraseña restablecida correctamente",
+        toast.success(t('ForgotPassword.toastMessages.operationSuccessful'), {
+          description: t('ForgotPassword.toastMessages.passwordResetSuccessful'),
         });
 
         navigate("/sign-in");
       }
       else {
-        toast.error("Operación fallida", {
+        toast.error(t('ForgotPassword.toastMessages.operationFailed'), {
           description: response.data.message,
         });
       }
     }
 
     catch (error) {
-      toast.error("Operación fallida", {
+      toast.error(t('ForgotPassword.toastMessages.operationFailed'), {
         description: error.message,
       });
     }
@@ -157,27 +159,27 @@ export default function ForgotPassword() {
               <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full inline-block">
                 <KeyIcon className="h-10 w-10 text-primary" />
               </div>
-              <CardTitle className="text-xl md:text-2xl font-medium">¿Has olvidado tu contraseña?</CardTitle>
-              <CardDescription className="text-sm md:text-base">No te preocupes, enviaremos a tu correo electrónico instrucciones para restablecerla.</CardDescription>
+              <CardTitle className="text-xl md:text-2xl font-medium">{t('ForgotPassword.passwordRecovery.forgotPasswordTitle')}</CardTitle>
+              <CardDescription className="text-sm md:text-base">{t('ForgotPassword.passwordRecovery.forgotPasswordDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmitEmail}>
                 <div className="grid w-full items-center gap-4">
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="email">Correo electrónico</Label>
+                    <Label htmlFor="email">{t('ForgotPassword.passwordRecovery.emailLabel')}</Label>
                     <Input
                       id="email"
-                      placeholder="Ingrese su correo electrónico"
+                      placeholder={t('ForgotPassword.passwordRecovery.emailPlaceholder')}
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      autocomplete="email"
+                      autoComplete="email"
                     />
                   </div>
                 </div>
                 <Button className="w-full mt-6" type="submit">
-                  Restablecer contraseña
+                {t('ForgotPassword.passwordRecovery.resetPasswordButton')}
                 </Button>
               </form>
             </CardContent>
@@ -190,8 +192,8 @@ export default function ForgotPassword() {
               <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full inline-block">
                 <MailIcon className="h-10 w-10 text-primary" />
               </div>
-              <CardTitle className="text-xl md:text-2xl font-medium">Revisa tu correo</CardTitle>
-              <CardDescription className="text-sm md:text-base">Enviamos un enlace para restablecer la contraseña a<br />{email}</CardDescription>
+              <CardTitle className="text-xl md:text-2xl font-medium">{t('ForgotPassword.passwordRecovery.checkEmailTitle')}</CardTitle>
+              <CardDescription className="text-sm md:text-base">{t('ForgotPassword.passwordRecovery.checkEmailDescription')}<br />{email}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleValidateOTP}>
@@ -211,12 +213,12 @@ export default function ForgotPassword() {
                   </InputOTP>
                 </div>
                 <Button className="w-full mt-6" type="submit">
-                  Validar enlace de restablecimiento
+                {t('ForgotPassword.passwordRecovery.validateLinkButton')}
                 </Button>
               </form>
               <p className="text-center text-sm mt-4">
-                ¿No recibiste el código? <Button variant="link" className="text-primary font-medium ml-auto inline-block" onClick={(e) => handleSubmitEmail(e)}>
-                  Reenviar código
+              {t('ForgotPassword.passwordRecovery.resendCodeLink')} <Button variant="link" className="text-primary font-medium ml-auto inline-block" onClick={(e) => handleSubmitEmail(e)}>
+              {t('ForgotPassword.passwordRecovery.resendCodeBt')}
                 </Button>
               </p>
             </CardContent>
@@ -229,25 +231,25 @@ export default function ForgotPassword() {
               <div className="mx-auto mb-4 bg-primary/10 p-3 rounded-full inline-block">
                 <LockIcon className="h-10 w-10 text-primary" />
               </div>
-              <CardTitle className="text-xl md:text-2xl font-medium">Establecer nueva contraseña</CardTitle>
-              <CardDescription className="text-sm md:text-base">Introduzca su nueva contraseña a continuación.</CardDescription>
+              <CardTitle className="text-xl md:text-2xl font-medium">{t('ForgotPassword.passwordRecovery.setNewPasswordTitle')}</CardTitle>
+              <CardDescription className="text-sm md:text-base">{t('ForgotPassword.passwordRecovery.setNewPasswordDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSetNewPassword}>
                 <div className="grid w-full items-center gap-4">
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="newPassword">Nueva contraseña</Label>
+                    <Label htmlFor="newPassword">{t('ForgotPassword.passwordRecovery.newPasswordLabel')}</Label>
                     <PasswordInput id="newPassword" placeholder="Ingrese la nueva contraseña" required value={password}
-                      onChange={(e) => setPassword(e.target.value)} autocomplete="new-password" />
+                      onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" />
                   </div>
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="confirmPassword">Confirmar nueva contraseña</Label>
-                    <PasswordInput id="confirmPassword" placeholder="Confirme la nueva contraseña" required value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)} autocomplete="new-password" />
+                    <Label htmlFor="confirmPassword">{t('ForgotPassword.passwordRecovery.confirmPasswordLabel')}</Label>
+                    <PasswordInput id="confirmPassword" placeholder={t('ForgotPassword.passwordRecovery.confirmPasswordLabel')} required value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="new-password" />
                   </div>
                 </div>
                 <Button className="w-full mt-6" type="submit">
-                  Establecer nueva contraseña
+                {t('ForgotPassword.passwordRecovery.setNewPasswordButton')}
                 </Button>
               </form>
             </CardContent>
@@ -259,7 +261,7 @@ export default function ForgotPassword() {
             className="mx-auto text-foreground text-sm"
             onClick={() => navigate('/sign-in')}
           >
-            <ArrowLeftIcon className="mr-2 h-4 w-4" /> Volver a iniciar sesión
+            <ArrowLeftIcon className="mr-2 h-4 w-4" /> {t('ForgotPassword.passwordRecovery.backToSignInButton')}
           </Button>
         </CardFooter>
       </Card>

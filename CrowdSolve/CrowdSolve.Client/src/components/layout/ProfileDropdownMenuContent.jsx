@@ -15,19 +15,51 @@ import {
     DropdownMenuSubContent,
     DropdownMenuSubTrigger
 } from "@/components/ui/dropdown-menu"
-import { User, Send, Settings, BellRing, SunMoon, Globe, LogOut, Check, Moon, Sun, MonitorSmartphone } from 'lucide-react';
+import { User, Building, Send, BellRing, SunMoon, Globe, LogOut, Check, Moon, Sun, MonitorSmartphone, ShieldEllipsis } from 'lucide-react';
 import flags from "react-phone-number-input/flags";
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import usePermisoAcceso from '@/hooks/use-permiso-acceso';
+import PermisosEnum from '@/enums/PermisosEnum';
+import { Badge } from '@/components/ui/badge';
+import { useEffect, useState } from 'react';
+import useAxios from '@/hooks/use-axios';
 
 const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
+    const { t } = useTranslation();
     const theme = useSelector((state) => state.theme.theme);
     const language = useSelector((state) => state.language.language);
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
+    const canAccessCompany = usePermisoAcceso(PermisosEnum.Empresa_Dashboard);
+    const canAccessProfile = usePermisoAcceso(PermisosEnum.Mi_perfil);
+    const canAccessSolutions = usePermisoAcceso(PermisosEnum.Mis_Soluciones);
+    const canAccessAdmin = usePermisoAcceso(PermisosEnum.Administrador_Dashboard);
+
+    const { api } = useAxios();
+    const [notificationCount, setNotificationCount] = useState(0);
+
+    useEffect(() => {
+        const fetchNotificationCount = async () => {
+            try {
+                const response = await api.get('/api/Notificaciones/Count',
+                    { requireLoading: false }
+                );
+                setNotificationCount(response.data.count);
+            } catch (error) {
+                console.error('Error fetching notification count:', error);
+            }
+        };
+
+        fetchNotificationCount();
+    }, [api]);
+
     const handleLogout = () => {
         dispatch(clearUser());
-        toast.success("Operación exitosa", {
-            description: "Has cerrado sesión exitosamente"
+        toast.success(t('ProfileDropdownMenuContent.toastMessageTitle'), {
+            description: t('ProfileDropdownMenuContent.toastMessageDescription')
         });
     }
 
@@ -44,8 +76,8 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
             { showHeader && <DropdownMenuLabel>
                 <div className='flex items-center'>
                     <Avatar className="bg-accent" size="1">
-                        <AvatarImage src={`https://robohash.org/${user.nombreUsuario}`} />
-                        <AvatarFallback>{user[0]}</AvatarFallback>
+                        <AvatarImage src={(user) ? `/api/Account/GetAvatar/${user.idUsuario}` : `https://robohash.org/${user.nombreUsuario}`} />
+                        <AvatarFallback>{user.nombreUsuario[0]}</AvatarFallback>
                     </Avatar>
                     <div className='flex flex-col ml-2'>
                         <span className='text-sm font-semibold'>{user.nombreUsuario}</span>
@@ -56,45 +88,58 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
             </DropdownMenuLabel> }
             { showHeader && <DropdownMenuSeparator /> }
             <DropdownMenuGroup>
-                <DropdownMenuItem>
-                    <User className="mr-2" size={16} />
-                    Perfil
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <Send className="mr-2" size={16} />
-                    Soluciones
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <Settings className="mr-2" size={16} />
-                    Configuración
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                {canAccessCompany && (
+                    <DropdownMenuItem onSelect={() => navigate('/company')}>
+                        <Building className="mr-2" size={16} />
+                        {t('ProfileDropdownMenuContent.miEmpresa')}
+                    </DropdownMenuItem>
+                )}
+                {canAccessProfile && (
+                    <DropdownMenuItem onSelect={() => navigate('/my-profile')}>
+                        <User className="mr-2" size={16} />
+                        {t('ProfileDropdownMenuContent.profile')}
+                    </DropdownMenuItem>
+                )}
+                {canAccessSolutions && (
+                    <DropdownMenuItem onSelect={() => navigate('/my-solutions')}>
+                        <Send className="mr-2" size={16} />
+                        {t('ProfileDropdownMenuContent.solutions')}
+                    </DropdownMenuItem>
+                )}
+                <DropdownMenuItem onSelect={() => navigate('/notifications')}>
                     <BellRing className="mr-2" size={16} />
-                    Notificaciones
+                    {t('ProfileDropdownMenuContent.notifications')}
+                    { notificationCount > 0 && <Badge className="ml-auto" variant="secondary">{notificationCount}</Badge> }
                 </DropdownMenuItem>
+                {canAccessAdmin && (
+                    <DropdownMenuItem onSelect={() => navigate('/admin')}>
+                        <ShieldEllipsis className="mr-2" size={16} />
+                        {t('ProfileDropdownMenuContent.admin')}
+                    </DropdownMenuItem>
+                )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
                 <DropdownMenuSub>
                     <DropdownMenuSubTrigger>
                         <SunMoon className="mr-2" size={16} />
-                        <span>Apariencia</span>
+                        <span>{t('ProfileDropdownMenuContent.appearance')}</span>
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                         <DropdownMenuSubContent className="w-36 mr-2">
                             <DropdownMenuItem onSelect={() => handleTheme('system')}>
                                 <MonitorSmartphone className="mr-2" size={16} />
-                                <span>Sistema</span>
+                                <span>{t('ProfileDropdownMenuContent.theme.system')}</span>
                                 {theme == 'system' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => handleTheme('light')}>
                                 <Sun className="mr-2" size={16} />
-                                <span>Claro</span>
+                                <span>{t('ProfileDropdownMenuContent.theme.light')}</span>
                                 {theme == 'light' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => handleTheme('dark')}>
                                 <Moon className="mr-2" size={16} />
-                                <span>Oscuro</span>
+                                <span>{t('ProfileDropdownMenuContent.theme.dark')}</span>
                                 {theme == 'dark' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                         </DropdownMenuSubContent>
@@ -103,18 +148,18 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
                 <DropdownMenuSub>
                     <DropdownMenuSubTrigger>
                         <Globe className="mr-2" size={16} />
-                        <span>Idioma</span>
+                        <span>{t('ProfileDropdownMenuContent.language')}</span>
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                         <DropdownMenuSubContent className="w-36 mr-2">
                             <DropdownMenuItem onSelect={() => handleLanguage('es')}>
                                 <FlagComponent country={'ES'} countryName={'Spain'} />
-                                <span>Español</span>
+                                <span>{t('ProfileDropdownMenuContent.language_options.es')}</span>
                                 {language == 'es' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => handleLanguage('en')}>
                                 <FlagComponent country={'US'} countryName={'English'} />
-                                <span>English</span>
+                                <span>{t('ProfileDropdownMenuContent.language_options.en')}</span>
                                 {language == 'en' && <Check className="ml-auto" size={16} />}
                             </DropdownMenuItem>
                         </DropdownMenuSubContent>
@@ -124,7 +169,7 @@ const ProfileDropdownMenuContent = ({ user, showHeader = true }) => {
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={handleLogout}>
                 <LogOut className="mr-2" size={16} />
-                Cerrar sesión
+                {t('ProfileDropdownMenuContent.logout')}
             </DropdownMenuItem>
         </DropdownMenuContent>
     );

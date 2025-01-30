@@ -1,13 +1,17 @@
 ﻿using CrowdSolve.Server.Entities.CrowdSolve;
 using CrowdSolve.Server.Infraestructure;
 using CrowdSolve.Server.Models;
+using CrowdSolve.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrowdSolve.Server.Repositories.Autenticación
 {
     public class UsuariosRepo : Repository<Usuarios, UsuariosModel>
     {
-        public UsuariosRepo(DbContext dbContext) : base
+        private readonly FirebaseTranslationService _translationService;
+        private readonly string _idioma;
+
+        public UsuariosRepo(DbContext dbContext, FirebaseTranslationService? translationService = null, string? idioma = null) : base
         (
             dbContext,
             new ObjectsMapper<UsuariosModel, Usuarios>(u => new Usuarios()
@@ -18,7 +22,8 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 idPerfil = u.idPerfil,
                 idEstatusUsuario = u.idEstatusUsuario,
                 Contraseña = u.ContraseñaHashed,
-                FechaRegistro = u.FechaRegistro
+                FechaRegistro = u.FechaRegistro,
+                AvatarURL = u.AvatarURL
             }),
             (DB, filter) =>
             {
@@ -39,17 +44,25 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                             idEstatusUsuario = u.idEstatusUsuario,
                             NombreEstatusUsuario = e.Nombre,
                             FechaRegistro = u.FechaRegistro,
+                            ContraseñaHashed = u.Contraseña,
                             InformacionParticipante = pa,
-                            InformacionEmpresa = em
+                            InformacionEmpresa = em,
+                            AvatarURL = u.AvatarURL
                         });
             }
         )
         {
-
+            _translationService = translationService;
+            _idioma = idioma;
         }
 
         public UsuariosModel GetByUsername(string nombreUsuario)
         {
+            var usuarioModel = this.Get(x => x.NombreUsuario == nombreUsuario).FirstOrDefault();
+
+            if (usuarioModel == null) return new UsuariosModel();
+
+            usuarioModel.ContraseñaHashed = null;
             return this.Get(x => x.NombreUsuario == nombreUsuario).FirstOrDefault();
         }
 
@@ -64,6 +77,17 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
             return null;
         }
+
+        public override IEnumerable<UsuariosModel> Get(Func<Usuarios, bool> filter = null)
+        {
+            var usuarios = base.Get(filter).ToList();
+            foreach (var usuario in usuarios)
+            {
+                usuario.NombreEstatusUsuario = _translationService.Traducir(usuario.NombreEstatusUsuario, _idioma);
+            }
+            return usuarios;
+        }
+
         public override Usuarios Add(UsuariosModel model)
         {
             try
@@ -71,7 +95,7 @@ namespace CrowdSolve.Server.Repositories.Autenticación
                 var result = base.Add(model);
                 return result;
             }
-            catch (Exception E)
+            catch (Exception)
             {
                 throw;
             }
@@ -79,28 +103,43 @@ namespace CrowdSolve.Server.Repositories.Autenticación
 
         public override void Edit(UsuariosModel model)
         {
-            using (var trx = dbContext.Database.BeginTransaction())
+            try
             {
-                try
+                var usuario = this.Get(model.idUsuario);
+
+                if (usuario == null) throw new Exception("El usuario no se ha encontrado");
+
+                if (usuario.NombreUsuario != model.NombreUsuario && this.Any(x => x.NombreUsuario == model.NombreUsuario)) throw new Exception("Este usuario ya existe en el sistema");
+                if (usuario.CorreoElectronico != model.CorreoElectronico && this.Any(x => x.CorreoElectronico == model.CorreoElectronico)) throw new Exception("Este correo electrónico ya está registrado");
+
+                if (usuario.idPerfil != model.idPerfil)
                 {
-                    var usuario = this.Get(model.idUsuario);
-
-                    if (usuario == null) throw new Exception("El usuario no se ha encontrado");
-
-                    usuario.idPerfil = model.idPerfil;
-                    usuario.idEstatusUsuario = model.idEstatusUsuario;
-
-                    SaveChanges();
-                    base.Edit(usuario);
-
-                    trx.Commit();
+                    var perfil = dbContext.Set<Perfiles>().Find(model.idPerfil);
+                    if (perfil == null) throw new Exception("Este perfil no se ha encontrado");
                 }
-                catch (Exception E)
-                {
-                    trx.Rollback();
-                    throw;
-                }
+
+                usuario.NombreUsuario = model.NombreUsuario;
+                usuario.CorreoElectronico = model.CorreoElectronico;
+                usuario.idPerfil = model.idPerfil;
+                usuario.idEstatusUsuario = model.idEstatusUsuario;
+                usuario.AvatarURL = model.AvatarURL;
+
+                base.Edit(usuario);
             }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<EstatusUsuarios> GetEstatusUsuarios()
+        {
+            return dbContext.Set<EstatusUsuarios>().ToList();
+        }
+
+        public List<Perfiles> GetPerfilesUsuarios()
+        {
+            return dbContext.Set<Perfiles>().ToList();
         }
     }
 }
